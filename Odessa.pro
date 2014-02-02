@@ -13,6 +13,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    Graphics/Bitmap/bitmapimage.cpp \
+    Structure/object.cpp \
+    Structure/layer.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    Graphics/Bitmap/bitmapimage.h \
+    Structure/object.h \
+    Structure/layer.h
