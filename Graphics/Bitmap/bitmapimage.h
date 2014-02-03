@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include <QImage>
+#include <QDebug>
 
 class BitmapImage
 {
@@ -12,8 +13,10 @@ class Object;
 public:
     BitmapImage();
     BitmapImage(const BitmapImage &image);
-    BitmapImage(Object *parent, QRect boundaries, QColor color);
-    BitmapImage(Object *parent, QRect boundaries, QImage image);
+    BitmapImage(Object* parent, QRect boundaries, QColor color);
+    BitmapImage(Object* parent, QRect boundaries, QImage image);
+
+    void setBoundaries(const QRect& bounds){this->boundaries = bounds;}
 
     void paintImage(QPainter &painter);
 

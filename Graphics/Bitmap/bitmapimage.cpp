@@ -3,6 +3,7 @@
 BitmapImage::BitmapImage()
 {
     m_Image = NULL;
+    qDebug() << "Image drawn!" << endl;
 }
 
 BitmapImage::BitmapImage(const BitmapImage &image)
