@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QMenuBar>
+#include <QMenu>
+#include <QAction>
 #include "Structure/editor.h"
 
 class MainWindow : public QMainWindow
@@ -14,6 +17,10 @@ public:
 
 private:
     Editor *mEditor;
+
+    //temporary action
+    QAction *addLayerAct;
+    QMenu *fileMenu;
 };
 
 #endif // MAINWINDOW_H

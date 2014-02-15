@@ -29,6 +29,14 @@ BitmapImage::BitmapImage(Object *parent, QRect boundaries, QImage image)
     if(m_Image->width() != boundaries.width() && m_Image->height() != boundaries.height()) qDebug() << "Error 0001: Failed to load Image" << endl;
 }
 
+BitmapImage::BitmapImage(QRect boundaries, QColor color)
+{
+    this->boundaries = boundaries;
+    m_Image = new QImage(boundaries.size(), QImage::Format_ARGB32_Premultiplied);
+    m_Color = color;
+    m_Image->fill(m_Color.rgba());
+}
+
 void BitmapImage::paintImage(QPainter &painter)
 {
     painter.drawImage(boundaries, *m_Image);

@@ -17,8 +17,9 @@ public:
 
     void setIndex(int indexVal){ m_currentIndex = indexVal; }
 
+    BitmapImage* getImage(){return m_Image;}
 protected:
-    Object object;
+    Object *object;
 
 private:
     BitmapImage* m_Image;
