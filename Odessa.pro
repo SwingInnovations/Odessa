@@ -17,10 +17,12 @@ SOURCES += main.cpp\
     Graphics/Bitmap/bitmapimage.cpp \
     Structure/object.cpp \
     Structure/layer.cpp \
-    Structure/editor.cpp
+    Structure/editor.cpp \
+    Interface/dialogwindows.cpp
 
 HEADERS  += mainwindow.h \
     Graphics/Bitmap/bitmapimage.h \
     Structure/object.h \
     Structure/layer.h \
-    Structure/editor.h
+    Structure/editor.h \
+    Interface/dialogwindows.h

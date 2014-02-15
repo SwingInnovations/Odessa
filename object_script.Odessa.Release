@@ -1,0 +1,12 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\bitmapimage.o
+./release\object.o
+./release\layer.o
+./release\editor.o
+./release\dialogwindows.o
+./release\moc_mainwindow.o
+./release\moc_editor.o
+./release\moc_dialogwindows.o
+);

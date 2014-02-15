@@ -6,6 +6,7 @@
 #include <QMenu>
 #include <QAction>
 #include "Structure/editor.h"
+#include "Interface/dialogwindows.h"
 
 class MainWindow : public QMainWindow
 {
@@ -15,11 +16,16 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void showNewDocWin();
+
 private:
     Editor *mEditor;
+    OdessaNewDocDialog *newDialogWin;
 
     //temporary action
     QAction *addLayerAct;
+    QAction *newAct;
     QMenu *fileMenu;
 };
 

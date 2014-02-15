@@ -1,0 +1,12 @@
+INPUT(
+./debug\main.o
+./debug\mainwindow.o
+./debug\bitmapimage.o
+./debug\object.o
+./debug\layer.o
+./debug\editor.o
+./debug\dialogwindows.o
+./debug\moc_mainwindow.o
+./debug\moc_editor.o
+./debug\moc_dialogwindows.o
+);
