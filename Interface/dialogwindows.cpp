@@ -56,6 +56,8 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     finalLayout->addLayout(buttonLayout);
 
     setLayout(finalLayout);
+
+    connect(cancelButton, SIGNAL(clicked()), SLOT(close()));
 }
 
 OdessaNewDocDialog::~OdessaNewDocDialog()

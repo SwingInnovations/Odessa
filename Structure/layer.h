@@ -13,6 +13,7 @@ public:
     Layer();
     Layer(LayerType type){m_LayerType = type;}
     Layer(LayerType type, int index);
+    Layer(LayerType type, int index, int width, int height);
     int getIndex(){ return m_currentIndex; }
 
     void setIndex(int indexVal){ m_currentIndex = indexVal; }

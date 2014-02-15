@@ -21,9 +21,10 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void tabletEvent(QTabletEvent *event);
 public slots:
-    void addLayer();
-
+    void newProject(int type, int width, int height);
+    void addLayer(int width, int height);
 private:
+    bool deviceDown;
     int currentFrame;
     int currentIndex;
     int numOfFramesPerSecond;

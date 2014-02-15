@@ -19,3 +19,15 @@ Layer::Layer(LayerType type, int index)
         m_Image = new BitmapImage(temp, color);
     }
 }
+
+Layer::Layer(LayerType type, int index, int width, int height)
+{
+    m_LayerType = type;
+    m_currentIndex = index;
+    if(m_LayerType == Bitmap)
+    {
+        QRect size(0, 0, width, height);
+        QColor color(0, 0, 0, 255);
+        m_Image = new BitmapImage(size, color);
+    }
+}

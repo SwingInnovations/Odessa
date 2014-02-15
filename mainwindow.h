@@ -5,6 +5,7 @@
 #include <QMenuBar>
 #include <QMenu>
 #include <QAction>
+#include <QMessageBox>
 #include "Structure/editor.h"
 #include "Interface/dialogwindows.h"
 
@@ -18,6 +19,7 @@ public:
 
 private slots:
     void showNewDocWin();
+    void about();
 
 private:
     Editor *mEditor;
@@ -26,7 +28,11 @@ private:
     //temporary action
     QAction *addLayerAct;
     QAction *newAct;
+    QAction *aboutAct;
+
     QMenu *fileMenu;
+    QMenu *helpMenu;
+
 };
 
 #endif // MAINWINDOW_H
