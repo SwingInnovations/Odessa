@@ -49,9 +49,12 @@ SOURCES       = main.cpp \
 		Structure\object.cpp \
 		Structure\layer.cpp \
 		Structure\editor.cpp \
-		Interface\dialogwindows.cpp release\moc_mainwindow.cpp \
+		Interface\dialogwindows.cpp \
+		Interface\dockwidgets.cpp \
+		Structure\brush.cpp release\moc_mainwindow.cpp \
 		release\moc_editor.cpp \
-		release\moc_dialogwindows.cpp
+		release\moc_dialogwindows.cpp \
+		release\moc_dockwidgets.cpp
 OBJECTS       = release/main.o \
 		release/mainwindow.o \
 		release/bitmapimage.o \
@@ -59,9 +62,12 @@ OBJECTS       = release/main.o \
 		release/layer.o \
 		release/editor.o \
 		release/dialogwindows.o \
+		release/dockwidgets.o \
+		release/brush.o \
 		release/moc_mainwindow.o \
 		release/moc_editor.o \
-		release/moc_dialogwindows.o
+		release/moc_dialogwindows.o \
+		release/moc_dockwidgets.o
 
 DIST          = 
 QMAKE_TARGET  = Odessa
@@ -102,7 +108,7 @@ dist:
 	$(ZIP) Odessa.zip $(SOURCES) $(DIST) Odessa.pro C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\spec_pre.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\qdevice.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\device_config.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\common\shell-win32.conf C:\Qt\Qt-5.2.0-x86_64\mkspecs\qconfig.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_axbase.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_axbase_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_axcontainer.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_axcontainer_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_axserver.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_axserver_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_bluetooth.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_bluetooth_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_bootstrap_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_clucene_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_core.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_core_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_declarative.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_declarative_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_designer.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_gui.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_help.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_help_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_multimedia.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_multimedia_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_multimediawidgets.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_multimediawidgets_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_network.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_network_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_nfc.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_nfc_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_opengl.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_openglextensions.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_openglextensions_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_platformsupport_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_positioning.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_positioning_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_qml.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_quick.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_script.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_script_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_scripttools.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_scripttools_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_sensors.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_sensors_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_serialport.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_serialport_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_sql.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_svg.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_testlib.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_uitools.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_webkit.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_webkit_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_webkitwidgets.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_webkitwidgets_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_widgets.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_winextras.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_winextras_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_xml.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_xmlpatterns.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\modules\qt_lib_xmlpatterns_private.pri C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\qt_functions.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\qt_config.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\win32-g++\qmake.conf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\spec_post.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\exclusive_builds.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\default_pre.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\win32\default_pre.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\resolve_config.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\exclusive_builds_post.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\default_post.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\build_pass.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\qml_debug.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\declarative_debug.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\win32\rtti.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\warn_on.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\qt.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\resources.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\moc.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\win32\opengl.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\uic.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\win32\windows.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\testcase_targets.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\exceptions.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\yacc.prf C:\Qt\Qt-5.2.0-x86_64\mkspecs\features\lex.prf Odessa.pro C:/Qt/Qt-5.2.0-x86_64/lib/Qt5Widgets.prl C:/Qt/Qt-5.2.0-x86_64/lib/Qt5Gui.prl C:/Qt/Qt-5.2.0-x86_64/lib/Qt5Core.prl  RESOURCES HEADERS SOURCES OBJECTIVE_SOURCES FORMS YACCSOURCES YACCSOURCES LEXSOURCES 
 
 clean: compiler_clean 
-	-$(DEL_FILE) release\main.o release\mainwindow.o release\bitmapimage.o release\object.o release\layer.o release\editor.o release\dialogwindows.o release\moc_mainwindow.o release\moc_editor.o release\moc_dialogwindows.o
+	-$(DEL_FILE) release\main.o release\mainwindow.o release\bitmapimage.o release\object.o release\layer.o release\editor.o release\dialogwindows.o release\dockwidgets.o release\brush.o release\moc_mainwindow.o release\moc_editor.o release\moc_dialogwindows.o release\moc_dockwidgets.o
 
 distclean: clean
 	-$(DEL_FILE) $(DESTDIR_TARGET)
@@ -116,9 +122,9 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: release/moc_mainwindow.cpp release/moc_editor.cpp release/moc_dialogwindows.cpp
+compiler_moc_header_make_all: release/moc_mainwindow.cpp release/moc_editor.cpp release/moc_dialogwindows.cpp release/moc_dockwidgets.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) release\moc_mainwindow.cpp release\moc_editor.cpp release\moc_dialogwindows.cpp
+	-$(DEL_FILE) release\moc_mainwindow.cpp release\moc_editor.cpp release\moc_dialogwindows.cpp release\moc_dockwidgets.cpp
 release/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qwidget.h \
@@ -237,6 +243,9 @@ release/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow 
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qactiongroup.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMenu \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QAction \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMessageBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmessagebox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdialog.h \
 		Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
@@ -442,6 +451,36 @@ release/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow 
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
+		Interface/dialogwindows.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QComboBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcombobox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemdelegate.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyleoption.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractspinbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractslider.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyle.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabbar.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qrubberband.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayout.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayoutitem.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qboxlayout.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgridlayout.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QPushButton \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qpushbutton.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGroupBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgroupbox.h \
+		Interface/dockwidgets.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
 		mainwindow.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) mainwindow.h -o release\moc_mainwindow.cpp
 
@@ -904,8 +943,122 @@ release/moc_dialogwindows.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGroupBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgroupbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		Interface/dialogwindows.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) Interface\dialogwindows.h -o release\moc_dialogwindows.cpp
+
+release/moc_dockwidgets.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qwindowdefs.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qglobal.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qconfig.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfeatures.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsystemdetection.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qprocessordetection.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcompilerdetection.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qglobalstatic.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qbasicatomic.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_bootstrap.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qgenericatomic.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_msvc.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_integrity.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qoldbasicatomic.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_vxworks.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_power.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_alpha.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_armv7.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_armv6.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_armv5.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_bfin.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_ia64.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_mips.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_s390.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_sh4a.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_sparc.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_x86.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_cxx11.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_gcc.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_unix.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmutex.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlogging.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qflags.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtypeinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtypetraits.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsysinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectdefs.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qnamespace.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectdefs_impl.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qwindowdefs_win.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobject.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstring.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qchar.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qbytearray.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qrefcount.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qarraydata.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstringbuilder.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlist.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qalgorithms.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qiterator.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcoreevent.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qscopedpointer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmetatype.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvarlengtharray.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcontainerfwd.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qisenum.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobject_impl.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmargins.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qrect.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsize.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpoint.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpaintdevice.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpalette.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qcolor.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qrgb.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstringlist.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdatastream.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qiodevice.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpair.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qregexp.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstringmatcher.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qbrush.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvector.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qmatrix.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpolygon.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qregion.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qline.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtransform.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpainterpath.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qimage.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpixmap.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsharedpointer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qshareddata.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsharedpointer_impl.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qhash.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qfont.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qfontmetrics.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qfontinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qsizepolicy.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qcursor.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qkeysequence.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qevent.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvariant.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmap.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdebug.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtextstream.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlocale.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qset.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcontiguouscache.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qurl.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qurlquery.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfile.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfiledevice.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvector2d.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtouchdevice.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
+		Interface/dockwidgets.h
+	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) Interface\dockwidgets.h -o release\moc_dockwidgets.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -1042,6 +1195,9 @@ release/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qactiongroup.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMenu \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QAction \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMessageBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmessagebox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdialog.h \
 		Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
@@ -1247,6 +1403,36 @@ release/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
+		Interface/dialogwindows.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QComboBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcombobox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemdelegate.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyleoption.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractspinbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractslider.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyle.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabbar.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qrubberband.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayout.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayoutitem.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qboxlayout.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgridlayout.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QPushButton \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qpushbutton.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGroupBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgroupbox.h \
+		Interface/dockwidgets.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QApplication \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qapplication.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdesktopwidget.h
@@ -1371,6 +1557,9 @@ release/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qactiongroup.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMenu \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QAction \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMessageBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmessagebox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdialog.h \
 		Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
@@ -1575,7 +1764,37 @@ release/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qdesktopservices.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
+		Interface/dialogwindows.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QComboBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcombobox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemdelegate.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyleoption.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractspinbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractslider.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyle.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabbar.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qrubberband.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayout.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayoutitem.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qboxlayout.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgridlayout.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QPushButton \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qpushbutton.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGroupBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgroupbox.h \
+		Interface/dockwidgets.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\mainwindow.o mainwindow.cpp
 
 release/bitmapimage.o: Graphics/Bitmap/bitmapimage.cpp Graphics/Bitmap/bitmapimage.h \
@@ -2711,8 +2930,213 @@ release/dialogwindows.o: Interface/dialogwindows.cpp Interface/dialogwindows.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qpushbutton.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGroupBox \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgroupbox.h
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgroupbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\dialogwindows.o Interface\dialogwindows.cpp
+
+release/dockwidgets.o: Interface/dockwidgets.cpp Interface/dockwidgets.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qwindowdefs.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qglobal.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qconfig.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfeatures.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsystemdetection.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qprocessordetection.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcompilerdetection.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qglobalstatic.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qbasicatomic.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_bootstrap.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qgenericatomic.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_msvc.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_integrity.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qoldbasicatomic.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_vxworks.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_power.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_alpha.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_armv7.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_armv6.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_armv5.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_bfin.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_ia64.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_mips.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_s390.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_sh4a.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_sparc.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_x86.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_cxx11.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_gcc.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_unix.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmutex.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlogging.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qflags.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtypeinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtypetraits.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsysinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectdefs.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qnamespace.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectdefs_impl.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qwindowdefs_win.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobject.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstring.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qchar.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qbytearray.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qrefcount.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qarraydata.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstringbuilder.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlist.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qalgorithms.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qiterator.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcoreevent.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qscopedpointer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmetatype.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvarlengtharray.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcontainerfwd.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qisenum.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobject_impl.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmargins.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qrect.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsize.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpoint.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpaintdevice.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpalette.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qcolor.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qrgb.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstringlist.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdatastream.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qiodevice.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpair.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qregexp.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstringmatcher.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qbrush.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvector.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qmatrix.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpolygon.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qregion.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qline.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtransform.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpainterpath.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qimage.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpixmap.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsharedpointer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qshareddata.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsharedpointer_impl.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qhash.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qfont.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qfontmetrics.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qfontinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qsizepolicy.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qcursor.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qkeysequence.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qevent.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvariant.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmap.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdebug.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtextstream.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlocale.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qset.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcontiguouscache.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qurl.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qurlquery.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfile.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfiledevice.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvector2d.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtouchdevice.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\dockwidgets.o Interface\dockwidgets.cpp
+
+release/brush.o: Structure/brush.cpp Structure/brush.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qbrush.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpair.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qglobal.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qconfig.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfeatures.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsystemdetection.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qprocessordetection.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcompilerdetection.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qglobalstatic.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qbasicatomic.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_bootstrap.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qgenericatomic.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_msvc.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_integrity.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qoldbasicatomic.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_vxworks.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_power.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_alpha.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_armv7.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_armv6.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_armv5.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_bfin.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_ia64.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_mips.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_s390.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_sh4a.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_sparc.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_x86.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_cxx11.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_gcc.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qatomic_unix.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmutex.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlogging.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qflags.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtypeinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtypetraits.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsysinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpoint.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qnamespace.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvector.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qalgorithms.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qiterator.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlist.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qrefcount.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qarraydata.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qscopedpointer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qcolor.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qrgb.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstringlist.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdatastream.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qiodevice.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobject.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectdefs.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectdefs_impl.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstring.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qchar.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qbytearray.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstringbuilder.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcoreevent.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmetatype.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvarlengtharray.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcontainerfwd.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qisenum.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobject_impl.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qregexp.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstringmatcher.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qmatrix.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpolygon.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qrect.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsize.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qregion.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qwindowdefs.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qwindowdefs_win.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qline.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtransform.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpainterpath.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qimage.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpaintdevice.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpixmap.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsharedpointer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qshareddata.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsharedpointer_impl.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qhash.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpen.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\brush.o Structure\brush.cpp
 
 release/moc_mainwindow.o: release/moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_mainwindow.o release\moc_mainwindow.cpp
@@ -2722,6 +3146,9 @@ release/moc_editor.o: release/moc_editor.cpp
 
 release/moc_dialogwindows.o: release/moc_dialogwindows.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_dialogwindows.o release\moc_dialogwindows.cpp
+
+release/moc_dockwidgets.o: release/moc_dockwidgets.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_dockwidgets.o release\moc_dockwidgets.cpp
 
 ####### Install
 

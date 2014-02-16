@@ -3,7 +3,10 @@
 
 #include <QtGui>
 #include <QImage>
+#include <QPixmap>
 #include <QDebug>
+#include <QPoint>
+#include "Structure/brush.h"
 
 class BitmapImage
 {
@@ -20,7 +23,10 @@ public:
     void setBoundaries(const QRect& bounds){this->boundaries = bounds;}
 
     void paintImage(QPainter &painter);
+    void paintImage(QPainter &painter, QPoint knownPoint, Brush brush, QPoint points[]);
     void setColor(const QColor color){ m_Color = color; m_Image->fill(m_Color);}
+
+    QImage *getImage(){return m_Image;}
 
     QPoint getTopLeft(){return boundaries.topLeft();}
     QPoint getTopRight(){ return boundaries.topRight(); }
@@ -33,6 +39,7 @@ protected:
     Object *myParent;
 
 private:
+    QPixmap m_pixmap;
     QImage *m_Image;
     QRect boundaries;
     QColor m_Color;

@@ -6,7 +6,10 @@ INPUT(
 ./release\layer.o
 ./release\editor.o
 ./release\dialogwindows.o
+./release\dockwidgets.o
+./release\brush.o
 ./release\moc_mainwindow.o
 ./release\moc_editor.o
 ./release\moc_dialogwindows.o
+./release\moc_dockwidgets.o
 );

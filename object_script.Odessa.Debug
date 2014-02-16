@@ -6,7 +6,10 @@ INPUT(
 ./debug\layer.o
 ./debug\editor.o
 ./debug\dialogwindows.o
+./debug\dockwidgets.o
+./debug\brush.o
 ./debug\moc_mainwindow.o
 ./debug\moc_editor.o
 ./debug\moc_dialogwindows.o
+./debug\moc_dockwidgets.o
 );

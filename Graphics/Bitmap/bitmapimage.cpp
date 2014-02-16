@@ -41,3 +41,10 @@ void BitmapImage::paintImage(QPainter &painter)
 {
     painter.drawImage(boundaries, *m_Image);
 }
+
+void BitmapImage::paintImage(QPainter &painter, QPoint knownPoint, Brush brush, QPoint points[])
+{
+    painter.setBrush(brush.getBrush());
+    painter.setPen(brush.getPen());
+    painter.drawLine(points[0], knownPoint);
+}

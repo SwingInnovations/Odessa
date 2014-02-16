@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include "Structure/editor.h"
 #include "Interface/dialogwindows.h"
+#include "Interface/dockwidgets.h"
 
 class MainWindow : public QMainWindow
 {
@@ -24,10 +25,15 @@ private slots:
 private:
     Editor *mEditor;
     OdessaNewDocDialog *newDialogWin;
+    BrushDockWidget *brushDockWidget;
+
+    bool isModified;
 
     //temporary action
     QAction *addLayerAct;
     QAction *newAct;
+    QAction *closeAct;
+
     QAction *aboutAct;
 
     QMenu *fileMenu;

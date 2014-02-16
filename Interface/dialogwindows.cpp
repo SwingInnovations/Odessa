@@ -57,11 +57,23 @@ OdessaNewDocDialog::OdessaNewDocDialog()
 
     setLayout(finalLayout);
 
+    connect(createButton, SIGNAL(clicked()), SLOT(newProjectSlot()));
     connect(cancelButton, SIGNAL(clicked()), SLOT(close()));
 }
 
 OdessaNewDocDialog::~OdessaNewDocDialog()
 {
 
+}
+
+void OdessaNewDocDialog::newProjectSlot()
+{
+    int type = optionsComboBox->currentIndex();
+    int width = m_widthLineEdit->text().toInt();
+    int height = m_heightLineEdit->text().toInt();
+    int dpi = m_dpiLineEdit->text().toInt();
+    emit newProject(type, width, height, dpi);
+
+    close();
 }
 

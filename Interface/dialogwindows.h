@@ -24,7 +24,13 @@ public:
     int getWidth()const{ return width; }
     int getHeight()const{ return height; }
     int getDPI()const{ return dpi; }
+
+signals:
+    void newProject(int type, int width, int height, int dpi);
 protected:
+
+private slots:
+    void newProjectSlot();
 
 private:
     int width, height, dpi;

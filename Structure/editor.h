@@ -7,7 +7,10 @@
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include <QDebug>
+#include <QPoint>
+#include <QPixmap>
 #include "layer.h"
+#include "brush.h"
 
 class Editor : public QWidget
 {
@@ -21,10 +24,13 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void tabletEvent(QTabletEvent *event);
 public slots:
-    void newProject(int type, int width, int height);
+    void newProject(int type, int width, int height, int dpi);
     void addLayer(int width, int height);
 private:
     bool deviceDown;
+    QPoint knownPos;
+    Brush brush;
+    QPoint drawPath[3];
     int currentFrame;
     int currentIndex;
     int numOfFramesPerSecond;
