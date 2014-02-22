@@ -84,7 +84,7 @@ void MainWindow::about()
 {
     QMessageBox msgbox(this);
     msgbox.setTextFormat(Qt::RichText);
-    msgbox.setText("Odessa Ver. 0.0.16<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
+    msgbox.setText("Odessa Ver. 0.0.20<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
     msgbox.exec();
 }
 
@@ -104,7 +104,7 @@ void MainWindow::toggleShowColorDock(bool val)
     {
         colorDockWidget->show();
     }else{
-        brushDockWidget->close();
+        colorDockWidget->close();
     }
 }
 

@@ -4,6 +4,7 @@ Editor::Editor(QWidget *parent): QWidget(parent), currentFrame(0), currentIndex(
 {
     deviceDown = false;
     setAutoFillBackground(true);
+    brush = Brush();
     brush.setBrush(QBrush(Qt::SolidLine));
     brush.setColor(Qt::red);
     brush.getPen().setWidth(20);
@@ -32,7 +33,8 @@ void Editor::mousePressEvent(QMouseEvent *event)
 {
     if(!mIndex.isEmpty() || !rIndex.isEmpty())
     {
-
+        deviceDown = true;
+        drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
     }
     qDebug() << "Mouse Pressed" << endl;
     update();
@@ -60,10 +62,10 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
 
     if(deviceDown)
     {
-        mIndex.at(0)->getImage()->paintImage(painter, knownPos, brush, drawPath);
+        mIndex.at(0)->getImage()->paintImage(event, brush, drawPath);
     }
+    update();
 }
-
 
 void Editor::tabletEvent(QTabletEvent *event)
 {
@@ -76,7 +78,7 @@ void Editor::tabletEvent(QTabletEvent *event)
             deviceDown = true;
             drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
             knownPos = event->pos();
-            qDebug() << "KnownPos" << knownPos << endl;
+            //qDebug() << "KnownPos" << knownPos << endl;
         }  
 
         break;
@@ -104,6 +106,11 @@ void Editor::tabletEvent(QTabletEvent *event)
     default:
         break;
         qDebug() << "Nothing Happening" << endl;
+    }
+
+    if(event->type() == QEvent::TabletEnterProximity)
+    {
+        qDebug() << "Entered Proximity" << endl;
     }
     update();
     qDebug() << "currentFrame"<< currentIndex << endl;
