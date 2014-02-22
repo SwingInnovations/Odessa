@@ -24,9 +24,12 @@ public:
 
     void paintImage(QPainter &painter);
     void paintImage(QPainter &painter, QPoint knownPoint, Brush brush, QPoint points[]);
+    void paintImage(QPainter &painter, QTabletEvent *event, Brush brush, QPoint points[]);
+    void paintImage(QTabletEvent *event, Brush brush, QPoint points[]);
     void setColor(const QColor color){ m_Color = color; m_Image->fill(m_Color);}
 
     QImage *getImage(){return m_Image;}
+    QPixmap getPixmap(){return m_pixmap;}
 
     QPoint getTopLeft(){return boundaries.topLeft();}
     QPoint getTopRight(){ return boundaries.topRight(); }

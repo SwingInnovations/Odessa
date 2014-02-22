@@ -253,6 +253,8 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
 		Structure/layer.h \
 		Structure/object.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QObject \
@@ -451,6 +453,10 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
+		Structure/brush.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
 		Interface/dialogwindows.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLineEdit \
@@ -597,6 +603,8 @@ debug/moc_editor.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
 		Structure/layer.h \
 		Structure/object.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QObject \
@@ -796,6 +804,10 @@ debug/moc_editor.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
+		Structure/brush.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
 		Structure/editor.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) Structure\editor.h -o debug\moc_editor.cpp
 
@@ -1205,6 +1217,8 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
 		Structure/layer.h \
 		Structure/object.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QObject \
@@ -1403,6 +1417,10 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
+		Structure/brush.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
 		Interface/dialogwindows.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLineEdit \
@@ -1567,6 +1585,8 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
 		Structure/layer.h \
 		Structure/object.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QObject \
@@ -1765,6 +1785,10 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
+		Structure/brush.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
 		Interface/dialogwindows.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLineEdit \
@@ -2099,7 +2123,13 @@ debug/bitmapimage.o: Graphics/Bitmap/bitmapimage.cpp Graphics/Bitmap/bitmapimage
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
+		Structure/brush.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\bitmapimage.o Graphics\Bitmap\bitmapimage.cpp
 
 debug/object.o: Structure/object.cpp Structure/object.h \
@@ -2468,7 +2498,13 @@ debug/layer.o: Structure/layer.cpp Structure/layer.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
+		Structure/brush.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\layer.o Structure\layer.cpp
 
 debug/editor.o: Structure/editor.cpp Structure/editor.h \
@@ -2585,6 +2621,8 @@ debug/editor.o: Structure/editor.cpp Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
 		Structure/layer.h \
 		Structure/object.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QObject \
@@ -2783,7 +2821,11 @@ debug/editor.o: Structure/editor.cpp Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qdesktopservices.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
+		Structure/brush.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\editor.o Structure\editor.cpp
 
 debug/dialogwindows.o: Interface/dialogwindows.cpp Interface/dialogwindows.h \

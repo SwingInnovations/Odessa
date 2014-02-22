@@ -4,10 +4,9 @@ Editor::Editor(QWidget *parent): QWidget(parent), currentFrame(0), currentIndex(
 {
     deviceDown = false;
     setAutoFillBackground(true);
-    //addLayer(this->size().width(), this->size().height());
     brush.setBrush(QBrush(Qt::SolidLine));
-    brush.setColor(QColor(0, 0, 0, 255));
-    brush.getPen().setWidth(5);
+    brush.setColor(Qt::red);
+    brush.getPen().setWidth(20);
     brush.getPen().setColor(brush.getColor());
 
     qDebug() << "KnownPos" << knownPos << endl;
@@ -19,37 +18,56 @@ void Editor::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     if(!mIndex.isEmpty())
     {
-        if(deviceDown)
-        {
-            mIndex.at(0)->getImage()->paintImage(painter, knownPos, brush, drawPath);
-            qDebug() << "Is Painting" << endl;
-        }
-        mIndex.at(0)->getImage()->paintImage(painter);
+        mIndex.at(currentIndex-1)->getImage()->paintImage(painter);
     }
+
+    if(!rIndex.isEmpty())
+    {
+        rIndex.at(currentFrame-1)->getImage()->paintImage(painter);
+    }
+
 }
 
 void Editor::mousePressEvent(QMouseEvent *event)
 {
-   if(!mIndex.isEmpty())
-   {
-    for(int i = 0; i < mIndex.size(); i++)
+    if(!mIndex.isEmpty() || !rIndex.isEmpty())
     {
-        //QColor color(0, 255, 0, 255);
-        //mIndex.at(0)->getImage()->setColor(color);
-    }
-   }
 
+    }
     qDebug() << "Mouse Pressed" << endl;
     update();
 }
 
 void Editor::mouseReleaseEvent(QMouseEvent *event)
 {
-
+    if(deviceDown)
+    {
+        deviceDown = false;
+    }
+    update();
 }
+
+void Editor::mouseMoveEvent(QMouseEvent *event)
+{
+    QPixmap tempPixMap = mIndex.at(0)->getImage()->getPixmap();
+
+    QPainter painter(&tempPixMap);
+
+    drawPath[2] = drawPath[1];
+    drawPath[1] = drawPath[0];
+    drawPath[0] = event->pos();
+    knownPos = event->pos();
+
+    if(deviceDown)
+    {
+        mIndex.at(0)->getImage()->paintImage(painter, knownPos, brush, drawPath);
+    }
+}
+
 
 void Editor::tabletEvent(QTabletEvent *event)
 {
+
     switch(event->type())
     {
     case QEvent::TabletPress:
@@ -59,7 +77,8 @@ void Editor::tabletEvent(QTabletEvent *event)
             drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
             knownPos = event->pos();
             qDebug() << "KnownPos" << knownPos << endl;
-        }
+        }  
+
         break;
     case QEvent::TabletRelease:
         if(deviceDown)
@@ -70,15 +89,24 @@ void Editor::tabletEvent(QTabletEvent *event)
         qDebug() << "KnownPos" << knownPos << endl;
         break;
     case QEvent::TabletMove:
+
         drawPath[2] = drawPath[1];
         drawPath[1] = drawPath[0];
         drawPath[0] = event->pos();
         knownPos = event->pos();
+
+        if(deviceDown)
+        {
+            mIndex.at(currentIndex-1)->getImage()->paintImage(event, brush, drawPath);
+        }
+
         qDebug() << "KnownPos" << knownPos << endl;
     default:
+        break;
         qDebug() << "Nothing Happening" << endl;
     }
     update();
+    qDebug() << "currentFrame"<< currentIndex << endl;
 }
 
 void Editor::addLayer(int width, int height)
@@ -92,14 +120,12 @@ void Editor::addLayer(int width, int height)
 void Editor::newProject(int type, int width, int height, int dpi)
 {
     mIndex.clear();
-    int dpm = dpi/0.0254;
     switch(type)
     {
     case 0:
         //create Standard Image
         mIndex.append(new Layer(Layer::Bitmap, currentIndex, width, height));
-        mIndex.at(0)->getImage()->getImage()->setDotsPerMeterX(dpm);
-        mIndex.at(0)->getImage()->getImage()->setDotsPerMeterY(dpm);
+        currentIndex++;
         break;
     case 1:
         //create Animation

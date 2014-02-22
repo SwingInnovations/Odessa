@@ -20,12 +20,17 @@ public:
 
 private slots:
     void showNewDocWin();
+    void toggleShowBrushDock(bool);
+    void toggleShowColorDock(bool);
+    void toggleShowTimelineDock(bool);
     void about();
 
 private:
     Editor *mEditor;
     OdessaNewDocDialog *newDialogWin;
     BrushDockWidget *brushDockWidget;
+    ColorDockWidget *colorDockWidget;
+    TimelineDockWidget *timelineDockWidget;
 
     bool isModified;
 
@@ -34,9 +39,16 @@ private:
     QAction *newAct;
     QAction *closeAct;
 
+    QAction *showBrushDockWinAct;
+    QAction *showColorDockWinAct;
+    QAction *showTimeDockWinAct;
+    QAction *preferenceAct;
+
     QAction *aboutAct;
 
     QMenu *fileMenu;
+    QMenu *viewMenu;
+    QMenu *dockWinMenu;
     QMenu *helpMenu;
 
 };

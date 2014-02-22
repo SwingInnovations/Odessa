@@ -8,6 +8,7 @@ int main(int argc, char *argv[])
     a.setApplicationVersion("0.0.16");
     a.setOrganizationName("SwingInnovations");
     a.setOrganizationDomain("www.swinginnovations.com");
+    a.setStyle("fusion");
     MainWindow w;
     w.show();
 

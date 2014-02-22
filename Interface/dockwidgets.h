@@ -14,4 +14,22 @@ private:
 
 };
 
+class ColorDockWidget : public QDockWidget
+{
+    Q_OBJECT
+public:
+    ColorDockWidget(QWidget *parent = 0);
+    virtual ~ColorDockWidget();
+private:
+
+};
+
+class TimelineDockWidget : public QDockWidget
+{
+    Q_OBJECT
+public:
+    TimelineDockWidget(QWidget *parent = 0);
+    virtual ~TimelineDockWidget();
+};
+
 #endif // DOCKWIDGETS_H
