@@ -40,6 +40,7 @@ private:
     QPoint knownPos;
     Brush currentTool;
     Brush brush;
+    Brush eraser;
     QPoint drawPath[3];
     int currentFrame;
     int currentIndex;

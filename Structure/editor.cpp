@@ -10,6 +10,9 @@ Editor::Editor(QWidget *parent): QWidget(parent), currentFrame(0), currentIndex(
     //brush.setPen(QPen(QColor(Qt::green)));
     brush.setWidth(20);
     currentTool = brush;
+    eraser = Brush();
+    eraser.setColor(QColor(Qt::white));
+    eraser.setBrush(QBrush(Qt::SolidLine));
 }
 
 void Editor::paintEvent(QPaintEvent *event)
@@ -60,7 +63,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
 
     if(deviceDown)
     {
-        mIndex.at(0)->getImage()->paintImage(event, brush, drawPath);
+        mIndex.at(0)->getImage()->paintImage(event, currentTool, drawPath);
     }
     update();
 }
@@ -97,7 +100,7 @@ void Editor::tabletEvent(QTabletEvent *event)
 
         if(deviceDown)
         {
-            mIndex.at(currentIndex-1)->getImage()->paintImage(event, brush, drawPath);
+            mIndex.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
         }
 
         qDebug() << "KnownPos" << knownPos << endl;
@@ -151,6 +154,8 @@ void Editor::setBrush(ToolType type)
     case BRUSH_TOOL:
         currentTool = brush;
         break;
+    case ERASER_TOOL:
+        currentTool = eraser;
     default:
         break;
     }
