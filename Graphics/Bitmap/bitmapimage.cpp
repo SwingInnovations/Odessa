@@ -79,6 +79,7 @@ void BitmapImage::paintImage(QPainter &painter, QTabletEvent *event, Brush brush
 void BitmapImage::paintImage(QTabletEvent *event, Brush brush, QPoint points[])
 {
     QPainter painter(&m_pixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
     painter.setBrush(brush.getBrush());
     painter.setPen(brush.getPen());
     painter.drawLine(points[1], event->pos());
@@ -87,6 +88,7 @@ void BitmapImage::paintImage(QTabletEvent *event, Brush brush, QPoint points[])
 void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint points[])
 {
     QPainter painter(&m_pixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
     painter.setBrush(brush.getBrush());
     painter.setPen(brush.getPen());
     qDebug() << brush.getBrush() << endl;
@@ -94,6 +96,7 @@ void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint points[])
     qDebug() << "Brush Width: " << brush.getPen().width() << endl;
 
     painter.drawLine(points[1], event->pos());
+
 }
 
 
