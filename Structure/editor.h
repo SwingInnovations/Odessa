@@ -14,9 +14,13 @@
 
 class Editor : public QWidget
 {
+
     Q_OBJECT
 public:
+    enum ToolType{BRUSH_TOOL, ERASER_TOOL, TEXT_TOOL , PRIMITIVE_TOOL};
+
     Editor(QWidget *parent = 0);
+    void setBrush(ToolType type);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -27,9 +31,14 @@ protected:
 public slots:
     void newProject(int type, int width, int height, int dpi);
     void addLayer(int width, int height);
+
+    void setBrushSize(int);
+    void setBrushFeather(int);
+    void setBrushSpacing(int);
 private:
     bool deviceDown;
     QPoint knownPos;
+    Brush currentTool;
     Brush brush;
     QPoint drawPath[3];
     int currentFrame;

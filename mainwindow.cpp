@@ -9,6 +9,9 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(mEditor);
     mEditor->setStyleSheet("background-color: grey;");
 
+    toolBar = this->addToolBar("Tools");
+    toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::TopToolBarArea);
+
     newDialogWin = new OdessaNewDocDialog();
     brushDockWidget = new BrushDockWidget(this);
     brushDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -18,6 +21,20 @@ MainWindow::MainWindow(QWidget *parent)
 
     timelineDockWidget = new TimelineDockWidget(this);
     timelineDockWidget->setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+
+    brushTool = new QAction(this);
+    brushTool->setText("Brush");
+    eraserTool = new QAction(this);
+    eraserTool->setText("Eraser");
+    textTool = new QAction(this);
+    textTool->setText("Text");
+    primitiveTool = new QAction(this);
+    primitiveTool->setText("Prim");
+
+    toolBar->addAction(brushTool);
+    toolBar->addAction(eraserTool);
+    toolBar->addAction(textTool);
+    toolBar->addAction(primitiveTool);
 
     addLayerAct = new QAction(this);
     addLayerAct->setText("AddLayer");
@@ -56,7 +73,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(newAct, SIGNAL(triggered()), SLOT(showNewDocWin()));
     //connect(addLayerAct, SIGNAL(triggered()), mEditor, SLOT(addLayer()));
+    connect(brushTool, SIGNAL(triggered()), SLOT(assignBrushTool()));
+    connect(eraserTool, SIGNAL(triggered()), SLOT(assignEraserTool()));
+    connect(textTool, SIGNAL(triggered()), SLOT(assignTextTool()));
+    connect(primitiveTool, SIGNAL(triggered()), SLOT(assignPrimitiveTool()));
     connect(newDialogWin, SIGNAL(newProject(int,int,int,int)), mEditor, SLOT(newProject(int,int,int,int)));
+    connect(brushDockWidget, SIGNAL(mSizeChanged(int)), mEditor, SLOT(setBrushSize(int)));
     connect(showBrushDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowBrushDock(bool)));
     connect(showColorDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowColorDock(bool)));
     connect(showTimeDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowTimelineDock(bool)));
@@ -84,7 +106,7 @@ void MainWindow::about()
 {
     QMessageBox msgbox(this);
     msgbox.setTextFormat(Qt::RichText);
-    msgbox.setText("Odessa Ver. 0.0.20<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
+    msgbox.setText("Odessa Ver. 0.0.25<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
     msgbox.exec();
 }
 
@@ -116,4 +138,24 @@ void MainWindow::toggleShowTimelineDock(bool val)
     }else{
         timelineDockWidget->hide();
     }
+}
+
+void MainWindow::assignBrushTool()
+{
+    mEditor->setBrush(Editor::BRUSH_TOOL);
+}
+
+void MainWindow::assignEraserTool()
+{
+    mEditor->setBrush(Editor::ERASER_TOOL);
+}
+
+void MainWindow::assignTextTool()
+{
+
+}
+
+void MainWindow::assignPrimitiveTool()
+{
+
 }

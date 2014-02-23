@@ -6,6 +6,8 @@
 #include <QMenu>
 #include <QAction>
 #include <QMessageBox>
+#include <QToolBar>
+
 #include "Structure/editor.h"
 #include "Interface/dialogwindows.h"
 #include "Interface/dockwidgets.h"
@@ -19,6 +21,10 @@ public:
     ~MainWindow();
 
 private slots:
+    void assignBrushTool();
+    void assignEraserTool();
+    void assignTextTool();
+    void assignPrimitiveTool();
     void showNewDocWin();
     void toggleShowBrushDock(bool);
     void toggleShowColorDock(bool);
@@ -44,12 +50,20 @@ private:
     QAction *showTimeDockWinAct;
     QAction *preferenceAct;
 
+    //basic Tools
+    QAction *brushTool;
+    QAction *eraserTool;
+    QAction *textTool;
+    QAction *primitiveTool;
+
     QAction *aboutAct;
 
     QMenu *fileMenu;
     QMenu *viewMenu;
     QMenu *dockWinMenu;
     QMenu *helpMenu;
+
+    QToolBar* toolBar;
 
 };
 

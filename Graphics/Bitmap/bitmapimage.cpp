@@ -88,7 +88,11 @@ void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint points[])
 {
     QPainter painter(&m_pixmap);
     painter.setBrush(brush.getBrush());
-    //painter.setPen(brush.getPen());
+    painter.setPen(brush.getPen());
+    qDebug() << brush.getBrush() << endl;
+    qDebug() << brush.getPen() << endl;
+    qDebug() << "Brush Width: " << brush.getPen().width() << endl;
+
     painter.drawLine(points[1], event->pos());
 }
 

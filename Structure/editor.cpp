@@ -5,12 +5,11 @@ Editor::Editor(QWidget *parent): QWidget(parent), currentFrame(0), currentIndex(
     deviceDown = false;
     setAutoFillBackground(true);
     brush = Brush();
+    brush.setColor(QColor(Qt::red));
     brush.setBrush(QBrush(Qt::SolidLine));
-    brush.setColor(Qt::red);
-    brush.getPen().setWidth(20);
-    brush.getPen().setColor(brush.getColor());
-
-    qDebug() << "KnownPos" << knownPos << endl;
+    //brush.setPen(QPen(QColor(Qt::green)));
+    brush.setWidth(20);
+    currentTool = brush;
 }
 
 void Editor::paintEvent(QPaintEvent *event)
@@ -26,7 +25,6 @@ void Editor::paintEvent(QPaintEvent *event)
     {
         rIndex.at(currentFrame-1)->getImage()->paintImage(painter);
     }
-
 }
 
 void Editor::mousePressEvent(QMouseEvent *event)
@@ -144,4 +142,31 @@ void Editor::newProject(int type, int width, int height, int dpi)
         break;
     }
     update();
+}
+
+void Editor::setBrush(ToolType type)
+{
+    switch(type)
+    {
+    case BRUSH_TOOL:
+        currentTool = brush;
+        break;
+    default:
+        break;
+    }
+}
+
+void Editor::setBrushSize(int val)
+{
+    currentTool.setWidth(val);
+}
+
+void Editor::setBrushFeather(int val)
+{
+
+}
+
+void Editor::setBrushSpacing(int val)
+{
+
 }

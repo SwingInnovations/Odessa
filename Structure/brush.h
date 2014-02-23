@@ -16,7 +16,9 @@ public:
     void setBrushType(BrushType type){ brushType = type; }
     void setBrush(QBrush brush){ myBrush = brush; }
     void setPen(QPen pen){ myPen = pen; }
-    void setColor(QColor color){ myColor = color; myBrush.setColor(myColor); }
+    void setColor(QColor color){ myColor = color; myBrush.setColor(myColor); myPen.setColor(myColor); }
+    void setWidth(int val){ myPen.setWidth(val); }
+    void setWidth(qreal val){ myPen.setWidthF(val); }
 
     void setPressure(bool val){ pressure = val; }
     void setFeather(bool val){ feather = val; }
@@ -35,6 +37,7 @@ private:
     bool pressure;
     bool feather;
     int featherAmount;
+    int pressureAmount;
 };
 
 #endif // BRUSH_H
