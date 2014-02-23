@@ -37,7 +37,6 @@ public slots:
     void setBrushSpacing(int);
 private:
     bool deviceDown;
-    QPoint knownPos;
     Brush currentTool;
     Brush brush;
     Brush eraser;

@@ -17,7 +17,6 @@ Editor::Editor(QWidget *parent): QWidget(parent), currentFrame(0), currentIndex(
 
 void Editor::paintEvent(QPaintEvent *event)
 {
-    qDebug() << "Painting" << endl;
     QPainter painter(this);
     if(!mIndex.isEmpty())
     {
@@ -52,14 +51,10 @@ void Editor::mouseReleaseEvent(QMouseEvent *event)
 
 void Editor::mouseMoveEvent(QMouseEvent *event)
 {
-    QPixmap tempPixMap = mIndex.at(0)->getImage()->getPixmap();
-
-    QPainter painter(&tempPixMap);
 
     drawPath[2] = drawPath[1];
     drawPath[1] = drawPath[0];
     drawPath[0] = event->pos();
-    knownPos = event->pos();
 
     if(deviceDown)
     {
@@ -78,8 +73,6 @@ void Editor::tabletEvent(QTabletEvent *event)
         {
             deviceDown = true;
             drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
-            knownPos = event->pos();
-            //qDebug() << "KnownPos" << knownPos << endl;
         }  
 
         break;
@@ -88,33 +81,25 @@ void Editor::tabletEvent(QTabletEvent *event)
         {
             deviceDown = false;
         }
-        qDebug() << "Tablet Released" << endl;
-        qDebug() << "KnownPos" << knownPos << endl;
+
         break;
     case QEvent::TabletMove:
 
         drawPath[2] = drawPath[1];
         drawPath[1] = drawPath[0];
         drawPath[0] = event->pos();
-        knownPos = event->pos();
 
         if(deviceDown)
         {
             mIndex.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
         }
 
-        qDebug() << "KnownPos" << knownPos << endl;
     default:
         break;
         qDebug() << "Nothing Happening" << endl;
     }
 
-    if(event->type() == QEvent::TabletEnterProximity)
-    {
-        qDebug() << "Entered Proximity" << endl;
-    }
     update();
-    qDebug() << "currentFrame"<< currentIndex << endl;
 }
 
 void Editor::addLayer(int width, int height)
