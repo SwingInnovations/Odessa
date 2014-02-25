@@ -246,6 +246,8 @@ release/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow 
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMessageBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmessagebox.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolBar \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbar.h \
 		Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
@@ -487,6 +489,13 @@ release/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow 
 		Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QVBoxLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QHBoxLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSlider \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QCheckBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcheckbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QTabWidget \
 		mainwindow.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) mainwindow.h -o release\moc_mainwindow.cpp
 
@@ -1069,6 +1078,33 @@ release/moc_dockwidgets.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvector2d.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtouchdevice.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QVBoxLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qboxlayout.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayout.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayoutitem.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgridlayout.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QHBoxLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSlider \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractslider.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtextcursor.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtextformat.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpen.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtextoption.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGroupBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgroupbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QCheckBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcheckbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qicon.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QTabWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabwidget.h \
 		Interface/dockwidgets.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) Interface\dockwidgets.h -o release\moc_dockwidgets.cpp
 
@@ -1210,6 +1246,8 @@ release/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMessageBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmessagebox.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolBar \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbar.h \
 		Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
@@ -1451,6 +1489,13 @@ release/main.o: main.cpp mainwindow.h \
 		Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QVBoxLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QHBoxLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSlider \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QCheckBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcheckbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QTabWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QApplication \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qapplication.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdesktopwidget.h
@@ -1578,6 +1623,8 @@ release/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMessageBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmessagebox.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolBar \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbar.h \
 		Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
@@ -1818,7 +1865,14 @@ release/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgroupbox.h \
 		Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QVBoxLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QHBoxLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSlider \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QCheckBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcheckbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QTabWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\mainwindow.o mainwindow.cpp
 
 release/bitmapimage.o: Graphics/Bitmap/bitmapimage.cpp Graphics/Bitmap/bitmapimage.h \
@@ -3086,7 +3140,34 @@ release/dockwidgets.o: Interface/dockwidgets.cpp Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfiledevice.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvector2d.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtouchdevice.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QVBoxLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qboxlayout.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayout.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayoutitem.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgridlayout.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QHBoxLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSlider \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractslider.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLineEdit \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlineedit.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtextcursor.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtextformat.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpen.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtextoption.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGroupBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgroupbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QCheckBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcheckbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractbutton.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qicon.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QTabWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabwidget.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\dockwidgets.o Interface\dockwidgets.cpp
 
 release/brush.o: Structure/brush.cpp Structure/brush.h \

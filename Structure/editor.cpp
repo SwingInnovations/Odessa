@@ -6,11 +6,12 @@ Editor::Editor(QWidget *parent): QWidget(parent), currentFrame(0), currentIndex(
     setAutoFillBackground(true);
     brush = Brush();
     brush.setColor(QColor(Qt::red));
-    brush.setBrush(QBrush(Qt::SolidLine));
+    brush.setBrush(QBrush(Qt::SolidPattern));
     //brush.setPen(QPen(QColor(Qt::green)));
-    brush.setWidth(20);
+    brush.setWidth(5);
     currentTool = brush;
     eraser = Brush();
+    eraser.setWidth(5);
     eraser.setColor(QColor(Qt::white));
     eraser.setBrush(QBrush(Qt::SolidLine));
 }
@@ -27,6 +28,8 @@ void Editor::paintEvent(QPaintEvent *event)
     {
         rIndex.at(currentFrame-1)->getImage()->paintImage(painter);
     }
+
+    qDebug() << currentIndex << endl;
 }
 
 void Editor::mousePressEvent(QMouseEvent *event)
@@ -106,34 +109,39 @@ void Editor::addLayer(int width, int height)
 {
     mIndex.append(new Layer(Layer::Bitmap, currentIndex, width, height));
     currentIndex++;
-    qDebug() << "Image Drawn!" << endl;
-    qDebug() << "Image Layer count: " << currentIndex << endl;
 }
 
 void Editor::newProject(int type, int width, int height, int dpi)
 {
-    mIndex.clear();
-    switch(type)
+
+    if(!mIndex.isEmpty())
     {
-    case 0:
-        //create Standard Image
-        mIndex.append(new Layer(Layer::Bitmap, currentIndex, width, height));
-        currentIndex++;
-        break;
-    case 1:
-        //create Animation
-        break;
-    case 2:
-        //create SpriteSheet
-        break;
-    default:
-        break;
+        mIndex.clear();
+        currentIndex = 0;
+    }else{
+        switch(type)
+        {
+        case 0:
+            //create Standard Image
+            mIndex.append(new Layer(Layer::Bitmap, currentIndex, width, height));
+            currentIndex++;
+            break;
+        case 1:
+            //create Animation
+            break;
+        case 2:
+            //create SpriteSheet
+            break;
+        default:
+            break;
+        }
     }
     update();
 }
 
 void Editor::setBrush(ToolType type)
 {
+    toolType = type;
     switch(type)
     {
     case BRUSH_TOOL:
@@ -149,6 +157,17 @@ void Editor::setBrush(ToolType type)
 void Editor::setBrushSize(int val)
 {
     currentTool.setWidth(val);
+    switch(toolType)
+    {
+    case BRUSH_TOOL:
+        brush.setWidth(val);
+        break;
+    case ERASER_TOOL:
+        eraser.setWidth(val);
+        break;
+    default:
+        break;
+    }
 }
 
 void Editor::setBrushFeather(int val)

@@ -25,39 +25,55 @@ signals:
     void mSizeChanged(int);
     void mFeatherChanged(int);
     void mSpacingChanged(int);
+    void mOpacityChanged(int);
+
 private slots:
     void set_mSizeLE(int);
     void set_mFeatherLE(int);
     void set_mSpacingLE(int);
+    void set_mOpacityLE(int);
 
     void set_mSizeSlider(QString);
     void set_mFeatherSlider(QString);
     void set_mSpacingSlider(QString);
+    void set_mOpacitySlider(QString);
+    void toggleTransferOpacity(bool);
+    void toggleTransferSize(bool);
 private:
     QLabel* mSizeLabel;
     QLabel* mFeatherLabel;
     QLabel* mSpacingLabel;
+    QLabel* mOpacityLabel;
 
     QSlider* mSizeSlider;
     QSlider* mFeatherSlider;
     QSlider* mSpacingSlider;
+    QSlider* mOpacitySlider;
 
     QLineEdit* mSizeLE;
     QLineEdit* mFeatherLE;
     QLineEdit* mSpacingLE;
+    QLineEdit* mOpacityLE;
 
     QHBoxLayout* mSizeLayout;
     QHBoxLayout* mFeatherLayout;
     QHBoxLayout* mSpacingLayout;
+    QHBoxLayout* mOpacityLayout;
 
     QVBoxLayout* primaryBrushControlLayout;
+    QVBoxLayout* secondaryBrushControlLayout;
 
-    QGroupBox* pressureContainer;
-    QGridLayout* pressureLayout;
-    QCheckBox* usePressure;
-    QCheckBox* transferOpacity;
-    QCheckBox* transferWidth;
-    QSlider* transferWidthSlider;
+    QGroupBox* mPressureContainer;
+
+    QHBoxLayout* mTransferOpacityLayout;
+    QCheckBox* mTransferOpacity;
+    QSlider* mTransferOpacityAmt;
+    QLineEdit* mTransferOpacityLE;
+
+    QHBoxLayout* mTransferWidthLayout;
+    QCheckBox* mTransferWidth;
+    QSlider* mTransferWidthSlider;
+    QLineEdit* mTransferWidthLE;
 
 };
 

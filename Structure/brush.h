@@ -27,6 +27,8 @@ public:
     QBrush getBrush(){ return myBrush; }
     QColor getColor() { return myColor; }
 
+    int getSize(){return myPen.width();;}
+
 private:
     BrushType brushType;
 

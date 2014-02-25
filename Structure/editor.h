@@ -21,7 +21,6 @@ public:
 
     Editor(QWidget *parent = 0);
     void setBrush(ToolType type);
-
 protected:
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
@@ -46,6 +45,7 @@ private:
     int numOfFramesPerSecond;
     QList<Layer*> mIndex;
     QList<Layer*> rIndex;
+    ToolType toolType;
 };
 
 #endif // EDITOR_H

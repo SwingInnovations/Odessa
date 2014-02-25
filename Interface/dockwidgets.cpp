@@ -9,8 +9,10 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     mSizeLabel->setText("Size: ");
     mSizeSlider = new QSlider(this);
     mSizeSlider->setOrientation(Qt::Horizontal);
+    mSizeSlider->setValue(5);
     mSizeLE = new QLineEdit(this);
     mSizeLE->setFixedWidth(32);
+    mSizeLE->setText(QString::number(5));
     mSizeLayout = new QHBoxLayout;
     mSizeLayout->addWidget(mSizeLabel);
     mSizeLayout->addWidget(mSizeSlider);
@@ -24,6 +26,7 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     mFeatherSlider->setOrientation(Qt::Horizontal);
     mFeatherLE = new QLineEdit(this);
     mFeatherLE->setFixedWidth(32);
+    mFeatherLE->setText(QString::number(0));
     mFeatherLayout = new QHBoxLayout;
     mFeatherLayout->addWidget(mFeatherLabel);
     mFeatherLayout->addWidget(mFeatherSlider);
@@ -36,18 +39,74 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     mSpacingSlider->setOrientation(Qt::Horizontal);
     mSpacingLE = new QLineEdit(this);
     mSpacingLE->setFixedWidth(32);
+    mSpacingLE->setText(QString::number(0));
     mSpacingLayout = new QHBoxLayout;
     mSpacingLayout->addWidget(mSpacingLabel);
     mSpacingLayout->addWidget(mSpacingSlider);
     mSpacingLayout->addWidget(mSpacingLE);
 
+    mOpacityLabel = new QLabel(this);
+    mOpacityLabel->setText("Opacity:");
+    mOpacitySlider = new QSlider(this);
+    mOpacitySlider->setRange(0, 255);
+    mOpacitySlider->setOrientation(Qt::Horizontal);
+    mOpacitySlider->setValue(255);
+    mOpacityLE = new QLineEdit(this);
+    mOpacityLE->setFixedWidth(32);
+    mOpacityLE->setText(QString::number(255));
+    mOpacityLayout = new QHBoxLayout;
+    mOpacityLayout->addWidget(mOpacityLabel);
+    mOpacityLayout->addWidget(mOpacitySlider);
+    mOpacityLayout->addWidget(mOpacityLE);
+
+    mTransferOpacity = new QCheckBox(this);
+    mTransferOpacity->setText("Opacity");
+    mTransferOpacity->setChecked(false);
+    mTransferOpacityAmt = new QSlider(this);
+    mTransferOpacityAmt->setRange(0, 255);
+    mTransferOpacityAmt->setOrientation(Qt::Horizontal);
+    mTransferOpacityAmt->setEnabled(false);
+    mTransferOpacityLE = new QLineEdit(this);
+    mTransferOpacityLE->setFixedWidth(32);
+    mTransferOpacityLE->setEnabled(false);
+    mTransferOpacityLayout = new QHBoxLayout;
+    mTransferOpacityLayout->addWidget(mTransferOpacity);
+    mTransferOpacityLayout->addWidget(mTransferOpacityAmt);
+    mTransferOpacityLayout->addWidget(mTransferOpacityLE);
+
+    mTransferWidth = new QCheckBox(this);
+    mTransferWidth->setText("Size:");
+    mTransferWidth->setChecked(false);
+    mTransferWidthSlider = new QSlider(this);
+    mTransferWidthSlider->setRange(0, 255);
+    mTransferWidthSlider->setOrientation(Qt::Horizontal);
+    mTransferWidthSlider->setEnabled(false);
+    mTransferWidthLE = new QLineEdit(this);
+    mTransferWidthLE->setFixedWidth(32);
+    mTransferWidthLE->setEnabled(false);
+    mTransferWidthLayout = new QHBoxLayout;
+    mTransferWidthLayout->addWidget(mTransferWidth);
+    mTransferWidthLayout->addWidget(mTransferWidthSlider);
+    mTransferWidthLayout->addWidget(mTransferWidthLE);
+
+    secondaryBrushControlLayout = new QVBoxLayout;
+    secondaryBrushControlLayout->addLayout(mTransferOpacityLayout);
+    secondaryBrushControlLayout->addLayout(mTransferWidthLayout);
+
+    mPressureContainer = new QGroupBox(this);
+    mPressureContainer->setTitle("Pressure");
+    mPressureContainer->setLayout(secondaryBrushControlLayout);
+
     primaryBrushControlLayout = new QVBoxLayout;
+
     primaryBrushControlLayout->addLayout(mSizeLayout);
-    primaryBrushControlLayout->addStretch(1);
+    primaryBrushControlLayout->addSpacing(0);
     primaryBrushControlLayout->addLayout(mFeatherLayout);
-    primaryBrushControlLayout->addStretch(1);
+    primaryBrushControlLayout->addSpacing(0);
     primaryBrushControlLayout->addLayout(mSpacingLayout);
     primaryBrushControlLayout->setSpacing(0);
+    primaryBrushControlLayout->addLayout(mOpacityLayout);
+    primaryBrushControlLayout->addWidget(mPressureContainer);
 
     connect(mSizeSlider, SIGNAL(valueChanged(int)), SLOT(set_mSizeLE(int)));
     connect(mSizeLE, SIGNAL(textChanged(QString)), SLOT(set_mSizeSlider(QString)));
@@ -55,12 +114,15 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(mFeatherLE, SIGNAL(textChanged(QString)), SLOT(set_mFeatherSlider(QString)));
     connect(mSpacingSlider, SIGNAL(valueChanged(int)), SLOT(set_mSpacingLE(int)));
     connect(mSpacingLE, SIGNAL(textChanged(QString)), SLOT(set_mSpacingSlider(QString)));
+    connect(mOpacityLE, SIGNAL(textChanged(QString)), SLOT(set_mOpacitySlider(QString)));
+    connect(mOpacitySlider, SIGNAL(valueChanged(int)), SLOT(set_mOpacityLE(int)));
+    connect(mTransferOpacity, SIGNAL(toggled(bool)), SLOT(toggleTransferOpacity(bool)));
+    connect(mTransferWidth, SIGNAL(toggled(bool)), SLOT(toggleTransferSize(bool)));
 
     QWidget *layoutView = new QWidget(this);
     layoutView->setLayout(primaryBrushControlLayout);
     this->setWidget(layoutView);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
 }
 
 void BrushDockWidget::set_mSizeLE(int val)
@@ -97,6 +159,42 @@ void BrushDockWidget::set_mSpacingSlider(QString val)
 {
     mSpacingSlider->setValue(val.toInt());
     emit mSpacingChanged(val.toInt());
+}
+
+void BrushDockWidget::set_mOpacityLE(int val)
+{
+    mOpacityLE->setText(QString::number(val));
+    emit mOpacityChanged(val);
+}
+
+void BrushDockWidget::set_mOpacitySlider(QString val)
+{
+    mOpacitySlider->setValue(val.toInt());
+    emit mOpacityChanged(val.toInt());
+}
+
+void BrushDockWidget::toggleTransferOpacity(bool val)
+{
+    if(val)
+    {
+        mTransferOpacityAmt->setEnabled(true);
+        mTransferOpacityLE->setEnabled(true);
+    }else{
+        mTransferOpacityAmt->setEnabled(false);
+        mTransferOpacityLE->setEnabled(false);
+    }
+}
+
+void BrushDockWidget::toggleTransferSize(bool val)
+{
+    if(val)
+    {
+        mTransferWidthSlider->setEnabled(true);
+        mTransferWidthLE->setEnabled(true);
+    }else{
+        mTransferWidthSlider->setEnabled(false);
+        mTransferWidthLE->setEnabled(false);
+    }
 }
 
 BrushDockWidget::~BrushDockWidget()
