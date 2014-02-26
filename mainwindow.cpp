@@ -82,6 +82,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(showBrushDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowBrushDock(bool)));
     connect(showColorDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowColorDock(bool)));
     connect(showTimeDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowTimelineDock(bool)));
+    connect(brushDockWidget, SIGNAL(mOpacityChanged(int)), mEditor, SLOT(setOpacity(int)));
+    connect(colorDockWidget, SIGNAL(redChanged(int)), mEditor, SLOT(setRedValue(int)));
+    connect(colorDockWidget, SIGNAL(greenChanged(int)), mEditor, SLOT(setGreenValue(int)));
+    connect(colorDockWidget, SIGNAL(blueChanged(int)), mEditor, SLOT(setBlueValue(int)));
     connect(aboutAct, SIGNAL(triggered()), SLOT(about()));
     connect(closeAct, SIGNAL(triggered()), SLOT(close()));
 

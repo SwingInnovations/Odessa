@@ -5,9 +5,12 @@ Editor::Editor(QWidget *parent): QWidget(parent), currentFrame(0), currentIndex(
     deviceDown = false;
     setAutoFillBackground(true);
     brush = Brush();
-    brush.setColor(QColor(Qt::red));
+    redVal = 0;
+    greenVal = 0;
+    blueVal = 0;
+    opacityVal = 255;
+    brush.setColor(Qt::blue);
     brush.setBrush(QBrush(Qt::SolidPattern));
-    //brush.setPen(QPen(QColor(Qt::green)));
     brush.setWidth(5);
     currentTool = brush;
     eraser = Brush();
@@ -94,6 +97,7 @@ void Editor::tabletEvent(QTabletEvent *event)
 
         if(deviceDown)
         {
+            //currentTool.setColor(primaryColor);
             mIndex.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
         }
 
@@ -178,4 +182,56 @@ void Editor::setBrushFeather(int val)
 void Editor::setBrushSpacing(int val)
 {
 
+}
+
+void Editor::setRedValue(int val)
+{
+    redVal = val;
+    primaryColor.setRed(redVal);
+    currentTool.setColor(primaryColor);
+    if(primaryColor.isValid())
+    {
+        qDebug() << "I am valid!" << endl;
+    }else{
+        qDebug() << "No Longer Valid" << endl;
+    }
+}
+
+void Editor::setGreenValue(int val)
+{
+    greenVal = val;
+    primaryColor.setGreen(greenVal);
+    currentTool.setColor(primaryColor);
+    if(primaryColor.isValid())
+    {
+        qDebug() << "I am valid!" << endl;
+    }else{
+        qDebug() << "No Longer Valid" << endl;
+    }
+}
+
+void Editor::setBlueValue(int val)
+{
+    blueVal = val;
+    primaryColor.setBlue(blueVal);
+    currentTool.setColor(primaryColor);
+    if(primaryColor.isValid())
+    {
+        qDebug() << "I am valid!" << endl;
+    }else{
+        qDebug() << "No Longer Valid" << endl;
+    }
+}
+
+void Editor::setOpacity(int val)
+{
+    opacityVal = val;
+    //primaryColor.setAlpha(opacityVal);
+    //brush.setColor(primaryColor);
+    if(primaryColor.isValid())
+    {
+        qDebug() << "I am valid!" << endl;
+    }else{
+        qDebug() << "No Longer Valid" << endl;
+    }
 }

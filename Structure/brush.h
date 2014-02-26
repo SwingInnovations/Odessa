@@ -23,6 +23,11 @@ public:
     void setPressure(bool val){ pressure = val; }
     void setFeather(bool val){ feather = val; }
 
+    //color Centric
+    void setRed(int val){myColor.setRed(val);}
+    void setGreen(int val){myColor.setGreen(val);}
+    void setBlue(int val){myColor.setBlue(val);}
+
     QPen getPen(){return myPen;}
     QBrush getBrush(){ return myBrush; }
     QColor getColor() { return myColor; }

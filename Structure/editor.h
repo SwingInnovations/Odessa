@@ -21,6 +21,7 @@ public:
 
     Editor(QWidget *parent = 0);
     void setBrush(ToolType type);
+
 protected:
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
@@ -34,6 +35,12 @@ public slots:
     void setBrushSize(int);
     void setBrushFeather(int);
     void setBrushSpacing(int);
+
+    void setRedValue(int);
+    void setBlueValue(int);
+    void setGreenValue(int);
+    void setOpacity(int);
+
 private:
     bool deviceDown;
     Brush currentTool;
@@ -46,6 +53,11 @@ private:
     QList<Layer*> mIndex;
     QList<Layer*> rIndex;
     ToolType toolType;
+
+    int redVal, greenVal, blueVal, opacityVal;
+
+    QColor primaryColor;
+    QColor secondaryColor;
 };
 
 #endif // EDITOR_H

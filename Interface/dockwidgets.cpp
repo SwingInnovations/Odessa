@@ -118,6 +118,10 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(mOpacitySlider, SIGNAL(valueChanged(int)), SLOT(set_mOpacityLE(int)));
     connect(mTransferOpacity, SIGNAL(toggled(bool)), SLOT(toggleTransferOpacity(bool)));
     connect(mTransferWidth, SIGNAL(toggled(bool)), SLOT(toggleTransferSize(bool)));
+    connect(mTransferOpacityAmt, SIGNAL(valueChanged(int)), SLOT(set_mTransferOpacity(int)));
+    connect(mTransferOpacityLE, SIGNAL(textChanged(QString)), SLOT(set_mTransferOpacitySlider(QString)));
+    connect(mTransferWidthSlider, SIGNAL(valueChanged(int)), SLOT(set_mTransferSize(int)));
+    connect(mTransferWidthLE, SIGNAL(textChanged(QString)), SLOT(set_mTransferSizeSlider(QString)));
 
     QWidget *layoutView = new QWidget(this);
     layoutView->setLayout(primaryBrushControlLayout);
@@ -171,6 +175,30 @@ void BrushDockWidget::set_mOpacitySlider(QString val)
 {
     mOpacitySlider->setValue(val.toInt());
     emit mOpacityChanged(val.toInt());
+}
+
+void BrushDockWidget::set_mTransferOpacity(int val)
+{
+    mTransferOpacityLE->setText(QString::number(val));
+    emit mTransferOpacityChanged(val);
+}
+
+void BrushDockWidget::set_mTransferOpacitySlider(QString val)
+{
+    mTransferOpacityAmt->setValue(val.toInt());
+    emit mTransferOpacityChanged(val.toInt());
+}
+
+void BrushDockWidget::set_mTransferSize(int val)
+{
+    mTransferWidthLE->setText(QString::number(val));
+    emit mTransferSizeChanged(val);
+}
+
+void BrushDockWidget::set_mTransferSizeSlider(QString val)
+{
+    mTransferWidthSlider->setValue(val.toInt());
+    emit mTransferSizeChanged(val.toInt());
 }
 
 void BrushDockWidget::toggleTransferOpacity(bool val)
@@ -304,11 +332,95 @@ ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
     setWidget(colorModeTab);
 
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    connect(m_RSlider, SIGNAL(valueChanged(int)), SLOT(set_RLE(int)));
+    connect(m_RLineEdit, SIGNAL(textChanged(QString)), SLOT(set_RSlider(QString)));
+    connect(m_GSlider, SIGNAL(valueChanged(int)), SLOT(set_GLE(int)));
+    connect(m_GLineEdit, SIGNAL(textEdited(QString)), SLOT(set_GSlider(QString)));
+    connect(m_BSlider, SIGNAL(valueChanged(int)), SLOT(set_BLE(int)));
+    connect(m_BLineEdit, SIGNAL(textChanged(QString)), SLOT(set_BSlider(QString)));
+    connect(m_HSlider, SIGNAL(valueChanged(int)), SLOT(set_HLE(int)));
+    connect(m_HLineEdit, SIGNAL(textChanged(QString)), SLOT(set_HSlider(QString)));
+    connect(m_SSLider, SIGNAL(valueChanged(int)), SLOT(set_SLE(int)));
+    connect(m_SLineEdit, SIGNAL(textChanged(QString)), SLOT(set_SSlider(QString)));
+    connect(m_VSlider, SIGNAL(valueChanged(int)), SLOT(set_VLE(int)));
+    connect(m_VLineEdit, SIGNAL(textChanged(QString)), SLOT(set_VSlider(QString)));
 }
 
 ColorDockWidget::~ColorDockWidget()
 {
 
+}
+
+void ColorDockWidget::set_RLE(int val)
+{
+    m_RLineEdit->setText(QString::number(val));
+    emit redChanged(val);
+}
+
+void ColorDockWidget::set_RSlider(QString val)
+{
+    m_RSlider->setValue(val.toInt());
+    emit redChanged(val.toInt());
+}
+
+void ColorDockWidget::set_GLE(int val)
+{
+    m_GLineEdit->setText(QString::number(val));
+    emit greenChanged(val);
+}
+
+void ColorDockWidget::set_GSlider(QString val)
+{
+    m_GSlider->setValue(val.toInt());
+    emit greenChanged(val.toInt());
+}
+
+void ColorDockWidget::set_BLE(int val)
+{
+    m_BLineEdit->setText(QString::number(val));
+    emit blueChanged(val);
+}
+
+void ColorDockWidget::set_BSlider(QString val)
+{
+    m_BSlider->setValue(val.toInt());
+    emit blueChanged(val.toInt());
+}
+
+void ColorDockWidget::set_HLE(int val)
+{
+    m_HLineEdit->setText(QString::number(val));
+    emit hueChanged(val);
+}
+
+void ColorDockWidget::set_HSlider(QString val)
+{
+    m_HSlider->setValue(val.toInt());
+    emit hueChanged(val.toInt());
+}
+
+void ColorDockWidget::set_SLE(int val)
+{
+    m_SLineEdit->setText(QString::number(val));
+    emit saturationChanged(val);
+}
+
+void ColorDockWidget::set_SSlider(QString val)
+{
+    m_SSLider->setValue(val.toInt());
+    emit saturationChanged(val.toInt());
+}
+
+void ColorDockWidget::set_VLE(int val)
+{
+    m_VLineEdit->setText(QString::number(val));
+    emit valueChanged(val);
+}
+
+void ColorDockWidget::set_VSlider(QString val)
+{
+    m_VSlider->setValue(val.toInt());
+    emit valueChanged(val.toInt());
 }
 
 TimelineDockWidget::TimelineDockWidget(QWidget *parent) : QDockWidget(parent)

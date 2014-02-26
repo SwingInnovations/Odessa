@@ -26,17 +26,23 @@ signals:
     void mFeatherChanged(int);
     void mSpacingChanged(int);
     void mOpacityChanged(int);
+    void mTransferOpacityChanged(int);
+    void mTransferSizeChanged(int);
 
 private slots:
     void set_mSizeLE(int);
     void set_mFeatherLE(int);
     void set_mSpacingLE(int);
     void set_mOpacityLE(int);
+    void set_mTransferOpacity(int);
+    void set_mTransferSize(int);
 
     void set_mSizeSlider(QString);
     void set_mFeatherSlider(QString);
     void set_mSpacingSlider(QString);
     void set_mOpacitySlider(QString);
+    void set_mTransferOpacitySlider(QString);
+    void set_mTransferSizeSlider(QString);
     void toggleTransferOpacity(bool);
     void toggleTransferSize(bool);
 private:
@@ -83,6 +89,34 @@ class ColorDockWidget : public QDockWidget
 public:
     ColorDockWidget(QWidget *parent = 0);
     virtual ~ColorDockWidget();
+
+    int getRed(){return red;}
+    int getGreen(){return green;}
+    int getBlue(){return blue;}
+    int getHue(){return hue;}
+    int getSaturation(){return saturation;}
+    int getValue(){return value;}
+signals:
+    void redChanged(int);
+    void greenChanged(int);
+    void blueChanged(int);
+    void hueChanged(int);
+    void saturationChanged(int);
+    void valueChanged(int);
+public slots:
+    void set_RLE(int);
+    void set_GLE(int);
+    void set_BLE(int);
+    void set_HLE(int);
+    void set_SLE(int);
+    void set_VLE(int);
+
+    void set_RSlider(QString);
+    void set_GSlider(QString);
+    void set_BSlider(QString);
+    void set_HSlider(QString);
+    void set_SSlider(QString);
+    void set_VSlider(QString);
 private:
     QTabWidget* colorModeTab;
 
@@ -116,6 +150,13 @@ private:
     QHBoxLayout* SLayout;
     QHBoxLayout* VLayout;
     QVBoxLayout* masterHSVLayout;
+
+    int red;
+    int green;
+    int blue;
+    int hue;
+    int saturation;
+    int value;
 };
 
 class TimelineDockWidget : public QDockWidget
