@@ -496,6 +496,9 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcheckbox.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QTabWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
 		mainwindow.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) mainwindow.h -o debug\moc_mainwindow.cpp
 
@@ -1105,6 +1108,10 @@ debug/moc_dockwidgets.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QTabWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpainter.h \
 		Interface/dockwidgets.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) Interface\dockwidgets.h -o debug\moc_dockwidgets.cpp
 
@@ -1496,6 +1503,9 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcheckbox.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QTabWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QApplication \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qapplication.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdesktopwidget.h
@@ -1872,7 +1882,10 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QCheckBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcheckbox.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QTabWidget
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QTabWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mainwindow.o mainwindow.cpp
 
 debug/bitmapimage.o: Graphics/Bitmap/bitmapimage.cpp Graphics/Bitmap/bitmapimage.h \
@@ -3167,7 +3180,11 @@ debug/dockwidgets.o: Interface/dockwidgets.cpp Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qicon.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QTabWidget \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabwidget.h
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpainter.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\dockwidgets.o Interface\dockwidgets.cpp
 
 debug/brush.o: Structure/brush.cpp Structure/brush.h \

@@ -9,7 +9,7 @@ Editor::Editor(QWidget *parent): QWidget(parent), currentFrame(0), currentIndex(
     greenVal = 0;
     blueVal = 0;
     opacityVal = 255;
-    brush.setColor(Qt::blue);
+    brush.setColor(Qt::black);
     brush.setBrush(QBrush(Qt::SolidPattern));
     brush.setWidth(5);
     currentTool = brush;
@@ -17,6 +17,7 @@ Editor::Editor(QWidget *parent): QWidget(parent), currentFrame(0), currentIndex(
     eraser.setWidth(5);
     eraser.setColor(QColor(Qt::white));
     eraser.setBrush(QBrush(Qt::SolidLine));
+    toolType = BRUSH_TOOL;
 }
 
 void Editor::paintEvent(QPaintEvent *event)
@@ -150,9 +151,12 @@ void Editor::setBrush(ToolType type)
     {
     case BRUSH_TOOL:
         currentTool = brush;
+        currentTool.setColor(primaryColor);
+        emit brushSizeChanged(brush.getSize());
         break;
     case ERASER_TOOL:
         currentTool = eraser;
+        emit brushSizeChanged(eraser.getSize());
     default:
         break;
     }
@@ -164,6 +168,7 @@ void Editor::setBrushSize(int val)
     switch(toolType)
     {
     case BRUSH_TOOL:
+        qDebug() << "Setting Brush Width" << endl;
         brush.setWidth(val);
         break;
     case ERASER_TOOL:
@@ -226,12 +231,38 @@ void Editor::setBlueValue(int val)
 void Editor::setOpacity(int val)
 {
     opacityVal = val;
-    //primaryColor.setAlpha(opacityVal);
-    //brush.setColor(primaryColor);
+    primaryColor.setAlpha(opacityVal);
+    currentTool.setColor(primaryColor);
     if(primaryColor.isValid())
     {
         qDebug() << "I am valid!" << endl;
     }else{
         qDebug() << "No Longer Valid" << endl;
+    }
+}
+
+void Editor::setOpacityTransfer(int val)
+{
+
+}
+
+void Editor::setSizeTransfer(int val)
+{
+    if(val == NULL)
+    {
+        val = 0;
+    }else{
+        currentTool.setTransferWidthAmount(val);
+        switch(toolType)
+        {
+        case BRUSH_TOOL:
+            brush.setTransferWidthAmount(val);
+            break;
+        case ERASER_TOOL:
+            eraser.setTransferWidthAmount(val);
+            break;
+        default:
+            break;
+        }
     }
 }

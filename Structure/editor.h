@@ -22,6 +22,12 @@ public:
     Editor(QWidget *parent = 0);
     void setBrush(ToolType type);
 
+signals:
+    void brushSizeChanged(int);
+    void brushFeatherChanged(int);
+    void brushOpacityChanged(int);
+    void brushSpacingChanged(int);
+
 protected:
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
@@ -35,6 +41,9 @@ public slots:
     void setBrushSize(int);
     void setBrushFeather(int);
     void setBrushSpacing(int);
+
+    void setSizeTransfer(int);
+    void setOpacityTransfer(int);
 
     void setRedValue(int);
     void setBlueValue(int);

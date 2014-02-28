@@ -83,9 +83,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(showColorDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowColorDock(bool)));
     connect(showTimeDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowTimelineDock(bool)));
     connect(brushDockWidget, SIGNAL(mOpacityChanged(int)), mEditor, SLOT(setOpacity(int)));
+    connect(brushDockWidget, SIGNAL(mTransferSizeChanged(int)), mEditor, SLOT(setSizeTransfer(int)));
     connect(colorDockWidget, SIGNAL(redChanged(int)), mEditor, SLOT(setRedValue(int)));
     connect(colorDockWidget, SIGNAL(greenChanged(int)), mEditor, SLOT(setGreenValue(int)));
     connect(colorDockWidget, SIGNAL(blueChanged(int)), mEditor, SLOT(setBlueValue(int)));
+    connect(mEditor, SIGNAL(brushSizeChanged(int)), brushDockWidget, SLOT(set_mSizeLE(int)));
     connect(aboutAct, SIGNAL(triggered()), SLOT(about()));
     connect(closeAct, SIGNAL(triggered()), SLOT(close()));
 
@@ -110,7 +112,7 @@ void MainWindow::about()
 {
     QMessageBox msgbox(this);
     msgbox.setTextFormat(Qt::RichText);
-    msgbox.setText("Odessa Ver. 0.0.27<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
+    msgbox.setText("Odessa Ver. 0.0.29<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
     msgbox.exec();
 }
 
@@ -156,10 +158,10 @@ void MainWindow::assignEraserTool()
 
 void MainWindow::assignTextTool()
 {
-
+    mEditor->setBrush(Editor::TEXT_TOOL);
 }
 
 void MainWindow::assignPrimitiveTool()
 {
-
+    mEditor->setBrush(Editor::PRIMITIVE_TOOL);
 }

@@ -13,8 +13,15 @@
 #include <QGridLayout>
 #include <QWidget>
 #include <QTabWidget>
+#include <QGradient>
+#include <QRadialGradient>
+#include <QConicalGradient>
+#include <QPainter>
 
 //handling the Brush System
+
+class ColorWheelWidget;
+
 class BrushDockWidget : public QDockWidget
 {
     Q_OBJECT
@@ -117,8 +124,15 @@ public slots:
     void set_HSlider(QString);
     void set_SSlider(QString);
     void set_VSlider(QString);
+
+protected:
+    void paintEvent(QPaintEvent* event);
+
 private:
     QTabWidget* colorModeTab;
+
+    QLabel* colorDisplayLabel;
+    QPixmap colorWheelPixmap;
 
     //for RGB
     QLabel* m_RLabel;
@@ -151,6 +165,8 @@ private:
     QHBoxLayout* VLayout;
     QVBoxLayout* masterHSVLayout;
 
+    QGroupBox* m_ColorWheelContainer;
+
     int red;
     int green;
     int blue;
@@ -172,7 +188,36 @@ class ColorWheelWidget : public QWidget
     Q_OBJECT
 public:
     ColorWheelWidget(QWidget *parent = 0);
+    void setSize(int x, int y, int w, int h){
+        boundaries.setX(x);
+        boundaries.setY(y);
+        boundaries.setWidth(w);
+        boundaries.setHeight(h);
+        this->resize(w, h);
+        this->setGeometry(boundaries);
+        update();
+    }
+
+    void Draw(QPaintEvent* event){
+        this->paintEvent(event);
+    }
+
+    QPixmap getPixmap(){return pixmap;}
+
     virtual ~ColorWheelWidget();
+protected:
+    void paintEvent(QPaintEvent *event);
+private:
+    QRect boundaries;
+    QPixmap pixmap;
+};
+
+class BrushShapeWidget : public QWidget
+{
+  Q_OBJECT
+public:
+    BrushShapeWidget(QWidget *parent = 0);
+    virtual ~BrushShapeWidget();
 };
 
 #endif // DOCKWIDGETS_H

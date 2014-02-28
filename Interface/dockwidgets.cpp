@@ -326,12 +326,30 @@ ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
 
     QWidget* HSVPanel = new QWidget(this);
     HSVPanel->setLayout(masterHSVLayout);
-
     colorModeTab->addTab(HSVPanel, "HSV");
 
-    setWidget(colorModeTab);
+    colorDisplayLabel = new QLabel(this);
+    colorWheelPixmap = QPixmap(200, 200);
+    colorWheelPixmap.fill(QColor(Qt::gray));
+    colorDisplayLabel->setPixmap(colorWheelPixmap);
 
-    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    QHBoxLayout* colorDisplayLt = new QHBoxLayout;
+    colorDisplayLt->setAlignment(Qt::AlignCenter);
+    colorDisplayLt->addWidget(colorDisplayLabel);
+
+    m_ColorWheelContainer = new QGroupBox(this);
+    m_ColorWheelContainer->setTitle("Color Wheel");
+    m_ColorWheelContainer->setLayout(colorDisplayLt);
+
+    QVBoxLayout* masterColorLayout = new QVBoxLayout;
+    masterColorLayout->addWidget(m_ColorWheelContainer);
+    masterColorLayout->addWidget(colorModeTab);
+
+    QWidget* masterColorWidget = new QWidget(this);
+    masterColorWidget->setLayout(masterColorLayout);
+
+    setWidget(masterColorWidget);
+
     connect(m_RSlider, SIGNAL(valueChanged(int)), SLOT(set_RLE(int)));
     connect(m_RLineEdit, SIGNAL(textChanged(QString)), SLOT(set_RSlider(QString)));
     connect(m_GSlider, SIGNAL(valueChanged(int)), SLOT(set_GLE(int)));
@@ -346,6 +364,26 @@ ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(m_VLineEdit, SIGNAL(textChanged(QString)), SLOT(set_VSlider(QString)));
 }
 
+void ColorDockWidget::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(&colorWheelPixmap);
+    QConicalGradient grad;
+    grad.setCenter(100, 100);
+    grad.setColorAt(0, Qt::green);
+    grad.setColorAt(0.175, QColor(Qt::yellow));
+    grad.setColorAt(0.35, QColor(Qt::red));
+    grad.setColorAt(0.525, QColor(Qt::magenta));
+    grad.setColorAt(0.65, QColor(Qt::blue));
+    grad.setColorAt(0.8253, QColor(Qt::cyan));
+    grad.setColorAt(1, QColor(Qt::green));
+    painter.setBrush(grad);
+    painter.drawEllipse(0, 0, 200, 200);
+
+    painter.setBrush(Qt::gray);
+    painter.drawEllipse(50, 50, 100, 100);
+
+    colorDisplayLabel->setPixmap(colorWheelPixmap);
+}
 ColorDockWidget::~ColorDockWidget()
 {
 
@@ -441,4 +479,33 @@ ColorWheelWidget::ColorWheelWidget(QWidget *parent) : QWidget(parent)
 ColorWheelWidget::~ColorWheelWidget()
 {
 
+}
+
+BrushShapeWidget::BrushShapeWidget(QWidget *parent) : QWidget(parent)
+{
+
+}
+
+BrushShapeWidget::~BrushShapeWidget()
+{
+
+}
+
+void ColorWheelWidget::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(&pixmap);
+    QConicalGradient grad;
+    grad.setCenter(boundaries.width()/2, boundaries.height()/2);
+    grad.setColorAt(0, Qt::green);
+    grad.setColorAt(0.175, QColor(Qt::yellow));
+    grad.setColorAt(0.35, QColor(Qt::red));
+    grad.setColorAt(0.525, QColor(Qt::magenta));
+    grad.setColorAt(0.65, QColor(Qt::blue));
+    grad.setColorAt(0.8253, QColor(Qt::cyan));
+    grad.setColorAt(1, QColor(Qt::green));
+    painter.setBrush(grad);
+    painter.drawEllipse(50, 0, 100, 100);
+
+    painter.setBrush(Qt::gray);
+    painter.drawEllipse(75, 25, 50, 50);
 }
