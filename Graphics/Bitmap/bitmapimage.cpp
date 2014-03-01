@@ -84,6 +84,7 @@ void BitmapImage::paintImage(QTabletEvent *event, Brush brush, QPoint points[])
     painter.setBrush(brush.getBrush());
     painter.setPen(brush.getPen());
     painter.drawLine(points[1], event->pos());
+    painter.end();
     //painter.drawEllipse(event->pos(), brush.getSize(), brush.getSize());
 }
 
@@ -98,6 +99,7 @@ void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint points[])
     qDebug() << "Brush Width: " << brush.getPen().width() << endl;
 
     painter.drawLine(points[1], event->pos());
+    painter.end();
     //painter.drawEllipse(event->pos(), brush.getSize(), brush.getSize());
 }
 

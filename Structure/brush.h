@@ -9,11 +9,11 @@
 class Brush
 {
 public:
-    enum BrushType { Pen, Pencil, Eraser, PaintBucket, Text };
+
+    enum BrushShape{LINE_SHAPE, CIRCLE_SHAPE, SQUARE_SHAPE};
 
     Brush();
 
-    void setBrushType(BrushType type){ brushType = type; }
     void setBrush(QBrush brush){ myBrush = brush; }
     void setPen(QPen pen){ myPen = pen; }
     void setColor(QColor color){ myColor = color; myBrush.setColor(myColor); myPen.setColor(myColor); }
@@ -26,6 +26,8 @@ public:
 
     void setPressure(bool val){ pressure = val; }
     void setFeather(bool val){ feather = val; }
+
+    void setBrushShape(BrushShape shape){ brushShape = shape; }
 
     //color Centric
     void setRed(int val){myColor.setRed(val);}
@@ -43,7 +45,8 @@ public:
     int getTransferWidth(){return widthAmount;}
 
 private:
-    BrushType brushType;
+
+    BrushShape brushShape;
 
     QPen myPen;
     QBrush myBrush;

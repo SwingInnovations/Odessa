@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::TopToolBarArea);
 
     newDialogWin = new OdessaNewDocDialog();
+    prefDialog = new OdessaPrefDialog();
     brushDockWidget = new BrushDockWidget(this);
     brushDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
@@ -47,6 +48,26 @@ MainWindow::MainWindow(QWidget *parent)
     closeAct = new QAction("&Close", this);
     closeAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
 
+    //edit Actions
+    undoAct = new QAction(this);
+    undoAct->setText("&Undo");
+    redoAct = new QAction(this);
+    redoAct->setText("&Redo");
+    cutAct = new QAction(this);
+    cutAct->setText("&Cut");
+    copyAct = new QAction(this);
+    copyAct->setText("&Copy");
+    pasteAct = new QAction(this);
+    pasteAct->setText("&Paste");
+
+    //Select Menu
+    selectRegionAct = new QAction(this);
+    selectRegionAct->setText("&Select Region");
+    selectAllAct = new QAction(this);
+    selectAllAct->setText("&Select All");
+    deselectAct = new QAction(this);
+    deselectAct->setText("&Deselect");
+
     preferenceAct = new QAction("Preferences", this);
     showBrushDockWinAct = new QAction("Show BrushDock", this);
     showBrushDockWinAct->setCheckable(true);
@@ -64,6 +85,21 @@ MainWindow::MainWindow(QWidget *parent)
     fileMenu->addSeparator();
     fileMenu->addAction(closeAct);
 
+    //edit Menu
+    editMenu = this->menuBar()->addMenu("&Edit");
+    editMenu->addAction(undoAct);
+    editMenu->addAction(redoAct);
+    editMenu->addSeparator();
+    editMenu->addAction(cutAct);
+    editMenu->addAction(copyAct);
+    editMenu->addAction(pasteAct);
+
+    //select Menu
+    selectMenu = this->menuBar()->addMenu("&Select");
+    selectMenu->addAction(selectRegionAct);
+    selectMenu->addAction(selectAllAct);
+    selectMenu->addAction(deselectAct);
+
     viewMenu = this->menuBar()->addMenu("&View");
     dockWinMenu = viewMenu->addMenu("Dock Windows");
     dockWinMenu->addAction(showBrushDockWinAct);
@@ -78,6 +114,7 @@ MainWindow::MainWindow(QWidget *parent)
     eyeDropper = new QShortcut(QKeySequence(Qt::ALT), this);
 
     connect(newAct, SIGNAL(triggered()), SLOT(showNewDocWin()));
+    connect(preferenceAct, SIGNAL(triggered()),SLOT(showPrefWin()));
     //connect(addLayerAct, SIGNAL(triggered()), mEditor, SLOT(addLayer()));
     connect(brushTool, SIGNAL(triggered()), SLOT(assignBrushTool()));
     connect(eraserTool, SIGNAL(triggered()), SLOT(assignEraserTool()));
@@ -88,6 +125,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(showBrushDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowBrushDock(bool)));
     connect(showColorDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowColorDock(bool)));
     connect(showTimeDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowTimelineDock(bool)));
+
     connect(brushDockWidget, SIGNAL(mOpacityChanged(int)), mEditor, SLOT(setOpacity(int)));
     connect(brushDockWidget, SIGNAL(mTransferSizeChanged(int)), mEditor, SLOT(setSizeTransfer(int)));
     connect(colorDockWidget, SIGNAL(redChanged(int)), mEditor, SLOT(setRedValue(int)));
@@ -101,8 +139,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(eyeDropper, SIGNAL(activated()), SLOT(assignEyeDropperTool()));
     connect(aboutAct, SIGNAL(triggered()), SLOT(about()));
     connect(closeAct, SIGNAL(triggered()), SLOT(close()));
-
-
 
     addDockWidget(Qt::RightDockWidgetArea, brushDockWidget);
     addDockWidget(Qt::RightDockWidgetArea, colorDockWidget);
@@ -121,11 +157,16 @@ void MainWindow::showNewDocWin()
     newDialogWin->exec();
 }
 
+void MainWindow::showPrefWin()
+{
+    prefDialog->exec();
+}
+
 void MainWindow::about()
 {
     QMessageBox msgbox(this);
     msgbox.setTextFormat(Qt::RichText);
-    msgbox.setText("Odessa Ver. 0.0.31<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
+    msgbox.setText("Odessa Ver. 0.0.40<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
     msgbox.exec();
 }
 
@@ -184,3 +225,4 @@ void MainWindow::assignEyeDropperTool()
     mEditor->setBrush(Editor::EYEDROPPER_TOOL);
     qDebug() << "Zing";
 }
+

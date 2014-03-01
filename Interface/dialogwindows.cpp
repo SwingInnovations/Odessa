@@ -77,3 +77,14 @@ void OdessaNewDocDialog::newProjectSlot()
     close();
 }
 
+OdessaPrefDialog::OdessaPrefDialog()
+{
+    setWindowTitle("Preferences");
+    setModal(true);
+}
+
+OdessaPrefDialog::~OdessaPrefDialog()
+{
+
+}
+

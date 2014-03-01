@@ -28,6 +28,7 @@ private slots:
     void assignPrimitiveTool();
     void assignEyeDropperTool();
     void showNewDocWin();
+    void showPrefWin();
     void toggleShowBrushDock(bool);
     void toggleShowColorDock(bool);
     void toggleShowTimelineDock(bool);
@@ -36,17 +37,30 @@ private slots:
 private:
     Editor *mEditor;
     OdessaNewDocDialog *newDialogWin;
+    OdessaPrefDialog *prefDialog;
     BrushDockWidget *brushDockWidget;
     ColorDockWidget *colorDockWidget;
     TimelineDockWidget *timelineDockWidget;
 
     bool isModified;
 
-    //temporary action
     QAction *addLayerAct;
     QAction *newAct;
     QAction *closeAct;
 
+    //edit menu actions
+    QAction *undoAct;
+    QAction *redoAct;
+    QAction *cutAct;
+    QAction *copyAct;
+    QAction *pasteAct;
+
+    //select menu actions
+    QAction *selectRegionAct;
+    QAction *selectAllAct;
+    QAction *deselectAct;
+
+    //show dock widgets
     QAction *showBrushDockWinAct;
     QAction *showColorDockWinAct;
     QAction *showTimeDockWinAct;
@@ -64,6 +78,8 @@ private:
     QAction *aboutAct;
 
     QMenu *fileMenu;
+    QMenu *editMenu;
+    QMenu *selectMenu;
     QMenu *viewMenu;
     QMenu *dockWinMenu;
     QMenu *helpMenu;

@@ -433,12 +433,14 @@ void ColorDockWidget::paintEvent(QPaintEvent *event)
 
 void ColorDockWidget::mousePressEvent(QMouseEvent *event)
 {
-    QPixmap temp = QWidget::grab();
-    tempImage = temp.toImage();
-    QColor color(tempImage.pixel(event->pos()));
-    set_RLE(color.red());
-    set_GLE(color.green());
-    set_BLE(color.blue());
+//    if(event->button() == Qt::LeftButton)
+//    {
+//        tempImage = colorWheelPixmap.toImage();
+//        QColor color = tempImage.pixel(event->pos());
+//        set_RLE(color.red());
+//        set_GLE(color.green());
+//        set_BLE(color.blue());
+//    }
 }
 
 ColorDockWidget::~ColorDockWidget()

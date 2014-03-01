@@ -9,6 +9,8 @@
 #include <QLayout>
 #include <QPushButton>
 #include <QGroupBox>
+#include <QListWidget>
+#include <QListWidgetItem>
 #include <QDebug>
 
 //handle the dialog windows
@@ -54,6 +56,16 @@ private:
     QVBoxLayout *finalLayout;
 
     QHBoxLayout *buttonLayout;
+};
+
+class OdessaPrefDialog : public QDialog
+{
+    Q_OBJECT
+public:
+    OdessaPrefDialog();
+    ~OdessaPrefDialog();
+private:
+
 };
 
 #endif // DIALOGWINDOWS_H
