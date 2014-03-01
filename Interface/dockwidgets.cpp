@@ -404,12 +404,36 @@ void ColorDockWidget::paintEvent(QPaintEvent *event)
     painter.setPen(QColor(Qt::gray));
     painter.drawEllipse(complementColorPos, 10, 10);
 
+    QColor primaryColor(m_RSlider->value(), m_GSlider->value(), m_BSlider->value(), 255);
+
+    //central painting wheel
+    QConicalGradient colorGrad;
+    colorGrad.setCenter(100, 100);
+    colorGrad.setColorAt(0, primaryColor);
+    colorGrad.setColorAt(0.25, Qt::white);
+    colorGrad.setColorAt(0.75, Qt::black);
+    colorGrad.setColorAt(1, primaryColor);
+    colorGrad.setAngle(45);
+
+    painter.setBrush(colorGrad);
+    painter.setPen(QColor(Qt::black));
+
+    refineColorRect = QRect(65, 65, 70, 70);
+    painter.translate(100, -40);
+    painter.rotate(45);
+    painter.drawRect(refineColorRect);
+
+    painter.resetTransform();
+    //primary Color preview
+    painter.setBrush(QColor(m_RSlider->value(), m_GSlider->value(), m_BSlider->value(), 255));
+    painter.drawRect(0, 175, 25, 25);
+
     colorDisplayLabel->setPixmap(colorWheelPixmap);
 }
 
 void ColorDockWidget::mousePressEvent(QMouseEvent *event)
 {
-    QPixmap temp = QPixmap::grabWidget(colorDisplayLabel);
+    QPixmap temp = QWidget::grab();
     tempImage = temp.toImage();
     QColor color(tempImage.pixel(event->pos()));
     set_RLE(color.red());

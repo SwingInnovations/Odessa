@@ -181,6 +181,7 @@ private:
     //color wheel
     QPoint primaryColorPos;
     QPoint complementColorPos;
+    QRect refineColorRect;
 };
 
 class TimelineDockWidget : public QDockWidget
