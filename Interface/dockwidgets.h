@@ -17,6 +17,8 @@
 #include <QRadialGradient>
 #include <QConicalGradient>
 #include <QPainter>
+#include <QMouseEvent>
+#include <QDebug>
 
 //handling the Brush System
 
@@ -127,12 +129,14 @@ public slots:
 
 protected:
     void paintEvent(QPaintEvent* event);
+    void mousePressEvent(QMouseEvent* event);
 
 private:
     QTabWidget* colorModeTab;
 
     QLabel* colorDisplayLabel;
     QPixmap colorWheelPixmap;
+    QImage tempImage;
 
     //for RGB
     QLabel* m_RLabel;
@@ -173,6 +177,10 @@ private:
     int hue;
     int saturation;
     int value;
+
+    //color wheel
+    QPoint primaryColorPos;
+    QPoint complementColorPos;
 };
 
 class TimelineDockWidget : public QDockWidget

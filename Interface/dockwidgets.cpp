@@ -192,13 +192,23 @@ void BrushDockWidget::set_mTransferOpacitySlider(QString val)
 void BrushDockWidget::set_mTransferSize(int val)
 {
     mTransferWidthLE->setText(QString::number(val));
-    emit mTransferSizeChanged(val);
+    if(mTransferWidth->isEnabled())
+    {
+        emit mTransferSizeChanged(val);
+    }else{
+        emit mTransferSizeChanged(0);
+    }
 }
 
 void BrushDockWidget::set_mTransferSizeSlider(QString val)
 {
     mTransferWidthSlider->setValue(val.toInt());
-    emit mTransferSizeChanged(val.toInt());
+    if(mTransferWidth->isEnabled())
+    {
+        emit mTransferSizeChanged(val.toInt());
+    }else{
+        emit mTransferSizeChanged(0);
+    }
 }
 
 void BrushDockWidget::toggleTransferOpacity(bool val)
@@ -222,6 +232,7 @@ void BrushDockWidget::toggleTransferSize(bool val)
     }else{
         mTransferWidthSlider->setEnabled(false);
         mTransferWidthLE->setEnabled(false);
+        emit mTransferSizeChanged(0);
     }
 }
 
@@ -382,8 +393,30 @@ void ColorDockWidget::paintEvent(QPaintEvent *event)
     painter.setBrush(Qt::gray);
     painter.drawEllipse(50, 50, 100, 100);
 
+    //handle drawing
+    primaryColorPos = QPoint(175, 100);
+    painter.setBrush(QBrush(Qt::transparent));
+    painter.setPen(QColor(Qt::black));
+    painter.drawEllipse(primaryColorPos, 10, 10);
+
+    complementColorPos = QPoint(25, 100);
+    painter.setBrush(QBrush(Qt::transparent));
+    painter.setPen(QColor(Qt::gray));
+    painter.drawEllipse(complementColorPos, 10, 10);
+
     colorDisplayLabel->setPixmap(colorWheelPixmap);
 }
+
+void ColorDockWidget::mousePressEvent(QMouseEvent *event)
+{
+    QPixmap temp = QPixmap::grabWidget(colorDisplayLabel);
+    tempImage = temp.toImage();
+    QColor color(tempImage.pixel(event->pos()));
+    set_RLE(color.red());
+    set_GLE(color.green());
+    set_BLE(color.blue());
+}
+
 ColorDockWidget::~ColorDockWidget()
 {
 

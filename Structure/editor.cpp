@@ -38,12 +38,32 @@ void Editor::paintEvent(QPaintEvent *event)
 
 void Editor::mousePressEvent(QMouseEvent *event)
 {
-    if(!mIndex.isEmpty() || !rIndex.isEmpty())
+    switch(toolType)
     {
-        deviceDown = true;
-        drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
+    case BRUSH_TOOL:
+        if(!mIndex.isEmpty() || !rIndex.isEmpty())
+        {
+            deviceDown = true;
+            drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
+        }
+        break;
+    case ERASER_TOOL:
+        if(!mIndex.isEmpty() || !rIndex.isEmpty())
+        {
+            deviceDown = true;
+            drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
+        }
+        break;
+    case EYEDROPPER_TOOL:
+        pix = QPixmap::grabWidget(this);
+        img = pix.toImage();
+        QColor color(img.pixel(event->pos().x(), event->pos().y()));
+        emit redChanged(color.red());
+        emit greenChanged(color.green());
+        emit blueChanged(color.blue());
+        break;
     }
-    qDebug() << "Mouse Pressed" << endl;
+
     update();
 }
 
@@ -58,14 +78,30 @@ void Editor::mouseReleaseEvent(QMouseEvent *event)
 
 void Editor::mouseMoveEvent(QMouseEvent *event)
 {
-
-    drawPath[2] = drawPath[1];
-    drawPath[1] = drawPath[0];
-    drawPath[0] = event->pos();
-
-    if(deviceDown)
+    switch(toolType)
     {
-        mIndex.at(0)->getImage()->paintImage(event, currentTool, drawPath);
+    case BRUSH_TOOL:
+        drawPath[2] = drawPath[1];
+        drawPath[1] = drawPath[0];
+        drawPath[0] = event->pos();
+
+        if(deviceDown)
+        {
+            mIndex.at(0)->getImage()->paintImage(event, currentTool, drawPath);
+        }
+        break;
+    case ERASER_TOOL:
+        drawPath[2] = drawPath[1];
+        drawPath[1] = drawPath[0];
+        drawPath[0] = event->pos();
+
+        if(deviceDown)
+        {
+            mIndex.at(0)->getImage()->paintImage(event, currentTool, drawPath);
+        }
+        break;
+    default:
+        break;
     }
     update();
 }
@@ -73,40 +109,85 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
 void Editor::tabletEvent(QTabletEvent *event)
 {
 
-    switch(event->type())
+    switch(toolType)
     {
-    case QEvent::TabletPress:
-        if(!deviceDown)
+    case BRUSH_TOOL:
+        switch(event->type())
         {
-            deviceDown = true;
-            drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
-        }  
+        case QEvent::TabletPress:
+            if(!deviceDown)
+            {
+                deviceDown = true;
+                drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
+            }
 
+            break;
+        case QEvent::TabletRelease:
+            if(deviceDown)
+            {
+                deviceDown = false;
+            }
+
+            break;
+        case QEvent::TabletMove:
+
+            drawPath[2] = drawPath[1];
+            drawPath[1] = drawPath[0];
+            drawPath[0] = event->pos();
+
+            if(deviceDown)
+            {
+                //currentTool.setColor(primaryColor);
+                mIndex.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
+            }
+
+        default:
+            break;
+            qDebug() << "Nothing Happening" << endl;
+        }
         break;
-    case QEvent::TabletRelease:
-        if(deviceDown)
+    case ERASER_TOOL:
+        switch(event->type())
         {
-            deviceDown = false;
+        case QEvent::TabletPress:
+            if(!deviceDown)
+            {
+                deviceDown = true;
+                drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
+            }
+
+            break;
+        case QEvent::TabletRelease:
+            if(deviceDown)
+            {
+                deviceDown = false;
+            }
+
+            break;
+        case QEvent::TabletMove:
+
+            drawPath[2] = drawPath[1];
+            drawPath[1] = drawPath[0];
+            drawPath[0] = event->pos();
+
+            if(deviceDown)
+            {
+                //currentTool.setColor(primaryColor);
+                mIndex.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
+            }
+
+        default:
+            break;
+            qDebug() << "Nothing Happening" << endl;
         }
 
         break;
-    case QEvent::TabletMove:
+    case EYEDROPPER_TOOL:
 
-        drawPath[2] = drawPath[1];
-        drawPath[1] = drawPath[0];
-        drawPath[0] = event->pos();
-
-        if(deviceDown)
-        {
-            //currentTool.setColor(primaryColor);
-            mIndex.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
-        }
-
+        break;
     default:
         break;
-        qDebug() << "Nothing Happening" << endl;
     }
-
     update();
 }
 
@@ -157,6 +238,9 @@ void Editor::setBrush(ToolType type)
     case ERASER_TOOL:
         currentTool = eraser;
         emit brushSizeChanged(eraser.getSize());
+    case EYEDROPPER_TOOL:
+
+        break;
     default:
         break;
     }

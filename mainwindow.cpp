@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     mEditor = new Editor(this);
     setCentralWidget(mEditor);
+
     mEditor->setStyleSheet("background-color: grey;");
 
     toolBar = this->addToolBar("Tools");
@@ -30,7 +31,10 @@ MainWindow::MainWindow(QWidget *parent)
     textTool->setText("Text");
     primitiveTool = new QAction(this);
     primitiveTool->setText("Prim");
+    eyeDropperTool = new QAction(this);
+    eyeDropperTool->setText("EyeDropper");
 
+    toolBar->addAction(eyeDropperTool);
     toolBar->addAction(brushTool);
     toolBar->addAction(eraserTool);
     toolBar->addAction(textTool);
@@ -56,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     fileMenu = this->menuBar()->addMenu("&File");
     fileMenu->addAction(newAct);
-    fileMenu->addAction(addLayerAct);
+    //fileMenu->addAction(addLayerAct);
     fileMenu->addSeparator();
     fileMenu->addAction(closeAct);
 
@@ -70,6 +74,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     helpMenu = this->menuBar()->addMenu("&Help");
     helpMenu->addAction(aboutAct);
+
+    eyeDropper = new QShortcut(QKeySequence(Qt::ALT), this);
 
     connect(newAct, SIGNAL(triggered()), SLOT(showNewDocWin()));
     //connect(addLayerAct, SIGNAL(triggered()), mEditor, SLOT(addLayer()));
@@ -88,8 +94,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(colorDockWidget, SIGNAL(greenChanged(int)), mEditor, SLOT(setGreenValue(int)));
     connect(colorDockWidget, SIGNAL(blueChanged(int)), mEditor, SLOT(setBlueValue(int)));
     connect(mEditor, SIGNAL(brushSizeChanged(int)), brushDockWidget, SLOT(set_mSizeLE(int)));
+    connect(mEditor, SIGNAL(redChanged(int)), colorDockWidget, SLOT(set_RLE(int)));
+    connect(mEditor, SIGNAL(greenChanged(int)), colorDockWidget, SLOT(set_GLE(int)));
+    connect(mEditor, SIGNAL(blueChanged(int)), colorDockWidget, SLOT(set_BLE(int)));
+    connect(eyeDropperTool, SIGNAL(triggered()), SLOT(assignEyeDropperTool()));
+    connect(eyeDropper, SIGNAL(activated()), SLOT(assignEyeDropperTool()));
     connect(aboutAct, SIGNAL(triggered()), SLOT(about()));
     connect(closeAct, SIGNAL(triggered()), SLOT(close()));
+
+
 
     addDockWidget(Qt::RightDockWidgetArea, brushDockWidget);
     addDockWidget(Qt::RightDockWidgetArea, colorDockWidget);
@@ -112,7 +125,7 @@ void MainWindow::about()
 {
     QMessageBox msgbox(this);
     msgbox.setTextFormat(Qt::RichText);
-    msgbox.setText("Odessa Ver. 0.0.29<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
+    msgbox.setText("Odessa Ver. 0.0.30<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
     msgbox.exec();
 }
 
@@ -164,4 +177,10 @@ void MainWindow::assignTextTool()
 void MainWindow::assignPrimitiveTool()
 {
     mEditor->setBrush(Editor::PRIMITIVE_TOOL);
+}
+
+void MainWindow::assignEyeDropperTool()
+{
+    mEditor->setBrush(Editor::EYEDROPPER_TOOL);
+    qDebug() << "Zing";
 }

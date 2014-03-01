@@ -9,6 +9,8 @@
 #include <QDebug>
 #include <QPoint>
 #include <QPixmap>
+#include <QShortcut>
+
 #include "layer.h"
 #include "brush.h"
 
@@ -17,7 +19,7 @@ class Editor : public QWidget
 
     Q_OBJECT
 public:
-    enum ToolType{BRUSH_TOOL, ERASER_TOOL, TEXT_TOOL , PRIMITIVE_TOOL};
+    enum ToolType{BRUSH_TOOL, ERASER_TOOL, TEXT_TOOL , PRIMITIVE_TOOL, EYEDROPPER_TOOL};
 
     Editor(QWidget *parent = 0);
     void setBrush(ToolType type);
@@ -27,6 +29,10 @@ signals:
     void brushFeatherChanged(int);
     void brushOpacityChanged(int);
     void brushSpacingChanged(int);
+
+    void redChanged(int);
+    void greenChanged(int);
+    void blueChanged(int);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -62,6 +68,8 @@ private:
     QList<Layer*> mIndex;
     QList<Layer*> rIndex;
     ToolType toolType;
+    QPixmap pix;
+    QImage img;
 
     int redVal, greenVal, blueVal, opacityVal;
 

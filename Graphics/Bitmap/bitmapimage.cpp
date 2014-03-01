@@ -99,7 +99,6 @@ void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint points[])
 
     painter.drawLine(points[1], event->pos());
     //painter.drawEllipse(event->pos(), brush.getSize(), brush.getSize());
-
 }
 
 

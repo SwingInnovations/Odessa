@@ -7,6 +7,7 @@
 #include <QAction>
 #include <QMessageBox>
 #include <QToolBar>
+#include <QShortcut>
 
 #include "Structure/editor.h"
 #include "Interface/dialogwindows.h"
@@ -25,6 +26,7 @@ private slots:
     void assignEraserTool();
     void assignTextTool();
     void assignPrimitiveTool();
+    void assignEyeDropperTool();
     void showNewDocWin();
     void toggleShowBrushDock(bool);
     void toggleShowColorDock(bool);
@@ -55,6 +57,9 @@ private:
     QAction *eraserTool;
     QAction *textTool;
     QAction *primitiveTool;
+    QAction *eyeDropperTool;
+
+    QShortcut* eyeDropper;
 
     QAction *aboutAct;
 
