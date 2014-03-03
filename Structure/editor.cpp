@@ -32,8 +32,6 @@ void Editor::paintEvent(QPaintEvent *event)
     {
         rIndex.at(currentFrame-1)->getImage()->paintImage(painter);
     }
-
-    qDebug() << currentIndex << endl;
 }
 
 void Editor::mousePressEvent(QMouseEvent *event)
@@ -109,6 +107,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
 void Editor::tabletEvent(QTabletEvent *event)
 {
 
+    event->accept();
     switch(toolType)
     {
     case BRUSH_TOOL:
@@ -120,14 +119,14 @@ void Editor::tabletEvent(QTabletEvent *event)
                 deviceDown = true;
                 drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
             }
-
+            qDebug() << "Tablet Pressed" << endl;
             break;
         case QEvent::TabletRelease:
             if(deviceDown)
             {
                 deviceDown = false;
             }
-
+            qDebug() << "Tablet Released" << endl;
             break;
         case QEvent::TabletMove:
 
@@ -252,7 +251,6 @@ void Editor::setBrushSize(int val)
     switch(toolType)
     {
     case BRUSH_TOOL:
-        qDebug() << "Setting Brush Width" << endl;
         brush.setWidth(val);
         break;
     case ERASER_TOOL:
