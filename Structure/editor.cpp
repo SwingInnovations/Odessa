@@ -23,14 +23,20 @@ Editor::Editor(QWidget *parent): QWidget(parent), currentFrame(0), currentIndex(
 void Editor::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-    if(!mIndex.isEmpty())
-    {
-        mIndex.at(currentIndex-1)->getImage()->paintImage(painter);
-    }
+//    if(!mIndex.isEmpty())
+//    {
+//        mIndex.at(currentIndex-1)->getImage()->paintImage(painter);
+//    }
 
-    if(!rIndex.isEmpty())
+//    if(!rIndex.isEmpty())
+//    {
+//        rIndex.at(currentFrame-1)->getImage()->paintImage(painter);
+//    }
+
+        //layerObject[currentIndex-1][currentFrame-1]->getImage()->paintImage(painter);
+    if(!layerObject.isEmpty())
     {
-        rIndex.at(currentFrame-1)->getImage()->paintImage(painter);
+        layerObject.at(currentIndex-1).at(currentFrame-1)->getImage()->paintImage(painter);
     }
 
     qDebug() << currentIndex << endl;
@@ -41,14 +47,25 @@ void Editor::mousePressEvent(QMouseEvent *event)
     switch(toolType)
     {
     case BRUSH_TOOL:
-        if(!mIndex.isEmpty() || !rIndex.isEmpty())
+//        if(!mIndex.isEmpty() || !rIndex.isEmpty())
+//        {
+//            deviceDown = true;
+//            drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
+//        }
+        if(!layerObject.isEmpty())
         {
             deviceDown = true;
             drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
         }
         break;
     case ERASER_TOOL:
-        if(!mIndex.isEmpty() || !rIndex.isEmpty())
+//        if(!mIndex.isEmpty() || !rIndex.isEmpty())
+//        {
+//            deviceDown = true;
+//            drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
+//        }
+
+        if(!layerObject.isEmpty())
         {
             deviceDown = true;
             drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
@@ -81,15 +98,14 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
     switch(toolType)
     {
     case BRUSH_TOOL:
-//        drawPath[2] = drawPath[1];
-//        drawPath[1] = drawPath[0];
-//        drawPath[0] = event->pos();
-
-        drawPath[2] = event->pos();
+        drawPath[2] = drawPath[1];
+        drawPath[1] = drawPath[0];
+        drawPath[0] = event->pos();
 
         if(deviceDown)
         {
-            mIndex.at(0)->getImage()->paintImage(event, currentTool, drawPath);
+//            mIndex.at(0)->getImage()->paintImage(event, currentTool, drawPath);
+            layerObject.at(currentIndex-1).at(currentFrame-1)->getImage()->paintImage(event, currentTool, drawPath);
         }
         break;
     case ERASER_TOOL:
@@ -99,7 +115,8 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
 
         if(deviceDown)
         {
-            mIndex.at(0)->getImage()->paintImage(event, currentTool, drawPath);
+//            mIndex.at(0)->getImage()->paintImage(event, currentTool, drawPath);
+            layerObject.at(currentIndex-1).at(currentFrame-1)->getImage()->paintImage(event, currentTool, drawPath);
         }
         break;
     default:
@@ -139,7 +156,8 @@ void Editor::tabletEvent(QTabletEvent *event)
                 drawPath[0] = event->pos();
 
                 //currentTool.setColor(primaryColor);
-                mIndex.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
+//                mIndex.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
+                layerObject.at(currentIndex-1).at(currentFrame-1)->getImage()->paintImage(event, currentTool, drawPath);
             }
 
         default:
@@ -174,7 +192,7 @@ void Editor::tabletEvent(QTabletEvent *event)
             if(deviceDown)
             {
                 //currentTool.setColor(primaryColor);
-                mIndex.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
+                 layerObject.at(currentIndex-1).at(currentFrame-1)->getImage()->paintImage(event, currentTool, drawPath);
             }
 
         default:
@@ -205,13 +223,26 @@ void Editor::newProject(int type, int width, int height, int dpi)
     {
         mIndex.clear();
         currentIndex = 0;
+        currentFrame = 0;
     }else{
         switch(type)
         {
         case 0:
             //create Standard Image
-            mIndex.append(new Layer(Layer::Bitmap, currentIndex, width, height));
-            currentIndex++;
+            //Old Implementation
+//            mIndex.append(new Layer(Layer::Bitmap, currentIndex, width, height));
+//            currentIndex++;
+            currentIndex = 1;
+            currentFrame = 1;
+            layerObject.resize(currentIndex);
+            for(int i = 0; i < 4; i++)
+            {
+                //layerObject[i].resize(3);
+            }
+            layerObject[currentIndex-1].push_back(new Layer(Layer::Bitmap, currentIndex, width, height));
+            qDebug() << "Total Layer Object Size: " << layerObject.size();
+            qDebug() << "Layer Index size: " << layerObject.at(0).size();
+
             break;
         case 1:
             //create Animation

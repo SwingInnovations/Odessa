@@ -488,6 +488,12 @@ release/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow 
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGroupBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgroupbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
 		Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
@@ -972,6 +978,13 @@ release/moc_dialogwindows.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGroupBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgroupbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qitemselectionmodel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		Interface/dialogwindows.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) Interface\dialogwindows.h -o release\moc_dialogwindows.cpp
@@ -1503,6 +1516,12 @@ release/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGroupBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgroupbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
 		Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
@@ -1886,6 +1905,12 @@ release/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGroupBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgroupbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
 		Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
@@ -3056,6 +3081,13 @@ release/dialogwindows.o: Interface/dialogwindows.cpp Interface/dialogwindows.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractbutton.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGroupBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qgroupbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qitemselectionmodel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\dialogwindows.o Interface\dialogwindows.cpp
 

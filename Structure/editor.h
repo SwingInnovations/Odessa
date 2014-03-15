@@ -10,6 +10,7 @@
 #include <QPoint>
 #include <QPixmap>
 #include <QShortcut>
+#include <QPointer>
 
 #include "layer.h"
 #include "brush.h"
@@ -67,6 +68,9 @@ private:
     int numOfFramesPerSecond;
     QList<Layer*> mIndex;
     QList<Layer*> rIndex;
+
+    QVector<QVector<Layer*> > layerObject;
+
     ToolType toolType;
     QPixmap pix;
     QImage img;
