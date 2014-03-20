@@ -68,6 +68,7 @@ private:
     int numOfFramesPerSecond;
     QList<Layer*> mIndex;
     QList<Layer*> rIndex;
+    QVector<Layer*> mLayers;
 
     QVector<QVector<Layer*> > layerObject;
 

@@ -34,9 +34,9 @@ void Editor::paintEvent(QPaintEvent *event)
 //    }
 
         //layerObject[currentIndex-1][currentFrame-1]->getImage()->paintImage(painter);
-    if(!layerObject.isEmpty())
+    if(!mLayers.isEmpty())
     {
-        layerObject.at(currentIndex-1).at(currentFrame-1)->getImage()->paintImage(painter);
+        mLayers.at(currentIndex-1)->getFrame(currentFrame-1)->paintImage(painter);
     }
 
     qDebug() << currentIndex << endl;
@@ -105,7 +105,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
         if(deviceDown)
         {
 //            mIndex.at(0)->getImage()->paintImage(event, currentTool, drawPath);
-            layerObject.at(currentIndex-1).at(currentFrame-1)->getImage()->paintImage(event, currentTool, drawPath);
+            mLayers.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
         }
         break;
     case ERASER_TOOL:
@@ -116,7 +116,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
         if(deviceDown)
         {
 //            mIndex.at(0)->getImage()->paintImage(event, currentTool, drawPath);
-            layerObject.at(currentIndex-1).at(currentFrame-1)->getImage()->paintImage(event, currentTool, drawPath);
+            mLayers.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
         }
         break;
     default:
@@ -155,9 +155,8 @@ void Editor::tabletEvent(QTabletEvent *event)
                 drawPath[1] = drawPath[0];
                 drawPath[0] = event->pos();
 
-                //currentTool.setColor(primaryColor);
-//                mIndex.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
-                layerObject.at(currentIndex-1).at(currentFrame-1)->getImage()->paintImage(event, currentTool, drawPath);
+                //mLayers.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
+                mLayers.at(currentIndex-1)->getFrame(currentFrame-1)->paintImage(event, currentTool, drawPath);
             }
 
         default:
@@ -192,7 +191,8 @@ void Editor::tabletEvent(QTabletEvent *event)
             if(deviceDown)
             {
                 //currentTool.setColor(primaryColor);
-                 layerObject.at(currentIndex-1).at(currentFrame-1)->getImage()->paintImage(event, currentTool, drawPath);
+                 //mLayers.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
+
             }
 
         default:
@@ -229,19 +229,9 @@ void Editor::newProject(int type, int width, int height, int dpi)
         {
         case 0:
             //create Standard Image
-            //Old Implementation
-//            mIndex.append(new Layer(Layer::Bitmap, currentIndex, width, height));
-//            currentIndex++;
             currentIndex = 1;
             currentFrame = 1;
-            layerObject.resize(currentIndex);
-            for(int i = 0; i < 4; i++)
-            {
-                //layerObject[i].resize(3);
-            }
-            layerObject[currentIndex-1].push_back(new Layer(Layer::Bitmap, currentIndex, width, height));
-            qDebug() << "Total Layer Object Size: " << layerObject.size();
-            qDebug() << "Layer Index size: " << layerObject.at(0).size();
+            mLayers.push_back(new Layer(Layer::Bitmap, width, height));
 
             break;
         case 1:
