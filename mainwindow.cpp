@@ -3,12 +3,18 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    resize(1024, 768);
+//    resize(1024, 768);
 
     mEditor = new Editor(this);
-    setCentralWidget(mEditor);
+    mEditor->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    mEditor->setScaledContents(true);
+
+    imageArea = new QScrollArea(this);
+    imageArea->setWidget(mEditor);
+    setCentralWidget(imageArea);
 
     mEditor->setStyleSheet("background-color: grey;");
+    mEditor->resize(imageArea->size());
 
     toolBar = this->addToolBar("Tools");
     toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::TopToolBarArea);
@@ -113,6 +119,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     eyeDropper = new QShortcut(QKeySequence(Qt::ALT), this);
 
+    mStatBar = this->statusBar();
+    this->setStatusBar(mStatBar);
+    activeToolLabel = new QLabel(this);
+    activeToolLabel->setText("FOO");
+    mStatBar->addWidget(activeToolLabel);
+
     connect(newAct, SIGNAL(triggered()), SLOT(showNewDocWin()));
     connect(preferenceAct, SIGNAL(triggered()),SLOT(showPrefWin()));
     //connect(addLayerAct, SIGNAL(triggered()), mEditor, SLOT(addLayer()));
@@ -145,6 +157,7 @@ MainWindow::MainWindow(QWidget *parent)
     addDockWidget(Qt::BottomDockWidgetArea, timelineDockWidget);
 
     isModified = false;
+    resize(1024,768);
 }
 
 MainWindow::~MainWindow()

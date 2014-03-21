@@ -7,7 +7,11 @@
 #include <QAction>
 #include <QMessageBox>
 #include <QToolBar>
+#include <QScrollArea>
 #include <QShortcut>
+#include <QStatusBar>
+#include <QLabel>
+#include <QSlider>
 
 #include "Structure/editor.h"
 #include "Interface/dialogwindows.h"
@@ -84,8 +88,15 @@ private:
     QMenu *dockWinMenu;
     QMenu *helpMenu;
 
+    QScrollArea *imageArea;
+
     QToolBar* toolBar;
 
+    QStatusBar* mStatBar;
+    QLabel* activeToolLabel;
+    QSlider* zoomSlider;
+    QAction* zoomInAct;
+    QAction* zoomOutAct;
 };
 
 #endif // MAINWINDOW_H
