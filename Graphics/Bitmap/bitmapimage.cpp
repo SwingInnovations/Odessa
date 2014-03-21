@@ -61,15 +61,6 @@ void BitmapImage::paintImage(QPainter &painter, QPoint knownPoint, Brush brush, 
 
 void BitmapImage::paintImage(QPainter &painter, QTabletEvent *event, Brush brush, QPoint points[])
 {
-    /*
-    painter.setBrush(brush.getBrush());
-    painter.setPen(brush.getPen());
-    painter.drawLine(points[1], event->pos());
-    */
-    qDebug() << "Brush"  << brush.getBrush() << endl;
-    qDebug() << "Pen" << brush.getPen() << endl;
-    qDebug() << "Color"  << brush.getColor() << endl;
-
     //painter = QPainter(&m_pixmap);
     painter.setBrush(brush.getBrush());
     painter.setPen(brush.getPen());
@@ -82,30 +73,39 @@ void BitmapImage::paintImage(QTabletEvent *event, Brush brush, QPoint points[])
     painter.setRenderHint(QPainter::Antialiasing);
     brush.setWidth(brush.getSize() + (event->pressure() * brush.getTransferWidth()));
     painter.setBrush(brush.getBrush());
-//    painter.setBrush(Qt::NoBrush);
-    painter.setPen(brush.getPen());
-    painter.drawLine(points[2], event->pos());
-    points[2] = event->pos();
-//    painter.drawEllipse(points[2], brush.getSize(), brush.getSize());
     painter.setPen(brush.getPen());
     painter.drawLine(points[1], event->pos());
-    painter.end();
-    //painter.drawEllipse(event->pos(), brush.getSize(), brush.getSize());
 }
 
 void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint points[])
 {
     QPainter painter(&m_pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
-    //painter.setBrush(brush.getBrush());
+    painter.setBrush(brush.getBrush());
     painter.setPen(brush.getPen());
-    qDebug() << brush.getBrush() << endl;
-    qDebug() << brush.getPen() << endl;
-    qDebug() << "Brush Width: " << brush.getPen().width() << endl;
-    painter.drawLine(points[2], event->pos());
     painter.drawLine(points[1], event->pos());
     painter.end();
-    //painter.drawEllipse(event->pos(), brush.getSize(), brush.getSize());
+}
+
+void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint &lastPoint)
+{
+    QPainter painter(&m_pixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(brush.getPen());
+    painter.drawLine(lastPoint, event->pos());
+    painter.end();
+}
+
+void BitmapImage::paintImage(QTabletEvent *event, Brush brush, QPoint &lastPoint)
+{
+    QPainter painter(&m_pixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
+    brush.setWidth(brush.getSize() + (event->pressure() * brush.getTransferWidth()));
+    painter.setBrush(brush.getBrush());
+    painter.setPen(brush.getPen());
+    painter.drawLine(QPoint(0,0), event->pos());
+    painter.end();
+    qDebug() << "Painting in Action!";
 }
 
 

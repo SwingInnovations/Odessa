@@ -27,6 +27,8 @@ public:
     void paintImage(QPainter &painter, QTabletEvent *event, Brush brush, QPoint points[]);
     void paintImage(QMouseEvent *event, Brush brush, QPoint points[]);
     void paintImage(QTabletEvent *event, Brush brush, QPoint points[]);
+    void paintImage(QMouseEvent *event, Brush brush, QPoint &lastPoint);
+    void paintImage(QTabletEvent *event, Brush brush, QPoint &lastPoint);
     void setColor(const QColor color){ m_Color = color; m_Image->fill(m_Color);}
 
     QImage *getImage(){return m_Image;}

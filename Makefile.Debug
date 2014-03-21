@@ -251,14 +251,17 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QShortcut \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qshortcut.h \
 		Structure/editor.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QListIterator \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPointer \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpointer.h \
 		Structure/layer.h \
 		Structure/object.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QObject \
@@ -317,7 +320,6 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmetaobject.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmimedata.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectcleanuphandler.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpointer.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsharedmemory.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsignalmapper.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsocketnotifier.h \
@@ -406,6 +408,7 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qopenglext.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qopenglversionfunctions.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qscreen.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QRect \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSize \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSizeF \
@@ -463,9 +466,9 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
 		Interface/dialogwindows.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLineEdit \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlineedit.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QComboBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcombobox.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemdelegate.h \
@@ -476,8 +479,6 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyle.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabbar.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qrubberband.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayout.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayoutitem.h \
@@ -511,7 +512,9 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		mainwindow.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) mainwindow.h -o debug\moc_mainwindow.cpp
 
-debug/moc_editor.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
+debug/moc_editor.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qwindowdefs.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qglobal.h \
@@ -619,15 +622,14 @@ debug/moc_editor.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfiledevice.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvector2d.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtouchdevice.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QListIterator \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QShortcut \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qshortcut.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPointer \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpointer.h \
 		Structure/layer.h \
 		Structure/object.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QObject \
@@ -686,7 +688,6 @@ debug/moc_editor.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmetaobject.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmimedata.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectcleanuphandler.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpointer.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsharedmemory.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsignalmapper.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsocketnotifier.h \
@@ -776,6 +777,7 @@ debug/moc_editor.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qopenglext.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qopenglversionfunctions.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qscreen.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QRect \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSize \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSizeF \
@@ -1279,14 +1281,17 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QShortcut \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qshortcut.h \
 		Structure/editor.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QListIterator \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPointer \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpointer.h \
 		Structure/layer.h \
 		Structure/object.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QObject \
@@ -1345,7 +1350,6 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmetaobject.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmimedata.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectcleanuphandler.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpointer.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsharedmemory.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsignalmapper.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsocketnotifier.h \
@@ -1434,6 +1438,7 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qopenglext.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qopenglversionfunctions.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qscreen.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QRect \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSize \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSizeF \
@@ -1491,9 +1496,9 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
 		Interface/dialogwindows.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLineEdit \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlineedit.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QComboBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcombobox.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemdelegate.h \
@@ -1504,8 +1509,6 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyle.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabbar.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qrubberband.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayout.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayoutitem.h \
@@ -1668,14 +1671,17 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QShortcut \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qshortcut.h \
 		Structure/editor.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QListIterator \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPointer \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpointer.h \
 		Structure/layer.h \
 		Structure/object.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QObject \
@@ -1734,7 +1740,6 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmetaobject.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmimedata.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectcleanuphandler.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpointer.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsharedmemory.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsignalmapper.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsocketnotifier.h \
@@ -1823,6 +1828,7 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qopenglext.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qopenglversionfunctions.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qscreen.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QRect \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSize \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSizeF \
@@ -1880,9 +1886,9 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
 		Interface/dialogwindows.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLineEdit \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlineedit.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QComboBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcombobox.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemdelegate.h \
@@ -1893,8 +1899,6 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyle.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabbar.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qrubberband.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayout.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlayoutitem.h \
@@ -2300,11 +2304,9 @@ debug/object.o: Structure/object.cpp Structure/object.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\object.o Structure\object.cpp
 
 debug/layer.o: Structure/layer.cpp Structure/layer.h \
-		Structure/object.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QObject \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobject.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectdefs.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qnamespace.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvector.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qalgorithms.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qglobal.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qconfig.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfeatures.h \
@@ -2341,16 +2343,21 @@ debug/layer.o: Structure/layer.cpp Structure/layer.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtypeinfo.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtypetraits.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsysinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qiterator.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlist.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qrefcount.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qarraydata.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpoint.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qnamespace.h \
+		Structure/object.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QObject \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobject.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectdefs.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectdefs_impl.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstring.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qchar.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qbytearray.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qrefcount.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qarraydata.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstringbuilder.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlist.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qalgorithms.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qiterator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcoreevent.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qscopedpointer.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmetatype.h \
@@ -2371,8 +2378,6 @@ debug/layer.o: Structure/layer.cpp Structure/layer.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpropertyanimation.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvariantanimation.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qeasingcurve.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvector.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpoint.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvariant.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmap.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpair.h \
@@ -2614,7 +2619,9 @@ debug/layer.o: Structure/layer.cpp Structure/layer.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\layer.o Structure\layer.cpp
 
 debug/editor.o: Structure/editor.cpp Structure/editor.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qwindowdefs.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qglobal.h \
@@ -2722,15 +2729,14 @@ debug/editor.o: Structure/editor.cpp Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfiledevice.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvector2d.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtouchdevice.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QListIterator \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QShortcut \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qshortcut.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPointer \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpointer.h \
 		Structure/layer.h \
 		Structure/object.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QObject \
@@ -2789,7 +2795,6 @@ debug/editor.o: Structure/editor.cpp Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmetaobject.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmimedata.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectcleanuphandler.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpointer.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsharedmemory.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsignalmapper.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsocketnotifier.h \
@@ -2879,6 +2884,7 @@ debug/editor.o: Structure/editor.cpp Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qopenglext.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qopenglversionfunctions.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qscreen.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QList \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QRect \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSize \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSizeF \

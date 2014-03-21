@@ -1,28 +1,27 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-#include <QWidget>
-#include <QList>
-#include <QListIterator>
+#include <QLabel>
+#include <QVector>
 #include <QPaintEvent>
 #include <QMouseEvent>
 #include <QDebug>
 #include <QPoint>
 #include <QPixmap>
-#include <QShortcut>
 #include <QPointer>
 
 #include "layer.h"
 #include "brush.h"
 
-class Editor : public QWidget
+class Editor : public QLabel
 {
-
     Q_OBJECT
 public:
-    enum ToolType{BRUSH_TOOL, ERASER_TOOL, TEXT_TOOL , PRIMITIVE_TOOL, EYEDROPPER_TOOL};
+
+    enum ToolType{BRUSH_TOOL, ERASER_TOOL, TEXT_TOOL, PRIMITIVE_TOOL, EYEDROPPER_TOOL};
 
     Editor(QWidget *parent = 0);
+
     void setBrush(ToolType type);
 
 signals:
@@ -41,9 +40,9 @@ protected:
     void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void tabletEvent(QTabletEvent *event);
+
 public slots:
     void newProject(int type, int width, int height, int dpi);
-    void addLayer(int width, int height);
 
     void setBrushSize(int);
     void setBrushFeather(int);
@@ -53,33 +52,30 @@ public slots:
     void setOpacityTransfer(int);
 
     void setRedValue(int);
-    void setBlueValue(int);
     void setGreenValue(int);
+    void setBlueValue(int);
     void setOpacity(int);
-
 private:
-    bool deviceDown;
-    Brush currentTool;
-    Brush brush;
-    Brush eraser;
-    QPoint drawPath[3];
-    int currentFrame;
-    int currentIndex;
-    int numOfFramesPerSecond;
-    QList<Layer*> mIndex;
-    QList<Layer*> rIndex;
-    QVector<Layer*> mLayers;
+    bool m_DeviceDown;
+    Brush m_CurrentTool;
+    Brush m_Brush;
+    Brush m_Eraser;
 
-    QVector<QVector<Layer*> > layerObject;
+    QPoint m_DrawPoint;
+    QPoint m_DrawPath[3];
 
-    ToolType toolType;
-    QPixmap pix;
-    QImage img;
+    int m_CurrentFrame;
+    int m_CurrentIndex;
+    QVector<Layer*> m_Layers;
 
-    int redVal, greenVal, blueVal, opacityVal;
+    ToolType m_ToolType;
+    QPixmap m_Pix;
+    QImage m_Img;
 
-    QColor primaryColor;
-    QColor secondaryColor;
+    int m_RedVal, m_GreenVal, m_BlueVal, m_OpacityVal;
+
+    QColor m_PrimaryColor;
+    QColor m_SecondaryColor;
 };
 
 #endif // EDITOR_H

@@ -1,244 +1,206 @@
 #include "editor.h"
 
-Editor::Editor(QWidget *parent): QWidget(parent), currentFrame(0), currentIndex(0), numOfFramesPerSecond(24)
+Editor::Editor(QWidget *parent):QLabel(parent)
 {
-    deviceDown = false;
-    setAutoFillBackground(true);
-    brush = Brush();
-    redVal = 0;
-    greenVal = 0;
-    blueVal = 0;
-    opacityVal = 255;
-    brush.setColor(Qt::black);
-    brush.setBrush(QBrush(Qt::SolidPattern));
-    brush.setWidth(5);
-    currentTool = brush;
-    eraser = Brush();
-    eraser.setWidth(5);
-    eraser.setColor(QColor(Qt::white));
-    eraser.setBrush(QBrush(Qt::SolidLine));
-    toolType = BRUSH_TOOL;
-}
+    m_DeviceDown = false;
 
-void Editor::paintEvent(QPaintEvent *event)
-{
-    QPainter painter(this);
-//    if(!mIndex.isEmpty())
-//    {
-//        mIndex.at(currentIndex-1)->getImage()->paintImage(painter);
-//    }
+    m_CurrentIndex = 0;
+    m_CurrentFrame = 0;
 
-//    if(!rIndex.isEmpty())
-//    {
-//        rIndex.at(currentFrame-1)->getImage()->paintImage(painter);
-//    }
+    m_RedVal = 0;
+    m_GreenVal = 0;
+    m_BlueVal = 0;
+    m_OpacityVal = 255;
 
-        //layerObject[currentIndex-1][currentFrame-1]->getImage()->paintImage(painter);
-    if(!mLayers.isEmpty())
-    {
-        mLayers.at(currentIndex-1)->getFrame(currentFrame-1)->paintImage(painter);
-    }
+    m_Brush = Brush();
+    m_Brush.setColor(QColor(m_RedVal, m_GreenVal, m_BlueVal, m_OpacityVal));
+    m_Brush.setBrush(QBrush(Qt::SolidPattern));
+    m_Brush.setWidth(5);
+    m_CurrentTool = m_Brush;
 
-    qDebug() << currentIndex << endl;
+    m_Eraser = Brush();
+    m_Eraser.setWidth(5);
+    m_Eraser.setColor(QColor(Qt::white));
+    m_Eraser.setBrush(QBrush(Qt::SolidLine));
+    m_ToolType = BRUSH_TOOL;
 }
 
 void Editor::mousePressEvent(QMouseEvent *event)
 {
-    switch(toolType)
+    if(!m_Layers.isEmpty())
     {
-    case BRUSH_TOOL:
-//        if(!mIndex.isEmpty() || !rIndex.isEmpty())
-//        {
-//            deviceDown = true;
-//            drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
-//        }
-        if(!layerObject.isEmpty())
+        switch(m_ToolType)
         {
-            deviceDown = true;
-            drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
+        case BRUSH_TOOL:
+            m_DeviceDown = true;
+            m_DrawPath[2] = m_DrawPath[1] = m_DrawPath[0] = event->pos();
+            break;
+        case ERASER_TOOL:
+            m_DeviceDown = true;
+            m_DrawPath[2] = m_DrawPath[1] = m_DrawPath[0] = event->pos();
+            break;
+        case EYEDROPPER_TOOL:
+            m_Pix = QPixmap::grabWidget(this);
+            m_Img = m_Pix.toImage();
+            QColor color(m_Img.pixel(event->pos()));
+            emit redChanged(color.red());
+            emit greenChanged(color.green());
+            emit blueChanged(color.blue());
+            break;
+//        default:
+//            break;
         }
-        break;
-    case ERASER_TOOL:
-//        if(!mIndex.isEmpty() || !rIndex.isEmpty())
-//        {
-//            deviceDown = true;
-//            drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
-//        }
-
-        if(!layerObject.isEmpty())
-        {
-            deviceDown = true;
-            drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
-        }
-        break;
-    case EYEDROPPER_TOOL:
-        pix = QPixmap::grabWidget(this);
-        img = pix.toImage();
-        QColor color(img.pixel(event->pos().x(), event->pos().y()));
-        emit redChanged(color.red());
-        emit greenChanged(color.green());
-        emit blueChanged(color.blue());
-        break;
     }
-
     update();
 }
 
 void Editor::mouseReleaseEvent(QMouseEvent *event)
 {
-    if(deviceDown)
+    if(m_DeviceDown)
     {
-        deviceDown = false;
+        m_DeviceDown = false;
     }
     update();
 }
 
 void Editor::mouseMoveEvent(QMouseEvent *event)
 {
-    switch(toolType)
+    if(!m_Layers.isEmpty())
     {
-    case BRUSH_TOOL:
-        drawPath[2] = drawPath[1];
-        drawPath[1] = drawPath[0];
-        drawPath[0] = event->pos();
 
-        if(deviceDown)
+        switch(m_ToolType)
         {
-//            mIndex.at(0)->getImage()->paintImage(event, currentTool, drawPath);
-            mLayers.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
+        case BRUSH_TOOL:
+            if(m_DeviceDown)
+            {
+                m_DrawPath[2] = m_DrawPath[1];
+                m_DrawPath[1] = m_DrawPath[0];
+                m_DrawPath[0] = event->pos();
+                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(event, m_CurrentTool, m_DrawPath);
+                setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+            }
+            break;
+        case ERASER_TOOL:
+            if(m_DeviceDown)
+            {
+                m_DrawPath[2] = m_DrawPath[1];
+                m_DrawPath[1] = m_DrawPath[0];
+                m_DrawPath[0] = event->pos();
+                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(event, m_CurrentTool, m_DrawPath);
+                setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+            }
+            break;
+        default:
+            break;
         }
-        break;
-    case ERASER_TOOL:
-        drawPath[2] = drawPath[1];
-        drawPath[1] = drawPath[0];
-        drawPath[0] = event->pos();
-
-        if(deviceDown)
-        {
-//            mIndex.at(0)->getImage()->paintImage(event, currentTool, drawPath);
-            mLayers.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
-        }
-        break;
-    default:
-        break;
     }
     update();
 }
 
 void Editor::tabletEvent(QTabletEvent *event)
 {
-
-    switch(toolType)
+    if(!m_Layers.isEmpty())
     {
-    case BRUSH_TOOL:
-        switch(event->type())
+        switch(m_ToolType)
         {
-        case QEvent::TabletPress:
-            if(!deviceDown)
+        case BRUSH_TOOL:
+            switch(event->type())
             {
-                deviceDown = true;
-                drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
+                case QEvent::TabletPress:
+                if(!m_DeviceDown)
+                {
+                    m_DeviceDown = true;
+                    m_DrawPath[2] = m_DrawPath[1] = m_DrawPath[0] = event->pos();
+                }
+                break;
+            case QEvent::TabletRelease:
+                if(m_DeviceDown)
+                {
+                    m_DeviceDown = false;
+                }
+                break;
+            case QEvent::TabletMove:
+                if(m_DeviceDown)
+                {
+                    m_DrawPath[2] = m_DrawPath[1];
+                    m_DrawPath[1] = m_DrawPath[0];
+                    m_DrawPath[0] = event->pos();
+                    m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(event, m_CurrentTool, m_DrawPath);
+                    setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+                }
+                break;
+            default:
+                qDebug() << "Nothing Happened" << endl;
             }
-
             break;
-        case QEvent::TabletRelease:
-            if(deviceDown)
+        case ERASER_TOOL:
+            switch(event->type())
             {
-                deviceDown = false;
+                case QEvent::TabletPress:
+                if(!m_DeviceDown)
+                {
+                    m_DeviceDown = true;
+                    m_DrawPath[2] = m_DrawPath[1] = m_DrawPath[0] = event->pos();
+                }
+                break;
+            case QEvent::TabletRelease:
+                if(m_DeviceDown)
+                {
+                    m_DeviceDown = false;
+                }
+                break;
+            case QEvent::TabletMove:
+                if(m_DeviceDown)
+                {
+                    m_DrawPath[2] = m_DrawPath[1];
+                    m_DrawPath[1] = m_DrawPath[0];
+                    m_DrawPath[0] = event->pos();
+                    m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(event, m_CurrentTool, m_DrawPath);
+                    setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+                }
+                break;
+            default:
+            qDebug() << "Nothing Happened" << endl;
             }
-
             break;
-        case QEvent::TabletMove:
-            if(deviceDown)
-            {
-                drawPath[2] = drawPath[1];
-                drawPath[1] = drawPath[0];
-                drawPath[0] = event->pos();
-
-                //mLayers.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
-                mLayers.at(currentIndex-1)->getFrame(currentFrame-1)->paintImage(event, currentTool, drawPath);
-            }
-
         default:
             break;
-            qDebug() << "Nothing Happening" << endl;
         }
-        break;
-    case ERASER_TOOL:
-        switch(event->type())
-        {
-        case QEvent::TabletPress:
-            if(!deviceDown)
-            {
-                deviceDown = true;
-                drawPath[0] = drawPath[1] = drawPath[2] = event->pos();
-            }
-
-            break;
-        case QEvent::TabletRelease:
-            if(deviceDown)
-            {
-                deviceDown = false;
-            }
-
-            break;
-        case QEvent::TabletMove:
-
-            drawPath[2] = drawPath[1];
-            drawPath[1] = drawPath[0];
-            drawPath[0] = event->pos();
-
-            if(deviceDown)
-            {
-                //currentTool.setColor(primaryColor);
-                 //mLayers.at(currentIndex-1)->getImage()->paintImage(event, currentTool, drawPath);
-
-            }
-
-        default:
-            break;
-            qDebug() << "Nothing Happening" << endl;
-        }
-
-        break;
-    case EYEDROPPER_TOOL:
-
-        break;
-    default:
-        break;
-    }
+   }
     update();
 }
 
-void Editor::addLayer(int width, int height)
+void Editor::paintEvent(QPaintEvent *event)
 {
-    mIndex.append(new Layer(Layer::Bitmap, currentIndex, width, height));
-    currentIndex++;
+    QPainter painter(this);
+
+    if(!m_Layers.isEmpty())
+    {
+        m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(painter);
+        setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+    }
 }
 
 void Editor::newProject(int type, int width, int height, int dpi)
 {
-
-    if(!mIndex.isEmpty())
+    if(!m_Layers.isEmpty())
     {
-        mIndex.clear();
-        currentIndex = 0;
-        currentFrame = 0;
+        m_Layers.clear();
+        m_CurrentIndex = 0;
+        m_CurrentFrame = 0;
     }else{
         switch(type)
         {
-        case 0:
-            //create Standard Image
-            currentIndex = 1;
-            currentFrame = 1;
-            mLayers.push_back(new Layer(Layer::Bitmap, width, height));
-
+         case 0:
+            m_CurrentIndex = 1;
+            m_CurrentFrame = 1;
+            m_Layers.push_back(new Layer(Layer::Bitmap, width, height));
             break;
         case 1:
-            //create Animation
+            //create Animation project
             break;
         case 2:
-            //create SpriteSheet
+            //create Spritesheet
             break;
         default:
             break;
@@ -249,19 +211,20 @@ void Editor::newProject(int type, int width, int height, int dpi)
 
 void Editor::setBrush(ToolType type)
 {
-    toolType = type;
-    switch(type)
+    m_ToolType = type;
+    switch(m_ToolType)
     {
     case BRUSH_TOOL:
-        currentTool = brush;
-        currentTool.setColor(primaryColor);
-        emit brushSizeChanged(brush.getSize());
+        m_CurrentTool = m_Brush;
+        m_CurrentTool.setColor(m_PrimaryColor);
+        emit brushSizeChanged(m_Brush.getSize());
         break;
     case ERASER_TOOL:
-        currentTool = eraser;
-        emit brushSizeChanged(eraser.getSize());
+        m_CurrentTool = m_Eraser;
+        emit brushSizeChanged(m_Eraser.getSize());
+    case TEXT_TOOL:
+        break;
     case EYEDROPPER_TOOL:
-
         break;
     default:
         break;
@@ -270,15 +233,14 @@ void Editor::setBrush(ToolType type)
 
 void Editor::setBrushSize(int val)
 {
-    currentTool.setWidth(val);
-    switch(toolType)
+    m_CurrentTool.setWidth(val);
+    switch(m_ToolType)
     {
     case BRUSH_TOOL:
-        qDebug() << "Setting Brush Width" << endl;
-        brush.setWidth(val);
+        m_Brush.setWidth(val);
         break;
     case ERASER_TOOL:
-        eraser.setWidth(val);
+        m_Eraser.setWidth(val);
         break;
     default:
         break;
@@ -297,54 +259,30 @@ void Editor::setBrushSpacing(int val)
 
 void Editor::setRedValue(int val)
 {
-    redVal = val;
-    primaryColor.setRed(redVal);
-    currentTool.setColor(primaryColor);
-    if(primaryColor.isValid())
-    {
-        qDebug() << "I am valid!" << endl;
-    }else{
-        qDebug() << "No Longer Valid" << endl;
-    }
+    m_RedVal = val;
+    m_PrimaryColor.setRed(m_RedVal);
+    m_CurrentTool.setColor(m_PrimaryColor);
 }
 
 void Editor::setGreenValue(int val)
 {
-    greenVal = val;
-    primaryColor.setGreen(greenVal);
-    currentTool.setColor(primaryColor);
-    if(primaryColor.isValid())
-    {
-        qDebug() << "I am valid!" << endl;
-    }else{
-        qDebug() << "No Longer Valid" << endl;
-    }
+    m_GreenVal = val;
+    m_PrimaryColor.setGreen(m_GreenVal);
+    m_CurrentTool.setColor(m_PrimaryColor);
 }
 
 void Editor::setBlueValue(int val)
 {
-    blueVal = val;
-    primaryColor.setBlue(blueVal);
-    currentTool.setColor(primaryColor);
-    if(primaryColor.isValid())
-    {
-        qDebug() << "I am valid!" << endl;
-    }else{
-        qDebug() << "No Longer Valid" << endl;
-    }
+    m_BlueVal = val;
+    m_PrimaryColor.setBlue(m_BlueVal);
+    m_CurrentTool.setColor(m_PrimaryColor);
 }
 
 void Editor::setOpacity(int val)
 {
-    opacityVal = val;
-    primaryColor.setAlpha(opacityVal);
-    currentTool.setColor(primaryColor);
-    if(primaryColor.isValid())
-    {
-        qDebug() << "I am valid!" << endl;
-    }else{
-        qDebug() << "No Longer Valid" << endl;
-    }
+    m_OpacityVal = val;
+    m_PrimaryColor.setBlue(m_BlueVal);
+    m_CurrentTool.setColor(m_PrimaryColor);
 }
 
 void Editor::setOpacityTransfer(int val)
@@ -354,21 +292,17 @@ void Editor::setOpacityTransfer(int val)
 
 void Editor::setSizeTransfer(int val)
 {
-    if(val == NULL)
+    m_CurrentTool.setTransferWidthAmount(val);
+    switch(m_ToolType)
     {
-        val = 0;
-    }else{
-        currentTool.setTransferWidthAmount(val);
-        switch(toolType)
-        {
-        case BRUSH_TOOL:
-            brush.setTransferWidthAmount(val);
-            break;
-        case ERASER_TOOL:
-            eraser.setTransferWidthAmount(val);
-            break;
-        default:
-            break;
-        }
+    case BRUSH_TOOL:
+        m_Brush.setTransferWidthAmount(val);
+        break;
+    case ERASER_TOOL:
+        m_Eraser.setTransferWidthAmount(val);
+        break;
+    default:
+        break;
     }
 }
+
