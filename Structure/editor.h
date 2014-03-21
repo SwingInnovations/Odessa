@@ -23,6 +23,14 @@ public:
     Editor(QWidget *parent = 0);
 
     void setBrush(ToolType type);
+    QSize getPixmapSize(){
+        if(!m_Layers.isEmpty())
+        {
+            return m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().size();
+        }else{
+
+        }
+    };
 
 signals:
     void brushSizeChanged(int);
@@ -57,6 +65,7 @@ public slots:
     void setOpacity(int);
 private:
     bool m_DeviceDown;
+    bool m_TabletInUse;
     Brush m_CurrentTool;
     Brush m_Brush;
     Brush m_Eraser;

@@ -135,6 +135,7 @@ private:
     QTabWidget* colorModeTab;
 
     QLabel* colorDisplayLabel;
+    ColorWheelWidget* colorWheel;
     QPixmap colorWheelPixmap;
     QImage tempImage;
 
@@ -192,41 +193,26 @@ public:
     virtual ~TimelineDockWidget();
 };
 
-class ColorWheelWidget : public QWidget
-{
-    Q_OBJECT
-public:
-    ColorWheelWidget(QWidget *parent = 0);
-    void setSize(int x, int y, int w, int h){
-        boundaries.setX(x);
-        boundaries.setY(y);
-        boundaries.setWidth(w);
-        boundaries.setHeight(h);
-        this->resize(w, h);
-        this->setGeometry(boundaries);
-        update();
-    }
-
-    void Draw(QPaintEvent* event){
-        this->paintEvent(event);
-    }
-
-    QPixmap getPixmap(){return pixmap;}
-
-    virtual ~ColorWheelWidget();
-protected:
-    void paintEvent(QPaintEvent *event);
-private:
-    QRect boundaries;
-    QPixmap pixmap;
-};
-
 class BrushShapeWidget : public QWidget
 {
   Q_OBJECT
 public:
     BrushShapeWidget(QWidget *parent = 0);
     virtual ~BrushShapeWidget();
+};
+
+class ColorWheelWidget : public QLabel
+{
+    Q_OBJECT
+public:
+    ColorWheelWidget(QWidget *parent = 0);
+    virtual ~ColorWheelWidget();
+signals:
+    void redChanged(int);
+    void greenChanged(int);
+    void blueChanged(int);
+protected:
+    void mousePressEvent(QMouseEvent *event);
 };
 
 #endif // DOCKWIDGETS_H

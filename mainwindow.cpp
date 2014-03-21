@@ -84,6 +84,8 @@ MainWindow::MainWindow(QWidget *parent)
     showTimeDockWinAct = new QAction("Timeline", this);
     showTimeDockWinAct->setCheckable(true);
     showTimeDockWinAct->setChecked(true);
+    zoomInAct = new QAction("&Zoom In",this);
+    zoomOutAct = new QAction("&Zoom Out", this);
 
     fileMenu = this->menuBar()->addMenu("&File");
     fileMenu->addAction(newAct);
@@ -107,6 +109,9 @@ MainWindow::MainWindow(QWidget *parent)
     selectMenu->addAction(deselectAct);
 
     viewMenu = this->menuBar()->addMenu("&View");
+    viewMenu->addAction(zoomInAct);
+    viewMenu->addAction(zoomOutAct);
+    viewMenu->addSeparator();
     dockWinMenu = viewMenu->addMenu("Dock Windows");
     dockWinMenu->addAction(showBrushDockWinAct);
     dockWinMenu->addAction(showColorDockWinAct);
@@ -134,6 +139,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(primitiveTool, SIGNAL(triggered()), SLOT(assignPrimitiveTool()));
     connect(newDialogWin, SIGNAL(newProject(int,int,int,int)), mEditor, SLOT(newProject(int,int,int,int)));
     connect(brushDockWidget, SIGNAL(mSizeChanged(int)), mEditor, SLOT(setBrushSize(int)));
+    connect(zoomInAct, SIGNAL(triggered()), SLOT(zoomIn()));
+    connect(zoomOutAct, SIGNAL(triggered()), SLOT(zoomOut()));
     connect(showBrushDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowBrushDock(bool)));
     connect(showColorDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowColorDock(bool)));
     connect(showTimeDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowTimelineDock(bool)));
@@ -237,5 +244,31 @@ void MainWindow::assignEyeDropperTool()
 {
     mEditor->setBrush(Editor::EYEDROPPER_TOOL);
     qDebug() << "Zing";
+}
+
+void MainWindow::zoomIn()
+{
+    scaleImage(1.5);
+}
+
+void MainWindow::zoomOut()
+{
+    scaleImage(0.8);
+}
+
+void MainWindow::scaleImage(double val)
+{
+    scaleFactor *= val;
+    mEditor->resize(scaleFactor * mEditor->getPixmapSize());
+    mEditor->adjustSize();
+    adjustScrollBar(imageArea->horizontalScrollBar(), val);
+    adjustScrollBar(imageArea->verticalScrollBar(), val);
+
+    qDebug() << "Image Size" << mEditor->getPixmapSize() << endl;
+}
+
+void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
+{
+    scrollBar->setValue(int(factor * scrollBar->value() + ((factor - 1) * scrollBar->pageStep()/2)));
 }
 

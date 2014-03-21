@@ -339,14 +339,17 @@ ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
     HSVPanel->setLayout(masterHSVLayout);
     colorModeTab->addTab(HSVPanel, "HSV");
 
-    colorDisplayLabel = new QLabel(this);
     colorWheelPixmap = QPixmap(200, 200);
     colorWheelPixmap.fill(QColor(Qt::gray));
-    colorDisplayLabel->setPixmap(colorWheelPixmap);
+//    colorDisplayLabel = new QLabel(this);
+//    colorDisplayLabel->setPixmap(colorWheelPixmap);
+
+    colorWheel = new ColorWheelWidget(this);
+    colorWheel->setPixmap(colorWheelPixmap);
 
     QHBoxLayout* colorDisplayLt = new QHBoxLayout;
     colorDisplayLt->setAlignment(Qt::AlignCenter);
-    colorDisplayLt->addWidget(colorDisplayLabel);
+    colorDisplayLt->addWidget(colorWheel);
 
     m_ColorWheelContainer = new QGroupBox(this);
     m_ColorWheelContainer->setTitle("Color Wheel");
@@ -373,6 +376,9 @@ ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(m_SLineEdit, SIGNAL(textChanged(QString)), SLOT(set_SSlider(QString)));
     connect(m_VSlider, SIGNAL(valueChanged(int)), SLOT(set_VLE(int)));
     connect(m_VLineEdit, SIGNAL(textChanged(QString)), SLOT(set_VSlider(QString)));
+    connect(colorWheel, SIGNAL(redChanged(int)), SLOT(set_RLE(int)));
+    connect(colorWheel, SIGNAL(blueChanged(int)), SLOT(set_BLE(int)));
+    connect(colorWheel, SIGNAL(greenChanged(int)), SLOT(set_GLE(int)));
 }
 
 void ColorDockWidget::paintEvent(QPaintEvent *event)
@@ -428,7 +434,8 @@ void ColorDockWidget::paintEvent(QPaintEvent *event)
     painter.setBrush(QColor(m_RSlider->value(), m_GSlider->value(), m_BSlider->value(), 255));
     painter.drawRect(0, 175, 25, 25);
 
-    colorDisplayLabel->setPixmap(colorWheelPixmap);
+    colorWheel->setPixmap(colorWheelPixmap);
+//    colorDisplayLabel->setPixmap(colorWheelPixmap);
 }
 
 void ColorDockWidget::mousePressEvent(QMouseEvent *event)
@@ -530,16 +537,6 @@ TimelineDockWidget::~TimelineDockWidget()
 
 }
 
-ColorWheelWidget::ColorWheelWidget(QWidget *parent) : QWidget(parent)
-{
-
-}
-
-ColorWheelWidget::~ColorWheelWidget()
-{
-
-}
-
 BrushShapeWidget::BrushShapeWidget(QWidget *parent) : QWidget(parent)
 {
 
@@ -550,21 +547,24 @@ BrushShapeWidget::~BrushShapeWidget()
 
 }
 
-void ColorWheelWidget::paintEvent(QPaintEvent *event)
+ColorWheelWidget::ColorWheelWidget(QWidget *parent) : QLabel(parent)
 {
-    QPainter painter(&pixmap);
-    QConicalGradient grad;
-    grad.setCenter(boundaries.width()/2, boundaries.height()/2);
-    grad.setColorAt(0, Qt::green);
-    grad.setColorAt(0.175, QColor(Qt::yellow));
-    grad.setColorAt(0.35, QColor(Qt::red));
-    grad.setColorAt(0.525, QColor(Qt::magenta));
-    grad.setColorAt(0.65, QColor(Qt::blue));
-    grad.setColorAt(0.8253, QColor(Qt::cyan));
-    grad.setColorAt(1, QColor(Qt::green));
-    painter.setBrush(grad);
-    painter.drawEllipse(50, 0, 100, 100);
 
-    painter.setBrush(Qt::gray);
-    painter.drawEllipse(75, 25, 50, 50);
 }
+
+ColorWheelWidget::~ColorWheelWidget()
+{
+
+}
+
+void ColorWheelWidget::mousePressEvent(QMouseEvent *event)
+{
+        QPixmap pix = QWidget::grab();
+        QImage img = pix.toImage();
+        QColor color(img.pixel(event->pos()));
+        emit redChanged(color.red());
+        emit greenChanged(color.green());
+        emit blueChanged(color.blue());
+        qDebug() << "Color Should Change" << endl;
+}
+

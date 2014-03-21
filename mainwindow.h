@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QToolBar>
 #include <QScrollArea>
+#include <QScrollBar>
 #include <QShortcut>
 #include <QStatusBar>
 #include <QLabel>
@@ -36,9 +37,15 @@ private slots:
     void toggleShowBrushDock(bool);
     void toggleShowColorDock(bool);
     void toggleShowTimelineDock(bool);
+    void zoomIn();
+    void zoomOut();
     void about();
 
 private:
+    void scaleImage(double);
+    void adjustScrollBar(QScrollBar* scrollBar, double factor);
+    int scaleFactor = 1;
+
     Editor *mEditor;
     OdessaNewDocDialog *newDialogWin;
     OdessaPrefDialog *prefDialog;

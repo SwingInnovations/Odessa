@@ -3,6 +3,7 @@
 Editor::Editor(QWidget *parent):QLabel(parent)
 {
     m_DeviceDown = false;
+    m_TabletInUse = false;
 
     m_CurrentIndex = 0;
     m_CurrentFrame = 0;
@@ -65,7 +66,7 @@ void Editor::mouseReleaseEvent(QMouseEvent *event)
 
 void Editor::mouseMoveEvent(QMouseEvent *event)
 {
-    if(!m_Layers.isEmpty())
+    if(!m_Layers.isEmpty()&& !m_TabletInUse)
     {
 
         switch(m_ToolType)
@@ -99,7 +100,8 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
 
 void Editor::tabletEvent(QTabletEvent *event)
 {
-    if(!m_Layers.isEmpty())
+    m_TabletInUse = true;
+    if(!m_Layers.isEmpty() && m_TabletInUse == true)
     {
         switch(m_ToolType)
         {
@@ -117,6 +119,10 @@ void Editor::tabletEvent(QTabletEvent *event)
                 if(m_DeviceDown)
                 {
                     m_DeviceDown = false;
+                }
+                if(m_TabletInUse)
+                {
+                    m_TabletInUse = false;
                 }
                 break;
             case QEvent::TabletMove:
