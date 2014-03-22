@@ -30,6 +30,9 @@ MainWindow::MainWindow(QWidget *parent)
     timelineDockWidget = new TimelineDockWidget(this);
     timelineDockWidget->setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
 
+    layerDockWidget = new LayerDockWidget(this);
+    layerDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+
     brushTool = new QAction(this);
     brushTool->setText("Brush");
     eraserTool = new QAction(this);
@@ -156,6 +159,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(mEditor, SIGNAL(redChanged(int)), colorDockWidget, SLOT(set_RLE(int)));
     connect(mEditor, SIGNAL(greenChanged(int)), colorDockWidget, SLOT(set_GLE(int)));
     connect(mEditor, SIGNAL(blueChanged(int)), colorDockWidget, SLOT(set_BLE(int)));
+    connect(mEditor, SIGNAL(redChanged(int)), colorDockWidget, SLOT(setRed(int)));
+    connect(mEditor, SIGNAL(greenChanged(int)), colorDockWidget, SLOT(setGreen(int)));
+    connect(mEditor, SIGNAL(blueChanged(int)), colorDockWidget, SLOT(setBlue(int)));
     connect(eyeDropperTool, SIGNAL(triggered()), SLOT(assignEyeDropperTool()));
     connect(eyeDropper, SIGNAL(activated()), SLOT(assignEyeDropperTool()));
     connect(aboutAct, SIGNAL(triggered()), SLOT(about()));
@@ -164,6 +170,7 @@ MainWindow::MainWindow(QWidget *parent)
     addDockWidget(Qt::RightDockWidgetArea, brushDockWidget);
     addDockWidget(Qt::RightDockWidgetArea, colorDockWidget);
     addDockWidget(Qt::BottomDockWidgetArea, timelineDockWidget);
+    addDockWidget(Qt::RightDockWidgetArea, layerDockWidget);
 
     isModified = false;
     resize(1024,768);

@@ -27,6 +27,7 @@ public:
     ~MainWindow();
 
 private slots:
+
     void assignBrushTool();
     void assignEraserTool();
     void assignTextTool();
@@ -52,6 +53,7 @@ private:
     BrushDockWidget *brushDockWidget;
     ColorDockWidget *colorDockWidget;
     TimelineDockWidget *timelineDockWidget;
+    LayerDockWidget *layerDockWidget;
 
     bool isModified;
 
@@ -75,6 +77,7 @@ private:
     QAction *showBrushDockWinAct;
     QAction *showColorDockWinAct;
     QAction *showTimeDockWinAct;
+    QAction *showLayersDockAct;
     QAction *preferenceAct;
 
     //basic Tools

@@ -109,6 +109,9 @@ public:
     int getHue(){return hue;}
     int getSaturation(){return saturation;}
     int getValue(){return value;}
+
+    QRect getColorZoneRect(){return refineColorRect;}
+
 signals:
     void redChanged(int);
     void greenChanged(int);
@@ -130,6 +133,13 @@ public slots:
     void set_HSlider(QString);
     void set_SSlider(QString);
     void set_VSlider(QString);
+
+    void setRed(int val){this->red = val;}
+    void setGreen(int val){this->green = val;}
+    void setBlue(int val){this->blue = val;}
+
+    void setActualColor(QColor);
+    void setActualColorPos(QPoint);
 
 protected:
     void paintEvent(QPaintEvent* event);
@@ -177,6 +187,11 @@ private:
     int red;
     int green;
     int blue;
+
+    int actualRed;
+    int actualBlue;
+    int actualGreen;
+
     int hue;
     int saturation;
     int value;
@@ -184,6 +199,7 @@ private:
     //color wheel
     QPoint primaryColorPos;
     QPoint complementColorPos;
+    QPoint actualColorPos;
     QRect refineColorRect;
 };
 
@@ -216,20 +232,35 @@ class ColorWheelWidget : public QLabel
 public:
     ColorWheelWidget(QWidget *parent = 0);
     virtual ~ColorWheelWidget();
+
+    void setRefineRect(QRect rect){ refineColorRect = rect; }
 signals:
     void redChanged(int);
     void greenChanged(int);
     void blueChanged(int);
+
+    void actualRedChanged(int);
+    void actualGreenChanged(int);
+    void actualBlueChanged(int);
+
+    void colorChanged(QColor);
+    void actualColorPoint(QPoint);
 protected:
     void mousePressEvent(QMouseEvent *event);
+private:
+    QPixmap pixmap;
+    QRect refineColorRect;
+    QPoint primaryColorPos;
+    QPoint complementColorPos;
+    QPoint actualColorPos;
 };
 
-class LayerWidget : public QDockWidget
+class LayerDockWidget : public QDockWidget
 {
     Q_OBJECT
 public:
-    LayerWidget(QWidget* parent = 0);
-    virtual ~LayerWidget();
+    LayerDockWidget(QWidget* parent = 0);
+    virtual ~LayerDockWidget();
 private:
     QComboBox* compositionMode;
     QListWidget* layerManager;

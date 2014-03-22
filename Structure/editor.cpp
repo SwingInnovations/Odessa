@@ -192,13 +192,13 @@ void Editor::paintEvent(QPaintEvent *event)
         this->setCursor(QCursor(Qt::CrossCursor));
         painter.setPen(Qt::darkGray);
         painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
-        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize(), m_CurrentTool.getSize());
+        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize()-3, m_CurrentTool.getSize()-3);
         painter.end();
     }else if(m_ToolType == ERASER_TOOL){
         this->setCursor(QCursor(Qt::CrossCursor));
         painter.setPen(Qt::darkGray);
         painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
-        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize(), m_CurrentTool.getSize());
+        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize()-3, m_CurrentTool.getSize()-3);
         painter.end();
     }else if(m_ToolType == EYEDROPPER_TOOL){
         setCursor(QCursor(Qt::ArrowCursor));

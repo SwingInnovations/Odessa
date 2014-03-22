@@ -229,6 +229,7 @@ void BrushDockWidget::toggleTransferSize(bool val)
     {
         mTransferWidthSlider->setEnabled(true);
         mTransferWidthLE->setEnabled(true);
+        emit mTransferSizeChanged(val);
     }else{
         mTransferWidthSlider->setEnabled(false);
         mTransferWidthLE->setEnabled(false);
@@ -360,11 +361,17 @@ ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
     QWidget* masterColorWidget = new QWidget(this);
     masterColorWidget->setLayout(masterColorLayout);
 
-    setWidget(masterColorWidget);
-
-    connect(colorWheel, SIGNAL(redChanged(int)), SLOT(set_RLE(int)));
-    connect(colorWheel, SIGNAL(blueChanged(int)), SLOT(set_BLE(int)));
-    connect(colorWheel, SIGNAL(greenChanged(int)), SLOT(set_GLE(int)));
+//    connect(colorWheel, SIGNAL(redChanged(int)), SLOT(set_RLE(int)));
+//    connect(colorWheel, SIGNAL(blueChanged(int)), SLOT(set_BLE(int)));
+//    connect(colorWheel, SIGNAL(greenChanged(int)), SLOT(set_GLE(int)));
+    connect(colorWheel, SIGNAL(redChanged(int)), SLOT(setRed(int)));
+    connect(colorWheel, SIGNAL(greenChanged(int)), SLOT(setGreen(int)));
+    connect(colorWheel, SIGNAL(blueChanged(int)), SLOT(setBlue(int)));
+    connect(colorWheel, SIGNAL(actualRedChanged(int)), SLOT(set_RLE(int)));
+    connect(colorWheel, SIGNAL(actualGreenChanged(int)), SLOT(set_GLE(int)));
+    connect(colorWheel, SIGNAL(actualBlueChanged(int)), SLOT(set_BLE(int)));
+    connect(colorWheel, SIGNAL(actualColorPoint(QPoint)), SLOT(setActualColorPos(QPoint)));
+    connect(colorWheel, SIGNAL(colorChanged(QColor)), SLOT(setActualColor(QColor)));
     connect(m_RSlider, SIGNAL(valueChanged(int)), SLOT(set_RLE(int)));
     connect(m_RLineEdit, SIGNAL(textChanged(QString)), SLOT(set_RSlider(QString)));
     connect(m_GSlider, SIGNAL(valueChanged(int)), SLOT(set_GLE(int)));
@@ -377,12 +384,16 @@ ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(m_SLineEdit, SIGNAL(textChanged(QString)), SLOT(set_SSlider(QString)));
     connect(m_VSlider, SIGNAL(valueChanged(int)), SLOT(set_VLE(int)));
     connect(m_VLineEdit, SIGNAL(textChanged(QString)), SLOT(set_VSlider(QString)));  
+
+    setWidget(masterColorWidget);
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
 void ColorDockWidget::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
     QPainter painter(&colorWheelPixmap);
+    //Start Color wheel
     QConicalGradient grad;
     grad.setCenter(100, 100);
     grad.setColorAt(0, Qt::green);
@@ -409,7 +420,7 @@ void ColorDockWidget::paintEvent(QPaintEvent *event)
     painter.setPen(QColor(Qt::gray));
     painter.drawEllipse(complementColorPos, 10, 10);
 
-    QColor primaryColor(m_RSlider->value(), m_GSlider->value(), m_BSlider->value(), 255);
+    QColor primaryColor(red, green, blue, 255);
 
     //central painting wheel
     QConicalGradient colorGrad;
@@ -428,18 +439,40 @@ void ColorDockWidget::paintEvent(QPaintEvent *event)
     painter.rotate(45);
     painter.drawRect(refineColorRect);
 
+    colorWheel->setRefineRect(refineColorRect);
+
     painter.resetTransform();
+
+    painter.setBrush(Qt::transparent);
+    painter.setPen(Qt::black);
+    painter.drawPoint(actualColorPos);
+    painter.drawEllipse(actualColorPos, 5, 5);
+
     //primary Color preview
-    painter.setBrush(QColor(m_RSlider->value(), m_GSlider->value(), m_BSlider->value(), 255));
+    painter.setBrush(QColor(actualRed, actualGreen, actualBlue, 255));
     painter.drawRect(0, 175, 25, 25);
 
     colorWheel->setPixmap(colorWheelPixmap);
+
 }
 
 ColorDockWidget::~ColorDockWidget()
 {
 
 }
+
+void ColorDockWidget::setActualColor(QColor color)
+{
+    actualRed = color.red();
+    actualGreen = color.green();
+    actualBlue = color.blue();
+}
+
+void ColorDockWidget::setActualColorPos(QPoint point)
+{
+    actualColorPos = point;
+}
+
 
 void ColorDockWidget::set_RLE(int val)
 {
@@ -577,19 +610,46 @@ void ColorWheelWidget::mousePressEvent(QMouseEvent *event)
         QPixmap pix = QWidget::grab();
         QImage img = pix.toImage();
         QColor color(img.pixel(event->pos()));
-        emit redChanged(color.red());
-        emit greenChanged(color.green());
-        emit blueChanged(color.blue());
+        if(!refineColorRect.contains(event->pos()))
+        {
+            emit redChanged(color.red());
+            emit greenChanged(color.green());
+            emit blueChanged(color.blue());
+        }
+
+        if(refineColorRect.contains(event->pos()))
+        {
+            //draw the circle
+            emit colorChanged(color);
+            emit actualColorPoint(event->pos());
+            emit actualRedChanged(color.red());
+            emit actualGreenChanged(color.green());
+            emit actualBlueChanged(color.blue());
+        }
         qDebug() << "Color Should Change" << endl;
 }
 
-LayerWidget::LayerWidget(QWidget *parent) : QDockWidget(parent)
+LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
 {
     //initialize
+    setWindowTitle("Layer");
 
+    compositionMode = new QComboBox(this);
+    compositionMode->addItem("Normal");
+    compositionMode->addItem("Multiply");
+
+    layerManager = new QListWidget(this);
+
+    QVBoxLayout *layerLayout = new QVBoxLayout;
+    layerLayout->addWidget(compositionMode);
+    layerLayout->addWidget(layerManager);
+
+    QWidget *layerDisplay = new QWidget(this);
+    layerDisplay->setLayout(layerLayout);
+    setWidget(layerDisplay);
 }
 
-LayerWidget::~LayerWidget()
+LayerDockWidget::~LayerDockWidget()
 {
 
 }
