@@ -129,6 +129,8 @@ MainWindow::MainWindow(QWidget *parent)
     activeToolLabel = new QLabel(this);
     activeToolLabel->setText("FOO");
     mStatBar->addWidget(activeToolLabel);
+    mStatBar->addAction(zoomInAct);
+    mStatBar->addAction(zoomOutAct);
 
     connect(newAct, SIGNAL(triggered()), SLOT(showNewDocWin()));
     connect(preferenceAct, SIGNAL(triggered()),SLOT(showPrefWin()));
@@ -186,7 +188,7 @@ void MainWindow::about()
 {
     QMessageBox msgbox(this);
     msgbox.setTextFormat(Qt::RichText);
-    msgbox.setText("Odessa Ver. 0.0.40<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
+    msgbox.setText("Odessa Ver. 0.0.60<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
     msgbox.exec();
 }
 

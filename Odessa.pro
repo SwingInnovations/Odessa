@@ -11,6 +11,11 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Odessa
 TEMPLATE = app
 
+VERSION = 0.0.60
+QMAKE_TARGET_COMPANY = Swing Innovations
+QMAKE_TARGET_PRODUCT = Odessa
+QMAKE_TARGET_DESCRIPTION = Swing In house Graphics App
+QMAKE_TARGET_COPYRIGHT = LGPL v2.1
 
 SOURCES += main.cpp\
         mainwindow.cpp \

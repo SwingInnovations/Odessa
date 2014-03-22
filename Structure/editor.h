@@ -18,7 +18,7 @@ class Editor : public QLabel
     Q_OBJECT
 public:
 
-    enum ToolType{BRUSH_TOOL, ERASER_TOOL, TEXT_TOOL, PRIMITIVE_TOOL, EYEDROPPER_TOOL};
+    enum ToolType{BRUSH_TOOL, ERASER_TOOL, TEXT_TOOL, PRIMITIVE_TOOL, EYEDROPPER_TOOL, RECT_SELECT_TOOL};
 
     Editor(QWidget *parent = 0);
 
@@ -30,7 +30,7 @@ public:
         }else{
 
         }
-    };
+    }
 
 signals:
     void brushSizeChanged(int);
@@ -52,6 +52,9 @@ protected:
 public slots:
     void newProject(int type, int width, int height, int dpi);
 
+    void addLayer();
+    void addFrame();
+
     void setBrushSize(int);
     void setBrushFeather(int);
     void setBrushSpacing(int);
@@ -64,6 +67,7 @@ public slots:
     void setBlueValue(int);
     void setOpacity(int);
 private:
+
     bool m_DeviceDown;
     bool m_TabletInUse;
     Brush m_CurrentTool;

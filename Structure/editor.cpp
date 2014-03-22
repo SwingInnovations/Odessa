@@ -24,6 +24,8 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_Eraser.setColor(QColor(Qt::white));
     m_Eraser.setBrush(QBrush(Qt::SolidLine));
     m_ToolType = BRUSH_TOOL;
+
+    setScaledContents(true);
 }
 
 void Editor::mousePressEvent(QMouseEvent *event)
@@ -185,6 +187,22 @@ void Editor::paintEvent(QPaintEvent *event)
         m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(painter);
         setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
     }
+
+    if(m_ToolType == BRUSH_TOOL){
+        this->setCursor(QCursor(Qt::CrossCursor));
+        painter.setPen(Qt::darkGray);
+        painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
+        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize(), m_CurrentTool.getSize());
+        painter.end();
+    }else if(m_ToolType == ERASER_TOOL){
+        this->setCursor(QCursor(Qt::CrossCursor));
+        painter.setPen(Qt::darkGray);
+        painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
+        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize(), m_CurrentTool.getSize());
+        painter.end();
+    }else if(m_ToolType == EYEDROPPER_TOOL){
+        setCursor(QCursor(Qt::ArrowCursor));
+    }
 }
 
 void Editor::newProject(int type, int width, int height, int dpi)
@@ -218,6 +236,22 @@ void Editor::newProject(int type, int width, int height, int dpi)
     }
 
     update();
+}
+
+void Editor::addLayer()
+{
+    if(!m_Layers.isEmpty())
+    {
+        int width = m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().size().width();
+        int height = m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().size().height();
+        m_CurrentIndex += 1;
+        m_Layers.push_back(new Layer(Layer::Bitmap_Blank, width, height));
+    }
+}
+
+void Editor::addFrame()
+{
+
 }
 
 void Editor::setBrush(ToolType type)

@@ -17,13 +17,13 @@ CXXFLAGS      = -march=nocona -mtune=core2 -pipe -fno-keep-inline-dllexport -g -
 INCPATH       = -I. -I"C:\Qt\Qt-5.2.0-x86_64\include" -I"C:\Qt\Qt-5.2.0-x86_64\include\QtWidgets" -I"C:\Qt\Qt-5.2.0-x86_64\include\QtGui" -I"C:\Qt\Qt-5.2.0-x86_64\include\QtCore" -I"debug" -I"C:\Qt\Qt-5.2.0-x86_64\mkspecs\win32-g++"
 LINKER      =        g++
 LFLAGS        =        -Wl,-subsystem,windows -mthreads
-LIBS        =        -lglu32 -lopengl32 -lgdi32 -luser32 -lmingw32 -lqtmaind -LC:/Qt/Qt-5.2.0-x86_64/lib -lQt5Widgetsd -lQt5Guid -lQt5Cored 
+LIBS        =        -lglu32 -lopengl32 -lgdi32 -luser32 -lmingw32 -lqtmaind -LC:/Qt/Qt-5.2.0-x86_64/lib -lQt5Widgetsd -lQt5Guid -lQt5Cored debug\Odessa_resource_res.o 
 QMAKE         = C:\Qt\Qt-5.2.0-x86_64\bin\qmake.exe
 IDC           = idc
 IDL           = midl
 ZIP           = zip -r -9
 DEF_FILE      = 
-RES_FILE      = 
+RES_FILE      = debug\Odessa_resource_res.o
 COPY          = copy /y
 SED           = $(QMAKE) -install sed
 COPY_FILE     = $(COPY)
@@ -96,8 +96,11 @@ DESTDIR_TARGET = debug\Odessa.exe
 first: all
 all: Makefile.Debug  $(DESTDIR_TARGET)
 
-$(DESTDIR_TARGET):  $(OBJECTS) 
+$(DESTDIR_TARGET):  $(OBJECTS) debug/Odessa_resource_res.o
 	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) object_script.Odessa.Debug  $(LIBS)
+
+debug/Odessa_resource_res.o: Odessa_resource.rc
+	windres -i Odessa_resource.rc -o debug\Odessa_resource_res.o --include-dir=. $(DEFINES)
 
 qmake: FORCE
 	@$(QMAKE) -spec win32-g++ CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile.Debug Odessa.pro
@@ -109,6 +112,7 @@ dist:
 
 clean: compiler_clean 
 	-$(DEL_FILE) debug\main.o debug\mainwindow.o debug\bitmapimage.o debug\object.o debug\layer.o debug\editor.o debug\dialogwindows.o debug\dockwidgets.o debug\brush.o debug\moc_mainwindow.o debug\moc_editor.o debug\moc_dialogwindows.o debug\moc_dockwidgets.o
+	-$(DEL_FILE) debug\Odessa_resource_res.o
 
 distclean: clean
 	-$(DEL_FILE) $(DESTDIR_TARGET)
@@ -248,12 +252,22 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdialog.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolBar \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbar.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QScrollArea \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qscrollarea.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QScrollBar \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qscrollbar.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractslider.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QShortcut \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qshortcut.h \
-		Structure/editor.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStatusBar \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstatusbar.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSlider \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
+		Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
@@ -474,8 +488,6 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemdelegate.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyleoption.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractspinbox.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractslider.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyle.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabbar.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qrubberband.h \
@@ -493,14 +505,12 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistview.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemview.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
 		Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QVBoxLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QHBoxLayout \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSlider \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QCheckBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcheckbox.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
@@ -1133,6 +1143,23 @@ debug/moc_dockwidgets.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QConicalGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpainter.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QComboBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcombobox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemdelegate.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyleoption.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractspinbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qregularexpression.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyle.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabbar.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qrubberband.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstractitemmodel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qitemselectionmodel.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		Interface/dockwidgets.h
@@ -1278,12 +1305,22 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdialog.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolBar \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbar.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QScrollArea \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qscrollarea.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QScrollBar \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qscrollbar.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractslider.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QShortcut \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qshortcut.h \
-		Structure/editor.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStatusBar \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstatusbar.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSlider \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
+		Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
@@ -1504,8 +1541,6 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemdelegate.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyleoption.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractspinbox.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractslider.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyle.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabbar.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qrubberband.h \
@@ -1523,14 +1558,12 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistview.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemview.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
 		Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QVBoxLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QHBoxLayout \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSlider \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QCheckBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcheckbox.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
@@ -1668,12 +1701,22 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdialog.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolBar \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbar.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QScrollArea \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qscrollarea.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QScrollBar \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qscrollbar.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractslider.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QShortcut \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qshortcut.h \
-		Structure/editor.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStatusBar \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstatusbar.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qframe.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSlider \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
+		Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
@@ -1894,8 +1937,6 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemdelegate.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyleoption.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractspinbox.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractslider.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyle.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabbar.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qrubberband.h \
@@ -1913,14 +1954,12 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistview.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemview.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
 		Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QVBoxLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QHBoxLayout \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSlider \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QCheckBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcheckbox.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
@@ -3240,6 +3279,23 @@ debug/dockwidgets.o: Interface/dockwidgets.cpp Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QConicalGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpainter.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QComboBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qcombobox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemdelegate.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyleoption.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractspinbox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qregularexpression.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstyle.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtabbar.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qrubberband.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstractitemmodel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qitemselectionmodel.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\dockwidgets.o Interface\dockwidgets.cpp

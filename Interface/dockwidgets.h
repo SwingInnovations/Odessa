@@ -17,6 +17,8 @@
 #include <QRadialGradient>
 #include <QConicalGradient>
 #include <QPainter>
+#include <QComboBox>
+#include <QListWidget>
 #include <QMouseEvent>
 #include <QDebug>
 
@@ -90,6 +92,8 @@ private:
     QSlider* mTransferWidthSlider;
     QLineEdit* mTransferWidthLE;
 
+    QTabWidget* brushOptions;
+
 };
 
 class ColorDockWidget : public QDockWidget
@@ -129,8 +133,6 @@ public slots:
 
 protected:
     void paintEvent(QPaintEvent* event);
-    void mousePressEvent(QMouseEvent* event);
-
 private:
     QTabWidget* colorModeTab;
 
@@ -199,6 +201,13 @@ class BrushShapeWidget : public QWidget
 public:
     BrushShapeWidget(QWidget *parent = 0);
     virtual ~BrushShapeWidget();
+protected:
+    void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+private:
+    QPixmap brushPreviewPixmap;
+    QLabel* brushPreviewLabel;
 };
 
 class ColorWheelWidget : public QLabel
@@ -213,6 +222,17 @@ signals:
     void blueChanged(int);
 protected:
     void mousePressEvent(QMouseEvent *event);
+};
+
+class LayerWidget : public QDockWidget
+{
+    Q_OBJECT
+public:
+    LayerWidget(QWidget* parent = 0);
+    virtual ~LayerWidget();
+private:
+    QComboBox* compositionMode;
+    QListWidget* layerManager;
 };
 
 #endif // DOCKWIDGETS_H
