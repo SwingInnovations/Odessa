@@ -138,6 +138,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(newAct, SIGNAL(triggered()), SLOT(showNewDocWin()));
     connect(preferenceAct, SIGNAL(triggered()),SLOT(showPrefWin()));
     //connect(addLayerAct, SIGNAL(triggered()), mEditor, SLOT(addLayer()));
+    connect(undoAct, SIGNAL(triggered()), mEditor, SLOT(undo()));
+    connect(redoAct, SIGNAL(triggered()), mEditor, SLOT(redo()));
     connect(brushTool, SIGNAL(triggered()), SLOT(assignBrushTool()));
     connect(eraserTool, SIGNAL(triggered()), SLOT(assignEraserTool()));
     connect(textTool, SIGNAL(triggered()), SLOT(assignTextTool()));

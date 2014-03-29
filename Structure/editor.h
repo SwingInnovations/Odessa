@@ -13,6 +13,27 @@
 #include "layer.h"
 #include "brush.h"
 
+class Editor;
+
+class HistoryStack : public QObject
+{
+    Q_OBJECT
+public:
+    enum ActivityType{UNDEFINED, BITMAP_CHANGE};
+    virtual int type(){return UNDEFINED;}
+    virtual void restore(Editor*){}
+};
+
+class BitmapHistoryStack : public HistoryStack
+{
+  Q_OBJECT
+public:
+    int m_Layer, m_Frame;
+    BitmapImage m_Bitmap;
+    int type(){return BITMAP_CHANGE;}
+    void restore(Editor*){}
+};
+
 class Editor : public QLabel
 {
     Q_OBJECT
@@ -27,8 +48,6 @@ public:
         if(!m_Layers.isEmpty())
         {
             return m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().size();
-        }else{
-
         }
     }
 
@@ -55,6 +74,12 @@ public slots:
     void addLayer();
     void addFrame();
 
+    void backup();
+    void backup(int backupLayer,int backupFrame);
+
+    void undo();
+    void redo();
+
     void setBrushSize(int);
     void setBrushFeather(int);
     void setBrushSpacing(int);
@@ -70,12 +95,15 @@ private:
 
     bool m_DeviceDown;
     bool m_TabletInUse;
+    bool m_Modified;
+
     Brush m_CurrentTool;
     Brush m_Brush;
     Brush m_Eraser;
 
     QPoint m_DrawPoint;
     QPoint m_DrawPath[3];
+    QVector<QPointF> m_MousePath;
 
     int m_CurrentFrame;
     int m_CurrentIndex;
@@ -89,6 +117,9 @@ private:
 
     QColor m_PrimaryColor;
     QColor m_SecondaryColor;
+
+    QVector<HistoryStack*> m_HistoryStack;
+    int m_BackupIndex;
 };
 
 #endif // EDITOR_H

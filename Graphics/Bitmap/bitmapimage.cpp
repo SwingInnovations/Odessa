@@ -43,6 +43,12 @@ BitmapImage::BitmapImage(QRect boundaries, QColor color)
     m_pixmap = temp;
 }
 
+BitmapImage::BitmapImage(QRect boundaries, QPixmap pixMap)
+{
+    this->boundaries = boundaries;
+    m_pixmap = pixMap;
+}
+
 void BitmapImage::paintImage(QPainter &painter)
 {
     painter.drawPixmap(0, 0, m_pixmap);
@@ -73,8 +79,10 @@ void BitmapImage::paintImage(QTabletEvent *event, Brush brush, QPoint points[])
     painter.setRenderHint(QPainter::Antialiasing);
     brush.setWidth(brush.getSize() + (event->pressure() * brush.getTransferWidth()));
     painter.setBrush(brush.getBrush());
+    painter.setPen(Qt::NoPen);
     painter.setPen(brush.getPen());
     painter.drawLine(points[1], event->pos());
+//    painter.drawEllipse(event->posF(), brush.getSize(), brush.getSize());
 }
 
 void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint points[])
@@ -82,9 +90,10 @@ void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint points[])
     QPainter painter(&m_pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setBrush(brush.getBrush());
+    painter.setPen(Qt::NoPen);
     painter.setPen(brush.getPen());
     painter.drawLine(points[1], event->pos());
-    painter.end();
+//    painter.drawEllipse(event->pos(), brush.getSize(), brush.getSize());
 }
 
 void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint &lastPoint)
@@ -108,4 +117,14 @@ void BitmapImage::paintImage(QTabletEvent *event, Brush brush, QPoint &lastPoint
     qDebug() << "Painting in Action!";
 }
 
+void BitmapImage::addBackupElement()
+{
+    m_MaxSizeOfHistory++;
+    m_historyStack.push_back(QPixmap());
+}
+
+void BitmapImage::removeLastBackupElement()
+{
+    m_historyStack.removeLast();
+}
 

@@ -4,13 +4,14 @@ Editor::Editor(QWidget *parent):QLabel(parent)
 {
     m_DeviceDown = false;
     m_TabletInUse = false;
+    m_Modified = false;
 
     m_CurrentIndex = 0;
     m_CurrentFrame = 0;
 
-    m_RedVal = 0;
-    m_GreenVal = 0;
-    m_BlueVal = 0;
+    m_RedVal = 1;
+    m_GreenVal = 1;
+    m_BlueVal = 1;
     m_OpacityVal = 255;
 
     m_Brush = Brush();
@@ -21,7 +22,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
 
     m_Eraser = Brush();
     m_Eraser.setWidth(5);
-    m_Eraser.setColor(QColor(Qt::white));
+    m_Eraser.setColor(QColor(255,255,255,255));
     m_Eraser.setBrush(QBrush(Qt::SolidLine));
     m_ToolType = BRUSH_TOOL;
 
@@ -36,11 +37,12 @@ void Editor::mousePressEvent(QMouseEvent *event)
         {
         case BRUSH_TOOL:
             m_DeviceDown = true;
-            m_DrawPath[2] = m_DrawPath[1] = m_DrawPath[0] = event->pos();
+            m_DrawPath[0] = m_DrawPath[1] = m_DrawPath[2] = event->pos();
+            backup();
             break;
         case ERASER_TOOL:
             m_DeviceDown = true;
-            m_DrawPath[2] = m_DrawPath[1] = m_DrawPath[0] = event->pos();
+            m_DrawPath[0] = m_DrawPath[1] = m_DrawPath[2] = event->pos();
             break;
         case EYEDROPPER_TOOL:
             m_Pix = QPixmap::grabWidget(this);
@@ -114,7 +116,7 @@ void Editor::tabletEvent(QTabletEvent *event)
                 if(!m_DeviceDown)
                 {
                     m_DeviceDown = true;
-                    m_DrawPath[2] = m_DrawPath[1] = m_DrawPath[0] = event->pos();
+                    m_DrawPath[0] = m_DrawPath[1] = m_DrawPath[2] = event->pos();
                 }
                 break;
             case QEvent::TabletRelease:
@@ -134,7 +136,7 @@ void Editor::tabletEvent(QTabletEvent *event)
                     m_DrawPath[1] = m_DrawPath[0];
                     m_DrawPath[0] = event->pos();
                     m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(event, m_CurrentTool, m_DrawPath);
-                    setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+                    //setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
                 }
                 break;
             default:
@@ -148,7 +150,7 @@ void Editor::tabletEvent(QTabletEvent *event)
                 if(!m_DeviceDown)
                 {
                     m_DeviceDown = true;
-                    m_DrawPath[2] = m_DrawPath[1] = m_DrawPath[0] = event->pos();
+                    m_DrawPath[0] = m_DrawPath[1] = m_DrawPath[2] = event->pos();
                 }
                 break;
             case QEvent::TabletRelease:
@@ -349,5 +351,45 @@ void Editor::setSizeTransfer(int val)
     default:
         break;
     }
+}
+
+void Editor::backup()
+{
+    backup(m_CurrentIndex-1, m_CurrentFrame-1);
+}
+
+void Editor::backup(int backupLayer, int backupFrame)
+{
+    while(m_HistoryStack.size()-1 > m_BackupIndex && m_HistoryStack.size() > 0)
+    {
+        delete m_HistoryStack.takeLast();
+    }
+        BitmapHistoryStack* element = new BitmapHistoryStack();
+        element->m_Layer = backupLayer;
+        element->m_Frame = backupFrame;
+        BitmapImage* bitmapImage = m_Layers.at(backupLayer)->getFrame(backupFrame);
+        if(bitmapImage != NULL)
+        {
+            element->m_Bitmap = bitmapImage->copy();
+            m_HistoryStack.append(element);
+            m_BackupIndex++;
+        }
+}
+
+void Editor::undo()
+{
+    m_BackupIndex--;
+//    m_HistoryStack[m_BackupIndex]->restore(this);
+    HistoryStack* lastElement = m_HistoryStack[m_BackupIndex];
+    BitmapHistoryStack* lastBitmapHist = (BitmapHistoryStack*)lastElement;
+    m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->setPixmap(lastBitmapHist->m_Bitmap.getPixmap());
+}
+
+void Editor::redo()
+{
+    m_BackupIndex++;
+    HistoryStack* lastElement = m_HistoryStack[m_BackupIndex];
+    BitmapHistoryStack* lastBitmapHist = (BitmapHistoryStack*)lastElement;
+    m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->setPixmap(lastBitmapHist->m_Bitmap.getPixmap());
 }
 

@@ -125,6 +125,7 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
 
     QWidget *layoutView = new QWidget(this);
     layoutView->setLayout(primaryBrushControlLayout);
+
     this->setWidget(layoutView);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
@@ -502,6 +503,7 @@ void ColorDockWidget::set_BLE(int val)
 {
     m_BLineEdit->setText(QString::number(val));
     emit blueChanged(val);
+
 }
 
 void ColorDockWidget::set_BSlider(QString val)
@@ -562,12 +564,12 @@ TimelineDockWidget::~TimelineDockWidget()
 
 */
 
-BrushShapeWidget::BrushShapeWidget(QWidget *parent) : QWidget(parent)
+BrushShapeWidget::BrushShapeWidget(QWidget *parent) : QLabel(parent)
 {
     brushPreviewPixmap = QPixmap(200, 200);
     brushPreviewPixmap.fill(Qt::transparent);
-    brushPreviewLabel = new QLabel(this);
-    brushPreviewLabel->setPixmap(brushPreviewPixmap);
+    this->setPixmap(brushPreviewPixmap);
+    this->resize(brushPreviewPixmap.size());
 }
 
 BrushShapeWidget::~BrushShapeWidget()
@@ -577,7 +579,8 @@ BrushShapeWidget::~BrushShapeWidget()
 
 void BrushShapeWidget::paintEvent(QPaintEvent *event)
 {
-
+    QPainter painter(&brushPreviewPixmap);
+    painter.drawEllipse(0, 0, 20, 20);
 }
 
 void BrushShapeWidget::mouseMoveEvent(QMouseEvent *event)

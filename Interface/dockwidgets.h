@@ -25,6 +25,7 @@
 //handling the Brush System
 
 class ColorWheelWidget;
+class BrushShapeWidget;
 
 class BrushDockWidget : public QDockWidget
 {
@@ -94,6 +95,8 @@ private:
 
     QTabWidget* brushOptions;
 
+    BrushShapeWidget* brushShape;
+
 };
 
 class ColorDockWidget : public QDockWidget
@@ -116,6 +119,9 @@ signals:
     void redChanged(int);
     void greenChanged(int);
     void blueChanged(int);
+    void actualRedChanged(int);
+    void actualBlueChanged(int);
+    void actualGreenChanged(int);
     void hueChanged(int);
     void saturationChanged(int);
     void valueChanged(int);
@@ -211,7 +217,7 @@ public:
     virtual ~TimelineDockWidget();
 };
 
-class BrushShapeWidget : public QWidget
+class BrushShapeWidget : public QLabel
 {
   Q_OBJECT
 public:
@@ -223,7 +229,6 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
 private:
     QPixmap brushPreviewPixmap;
-    QLabel* brushPreviewLabel;
 };
 
 class ColorWheelWidget : public QLabel
