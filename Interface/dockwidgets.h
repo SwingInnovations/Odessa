@@ -20,6 +20,8 @@
 #include <QComboBox>
 #include <QListWidget>
 #include <QMouseEvent>
+#include <QToolButton>
+#include <QMenu>
 #include <QDebug>
 
 //handling the Brush System
@@ -269,6 +271,8 @@ public:
 private:
     QComboBox* compositionMode;
     QListWidget* layerManager;
+    QToolButton* layerOptionsButton;
+    QMenu* layerOptionsMenu;
 };
 
 #endif // DOCKWIDGETS_H

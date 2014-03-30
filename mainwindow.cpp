@@ -50,9 +50,8 @@ MainWindow::MainWindow(QWidget *parent)
     toolBar->addAction(textTool);
     toolBar->addAction(primitiveTool);
 
-    addLayerAct = new QAction(this);
-    addLayerAct->setText("AddLayer");
     newAct = new QAction("&New", this);
+    newAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
     aboutAct = new QAction("&About", this);
     closeAct = new QAction("&Close", this);
     closeAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
@@ -60,8 +59,10 @@ MainWindow::MainWindow(QWidget *parent)
     //edit Actions
     undoAct = new QAction(this);
     undoAct->setText("&Undo");
+    undoAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
     redoAct = new QAction(this);
     redoAct->setText("&Redo");
+    redoAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Y));
     cutAct = new QAction(this);
     cutAct->setText("&Cut");
     copyAct = new QAction(this);
@@ -92,7 +93,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     fileMenu = this->menuBar()->addMenu("&File");
     fileMenu->addAction(newAct);
-    //fileMenu->addAction(addLayerAct);
     fileMenu->addSeparator();
     fileMenu->addAction(closeAct);
 
@@ -197,7 +197,7 @@ void MainWindow::about()
 {
     QMessageBox msgbox(this);
     msgbox.setTextFormat(Qt::RichText);
-    msgbox.setText("Odessa Ver. 0.0.60<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
+    msgbox.setText("Odessa Ver. 0.0.51<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
     msgbox.exec();
 }
 

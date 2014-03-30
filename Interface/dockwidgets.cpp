@@ -637,14 +637,21 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     //initialize
     setWindowTitle("Layer");
 
+    layerOptionsButton = new QToolButton(this);
+    layerOptionsButton->setText("Options");
+
     compositionMode = new QComboBox(this);
     compositionMode->addItem("Normal");
     compositionMode->addItem("Multiply");
 
     layerManager = new QListWidget(this);
 
+    QHBoxLayout* compLayout = new QHBoxLayout;
+    compLayout->addWidget(compositionMode);
+    compLayout->addWidget(layerOptionsButton);
+
     QVBoxLayout *layerLayout = new QVBoxLayout;
-    layerLayout->addWidget(compositionMode);
+    layerLayout->addLayout(compLayout);
     layerLayout->addWidget(layerManager);
 
     QWidget *layerDisplay = new QWidget(this);

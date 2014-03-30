@@ -81,9 +81,58 @@ OdessaPrefDialog::OdessaPrefDialog()
 {
     setWindowTitle("Preferences");
     setModal(true);
+
+    contentWidget = new QListWidget(this);
+    contentWidget->setMaximumWidth(128);
+
+    pagesWidget = new QStackedWidget(this);
+    pagesWidget->addWidget(new GeneralPrefPage);
+
+    m_OkButton = new QPushButton("Ok", this);
+    m_ApplyButton = new QPushButton("Apply", this);
+    m_CancelButton = new QPushButton("Cancel", this);
+
+    QListWidgetItem* generalItem = new QListWidgetItem(contentWidget);
+    generalItem->setText("General");
+    generalItem->setTextAlignment(Qt::AlignHCenter);
+
+    QListWidgetItem* animationItem = new QListWidgetItem(contentWidget);
+    animationItem->setText("Animation");
+    animationItem->setTextAlignment(Qt::AlignHCenter);
+
+    QListWidgetItem* spriteItem = new QListWidgetItem(contentWidget);
+    spriteItem->setText("Sprite Sheet");
+    spriteItem->setTextAlignment(Qt::AlignHCenter);
+
+    QHBoxLayout* contentLayout = new QHBoxLayout;
+    contentLayout->addWidget(contentWidget);
+    contentLayout->addWidget(pagesWidget);
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout;
+    buttonLayout->addSpacing(this->width()/3);
+    buttonLayout->addWidget(m_OkButton);
+    buttonLayout->addWidget(m_ApplyButton);
+    buttonLayout->addWidget(m_CancelButton);
+
+    QVBoxLayout* mainLayout = new QVBoxLayout;
+    mainLayout->addLayout(contentLayout);
+    mainLayout->addLayout(buttonLayout);
+
+    setLayout(mainLayout);
+
 }
 
 OdessaPrefDialog::~OdessaPrefDialog()
+{
+
+}
+
+GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
+{
+
+}
+
+GeneralPrefPage::~GeneralPrefPage()
 {
 
 }

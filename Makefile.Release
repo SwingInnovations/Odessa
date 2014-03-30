@@ -103,7 +103,7 @@ release/Odessa_resource_res.o: Odessa_resource.rc
 	windres -i Odessa_resource.rc -o release\Odessa_resource_res.o --include-dir=. $(DEFINES)
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-g++ CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile.Release Odessa.pro
+	@$(QMAKE) -spec win32-g++ CONFIG+=release CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile.Release Odessa.pro
 
 qmake_all: FORCE
 
@@ -474,6 +474,7 @@ release/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow 
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPointF \
 		Structure/brush.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
@@ -505,6 +506,8 @@ release/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow 
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistview.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
 		Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
@@ -519,6 +522,8 @@ release/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow 
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QConicalGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolButton \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h \
 		mainwindow.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) mainwindow.h -o release\moc_mainwindow.cpp
 
@@ -839,6 +844,7 @@ release/moc_editor.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPointF \
 		Structure/brush.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
@@ -996,6 +1002,8 @@ release/moc_dialogwindows.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemview.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qitemselectionmodel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		Interface/dialogwindows.h
@@ -1161,6 +1169,12 @@ release/moc_dockwidgets.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qitemselectionmodel.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolButton \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMenu \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmenu.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qaction.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qactiongroup.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		Interface/dockwidgets.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) Interface\dockwidgets.h -o release\moc_dockwidgets.cpp
@@ -1527,6 +1541,7 @@ release/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPointF \
 		Structure/brush.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
@@ -1558,6 +1573,8 @@ release/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistview.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
 		Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
@@ -1572,6 +1589,8 @@ release/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QConicalGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolButton \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QApplication \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qapplication.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdesktopwidget.h
@@ -1923,6 +1942,7 @@ release/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPointF \
 		Structure/brush.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
@@ -1954,6 +1974,8 @@ release/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlistview.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemview.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
 		Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
@@ -1967,7 +1989,9 @@ release/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QConicalGradient \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolButton \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\mainwindow.o mainwindow.cpp
 
 release/bitmapimage.o: Graphics/Bitmap/bitmapimage.cpp Graphics/Bitmap/bitmapimage.h \
@@ -2275,6 +2299,8 @@ release/bitmapimage.o: Graphics/Bitmap/bitmapimage.cpp Graphics/Bitmap/bitmapima
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPointF \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		Structure/brush.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
@@ -2651,6 +2677,7 @@ release/layer.o: Structure/layer.cpp Structure/layer.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPointF \
 		Structure/brush.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
@@ -2975,6 +3002,7 @@ release/editor.o: Structure/editor.cpp Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPointF \
 		Structure/brush.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
@@ -3132,6 +3160,8 @@ release/dialogwindows.o: Interface/dialogwindows.cpp Interface/dialogwindows.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractitemview.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qitemselectionmodel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\dialogwindows.o Interface\dialogwindows.cpp
@@ -3297,6 +3327,12 @@ release/dockwidgets.o: Interface/dockwidgets.cpp Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qabstractscrollarea.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qitemselectionmodel.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolButton \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMenu \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmenu.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qaction.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qactiongroup.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\dockwidgets.o Interface\dockwidgets.cpp
 

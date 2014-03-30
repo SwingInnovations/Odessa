@@ -10,10 +10,12 @@
 #include <QPushButton>
 #include <QGroupBox>
 #include <QListWidget>
+#include <QStackedWidget>
 #include <QListWidgetItem>
 #include <QDebug>
 
 //handle the dialog windows
+class GeneralPrefPage;
 
 //new Document
 class OdessaNewDocDialog : public QDialog
@@ -65,6 +67,19 @@ public:
     OdessaPrefDialog();
     ~OdessaPrefDialog();
 private:
+    QListWidget* contentWidget;
+    QStackedWidget* pagesWidget;
+    QPushButton* m_OkButton;
+    QPushButton* m_ApplyButton;
+    QPushButton* m_CancelButton;
+};
+
+class GeneralPrefPage : public QWidget
+{
+    Q_OBJECT
+public:
+    GeneralPrefPage(QWidget* parent = 0);
+    ~GeneralPrefPage();
 
 };
 

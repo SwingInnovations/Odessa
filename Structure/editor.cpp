@@ -9,22 +9,22 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_CurrentIndex = 0;
     m_CurrentFrame = 0;
 
-    m_RedVal = 1;
-    m_GreenVal = 1;
-    m_BlueVal = 1;
+    m_RedVal = 0;
+    m_GreenVal = 0;
+    m_BlueVal = 0;
     m_OpacityVal = 255;
 
     m_Brush = Brush();
-    m_Brush.setColor(QColor(m_RedVal, m_GreenVal, m_BlueVal, m_OpacityVal));
+    m_Brush.setColor(Qt::black);
     m_Brush.setBrush(QBrush(Qt::SolidPattern));
     m_Brush.setWidth(5);
     m_CurrentTool = m_Brush;
+     m_ToolType = BRUSH_TOOL;
 
     m_Eraser = Brush();
     m_Eraser.setWidth(5);
-    m_Eraser.setColor(QColor(255,255,255,255));
+    m_Eraser.setColor(Qt::white);
     m_Eraser.setBrush(QBrush(Qt::SolidLine));
-    m_ToolType = BRUSH_TOOL;
 
     setScaledContents(true);
 }
@@ -43,6 +43,7 @@ void Editor::mousePressEvent(QMouseEvent *event)
         case ERASER_TOOL:
             m_DeviceDown = true;
             m_DrawPath[0] = m_DrawPath[1] = m_DrawPath[2] = event->pos();
+            backup();
             break;
         case EYEDROPPER_TOOL:
             m_Pix = QPixmap::grabWidget(this);
@@ -382,14 +383,17 @@ void Editor::undo()
 //    m_HistoryStack[m_BackupIndex]->restore(this);
     HistoryStack* lastElement = m_HistoryStack[m_BackupIndex];
     BitmapHistoryStack* lastBitmapHist = (BitmapHistoryStack*)lastElement;
-    m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->setPixmap(lastBitmapHist->m_Bitmap.getPixmap());
+    m_Layers.at(lastBitmapHist->m_Layer)->getFrame(lastBitmapHist->m_Frame)->setPixmap(lastBitmapHist->m_Bitmap.getPixmap());
 }
 
 void Editor::redo()
 {
-    m_BackupIndex++;
-    HistoryStack* lastElement = m_HistoryStack[m_BackupIndex];
-    BitmapHistoryStack* lastBitmapHist = (BitmapHistoryStack*)lastElement;
-    m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->setPixmap(lastBitmapHist->m_Bitmap.getPixmap());
+    if(m_BackupIndex > -1 && m_BackupIndex < m_HistoryStack.size() -1)
+    {
+        m_BackupIndex++;
+        HistoryStack* lastElement = m_HistoryStack[m_BackupIndex];
+        BitmapHistoryStack* lastBitmapHist = (BitmapHistoryStack*)lastElement;
+        m_Layers.at(lastBitmapHist->m_Layer)->getFrame(lastBitmapHist->m_Frame)->setPixmap(lastBitmapHist->m_Bitmap.getPixmap());
+    }
 }
 
