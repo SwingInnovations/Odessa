@@ -54,25 +54,6 @@ void BitmapImage::paintImage(QPainter &painter)
     painter.drawPixmap(0, 0, m_pixmap);
 }
 
-void BitmapImage::paintImage(QPainter &painter, QPoint knownPoint, Brush brush, QPoint points[])
-{
-    painter.setBrush(brush.getBrush());
-    painter.setPen(brush.getPen());
-    qDebug() << "Brush"  << brush.getBrush() << endl;
-    qDebug() << "Pen" << brush.getPen() << endl;
-    painter.drawLine(points[1], knownPoint);
-    qDebug() << "Color"  << brush.getColor() << endl;
-    qDebug() << "Drawing In progress" << endl;
-}
-
-void BitmapImage::paintImage(QPainter &painter, QTabletEvent *event, Brush brush, QPoint points[])
-{
-    //painter = QPainter(&m_pixmap);
-    painter.setBrush(brush.getBrush());
-    painter.setPen(brush.getPen());
-    painter.drawLine(points[1], event->pos());
-}
-
 void BitmapImage::paintImage(QTabletEvent *event, Brush brush, QPoint points[])
 {
     QPainter painter(&m_pixmap);
@@ -82,7 +63,6 @@ void BitmapImage::paintImage(QTabletEvent *event, Brush brush, QPoint points[])
     painter.setPen(Qt::NoPen);
     painter.setPen(brush.getPen());
     painter.drawLine(points[1], event->pos());
-//    painter.drawEllipse(event->posF(), brush.getSize(), brush.getSize());
 }
 
 void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint points[])
@@ -96,35 +76,55 @@ void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint points[])
 //    painter.drawEllipse(event->pos(), brush.getSize(), brush.getSize());
 }
 
-void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint &lastPoint)
+void BitmapImage::paintImage(QPainterPath painterPath, Brush brush)
 {
     QPainter painter(&m_pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setPen(brush.getPen());
-    painter.drawLine(lastPoint, event->pos());
-    painter.end();
+    painter.setBrush(Qt::NoBrush);
+    QPen copyPen = brush.getPen();
+    if(brush.getSize() > 0)
+    {
+        copyPen.setBrush(brush.getBrush());
+        copyPen.setWidth(brush.getSize());
+        painter.setPen(copyPen);
+    }else{
+        copyPen.setBrush(Qt::NoBrush);
+        copyPen.setWidth(0);
+        painter.setPen(copyPen);
+    }
+    painter.drawPath(painterPath);
 }
 
-void BitmapImage::paintImage(QTabletEvent *event, Brush brush, QPoint &lastPoint)
+void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
 {
     QPainter painter(&m_pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
-    brush.setWidth(brush.getSize() + (event->pressure() * brush.getTransferWidth()));
     painter.setBrush(brush.getBrush());
     painter.setPen(brush.getPen());
-    painter.drawLine(QPoint(0,0), event->pos());
+    painter.setOpacity(brush.getOpacity());
+    painter.drawPolyline(pointInfo);
     painter.end();
-    qDebug() << "Painting in Action!";
 }
 
-void BitmapImage::addBackupElement()
+void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt)
 {
-    m_MaxSizeOfHistory++;
-    m_historyStack.push_back(QPixmap());
+    QPainter painter(&m_pixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setBrush(brush.getBrush());
+    QPen pen(brush.getPen());
+    pen.setWidthF(brush.getSize() + (tabPress * 20));
+    painter.setPen(pen);
+    painter.setOpacity(brush.getOpacity());
+    painter.drawPolyline(pointInfo);
+    painter.end();
 }
 
-void BitmapImage::removeLastBackupElement()
+void BitmapImage::getCompositeImage()
 {
-    m_historyStack.removeLast();
+    QPixmap temp = m_pixmap;
+    QPainter painter(&temp);
+    painter.setOpacity(0.5);
+    painter.drawPixmap(0, 0, temp);
+    painter.end();
+    m_pixmap = temp;
 }
-

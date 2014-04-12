@@ -4,6 +4,7 @@
 #include <QBrush>
 #include <QPen>
 #include <QColor>
+#include <QDebug>
 
 
 class Brush
@@ -18,11 +19,31 @@ public:
     void setPen(QPen pen){ myPen = pen; }
     void setColor(QColor color){ myColor = color; myBrush.setColor(myColor); myPen.setColor(myColor); }
     void setWidth(int val){
-        width = val;
+        width = val + (widthAmount * m_PressureVal);
         myPen.setWidth(width); }
     void setWidth(qreal val){
-        width = val;
-        myPen.setWidthF(width); }
+        width = val + (widthAmount * m_PressureVal );
+        myPen.setWidthF(width);
+    }
+
+    void setPressureVal(qreal val)
+    {
+        m_PressureVal = val;
+    }
+
+    void setxTilt(qreal val)
+    {
+        m_xTilt = val;
+    }
+
+    void setyTilt(qreal val)
+    {
+        m_yTilt = val;
+    }
+
+    void setOpacity(int val){opacity = val;}
+
+    qreal gePressureVal(){return m_PressureVal;}
 
     void setPressure(bool val){ pressure = val; }
     void setFeather(bool val){ feather = val; }
@@ -41,8 +62,9 @@ public:
     QBrush getBrush(){ return myBrush; }
     QColor getColor() { return myColor; }
 
-    int getSize(){return myPen.width();}
+    int getSize(){return width;}
     int getTransferWidth(){return widthAmount;}
+    int getOpacity(){return opacity;}
 
 private:
 
@@ -57,6 +79,12 @@ private:
     int featherAmount;
     int widthAmount;
     int width;
+
+    int opacity;
+
+    qreal m_PressureVal;
+    qreal m_xTilt;
+    qreal m_yTilt;
 };
 
 #endif // BRUSH_H

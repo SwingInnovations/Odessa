@@ -18,6 +18,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_Brush.setColor(Qt::black);
     m_Brush.setBrush(QBrush(Qt::SolidPattern));
     m_Brush.setWidth(5);
+    m_Brush.setOpacity(m_OpacityVal);
     m_CurrentTool = m_Brush;
      m_ToolType = BRUSH_TOOL;
 
@@ -25,6 +26,8 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_Eraser.setWidth(5);
     m_Eraser.setColor(Qt::white);
     m_Eraser.setBrush(QBrush(Qt::SolidLine));
+
+    m_BackupIndex = 0;
 
     setScaledContents(true);
 }
@@ -38,6 +41,11 @@ void Editor::mousePressEvent(QMouseEvent *event)
         case BRUSH_TOOL:
             m_DeviceDown = true;
             m_DrawPath[0] = m_DrawPath[1] = m_DrawPath[2] = event->pos();
+            if(!m_MousePath.isEmpty())
+            {
+                m_MousePath.clear();
+            }
+            m_MousePath.append(event->pos());
             backup();
             break;
         case ERASER_TOOL:
@@ -62,6 +70,8 @@ void Editor::mousePressEvent(QMouseEvent *event)
 
 void Editor::mouseReleaseEvent(QMouseEvent *event)
 {
+    Q_UNUSED(event)
+
     if(m_DeviceDown)
     {
         m_DeviceDown = false;
@@ -71,7 +81,7 @@ void Editor::mouseReleaseEvent(QMouseEvent *event)
 
 void Editor::mouseMoveEvent(QMouseEvent *event)
 {
-    if(!m_Layers.isEmpty()&& !m_TabletInUse)
+    if(!m_Layers.isEmpty())
     {
 
         switch(m_ToolType)
@@ -82,7 +92,16 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                 m_DrawPath[2] = m_DrawPath[1];
                 m_DrawPath[1] = m_DrawPath[0];
                 m_DrawPath[0] = event->pos();
-                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(event, m_CurrentTool, m_DrawPath);
+
+                m_MousePath.append(event->pos());
+                if(m_MousePath.size() > 30)
+                {
+                    m_MousePath.removeFirst();
+                }
+
+                m_CurrentTool.setTransferWidthAmount(m_Pressure);
+
+                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool, m_Pressure, m_CurrentTool.getTransferWidth());
                 setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
             }
             break;
@@ -100,81 +119,109 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
             break;
         }
     }
+    qDebug() << "Pressure:" << m_Pressure << endl;
     update();
 }
 
 void Editor::tabletEvent(QTabletEvent *event)
 {
-    m_TabletInUse = true;
-    if(!m_Layers.isEmpty() && m_TabletInUse == true)
+    if(!m_Layers.isEmpty())
     {
-        switch(m_ToolType)
+//        switch(m_ToolType)
+//        {
+//        case BRUSH_TOOL:
+//            switch(event->type())
+//            {
+//                case QEvent::TabletPress:
+//                if(!m_DeviceDown)
+//                {
+//                    m_DeviceDown = true;
+//                    m_DrawPath[0] = m_DrawPath[1] = m_DrawPath[2] = event->pos();
+//                }
+//                break;
+//            case QEvent::TabletRelease:
+//                if(m_DeviceDown)
+//                {
+//                    m_DeviceDown = false;
+//                }
+//                if(m_TabletInUse)
+//                {
+//                    m_TabletInUse = false;
+//                }
+//                break;
+//            case QEvent::TabletMove:
+//                if(m_DeviceDown)
+//                {
+//                    m_DrawPath[2] = m_DrawPath[1];
+//                    m_DrawPath[1] = m_DrawPath[0];
+//                    m_DrawPath[0] = event->pos();
+//                    m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(event, m_CurrentTool, m_DrawPath);
+//                    //setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+//                }
+//                break;
+//            default:
+//                qDebug() << "Nothing Happened" << endl;
+//            }
+//            break;
+//        case ERASER_TOOL:
+//            switch(event->type())
+//            {
+//                case QEvent::TabletPress:
+//                if(!m_DeviceDown)
+//                {
+//                    m_DeviceDown = true;
+//                    m_DrawPath[0] = m_DrawPath[1] = m_DrawPath[2] = event->pos();
+//                }
+//                break;
+//            case QEvent::TabletRelease:
+//                if(m_DeviceDown)
+//                {
+//                    m_DeviceDown = false;
+//                }
+//                break;
+//            case QEvent::TabletMove:
+//                if(m_DeviceDown)
+//                {
+//                    m_DrawPath[2] = m_DrawPath[1];
+//                    m_DrawPath[1] = m_DrawPath[0];
+//                    m_DrawPath[0] = event->pos();
+//                    m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(event, m_CurrentTool, m_DrawPath);
+//                    setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+//                }
+//                break;
+//            default:
+//            qDebug() << "Nothing Happened" << endl;
+//            }
+//            break;
+//        default:
+//            break;
+//        }
+        switch(event->type())
         {
-        case BRUSH_TOOL:
-            switch(event->type())
+        case QEvent::TabletPress:
+           if(m_DeviceDown)
+           {
+               m_TabletInUse = true;
+               m_Pressure = event->pressure();
+               m_CurrentTool.setPressureVal(m_Pressure);
+               m_XTilt = event->xTilt();
+               m_YTilt = event->yTilt();
+           }
+            break;
+        case QEvent::TabletMove:
+            if(m_DeviceDown)
             {
-                case QEvent::TabletPress:
-                if(!m_DeviceDown)
-                {
-                    m_DeviceDown = true;
-                    m_DrawPath[0] = m_DrawPath[1] = m_DrawPath[2] = event->pos();
-                }
-                break;
-            case QEvent::TabletRelease:
-                if(m_DeviceDown)
-                {
-                    m_DeviceDown = false;
-                }
-                if(m_TabletInUse)
-                {
-                    m_TabletInUse = false;
-                }
-                break;
-            case QEvent::TabletMove:
-                if(m_DeviceDown)
-                {
-                    m_DrawPath[2] = m_DrawPath[1];
-                    m_DrawPath[1] = m_DrawPath[0];
-                    m_DrawPath[0] = event->pos();
-                    m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(event, m_CurrentTool, m_DrawPath);
-                    //setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
-                }
-                break;
-            default:
-                qDebug() << "Nothing Happened" << endl;
+                m_Pressure = event->pressure();
+                m_CurrentTool.setPressureVal(m_Pressure);
+                m_XTilt = event->xTilt();
+                m_YTilt = event->yTilt();
             }
             break;
-        case ERASER_TOOL:
-            switch(event->type())
+         case QEvent::TabletRelease:
+            if(m_DeviceDown)
             {
-                case QEvent::TabletPress:
-                if(!m_DeviceDown)
-                {
-                    m_DeviceDown = true;
-                    m_DrawPath[0] = m_DrawPath[1] = m_DrawPath[2] = event->pos();
-                }
-                break;
-            case QEvent::TabletRelease:
-                if(m_DeviceDown)
-                {
-                    m_DeviceDown = false;
-                }
-                break;
-            case QEvent::TabletMove:
-                if(m_DeviceDown)
-                {
-                    m_DrawPath[2] = m_DrawPath[1];
-                    m_DrawPath[1] = m_DrawPath[0];
-                    m_DrawPath[0] = event->pos();
-                    m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(event, m_CurrentTool, m_DrawPath);
-                    setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
-                }
-                break;
-            default:
-            qDebug() << "Nothing Happened" << endl;
+                m_DeviceDown = false;
             }
-            break;
-        default:
             break;
         }
    }
@@ -330,6 +377,7 @@ void Editor::setOpacity(int val)
 {
     m_OpacityVal = val;
     m_PrimaryColor.setAlpha(m_OpacityVal);
+    m_CurrentTool.setOpacity(val);
     m_CurrentTool.setColor(m_PrimaryColor);
 }
 
@@ -356,7 +404,15 @@ void Editor::setSizeTransfer(int val)
 
 void Editor::backup()
 {
-    backup(m_CurrentIndex-1, m_CurrentFrame-1);
+    if(!m_Layers.isEmpty())
+    {
+        backup(m_CurrentIndex-1, m_CurrentFrame-1);
+    }
+}
+
+void Editor::scale(double scaleVal)
+{
+    //scale the image directly through the layers
 }
 
 void Editor::backup(int backupLayer, int backupFrame)
@@ -380,7 +436,6 @@ void Editor::backup(int backupLayer, int backupFrame)
 void Editor::undo()
 {
     m_BackupIndex--;
-//    m_HistoryStack[m_BackupIndex]->restore(this);
     HistoryStack* lastElement = m_HistoryStack[m_BackupIndex];
     BitmapHistoryStack* lastBitmapHist = (BitmapHistoryStack*)lastElement;
     m_Layers.at(lastBitmapHist->m_Layer)->getFrame(lastBitmapHist->m_Frame)->setPixmap(lastBitmapHist->m_Bitmap.getPixmap());

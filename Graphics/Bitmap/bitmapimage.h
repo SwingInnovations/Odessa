@@ -4,6 +4,7 @@
 #include <QtGui>
 #include <QImage>
 #include <QPixmap>
+#include <QPainterPath>
 #include <QDebug>
 #include <QPoint>
 #include <QPointF>
@@ -25,24 +26,21 @@ public:
 
     void setBoundaries(const QRect& bounds){this->boundaries = bounds;}
 
-    void addBackupElement();
-    void removeLastBackupElement();
-
     void setPixmap(QPixmap pixmap){m_pixmap = pixmap;}
 
     void paintImage(QPainter &painter);
-    void paintImage(QPainter &painter, QPoint knownPoint, Brush brush, QPoint points[]);
-    void paintImage(QPainter &painter, QTabletEvent *event, Brush brush, QPoint points[]);
-    void paintImage(QMouseEvent *event, Brush brush, QPoint points[]);
-    void paintImage(QTabletEvent *event, Brush brush, QPoint points[]);
-    void paintImage(QMouseEvent *event, Brush brush, QPoint &lastPoint);
-    void paintImage(QTabletEvent *event, Brush brush, QPoint &lastPoint);
+    void paintImage(QMouseEvent *event, Brush brush, QPoint points[]);//Deprecate
+    void paintImage(QTabletEvent *event, Brush brush, QPoint points[]);//Deprecate
+    void paintImage(QPainterPath painterPath, Brush brush); //works
+    void paintImage(QVector<QPointF> pointInfo, Brush brush);
+    void paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt);
     void setColor(const QColor color){ m_Color = color; m_Image->fill(m_Color);}
 
     BitmapImage copy(){return BitmapImage(boundaries, m_pixmap);}
 
     QImage *getImage(){return m_Image;}
     QPixmap getPixmap(){return m_pixmap;}
+    void getCompositeImage();
 
     QPoint getTopLeft(){return boundaries.topLeft();}
     QPoint getTopRight(){ return boundaries.topRight(); }
@@ -62,8 +60,6 @@ private:
 
     //handle history
     int m_MaxSizeOfHistory;
-    QVector<QPixmap> m_historyStack;
-    QPoint startPoint, endPoint;
 };
 
 #endif // BITMAPIMAGE_H

@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(imageArea);
 
     mEditor->setStyleSheet("background-color: grey;");
-    mEditor->resize(imageArea->size());
+    //mEditor->resize(imageArea->size());
 
     toolBar = this->addToolBar("Tools");
     toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::TopToolBarArea);

@@ -98,6 +98,7 @@ private:
     QTabWidget* brushOptions;
 
     BrushShapeWidget* brushShape;
+    QTabWidget* brushContainer;
 
 };
 

@@ -5,6 +5,7 @@
 #include <QVector>
 #include <QPaintEvent>
 #include <QMouseEvent>
+#include <QPainterPath>
 #include <QDebug>
 #include <QPoint>
 #include <QPixmap>
@@ -48,6 +49,8 @@ public:
         if(!m_Layers.isEmpty())
         {
             return m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().size();
+        }else{
+            return QSize();
         }
     }
 
@@ -80,6 +83,8 @@ public slots:
     void undo();
     void redo();
 
+    void scale(double scaleVal);
+
     void setBrushSize(int);
     void setBrushFeather(int);
     void setBrushSpacing(int);
@@ -101,9 +106,16 @@ private:
     Brush m_Brush;
     Brush m_Eraser;
 
+    QPainter::CompositionMode m_CompMode;
+
     QPoint m_DrawPoint;
     QPoint m_DrawPath[3];
     QVector<QPointF> m_MousePath;
+    QPainterPath* m_PainterPath;
+
+    qreal m_Pressure;
+    qreal m_XTilt;
+    qreal m_YTilt;
 
     int m_CurrentFrame;
     int m_CurrentIndex;
