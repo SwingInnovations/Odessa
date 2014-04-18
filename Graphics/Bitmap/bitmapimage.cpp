@@ -101,7 +101,7 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setBrush(brush.getBrush());
     painter.setPen(brush.getPen());
-    painter.setOpacity(brush.getOpacity());
+    painter.setOpacity(((float)brush.getOpacity() / 255.0));
     painter.drawPolyline(pointInfo);
     painter.end();
 }
@@ -112,14 +112,29 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setBrush(brush.getBrush());
     QPen pen(brush.getPen());
-    pen.setWidthF(brush.getSize() + (tabPress * 20));
+    pen.setWidthF((float)brush.getSize() + (float)brush.getTransferWidth());
     painter.setPen(pen);
-    painter.setOpacity(brush.getOpacity());
+    painter.setOpacity((brush.getOpacity()/255.0));
     painter.drawPolyline(pointInfo);
     painter.end();
+
 }
 
-void BitmapImage::getCompositeImage()
+void BitmapImage::optimizeImage(Brush brush)
+{
+    QPixmap temp = this->copy().getPixmap();
+    QPainter painter(&m_pixmap);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+    painter.drawPixmap(0,0, m_pixmap);
+    painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+    painter.setOpacity(0.1);
+    painter.drawPixmap(0, 0, temp);
+    painter.end();
+    m_pixmap = temp;
+    qDebug() << "Optimizing Image" << endl;
+}
+
+QPixmap BitmapImage::getCompositeImage()
 {
     QPixmap temp = m_pixmap;
     QPainter painter(&temp);
@@ -127,4 +142,5 @@ void BitmapImage::getCompositeImage()
     painter.drawPixmap(0, 0, temp);
     painter.end();
     m_pixmap = temp;
+    return m_pixmap;
 }

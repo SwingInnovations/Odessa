@@ -36,11 +36,13 @@ public:
     void paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt);
     void setColor(const QColor color){ m_Color = color; m_Image->fill(m_Color);}
 
+    void optimizeImage(Brush brush);
+
     BitmapImage copy(){return BitmapImage(boundaries, m_pixmap);}
 
     QImage *getImage(){return m_Image;}
     QPixmap getPixmap(){return m_pixmap;}
-    void getCompositeImage();
+    QPixmap getCompositeImage();
 
     QPoint getTopLeft(){return boundaries.topLeft();}
     QPoint getTopRight(){ return boundaries.topRight(); }

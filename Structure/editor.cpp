@@ -76,6 +76,10 @@ void Editor::mouseReleaseEvent(QMouseEvent *event)
     {
         m_DeviceDown = false;
     }
+    if(!m_Layers.empty())
+    {
+//        m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->optimizeImage(m_CurrentTool);
+    }
     update();
 }
 
@@ -376,7 +380,7 @@ void Editor::setBlueValue(int val)
 void Editor::setOpacity(int val)
 {
     m_OpacityVal = val;
-    m_PrimaryColor.setAlpha(m_OpacityVal);
+    //m_PrimaryColor.setAlpha(m_OpacityVal);
     m_CurrentTool.setOpacity(val);
     m_CurrentTool.setColor(m_PrimaryColor);
 }
