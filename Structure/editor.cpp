@@ -98,7 +98,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                 m_DrawPath[0] = event->pos();
 
                 m_MousePath.append(event->pos());
-                if(m_MousePath.size() > 30)
+                if(m_MousePath.size() > 15)
                 {
                     m_MousePath.removeFirst();
                 }

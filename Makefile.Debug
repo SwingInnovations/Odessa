@@ -103,7 +103,7 @@ debug/Odessa_resource_res.o: Odessa_resource.rc
 	windres -i Odessa_resource.rc -o debug\Odessa_resource_res.o --include-dir=. $(DEFINES)
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-g++ CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile.Debug Odessa.pro
+	@$(QMAKE) -spec win32-g++ CONFIG+=release CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile.Debug Odessa.pro
 
 qmake_all: FORCE
 
@@ -271,6 +271,7 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainterPath \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
@@ -521,9 +522,13 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QConicalGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedlayout.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolButton \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h \
 		mainwindow.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) mainwindow.h -o debug\moc_mainwindow.cpp
 
@@ -640,6 +645,7 @@ debug/moc_editor.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainterPath \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
@@ -1149,6 +1155,10 @@ debug/moc_dockwidgets.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QConicalGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedlayout.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpainter.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QComboBox \
@@ -1171,10 +1181,16 @@ debug/moc_dockwidgets.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolButton \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMenu \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmenu.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdir.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfileinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QAction \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qaction.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qactiongroup.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMenu \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmenu.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		Interface/dockwidgets.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) Interface\dockwidgets.h -o debug\moc_dockwidgets.cpp
@@ -1338,6 +1354,7 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainterPath \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
@@ -1588,9 +1605,13 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QConicalGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedlayout.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolButton \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QApplication \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qapplication.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdesktopwidget.h
@@ -1739,6 +1760,7 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainterPath \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
@@ -1989,9 +2011,13 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QConicalGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedlayout.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolButton \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mainwindow.o mainwindow.cpp
 
 debug/bitmapimage.o: Graphics/Bitmap/bitmapimage.cpp Graphics/Bitmap/bitmapimage.h \
@@ -2297,6 +2323,7 @@ debug/bitmapimage.o: Graphics/Bitmap/bitmapimage.cpp Graphics/Bitmap/bitmapimage
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainterPath \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPointF \
@@ -2675,6 +2702,7 @@ debug/layer.o: Structure/layer.cpp Structure/layer.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainterPath \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPointF \
@@ -2798,6 +2826,7 @@ debug/editor.o: Structure/editor.cpp Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainterPath \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
@@ -3307,6 +3336,10 @@ debug/dockwidgets.o: Interface/dockwidgets.cpp Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QConicalGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedWidget \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedwidget.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedLayout \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedlayout.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpainter.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QComboBox \
@@ -3329,10 +3362,16 @@ debug/dockwidgets.o: Interface/dockwidgets.cpp Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QMouseEvent \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolButton \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMenu \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmenu.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdir.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfileinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QAction \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qaction.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qactiongroup.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMenu \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmenu.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\dockwidgets.o Interface\dockwidgets.cpp
 
@@ -3424,7 +3463,15 @@ debug/brush.o: Structure/brush.cpp Structure/brush.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qhash.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpen.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdebug.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmap.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtextstream.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlocale.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvariant.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qset.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcontiguouscache.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\brush.o Structure\brush.cpp
 
 debug/moc_mainwindow.o: debug/moc_mainwindow.cpp 

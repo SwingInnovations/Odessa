@@ -137,7 +137,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(newAct, SIGNAL(triggered()), SLOT(showNewDocWin()));
     connect(preferenceAct, SIGNAL(triggered()),SLOT(showPrefWin()));
-    //connect(addLayerAct, SIGNAL(triggered()), mEditor, SLOT(addLayer()));
     connect(undoAct, SIGNAL(triggered()), mEditor, SLOT(undo()));
     connect(redoAct, SIGNAL(triggered()), mEditor, SLOT(redo()));
     connect(brushTool, SIGNAL(triggered()), SLOT(assignBrushTool()));
@@ -145,19 +144,19 @@ MainWindow::MainWindow(QWidget *parent)
     connect(textTool, SIGNAL(triggered()), SLOT(assignTextTool()));
     connect(primitiveTool, SIGNAL(triggered()), SLOT(assignPrimitiveTool()));
     connect(newDialogWin, SIGNAL(newProject(int,int,int,int)), mEditor, SLOT(newProject(int,int,int,int)));
-    connect(brushDockWidget, SIGNAL(mSizeChanged(int)), mEditor, SLOT(setBrushSize(int)));
     connect(zoomInAct, SIGNAL(triggered()), SLOT(zoomIn()));
     connect(zoomOutAct, SIGNAL(triggered()), SLOT(zoomOut()));
     connect(showBrushDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowBrushDock(bool)));
     connect(showColorDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowColorDock(bool)));
     connect(showTimeDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowTimelineDock(bool)));
 
-    connect(brushDockWidget, SIGNAL(mOpacityChanged(int)), mEditor, SLOT(setOpacity(int)));
-    connect(brushDockWidget, SIGNAL(mTransferSizeChanged(int)), mEditor, SLOT(setSizeTransfer(int)));
+    connect(brushDockWidget, SIGNAL(BrushSizeChanged(int)), mEditor, SLOT(setBrushSize(int)));
+    connect(brushDockWidget, SIGNAL(BrushOpacityChanged(int)), mEditor, SLOT(setOpacity(int)));
     connect(colorDockWidget, SIGNAL(redChanged(int)), mEditor, SLOT(setRedValue(int)));
     connect(colorDockWidget, SIGNAL(greenChanged(int)), mEditor, SLOT(setGreenValue(int)));
     connect(colorDockWidget, SIGNAL(blueChanged(int)), mEditor, SLOT(setBlueValue(int)));
-    connect(mEditor, SIGNAL(brushSizeChanged(int)), brushDockWidget, SLOT(set_mSizeLE(int)));
+    connect(mEditor, SIGNAL(brushSizeChanged(int)), brushDockWidget, SLOT(UpdateSize(int)));
+    connect(mEditor, SIGNAL(brushOpacityChanged(int)), brushDockWidget, SLOT(UpdateOpacity(int)));
     connect(mEditor, SIGNAL(redChanged(int)), colorDockWidget, SLOT(set_RLE(int)));
     connect(mEditor, SIGNAL(greenChanged(int)), colorDockWidget, SLOT(set_GLE(int)));
     connect(mEditor, SIGNAL(blueChanged(int)), colorDockWidget, SLOT(set_BLE(int)));
@@ -197,7 +196,7 @@ void MainWindow::about()
 {
     QMessageBox msgbox(this);
     msgbox.setTextFormat(Qt::RichText);
-    msgbox.setText("Odessa Ver. 0.0.51<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
+    msgbox.setText("Odessa Ver. 0.0.70<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
     msgbox.exec();
 }
 

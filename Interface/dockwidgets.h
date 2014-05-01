@@ -16,11 +16,15 @@
 #include <QGradient>
 #include <QRadialGradient>
 #include <QConicalGradient>
+#include <QStackedWidget>
+#include <QStackedLayout>
 #include <QPainter>
 #include <QComboBox>
 #include <QListWidget>
 #include <QMouseEvent>
 #include <QToolButton>
+#include <QFileDialog>
+#include <QAction>
 #include <QMenu>
 #include <QDebug>
 
@@ -36,69 +40,64 @@ public:
     BrushDockWidget(QWidget *parent = 0);
     virtual ~BrushDockWidget();
 signals:
-    void mSizeChanged(int);
-    void mFeatherChanged(int);
-    void mSpacingChanged(int);
-    void mOpacityChanged(int);
-    void mTransferOpacityChanged(int);
-    void mTransferSizeChanged(int);
-
+    void BrushSizeChanged(int);
+    void BrushOpacityChanged(int);
+    void BrushTransferSizeChanged(int);
+    void BrushTransferOpacityChanged(int);
+    void BrushStencilChanged(QPixmap);
 private slots:
-    void set_mSizeLE(int);
-    void set_mFeatherLE(int);
-    void set_mSpacingLE(int);
-    void set_mOpacityLE(int);
-    void set_mTransferOpacity(int);
-    void set_mTransferSize(int);
-
-    void set_mSizeSlider(QString);
-    void set_mFeatherSlider(QString);
-    void set_mSpacingSlider(QString);
-    void set_mOpacitySlider(QString);
-    void set_mTransferOpacitySlider(QString);
-    void set_mTransferSizeSlider(QString);
-    void toggleTransferOpacity(bool);
-    void toggleTransferSize(bool);
+    void UpdateSize(int);
+    void UpdateSize(QString);
+    void UpdateOpacity(int);
+    void UpdateOpacity(QString);
+    void UpdateTransferSize(int);
+    void UpdateTransferSize(QString);
+    void UpdateTransferOpacity(int);
+    void UpdateTransferOpacity(QString);
+    void ToggleTransferSize(bool);
+    void ToggleTransferOpacity(bool);
 private:
-    QLabel* mSizeLabel;
-    QLabel* mFeatherLabel;
-    QLabel* mSpacingLabel;
-    QLabel* mOpacityLabel;
+    QStackedLayout* m_BrushStack;
+    QTabWidget* m_BrushAttrib;
+    QAction* m_OpenBrushAct;
+    QAction* m_OpenBrushLibAct;
+    QAction* m_ExportBrushAct;
+    QAction* m_ExportBrushLibAct;
+    QMenu* m_BrushMenu;
+    //Actions here
 
-    QSlider* mSizeSlider;
-    QSlider* mFeatherSlider;
-    QSlider* mSpacingSlider;
-    QSlider* mOpacitySlider;
+    /*Widgets under the General Brush Tab*/
+    QToolButton* m_BrushToolButton; //Menu for other brush options
+    QLabel* m_BrushPreviewLbl;
+    QListView* m_BrushLibView;
 
-    QLineEdit* mSizeLE;
-    QLineEdit* mFeatherLE;
-    QLineEdit* mSpacingLE;
-    QLineEdit* mOpacityLE;
+    /* General Size Related */
+    QLabel* m_SizeLabel;
+    QSlider* m_SizeSlider;
+    QLineEdit* m_SizeLE;
 
-    QHBoxLayout* mSizeLayout;
-    QHBoxLayout* mFeatherLayout;
-    QHBoxLayout* mSpacingLayout;
-    QHBoxLayout* mOpacityLayout;
+    /* General Opacity Related */
+    QLabel* m_OpacityLabel;
+    QSlider* m_OpacitySlider;
+    QLineEdit* m_OpacityLE;
 
-    QVBoxLayout* primaryBrushControlLayout;
-    QVBoxLayout* secondaryBrushControlLayout;
+    /* Transfer Size Related */
+    QCheckBox* m_TransferSizeCheck;
+    QSlider* m_TransferSizeSlider;
+    QLineEdit* m_TransferSizeLE;
 
-    QGroupBox* mPressureContainer;
+    /* Transfer Opacity Related */
+    QCheckBox* m_TransferOpacityCheck;
+    QSlider* m_TransferOpacitySlider;
+    QLineEdit* m_TransferOpacityLE;
 
-    QHBoxLayout* mTransferOpacityLayout;
-    QCheckBox* mTransferOpacity;
-    QSlider* mTransferOpacityAmt;
-    QLineEdit* mTransferOpacityLE;
+    /* Advanced Brush WorkArea */
+    QLabel* m_BrushWorkArea;
+    QPixmap m_brushPreview;
+    int m_BrushWidth, m_BrushHeight;
 
-    QHBoxLayout* mTransferWidthLayout;
-    QCheckBox* mTransferWidth;
-    QSlider* mTransferWidthSlider;
-    QLineEdit* mTransferWidthLE;
+    /*Advanced Brush Related*/
 
-    QTabWidget* brushOptions;
-
-    BrushShapeWidget* brushShape;
-    QTabWidget* brushContainer;
 
 };
 
