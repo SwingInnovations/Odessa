@@ -45,7 +45,6 @@ void Editor::mousePressEvent(QMouseEvent *event)
             {
                 m_MousePath.clear();
             }
-            m_MousePath.append(event->pos());
             backup();
             break;
         case ERASER_TOOL:
@@ -76,6 +75,7 @@ void Editor::mouseReleaseEvent(QMouseEvent *event)
     {
         m_DeviceDown = false;
     }
+
     if(!m_Layers.empty())
     {
 //        m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->optimizeImage(m_CurrentTool);
@@ -98,7 +98,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                 m_DrawPath[0] = event->pos();
 
                 m_MousePath.append(event->pos());
-                if(m_MousePath.size() > 15)
+                if(m_MousePath.size() > 2)
                 {
                     m_MousePath.removeFirst();
                 }
@@ -107,6 +107,8 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
 
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool, m_Pressure, m_CurrentTool.getTransferWidth());
                 setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+//                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(*m_PainterPath, m_CurrentTool);
+//                setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
             }
             break;
         case ERASER_TOOL:

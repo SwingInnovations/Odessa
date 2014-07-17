@@ -72,7 +72,7 @@ void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint points[])
     painter.setBrush(brush.getBrush());
     painter.setPen(Qt::NoPen);
     painter.setPen(brush.getPen());
-    painter.drawLine(points[1], event->pos());
+    painter.drawLine(points[2], points[1]);
 //    painter.drawEllipse(event->pos(), brush.getSize(), brush.getSize());
 }
 
@@ -102,8 +102,21 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
     painter.setBrush(brush.getBrush());
     painter.setPen(brush.getPen());
     painter.setOpacity(((float)brush.getOpacity() / 255.0));
-    painter.drawPolyline(pointInfo);
-    painter.end();
+
+    qDebug() << "Painting with Interpolation" << endl;
+
+    QPointF point, drawPoint;
+    point = pointInfo.last() - pointInfo.first();
+    int length = point.manhattanLength();
+    double xInc, yInc;
+    xInc = point.x() / length;
+    yInc = point.y() / length;
+    drawPoint = pointInfo.first();
+    for(unsigned int i = 0; i < length; i++){
+        drawPoint.setX(drawPoint.x() + xInc);
+        drawPoint.setY(drawPoint.y() + yInc);
+        painter.drawEllipse(drawPoint, brush.getSize(), brush.getSize());
+    }
 }
 
 void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt)
@@ -115,8 +128,19 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
     pen.setWidthF((float)brush.getSize() + (float)brush.getTransferWidth());
     painter.setPen(pen);
     painter.setOpacity((brush.getOpacity()/255.0));
-    painter.drawPolyline(pointInfo);
-    painter.end();
+
+    QPointF point, drawPoint;
+    point = pointInfo.last() - pointInfo.first();
+    int length = point.manhattanLength();
+    double xInc, yInc;
+    xInc = point.x() / length;
+    yInc = point.y() / length;
+    drawPoint = pointInfo.first();
+    for(unsigned int i = 0; i < length; i++){
+        drawPoint.setX(drawPoint.x() + xInc);
+        drawPoint.setY(drawPoint.y() + yInc);
+        painter.drawEllipse(drawPoint, brush.getSize(), brush.getSize());
+    }
 
 }
 
