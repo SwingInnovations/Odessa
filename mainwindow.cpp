@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     newDialogWin = new OdessaNewDocDialog();
     prefDialog = new OdessaPrefDialog();
     brushDockWidget = new BrushDockWidget(this);
+    brushDockWidget->setWindowTitle("Brush");
     brushDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     colorDockWidget = new ColorDockWidget(this);

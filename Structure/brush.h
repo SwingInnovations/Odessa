@@ -5,25 +5,26 @@
 #include <QPen>
 #include <QColor>
 #include <QDebug>
-
+#include <QPixmap>
 
 class Brush
 {
 public:
 
-    enum BrushShape{LINE_SHAPE, CIRCLE_SHAPE, SQUARE_SHAPE};
+    enum BrushShape{LINE_SHAPE, CIRCLE_SHAPE, SQUARE_SHAPE, CUSTOM_SHAPE};
 
     Brush();
 
     void setBrush(QBrush brush){ myBrush = brush; }
     void setPen(QPen pen){ myPen = pen; }
+    void SetStencil(QPixmap pixmap){ mStencil = pixmap; }
     void setColor(QColor color){ myColor = color; myBrush.setColor(myColor); myPen.setColor(myColor); }
     void setWidth(int val){
-        width = val + (widthAmount * m_PressureVal);
-        myPen.setWidth(width); }
+        mSize = val + (mTSize * m_PressureVal);
+        myPen.setWidth(mSize); }
     void setWidth(qreal val){
-        width = val + (widthAmount * m_PressureVal );
-        myPen.setWidthF(width);
+        mSize = val + (mTSize * m_PressureVal );
+        myPen.setWidthF(mSize);
     }
 
     void setPressureVal(qreal val)
@@ -41,30 +42,30 @@ public:
         m_yTilt = val;
     }
 
-    void setOpacity(int val){opacity = val;}
+    void SetOpacity(int val){mOpacity = val;}
+    void SetTransferSize(int val){mTSize = val;}
+    void SetTransferOpacity(int val){mTOpacity = val;}
 
-    qreal gePressureVal(){return m_PressureVal;}
+    qreal GetPressureVal(){return m_PressureVal;}
 
-    void setPressure(bool val){ pressure = val; }
-    void setFeather(bool val){ feather = val; }
+    void SetPressure(bool val){ mPressure = val; }
+    void SetHardness(bool val){ mHardness = val; }
 
-    void setBrushShape(BrushShape shape){ brushShape = shape; }
+    void SetBrushShape(BrushShape shape){ brushShape = shape; }
 
     //color Centric
     void setRed(int val){myColor.setRed(val);}
     void setGreen(int val){myColor.setGreen(val);}
     void setBlue(int val){myColor.setBlue(val);}
 
-    void setFeatherAmount(int val){ featherAmount = val; }
-    void setTransferWidthAmount(int val){ widthAmount = val; }
-
     QPen getPen(){return myPen;}
     QBrush getBrush(){ return myBrush; }
     QColor getColor() { return myColor; }
 
-    int getSize(){return width;}
-    int getTransferWidth(){return widthAmount;}
-    int getOpacity(){return opacity;}
+    int GetSize(){return mSize;}
+    int GetTransferSize(){return mTSize;}
+    int GetTransferOpacity(){return mTOpacity;}
+    int getOpacity(){return mOpacity;}
 
 private:
 
@@ -74,17 +75,19 @@ private:
     QBrush myBrush;
     QColor myColor;
 
-    bool pressure;
-    bool feather;
-    int featherAmount;
-    int widthAmount;
-    int width;
+    bool mPressure;
+    bool mHardness;
+    unsigned int mSize;
+    int mOpacity;
 
-    int opacity;
+    unsigned int mTSize;
+    unsigned int mTOpacity;
 
     qreal m_PressureVal;
     qreal m_xTilt;
     qreal m_yTilt;
+
+    QPixmap mStencil;
 };
 
 #endif // BRUSH_H

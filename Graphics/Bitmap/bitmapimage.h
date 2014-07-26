@@ -32,8 +32,8 @@ public:
     void paintImage(QMouseEvent *event, Brush brush, QPoint points[]);//Deprecate
     void paintImage(QTabletEvent *event, Brush brush, QPoint points[]);//Deprecate
     void paintImage(QPainterPath painterPath, Brush brush); //works
-    void paintImage(QVector<QPointF> pointInfo, Brush brush);
-    void paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt);
+    void paintImage(QVector<QPointF> pointInfo, Brush brush);//Keep
+    void paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt);//Keep
     void setColor(const QColor color){ m_Color = color; m_Image->fill(m_Color);}
 
     void optimizeImage(Brush brush);

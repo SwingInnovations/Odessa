@@ -2,228 +2,266 @@
 
 BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
 {
-    setWindowTitle("Brush");
+    /*-Constructor-*/
+    mTabWidget = new QTabWidget(this);
+    mGenBrushWidget = new GeneralBrushWidget;
+    mTransBrushWidget = new GeneralBrushWidget;
+    mStencilWidget = new CustomBrushWidget;
 
-    m_OpenBrushAct = new QAction("&Open Brush..", this);
-    m_OpenBrushLibAct = new QAction("&Open Brush set..", this);
-    m_ExportBrushAct = new QAction("&Export Brush", this);
-    m_ExportBrushLibAct = new QAction("&Export Brush Set", this);
+    mSizeLabel = new QLabel("Size:", this);
+    mSizeSlider = new QSlider(Qt::Horizontal, this);
+    mSizeSlider->setRange(0, 500);
+    mSizeSlider->setValue(5);
+    mSizeSlider->setMinimumWidth(150);
+    mSizeLE = new QLineEdit(this);
+    mSizeLE->setFixedWidth(32);
+    mSizeLE->setText(QString::number(5));
+    QHBoxLayout* sizeLayout = new QHBoxLayout();
+    sizeLayout->addWidget(mSizeLabel);
+    sizeLayout->addWidget(mSizeSlider);
+    sizeLayout->addWidget(mSizeLE);
 
-    m_BrushMenu = new QMenu(this);
-    m_BrushMenu->addAction(m_OpenBrushAct);
-    m_BrushMenu->addAction(m_OpenBrushLibAct);
-    m_BrushMenu->addSeparator();
-    m_BrushMenu->addAction(m_ExportBrushAct);
-    m_BrushMenu->addAction(m_ExportBrushLibAct);
+    mOpacityLabel = new QLabel("Opacity:", this);
+    mOpacitySlider = new QSlider(Qt::Horizontal, this);
+    mOpacitySlider->setRange(0, 255);
+    mOpacitySlider->setValue(255);
+    mOpacitySlider->setValue(150);
+    mOpacityLE = new QLineEdit(this);
+    mOpacityLE->setFixedWidth(32);
+    mOpacityLE->setText(QString::number(255));
+    QHBoxLayout* opacityLayout = new QHBoxLayout;
+    opacityLayout->addWidget(mOpacityLabel);
+    opacityLayout->addWidget(mOpacitySlider);
+    opacityLayout->addWidget(mOpacityLE);
 
-    /* Setup top widget */
-    /* This will appear under the general and advanced tabs */
-    m_BrushToolButton = new QToolButton(this);
-    m_BrushToolButton->setText("Brush");
-    m_BrushToolButton->setFixedWidth(48);
-    m_BrushToolButton->setMenu(m_BrushMenu);
-    m_BrushPreviewLbl = new QLabel(this);
-    m_BrushPreviewLbl->setText("Test");
-    QVBoxLayout* vBGLayout = new QVBoxLayout;
-    vBGLayout->addWidget(m_BrushToolButton);
-    vBGLayout->addWidget(m_BrushPreviewLbl);
+    mSpacingLabel = new QLabel("Spacing:", this);
+    mSpacingSlider = new QSlider(Qt::Horizontal, this);
+    mSpacingSlider->setRange(0, 3);
+    mSpacingSlider->setPageStep(0.1);
+    mSpacingSlider->setValue(1);
+    mSpacingSlider->setMinimumWidth(150);
+    mSpacingLE = new QLineEdit(this);
+    mSpacingLE->setFixedWidth(32);
+    mSpacingLE->setText(QString::number(1));
+    QHBoxLayout* spacingLayout = new QHBoxLayout;
+    spacingLayout->addWidget(mSpacingLabel);
+    spacingLayout->addWidget(mSpacingSlider);
+    spacingLayout->addWidget(mSpacingLE);
 
-    m_BrushLibView = new QListView(this);
-    QHBoxLayout* hBGLayout = new QHBoxLayout;
-    hBGLayout->addWidget(m_BrushLibView);
-    hBGLayout->addLayout(vBGLayout);
+    QVBoxLayout* generalParam = new QVBoxLayout;
+    generalParam->addLayout(sizeLayout);
+    generalParam->addLayout(opacityLayout);
+    generalParam->addLayout(spacingLayout);
 
-    QWidget* MainBrushWork = new QWidget(this);
-    MainBrushWork->setLayout(hBGLayout);
+    /*-Transfer-*/
+    mTransferSizeToggle = new QCheckBox("Size:", this);
+    mTransferSizeToggle->setChecked(false);
+    mTransferSizeSlider = new QSlider(Qt::Horizontal, this);
+    mTransferSizeSlider->setRange(0, 500);
+    mTransferSizeSlider->setValue(0);
+    mTransferSizeSlider->setEnabled(false);
+    mTransferSizeLE = new QLineEdit(this);
+    mTransferSizeLE->setFixedWidth(32);
+    mTransferSizeLE->setText(QString::number(0));
+    mTransferSizeLE->setEnabled(false);
+    QHBoxLayout* transferSizeLayout = new QHBoxLayout;
+    transferSizeLayout->addWidget(mTransferSizeToggle);
+    transferSizeLayout->addWidget(mTransferSizeSlider);
+    transferSizeLayout->addWidget(mTransferSizeLE);
 
-    /* This will appear under the Advanced Brush Tab */
-    m_BrushWorkArea = new QLabel(this);
-    m_brushPreview = QPixmap(100, 100);
+    mTransferOpacityToggle = new QCheckBox("Opacity:", this);
+    mTransferOpacityToggle->setChecked(false);
+    mTransferOpacitySlider = new QSlider(Qt::Horizontal, this);
+    mTransferOpacitySlider->setRange(0, 255);
+    mTransferOpacitySlider->setValue(0);
+    mTransferOpacitySlider->setEnabled(false);
+    mTransferOpacityLE = new QLineEdit(this);
+    mTransferOpacityLE->setFixedWidth(32);
+    mTransferOpacityLE->setText(QString::number(0));
+    mTransferOpacityLE->setEnabled(false);
+    QHBoxLayout* transferOpacityLayout = new QHBoxLayout;
+    transferOpacityLayout->addWidget(mTransferOpacityToggle);
+    transferOpacityLayout->addWidget(mTransferOpacitySlider);
+    transferOpacityLayout->addWidget(mTransferOpacityLE);
 
-    /* General Brush Properties */
-    m_SizeLabel = new QLabel(this);
-    m_SizeLabel->setText("Size:");
-    m_SizeSlider = new QSlider(this);
-    m_SizeSlider->setRange(0, 500);
-    m_SizeSlider->setOrientation(Qt::Horizontal);
-    m_SizeSlider->setValue(5);
-    m_SizeLE = new QLineEdit(this);
-    m_SizeLE->setFixedWidth(32);
-    m_SizeLE->setText(QString::number(m_SizeSlider->value()));
-    QHBoxLayout* hGSLayout = new QHBoxLayout;
-    hGSLayout->addWidget(m_SizeLabel);
-    hGSLayout->addWidget(m_SizeSlider);
-    hGSLayout->addWidget(m_SizeLE);
+    QVBoxLayout* transferParam = new QVBoxLayout;
+    transferParam->addLayout(transferSizeLayout);
+    transferParam->addLayout(transferOpacityLayout);
 
-    m_OpacityLabel = new QLabel(this);
-    m_OpacityLabel->setText("Opacity:");
-    m_OpacitySlider = new QSlider(this);
-    m_OpacitySlider->setRange(0, 255);
-    m_OpacitySlider->setOrientation(Qt::Horizontal);
-    m_OpacitySlider->setValue(100);
-    m_OpacityLE = new QLineEdit(this);
-    m_OpacityLE->setFixedWidth(32);
-    m_OpacityLE->setText(QString::number(m_OpacitySlider->value()));
-    QHBoxLayout* hGOLayout = new QHBoxLayout;
-    hGOLayout->addWidget(m_OpacityLabel);
-    hGOLayout->addWidget(m_OpacitySlider);
-    hGOLayout->addWidget(m_OpacityLE);
+    /*-Brush_General-*/
 
-    QVBoxLayout* genBrushLayout = new QVBoxLayout;
-    genBrushLayout->addLayout(hGSLayout);
-    genBrushLayout->addLayout(hGOLayout);
+    QVBoxLayout* GeneralBrushLayout = new QVBoxLayout;
+    //GeneralBrushLayout->addLayout(GeneralBrushWidget);
+    GeneralBrushLayout->addWidget(mGenBrushWidget);
+    GeneralBrushLayout->addLayout(generalParam);
+
+    QVBoxLayout* TransferBrushLayout = new QVBoxLayout;
+    TransferBrushLayout->addWidget(mTransBrushWidget);
+    TransferBrushLayout->addLayout(transferParam);
 
     QWidget* GeneralBrushTab = new QWidget(this);
-    GeneralBrushTab->setLayout(genBrushLayout);
-
-    /* Transfer Brush Properties */
-    m_TransferSizeCheck = new QCheckBox(this);
-    m_TransferSizeCheck->setText("Size:");
-    m_TransferSizeCheck->setCheckable(true);
-    m_TransferSizeCheck->setChecked(false);
-    m_TransferSizeSlider = new QSlider(this);
-    m_TransferSizeSlider->setRange(0, 500);
-    m_TransferSizeSlider->setOrientation(Qt::Horizontal);
-    m_TransferSizeSlider->setValue(0);
-    m_TransferSizeSlider->setEnabled(false);
-    m_TransferSizeLE = new QLineEdit(this);
-    m_TransferSizeLE->setFixedWidth(32);
-    m_TransferSizeLE->setText(QString::number(m_TransferSizeSlider->value()));
-    m_TransferSizeLE->setEnabled(false);
-    QHBoxLayout* hTSLayout = new QHBoxLayout;
-    hTSLayout->addWidget(m_TransferSizeCheck);
-    hTSLayout->addWidget(m_TransferSizeSlider);
-    hTSLayout->addWidget(m_TransferSizeLE);
-
-    m_TransferOpacityCheck = new QCheckBox(this);
-    m_TransferOpacityCheck->setText("Opacity:");
-    m_TransferOpacityCheck->setCheckable(true);
-    m_TransferOpacityCheck->setChecked(false);
-    m_TransferOpacitySlider = new QSlider(this);
-    m_TransferOpacitySlider->setRange(0, 100);
-    m_TransferOpacitySlider->setValue(0);
-    m_TransferOpacitySlider->setEnabled(false);
-    m_TransferOpacitySlider->setOrientation(Qt::Horizontal);
-    m_TransferOpacityLE = new QLineEdit(this);
-    m_TransferOpacityLE->setFixedWidth(32);
-    m_TransferOpacityLE->setEnabled(false);
-    m_TransferOpacityLE->setText(QString::number(m_TransferOpacitySlider->value()));
-    QHBoxLayout* hTOLayout = new QHBoxLayout;
-    hTOLayout->addWidget(m_TransferOpacityCheck);
-    hTOLayout->addWidget(m_TransferOpacitySlider);
-    hTOLayout->addWidget(m_TransferOpacityLE);
-
-    QVBoxLayout* tranBrushLayout = new QVBoxLayout;
-    tranBrushLayout->addLayout(hTSLayout);
-    tranBrushLayout->addLayout(hTOLayout);
+    GeneralBrushTab->setLayout(GeneralBrushLayout);
 
     QWidget* TransferBrushTab = new QWidget(this);
-    TransferBrushTab->setLayout(tranBrushLayout);
+    TransferBrushTab->setLayout(TransferBrushLayout);
 
-    m_BrushStack = new QStackedLayout;
-    m_BrushStack->addWidget(MainBrushWork);
+    /*-Brush_Advanced-*/
 
-    m_BrushAttrib = new QTabWidget(this);
-    m_BrushAttrib->addTab(GeneralBrushTab, "General");
-    m_BrushAttrib->addTab(TransferBrushTab, "Transfer");
+    QVBoxLayout* AdvancedBrushLayout = new QVBoxLayout;
+    AdvancedBrushLayout->addWidget(mStencilWidget);
 
-    QVBoxLayout* Layout = new QVBoxLayout;
-    Layout->addLayout(m_BrushStack);
-    Layout->addWidget(m_BrushAttrib);
+    QWidget* AdvancedBrushTab = new QWidget(this);
+    AdvancedBrushTab->setLayout(AdvancedBrushLayout);
 
+    mTabWidget->addTab(GeneralBrushTab, "General");
+    mTabWidget->addTab(TransferBrushTab, "Transfer");
+    mTabWidget->addTab(AdvancedBrushTab, "Custom");
 
-    QWidget* DisplayWidget = new QWidget(this);
-    DisplayWidget->setLayout(Layout);
+    mTabWidget->setTabPosition(QTabWidget::South);
+    mTabWidget->setTabShape(QTabWidget::Rounded);
 
-    this->setWidget(DisplayWidget);
+    setWidget(mTabWidget);
 
-    connect(m_SizeLE, SIGNAL(textChanged(QString)), SLOT(UpdateSize(QString)));
-    connect(m_SizeSlider, SIGNAL(valueChanged(int)), SLOT(UpdateSize(int)));
-    connect(m_OpacityLE, SIGNAL(textChanged(QString)), SLOT(UpdateOpacity(QString)));
-    connect(m_OpacitySlider, SIGNAL(valueChanged(int)), SLOT(UpdateOpacity(int)));
-    connect(m_TransferSizeLE, SIGNAL(textChanged(QString)), SLOT(UpdateTransferSize(QString)));
-    connect(m_TransferSizeSlider, SIGNAL(valueChanged(int)), SLOT(UpdateTransferSize(int)));
-    connect(m_TransferOpacityLE, SIGNAL(textChanged(QString)), SLOT(UpdateTransferOpacity(QString)));
-    connect(m_TransferOpacitySlider, SIGNAL(valueChanged(int)), SLOT(UpdateTransferOpacity(int)));
-    connect(m_TransferSizeCheck, SIGNAL(toggled(bool)), SLOT(ToggleTransferSize(bool)));
-    connect(m_TransferOpacityCheck, SIGNAL(toggled(bool)), SLOT(ToggleTransferOpacity(bool)));
+    connect(mSizeSlider, SIGNAL(valueChanged(int)), SLOT(UpdateSize(int)));
+    connect(mSizeLE, SIGNAL(textChanged(QString)), SLOT(UpdateSize(QString)));
+    connect(mOpacitySlider, SIGNAL(valueChanged(int)), SLOT(UpdateOpacity(int)));
+    connect(mOpacityLE, SIGNAL(textChanged(QString)), SLOT(UpdateOpacity(QString)));
+    connect(mSpacingSlider, SIGNAL(valueChanged(int)), SLOT(UpdateSpacing(int)));
+    connect(mSpacingLE, SIGNAL(textChanged(QString)), SLOT(UpdateSpacing(QString)));
+    connect(mTransferSizeToggle, SIGNAL(toggled(bool)), SLOT(ToggleTransferSize(bool)));
+    connect(mTransferSizeSlider, SIGNAL(valueChanged(int)), SLOT(UpdateTransferSize(int)));
+    connect(mTransferSizeLE, SIGNAL(textChanged(QString)), SLOT(UpdateTransferSize(QString)));
+    connect(mTransferOpacityToggle, SIGNAL(toggled(bool)), SLOT(ToggleTransferOpacity(bool)));
+    connect(mTransferOpacitySlider, SIGNAL(valueChanged(int)), SLOT(UpdateTransferOpacity(int)));
+    connect(mTransferOpacityLE, SIGNAL(textChanged(QString)), SLOT(UpdateTransferOpacity(QString)));
 }
 
 void BrushDockWidget::UpdateSize(int val)
 {
-    m_SizeLE->setText(QString::number(val));
+    mSizeLE->setText(QString::number(val));
     emit BrushSizeChanged(val);
 }
 
 void BrushDockWidget::UpdateSize(QString val)
 {
-    m_SizeSlider->setValue(val.toInt());
+    mSizeSlider->setValue(val.toInt());
     emit BrushSizeChanged(val.toInt());
 }
 
 void BrushDockWidget::UpdateOpacity(int val)
 {
-    m_OpacityLE->setText(QString::number(val));
+    mOpacityLE->setText(QString::number(val));
     emit BrushOpacityChanged(val);
 }
 
 void BrushDockWidget::UpdateOpacity(QString val)
 {
-    m_OpacitySlider->setValue(val.toInt());
+    mOpacitySlider->setValue(val.toInt());
     emit BrushOpacityChanged(val.toInt());
+}
+
+void BrushDockWidget::UpdateSpacing(int val){
+    mSpacingLE->setText(QString::number(val));
+    emit BrushSpacingChanged(val);
+}
+
+void BrushDockWidget::UpdateSpacing(QString val){
+    mSpacingSlider->setValue(val.toInt());
+    emit BrushSpacingChanged(val.toInt());
 }
 
 void BrushDockWidget::UpdateTransferSize(int val)
 {
-    m_TransferSizeLE->setText(QString::number(val));
+    mTransferSizeLE->setText(QString::number(val));
     emit BrushTransferSizeChanged(val);
 }
 
 void BrushDockWidget::UpdateTransferSize(QString val)
 {
-    m_TransferSizeSlider->setValue(val.toInt());
+    mTransferSizeSlider->setValue(val.toInt());
     emit BrushTransferSizeChanged(val.toInt());
 }
 
 void BrushDockWidget::UpdateTransferOpacity(int val)
 {
-    m_TransferOpacityLE->setText(QString::number(val));
+    mTransferOpacityLE->setText(QString::number(val));
     emit BrushTransferOpacityChanged(val);
 }
 
 void BrushDockWidget::UpdateTransferOpacity(QString val)
 {
-    m_TransferOpacitySlider->setValue(val.toInt());
+    mTransferOpacitySlider->setValue(val.toInt());
     emit BrushTransferOpacityChanged(val.toInt());
 }
 
 void BrushDockWidget::ToggleTransferSize(bool val)
 {
-    if(val)
-    {
-        m_TransferSizeSlider->setEnabled(true);
-        m_TransferSizeLE->setEnabled(true);
-        emit BrushTransferSizeChanged(m_TransferSizeSlider->value());
-    }else{
-        m_TransferSizeSlider->setEnabled(false);
-        m_TransferSizeLE->setEnabled(false);
+    mTransferSizeSlider->setEnabled(val);
+    mTransferSizeLE->setEnabled(val);
+    if(val == false){
         emit BrushTransferSizeChanged(0);
     }
 }
 
 void BrushDockWidget::ToggleTransferOpacity(bool val)
 {
-    if(val)
-    {
-        m_TransferOpacitySlider->setEnabled(true);
-        m_TransferOpacityLE->setEnabled(true);
-        emit BrushTransferOpacityChanged(m_TransferOpacitySlider->value());
-    }else{
-        m_TransferOpacitySlider->setEnabled(false);
-        m_TransferOpacityLE->setEnabled(false);
+    mTransferOpacitySlider->setEnabled(val);
+    mTransferOpacityLE->setEnabled(val);
+    if(val == false){
         emit BrushTransferOpacityChanged(0);
     }
 }
+
+void BrushDockWidget::UpdateStencilWidth(int val){
+    mWidthLE->setText(QString::number(val));
+    emit StencilWidthChanged(val);
+}
+
+void BrushDockWidget::UpdateStencilWidth(QString val){
+    mWidthSlider->setValue(val.toInt());
+    emit StencilWidthChanged(val.toInt());
+}
+
+void BrushDockWidget::UpdateStencilHeight(int val){
+    mHeightLE->setText(QString::number(val));
+    emit StencilHeightChanged(val);
+}
+
+void BrushDockWidget::UpdateStencilHeight(QString val){
+    mHeightSlider->setValue(val.toInt());
+    emit StencilHeightChanged(val.toInt());
+}
+
+void BrushDockWidget::UpdateHardness(int val){
+    mHardnessLE->setText(QString::number(val));
+    emit BrushHardnessChanged(val);
+}
+
+void BrushDockWidget::UpdateHardness(QString val){
+    mHardnessSlider->setValue(val.toInt());
+    emit BrushHardnessChanged(val.toInt());
+}
+
+void BrushDockWidget::UpdateRotate(int val){
+    int range = val;
+    if(range > 360){
+        range = 0;
+        mRotateSlider->setValue(0);
+    }
+    mRotateLE->setText(QString::number(range));
+    emit StencilRotateChanged(range);
+}
+
+void BrushDockWidget::UpdateRotate(QString val){
+    int range = val.toInt();
+    if(range > 360){
+        range = 0;
+        mRotateSlider->setValue(0);
+    }
+    mRotateSlider->setValue(range);
+    emit StencilRotateChanged(range);
+}
+
 BrushDockWidget::~BrushDockWidget()
 {
 
@@ -650,3 +688,160 @@ LayerDockWidget::~LayerDockWidget()
 
 }
 
+GeneralBrushWidget::GeneralBrushWidget(){
+    mToolBtn = new QToolButton(this);
+    mToolBtn->setText("Tool");
+    mToolBtn->setFixedWidth(48);
+    mToolBtn->setFixedHeight(48);
+    mToolMenu = new QMenu(this);
+    mLoadStencilAct = new QAction("&Load Stencil", this);
+    mLoadBrushAct = new QAction("&Load Brush", this);
+    mLoadBrushSetAct = new QAction("&Load Brush Set", this);
+    mSaveStencilAct = new QAction("&Save Stencil", this);
+    mSaveBrushAct = new QAction("&Save Brush", this);
+    mSaveBrushSetAct = new QAction("&Save Brush Set", this);
+    mToolMenu->addAction(mLoadStencilAct);
+    mToolMenu->addAction(mLoadBrushAct);
+    mToolMenu->addAction(mLoadBrushSetAct);
+    mToolMenu->addSeparator();
+    mToolMenu->addAction(mSaveStencilAct);
+    mToolMenu->addAction(mSaveBrushAct);
+    mToolMenu->addAction(mSaveBrushSetAct);
+    mToolBtn->setMenu(mToolMenu);
+
+    mBrushIndex = new QListWidget(this);
+    mBrushIndex->setMinimumWidth(130);
+    mBrushIndex->setBaseSize(130, 130);
+    mStrokePreview = QPixmap(175, 100);
+    mStrokePreview.fill(Qt::gray);
+    mStrokePreviewLabel = new QLabel(this);
+    mStrokePreviewLabel->setPixmap(mStrokePreview);
+    QVBoxLayout* vert1 = new QVBoxLayout;
+    vert1->addWidget(mToolBtn);
+    QHBoxLayout* horiz1 = new QHBoxLayout;
+    horiz1->addWidget(mBrushIndex);
+    horiz1->addLayout(vert1);
+    QVBoxLayout* generalBrushLayout = new QVBoxLayout;
+    generalBrushLayout->addLayout(horiz1);
+    generalBrushLayout->addWidget(mStrokePreviewLabel);
+
+    setLayout(generalBrushLayout);
+
+}
+
+GeneralBrushWidget::~GeneralBrushWidget(){
+
+}
+
+CustomBrushWidget::CustomBrushWidget(){
+
+    mStencilPreview = QPixmap(160, 160);
+    //mStencilPreview.fill(Qt::gray);
+    mStencilLabel = new QLabel(this);
+    mStencilLabel->setPixmap(mStencilPreview);
+
+    mToolBtn = new QToolButton(this);
+    mToolBtn->setText("Tool");
+    mToolBtn->setFixedWidth(48);
+    mToolBtn->setFixedHeight(48);
+    mToolMenu = new QMenu(this);
+    mLoadStencilAct = new QAction("&Load Stencil", this);
+    mLoadBrushAct = new QAction("&Load Brush", this);
+    mLoadBrushSetAct = new QAction("&Load Brush Set", this);
+    mSaveStencilAct = new QAction("&Save Stencil", this);
+    mSaveBrushAct = new QAction("&Save Brush", this);
+    mSaveBrushSetAct = new QAction("&Save Brush Set", this);
+    mToolMenu->addAction(mLoadStencilAct);
+    mToolMenu->addAction(mLoadBrushAct);
+    mToolMenu->addAction(mLoadBrushSetAct);
+    mToolMenu->addSeparator();
+    mToolMenu->addAction(mSaveStencilAct);
+    mToolMenu->addAction(mSaveBrushAct);
+    mToolMenu->addAction(mSaveBrushSetAct);
+    mToolBtn->setMenu(mToolMenu);
+
+    QHBoxLayout* StencilPreviewLayout = new QHBoxLayout;
+    StencilPreviewLayout->addWidget(mStencilLabel);
+    StencilPreviewLayout->addWidget(mToolBtn);
+
+    mWidthLabel = new QLabel("Width:", this);
+    mWidthSlider = new QSlider(Qt::Horizontal, this);
+    mWidthSlider->setRange(0, 10);
+    mWidthSlider->setValue(10);
+    mWidthLE = new QLineEdit(this);
+    mWidthLE->setFixedWidth(32);
+    mWidthLE->setText(QString::number(10));
+    QHBoxLayout* widthLayout = new QHBoxLayout;
+    widthLayout->addWidget(mWidthLabel);
+    widthLayout->addWidget(mWidthSlider);
+    widthLayout->addWidget(mWidthLE);
+
+    mHeightLabel = new QLabel("Height:", this);
+    mHeightSlider = new QSlider(Qt::Horizontal, this);
+    mHeightSlider->setRange(0, 10);
+    mHeightSlider->setValue(10);
+    mHeightLE = new QLineEdit(this);
+    mHeightLE->setFixedWidth(32);
+    mHeightLE->setText(QString::number(10));
+    QHBoxLayout* heightLayout = new QHBoxLayout;
+    heightLayout->addWidget(mHeightLabel);
+    heightLayout->addWidget(mHeightSlider);
+    heightLayout->addWidget(mHeightLE);
+
+    mHardnessLabel = new QLabel("Hardness:", this);
+    mHardnessSlider = new QSlider(Qt::Horizontal, this);
+    mHardnessSlider->setRange(0, 100);
+    mHardnessSlider->setValue(100);
+    mHardnessLE = new QLineEdit(this);
+    mHardnessLE->setFixedWidth(32);
+    mHardnessLE->setText(QString::number(100));
+    QHBoxLayout* hardnessLayout = new QHBoxLayout;
+    hardnessLayout->addWidget(mHardnessLabel);
+    hardnessLayout->addWidget(mHardnessSlider);
+    hardnessLayout->addWidget(mHardnessLE);
+
+    mRotateLabel = new QLabel("Rotate:", this);
+    mRotateSlider = new QSlider(Qt::Horizontal, this);
+    mRotateSlider->setRange(0, 361);
+    mRotateSlider->setValue(0);
+    mRotateLE = new QLineEdit(this);
+    mRotateLE->setFixedWidth(32);
+    mRotateLE->setText(QString::number(0));
+    QHBoxLayout* rotateLayout = new QHBoxLayout;
+    rotateLayout->addWidget(mRotateLabel);
+    rotateLayout->addWidget(mRotateSlider);
+    rotateLayout->addWidget(mRotateLE);
+
+    mCircleButton = new QPushButton("Circle", this);
+    mSquareButton = new QPushButton("Square", this);
+    mCustomButton = new QPushButton("Custom", this);
+    QHBoxLayout* stencilShapeLayout = new QHBoxLayout;
+    stencilShapeLayout->addWidget(mCircleButton);
+    stencilShapeLayout->addWidget(mSquareButton);
+    stencilShapeLayout->addWidget(mCustomButton);
+
+    mTextureLabel = new QLabel("Texture: ", this);
+    mTextureFileLE = new QLineEdit(this);
+    mTextureBtn = new QPushButton("...",this);
+    QHBoxLayout* textureLayout = new QHBoxLayout;
+    textureLayout->addWidget(mTextureLabel);
+    textureLayout->addWidget(mTextureFileLE);
+    textureLayout->addWidget(mTextureBtn);
+
+    QVBoxLayout* advancedLayout = new QVBoxLayout;
+    advancedLayout->addLayout(widthLayout);
+    advancedLayout->addLayout(heightLayout);
+    advancedLayout->addLayout(hardnessLayout);
+    advancedLayout->addLayout(rotateLayout);
+    advancedLayout->addLayout(stencilShapeLayout);
+    advancedLayout->addLayout(textureLayout);
+
+    QVBoxLayout* AdvancedPanel = new QVBoxLayout;
+    AdvancedPanel->addLayout(StencilPreviewLayout);
+    AdvancedPanel->addLayout(advancedLayout);
+    setLayout(AdvancedPanel);
+}
+
+CustomBrushWidget::~CustomBrushWidget(){
+
+}

@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     a.setApplicationName("Odessa");
-    a.setApplicationVersion("0.0.51");
+    a.setApplicationVersion("0.0.70");
     a.setOrganizationName("SwingInnovations");
     a.setOrganizationDomain("www.swinginnovations.com");
     a.setStyle("fusion");

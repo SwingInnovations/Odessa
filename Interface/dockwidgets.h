@@ -27,27 +27,40 @@
 #include <QAction>
 #include <QMenu>
 #include <QDebug>
+#include <QPushButton>
+#include <QScrollArea>
 
 //handling the Brush System
 
 class ColorWheelWidget;
 class BrushShapeWidget;
+class GeneralBrushWidget;
+class CustomBrushWidget;
 
 class BrushDockWidget : public QDockWidget
 {
     Q_OBJECT
 public:
+    enum BrushShape{CIRCLE_SHAPE, SQUARE_SHAPE, CUSTOM};
     BrushDockWidget(QWidget *parent = 0);
     virtual ~BrushDockWidget();
 signals:
     void BrushSizeChanged(int);
     void BrushOpacityChanged(int);
+    void BrushSpacingChanged(int);
     void BrushTransferSizeChanged(int);
     void BrushTransferOpacityChanged(int);
+    void BrushHardnessChanged(int);
+    void StencilWidthChanged(int);
+    void StencilHeightChanged(int);
+    void StencilRotateChanged(int);
     void BrushStencilChanged(QPixmap);
+    void StencilBaseShapeChanged(BrushShape);
 private slots:
     void UpdateSize(int);
     void UpdateSize(QString);
+    void UpdateSpacing(int);
+    void UpdateSpacing(QString);
     void UpdateOpacity(int);
     void UpdateOpacity(QString);
     void UpdateTransferSize(int);
@@ -56,47 +69,90 @@ private slots:
     void UpdateTransferOpacity(QString);
     void ToggleTransferSize(bool);
     void ToggleTransferOpacity(bool);
+    void UpdateStencilWidth(int);
+    void UpdateStencilWidth(QString);
+    void UpdateStencilHeight(int);
+    void UpdateStencilHeight(QString);
+    void UpdateHardness(int);
+    void UpdateHardness(QString);
+    void UpdateRotate(int);
+    void UpdateRotate(QString);
 private:
-    QStackedLayout* m_BrushStack;
-    QTabWidget* m_BrushAttrib;
-    QAction* m_OpenBrushAct;
-    QAction* m_OpenBrushLibAct;
-    QAction* m_ExportBrushAct;
-    QAction* m_ExportBrushLibAct;
-    QMenu* m_BrushMenu;
-    //Actions here
 
-    /*Widgets under the General Brush Tab*/
-    QToolButton* m_BrushToolButton; //Menu for other brush options
-    QLabel* m_BrushPreviewLbl;
-    QListView* m_BrushLibView;
+    QPixmap mStencil, mStrokePreview;
+    QLabel* mStencilLabel, *mStrokePreviewLabel;
+    QListWidget* mBrushIndex;
+    QToolButton* mToolBtn;
+    QMenu* mToolMenu;
+    QAction* mLoadStencilAct;
+    QAction* mLoadBrushAct;
+    QAction* mLoadBrushSetAct;
+    QAction* mSaveStencilAct;
+    QAction* mSaveBrushAct;
+    QAction* mSaveBrushSetAct;
+    QTabWidget* mTabWidget;
 
-    /* General Size Related */
-    QLabel* m_SizeLabel;
-    QSlider* m_SizeSlider;
-    QLineEdit* m_SizeLE;
+    /*--General Parameters--*/
+    GeneralBrushWidget* mGenBrushWidget;
+    GeneralBrushWidget* mTransBrushWidget;
 
-    /* General Opacity Related */
-    QLabel* m_OpacityLabel;
-    QSlider* m_OpacitySlider;
-    QLineEdit* m_OpacityLE;
+    /*-Size-*/
+    QLabel* mSizeLabel;
+    QSlider* mSizeSlider;
+    QLineEdit* mSizeLE;
 
-    /* Transfer Size Related */
-    QCheckBox* m_TransferSizeCheck;
-    QSlider* m_TransferSizeSlider;
-    QLineEdit* m_TransferSizeLE;
+    /*-Opacity-*/
+    QLabel* mOpacityLabel;
+    QSlider* mOpacitySlider;
+    QLineEdit* mOpacityLE;
 
-    /* Transfer Opacity Related */
-    QCheckBox* m_TransferOpacityCheck;
-    QSlider* m_TransferOpacitySlider;
-    QLineEdit* m_TransferOpacityLE;
+    /*-Spacing-*/
+    QLabel* mSpacingLabel;
+    QSlider* mSpacingSlider;
+    QLineEdit* mSpacingLE;
 
-    /* Advanced Brush WorkArea */
-    QLabel* m_BrushWorkArea;
-    QPixmap m_brushPreview;
-    int m_BrushWidth, m_BrushHeight;
+    /*--Transfer--*/
 
-    /*Advanced Brush Related*/
+    /*-TransferSize-*/
+    QCheckBox* mTransferSizeToggle;
+    QSlider* mTransferSizeSlider;
+    QLineEdit* mTransferSizeLE;
+
+    /*-TransferOpacity-*/
+    QCheckBox* mTransferOpacityToggle;
+    QSlider* mTransferOpacitySlider;
+    QLineEdit* mTransferOpacityLE;
+
+    /*--Custom--*/
+    CustomBrushWidget* mStencilWidget;
+    /*-Width-*/
+    QLabel* mWidthLabel;
+    QSlider* mWidthSlider;
+    QLineEdit* mWidthLE;
+
+    /*-Height-*/
+    QLabel* mHeightLabel;
+    QSlider* mHeightSlider;
+    QLineEdit* mHeightLE;
+
+    /*-Hardness-*/
+    QLabel* mHardnessLabel;
+    QSlider* mHardnessSlider;
+    QLineEdit* mHardnessLE;
+
+    /*-Rotate-*/
+    QLabel* mRotateLabel;
+    QSlider* mRotateSlider;
+    QLineEdit* mRotateLE;
+
+    /*-SelectShape-*/
+    QPushButton* mCircleButton;
+    QPushButton* mSquareButton;
+    QPushButton* mCustomButton;
+
+    QLabel* mTextureLabel;
+    QLineEdit* mTextureFileLE;
+    QPushButton* mTextureBtn;
 
 
 };
@@ -273,6 +329,84 @@ private:
     QListWidget* layerManager;
     QToolButton* layerOptionsButton;
     QMenu* layerOptionsMenu;
+};
+
+class GeneralBrushWidget : public QWidget
+{
+public:
+    GeneralBrushWidget();
+    virtual ~GeneralBrushWidget();
+signals:
+
+public slots:
+
+private:
+    QPixmap mStrokePreview;
+    QLabel* mStrokePreviewLabel;
+    QListWidget* mBrushIndex;
+    QToolButton* mToolBtn;
+    QMenu* mToolMenu;
+    QAction* mLoadStencilAct;
+    QAction* mLoadBrushAct;
+    QAction* mLoadBrushSetAct;
+    QAction* mSaveStencilAct;
+    QAction* mSaveBrushAct;
+    QAction* mSaveBrushSetAct;
+};
+
+class CustomBrushWidget : public QWidget
+{
+public:
+    CustomBrushWidget();
+    virtual ~CustomBrushWidget();
+signals:
+
+public slots:
+
+private:
+    /*--Custom--*/
+    QLabel* mStencilLabel;
+    QPixmap mStencilPreview;
+
+    /*-Width-*/
+    QLabel* mWidthLabel;
+    QSlider* mWidthSlider;
+    QLineEdit* mWidthLE;
+
+    /*-Height-*/
+    QLabel* mHeightLabel;
+    QSlider* mHeightSlider;
+    QLineEdit* mHeightLE;
+
+    /*-Hardness-*/
+    QLabel* mHardnessLabel;
+    QSlider* mHardnessSlider;
+    QLineEdit* mHardnessLE;
+
+    /*-Rotate-*/
+    QLabel* mRotateLabel;
+    QSlider* mRotateSlider;
+    QLineEdit* mRotateLE;
+
+    /*-SelectShape-*/
+    QPushButton* mCircleButton;
+    QPushButton* mSquareButton;
+    QPushButton* mCustomButton;
+
+    QLabel* mTextureLabel;
+    QLineEdit* mTextureFileLE;
+    QPushButton* mTextureBtn;
+
+    /*-Tool_Menu-*/
+    QToolButton* mToolBtn;
+    QMenu* mToolMenu;
+    QAction* mLoadStencilAct;
+    QAction* mLoadBrushAct;
+    QAction* mLoadBrushSetAct;
+    QAction* mSaveStencilAct;
+    QAction* mSaveBrushAct;
+    QAction* mSaveBrushSetAct;
+
 };
 
 #endif // DOCKWIDGETS_H

@@ -58,7 +58,7 @@ void BitmapImage::paintImage(QTabletEvent *event, Brush brush, QPoint points[])
 {
     QPainter painter(&m_pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
-    brush.setWidth(brush.getSize() + (event->pressure() * brush.getTransferWidth()));
+    brush.setWidth(brush.GetSize() + (event->pressure() * brush.GetTransferSize()));
     painter.setBrush(brush.getBrush());
     painter.setPen(Qt::NoPen);
     painter.setPen(brush.getPen());
@@ -73,7 +73,6 @@ void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint points[])
     painter.setPen(Qt::NoPen);
     painter.setPen(brush.getPen());
     painter.drawLine(points[2], points[1]);
-//    painter.drawEllipse(event->pos(), brush.getSize(), brush.getSize());
 }
 
 void BitmapImage::paintImage(QPainterPath painterPath, Brush brush)
@@ -82,10 +81,10 @@ void BitmapImage::paintImage(QPainterPath painterPath, Brush brush)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setBrush(Qt::NoBrush);
     QPen copyPen = brush.getPen();
-    if(brush.getSize() > 0)
+    if(brush.GetSize() > 0)
     {
         copyPen.setBrush(brush.getBrush());
-        copyPen.setWidth(brush.getSize());
+        copyPen.setWidth(brush.GetSize());
         painter.setPen(copyPen);
     }else{
         copyPen.setBrush(Qt::NoBrush);
@@ -115,7 +114,7 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
     for(unsigned int i = 0; i < length; i++){
         drawPoint.setX(drawPoint.x() + xInc);
         drawPoint.setY(drawPoint.y() + yInc);
-        painter.drawEllipse(drawPoint, brush.getSize(), brush.getSize());
+        painter.drawEllipse(drawPoint, brush.GetSize(), brush.GetSize());
     }
 }
 
@@ -125,7 +124,7 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setBrush(brush.getBrush());
     QPen pen(brush.getPen());
-    pen.setWidthF((float)brush.getSize() + (float)brush.getTransferWidth());
+    pen.setWidthF((float)brush.GetSize() + brush.GetTransferSize());
     painter.setPen(pen);
     painter.setOpacity((brush.getOpacity()/255.0));
 
@@ -139,7 +138,7 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
     for(unsigned int i = 0; i < length; i++){
         drawPoint.setX(drawPoint.x() + xInc);
         drawPoint.setY(drawPoint.y() + yInc);
-        painter.drawEllipse(drawPoint, brush.getSize(), brush.getSize());
+        painter.drawEllipse(drawPoint, brush.GetSize(), brush.GetSize());
     }
 
 }

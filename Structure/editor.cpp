@@ -18,7 +18,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_Brush.setColor(Qt::black);
     m_Brush.setBrush(QBrush(Qt::SolidPattern));
     m_Brush.setWidth(5);
-    m_Brush.setOpacity(m_OpacityVal);
+    m_Brush.SetOpacity(m_OpacityVal);
     m_CurrentTool = m_Brush;
      m_ToolType = BRUSH_TOOL;
 
@@ -103,9 +103,9 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                     m_MousePath.removeFirst();
                 }
 
-                m_CurrentTool.setTransferWidthAmount(m_Pressure);
+                m_CurrentTool.setPressureVal(m_Pressure);
 
-                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool, m_Pressure, m_CurrentTool.getTransferWidth());
+                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool, m_Pressure, m_CurrentTool.GetPressureVal());
                 setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
 //                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(*m_PainterPath, m_CurrentTool);
 //                setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
@@ -248,13 +248,13 @@ void Editor::paintEvent(QPaintEvent *event)
         this->setCursor(QCursor(Qt::CrossCursor));
         painter.setPen(Qt::darkGray);
         painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
-        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize()-3, m_CurrentTool.getSize()-3);
+        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.GetSize()-3, m_CurrentTool.GetSize()-3);
         painter.end();
     }else if(m_ToolType == ERASER_TOOL){
         this->setCursor(QCursor(Qt::CrossCursor));
         painter.setPen(Qt::darkGray);
         painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
-        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize()-3, m_CurrentTool.getSize()-3);
+        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.GetSize()-3, m_CurrentTool.GetSize()-3);
         painter.end();
     }else if(m_ToolType == EYEDROPPER_TOOL){
         setCursor(QCursor(Qt::ArrowCursor));
@@ -318,11 +318,11 @@ void Editor::setBrush(ToolType type)
     case BRUSH_TOOL:
         m_CurrentTool = m_Brush;
         m_CurrentTool.setColor(m_PrimaryColor);
-        emit brushSizeChanged(m_Brush.getSize());
+        emit brushSizeChanged(m_Brush.GetSize());
         break;
     case ERASER_TOOL:
         m_CurrentTool = m_Eraser;
-        emit brushSizeChanged(m_Eraser.getSize());
+        emit brushSizeChanged(m_Eraser.GetSize());
     case TEXT_TOOL:
         break;
     case EYEDROPPER_TOOL:
@@ -383,7 +383,7 @@ void Editor::setOpacity(int val)
 {
     m_OpacityVal = val;
     //m_PrimaryColor.setAlpha(m_OpacityVal);
-    m_CurrentTool.setOpacity(val);
+    m_CurrentTool.SetOpacity(val);
     m_CurrentTool.setColor(m_PrimaryColor);
 }
 
@@ -394,14 +394,14 @@ void Editor::setOpacityTransfer(int val)
 
 void Editor::setSizeTransfer(int val)
 {
-    m_CurrentTool.setTransferWidthAmount(val);
+    m_CurrentTool.SetTransferSize(val);
     switch(m_ToolType)
     {
     case BRUSH_TOOL:
-        m_Brush.setTransferWidthAmount(val);
+        m_Brush.SetTransferSize(val);
         break;
     case ERASER_TOOL:
-        m_Eraser.setTransferWidthAmount(val);
+        m_Eraser.SetTransferSize(val);
         break;
     default:
         break;
