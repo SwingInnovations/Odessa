@@ -211,56 +211,25 @@ void BrushDockWidget::ToggleTransferOpacity(bool val)
         emit BrushTransferOpacityChanged(0);
     }
 }
+//void BrushDockWidget::UpdateRotate(int val){
+//    int range = val;
+//    if(range > 360){
+//        range = 0;
+//        mRotateSlider->setValue(0);
+//    }
+//    mRotateLE->setText(QString::number(range));
+//    emit StencilRotateChanged(range);
+//}
 
-void BrushDockWidget::UpdateStencilWidth(int val){
-    mWidthLE->setText(QString::number(val));
-    emit StencilWidthChanged(val);
-}
-
-void BrushDockWidget::UpdateStencilWidth(QString val){
-    mWidthSlider->setValue(val.toInt());
-    emit StencilWidthChanged(val.toInt());
-}
-
-void BrushDockWidget::UpdateStencilHeight(int val){
-    mHeightLE->setText(QString::number(val));
-    emit StencilHeightChanged(val);
-}
-
-void BrushDockWidget::UpdateStencilHeight(QString val){
-    mHeightSlider->setValue(val.toInt());
-    emit StencilHeightChanged(val.toInt());
-}
-
-void BrushDockWidget::UpdateHardness(int val){
-    mHardnessLE->setText(QString::number(val));
-    emit BrushHardnessChanged(val);
-}
-
-void BrushDockWidget::UpdateHardness(QString val){
-    mHardnessSlider->setValue(val.toInt());
-    emit BrushHardnessChanged(val.toInt());
-}
-
-void BrushDockWidget::UpdateRotate(int val){
-    int range = val;
-    if(range > 360){
-        range = 0;
-        mRotateSlider->setValue(0);
-    }
-    mRotateLE->setText(QString::number(range));
-    emit StencilRotateChanged(range);
-}
-
-void BrushDockWidget::UpdateRotate(QString val){
-    int range = val.toInt();
-    if(range > 360){
-        range = 0;
-        mRotateSlider->setValue(0);
-    }
-    mRotateSlider->setValue(range);
-    emit StencilRotateChanged(range);
-}
+//void BrushDockWidget::UpdateRotate(QString val){
+//    int range = val.toInt();
+//    if(range > 360){
+//        range = 0;
+//        mRotateSlider->setValue(0);
+//    }
+//    mRotateSlider->setValue(range);
+//    emit StencilRotateChanged(range);
+//}
 
 BrushDockWidget::~BrushDockWidget()
 {
@@ -726,6 +695,12 @@ GeneralBrushWidget::GeneralBrushWidget(){
     generalBrushLayout->addWidget(mStrokePreviewLabel);
 
     setLayout(generalBrushLayout);
+    connect(mLoadStencilAct, SIGNAL(triggered()), SLOT(UpdateLoadStencil()));
+    connect(mLoadBrushAct, SIGNAL(triggered()), SLOT(UpdateLoadBrush()));
+    connect(mLoadBrushSetAct, SIGNAL(triggered()), SLOT(UpdateLoadBrushSet()));
+    connect(mSaveStencilAct, SIGNAL(triggered()), SLOT(UpdateSaveStencil()));
+    connect(mSaveBrushAct, SIGNAL(triggered()), SLOT(UpdateSaveBrush()));
+    connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(UpdateSaveBrushSet()));
 
 }
 
@@ -736,7 +711,7 @@ GeneralBrushWidget::~GeneralBrushWidget(){
 CustomBrushWidget::CustomBrushWidget(){
 
     mStencilPreview = QPixmap(160, 160);
-    //mStencilPreview.fill(Qt::gray);
+    mStencilPreview.fill(Qt::gray);
     mStencilLabel = new QLabel(this);
     mStencilLabel->setPixmap(mStencilPreview);
 
@@ -840,6 +815,62 @@ CustomBrushWidget::CustomBrushWidget(){
     AdvancedPanel->addLayout(StencilPreviewLayout);
     AdvancedPanel->addLayout(advancedLayout);
     setLayout(AdvancedPanel);
+
+    connect(mLoadStencilAct, SIGNAL(triggered()), SLOT(UpdateLoadStencil()));
+    connect(mLoadBrushAct, SIGNAL(triggered()), SLOT(UpdateLoadBrush()));
+    connect(mLoadBrushSetAct, SIGNAL(triggered()), SLOT(UpdateLoadBrushSet()));
+    connect(mSaveStencilAct, SIGNAL(triggered()), SLOT(UpdateSaveStencil()));
+    connect(mSaveBrushAct, SIGNAL(triggered()), SLOT(UpdateSaveBrush()));
+    connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(UpdateSaveBrushSet()));
+    connect(mWidthLE, SIGNAL(textChanged(QString)), SLOT(UpdateStencilWidth(QString)));
+    connect(mWidthSlider, SIGNAL(valueChanged(int)), SLOT(UpdateStencilWidth(int)));
+    connect(mHeightLE, SIGNAL(textChanged(QString)), SLOT(UpdateStencilHeight(QString)));
+    connect(mHeightSlider, SIGNAL(valueChanged(int)), SLOT(UpdateStencilHeight(int)));
+    connect(mHeightLE, SIGNAL(textChanged(QString)), SLOT(UpdateStencilHeight(QString)));
+    connect(mHardnessSlider, SIGNAL(valueChanged(int)), SLOT(UpdateBrushHardness(int)));
+    connect(mHardnessLE, SIGNAL(textChanged(QString)), SLOT(UpdateBrushHardness(QString)));
+    connect(mRotateSlider, SIGNAL(valueChanged(int)), SLOT(UpdateStencilRotate(int)));
+    connect(mRotateLE, SIGNAL(textChanged(QString)), SLOT(UpdateStencilRotate(QString)));
+}
+
+void CustomBrushWidget::UpdateStencilWidth(int val){
+   mWidthLE->setText(QString::number(val));
+   emit StencilWidthChanged(val);
+}
+
+void CustomBrushWidget::UpdateStencilWidth(QString val){
+    mWidthSlider->setValue(val.toInt());
+    emit StencilWidthChanged(val.toInt());
+}
+
+void CustomBrushWidget::UpdateStencilHeight(int val){
+    mHeightLE->setText(QString::number(val));
+    emit StencilHeightChanged(val);
+}
+
+void CustomBrushWidget::UpdateStencilHeight(QString val){
+    mHeightSlider->setValue(val.toInt());
+    emit StencilHeightChanged(val.toInt());
+}
+
+void CustomBrushWidget::UpdateBrushHardness(int val){
+    mHardnessLE->setText(QString::number(val));
+    emit BrushHardnessChanged(val);
+}
+
+void CustomBrushWidget::UpdateBrushHardness(QString val){
+    mHardnessSlider->setValue(val.toInt());
+    emit BrushHardnessChanged(val.toInt());
+}
+
+void CustomBrushWidget::UpdateStencilRotate(int val){
+    mRotateLE->setText(QString::number(val));
+    emit UpdateStencilRotate(val);
+}
+
+void CustomBrushWidget::UpdateStencilRotate(QString val){
+    mRotateSlider->setValue(val.toInt());
+    emit UpdateStencilRotate(val.toInt());
 }
 
 CustomBrushWidget::~CustomBrushWidget(){

@@ -30,6 +30,8 @@
 #include <QPushButton>
 #include <QScrollArea>
 
+#include "../Structure/brush.h"
+
 //handling the Brush System
 
 class ColorWheelWidget;
@@ -69,14 +71,6 @@ private slots:
     void UpdateTransferOpacity(QString);
     void ToggleTransferSize(bool);
     void ToggleTransferOpacity(bool);
-    void UpdateStencilWidth(int);
-    void UpdateStencilWidth(QString);
-    void UpdateStencilHeight(int);
-    void UpdateStencilHeight(QString);
-    void UpdateHardness(int);
-    void UpdateHardness(QString);
-    void UpdateRotate(int);
-    void UpdateRotate(QString);
 private:
 
     QPixmap mStencil, mStrokePreview;
@@ -333,13 +327,25 @@ private:
 
 class GeneralBrushWidget : public QWidget
 {
+    Q_OBJECT
 public:
     GeneralBrushWidget();
     virtual ~GeneralBrushWidget();
+
 signals:
-
+    void LoadStencilTriggered();
+    void LoadBrushTriggered();
+    void LoadBrushSetTriggered();
+    void SaveStencilTriggered();
+    void SaveBrushTriggered();
+    void SaveBrushSetTriggered();
 public slots:
-
+    void UpdateLoadStencil(){emit LoadStencilTriggered();}
+    void UpdateLoadBrush(){emit LoadBrushTriggered();}
+    void UpdateLoadBrushSet(){emit LoadBrushSetTriggered();}
+    void UpdateSaveStencil(){emit SaveStencilTriggered();}
+    void UpdateSaveBrush(){emit SaveBrushTriggered();}
+    void UpdateSaveBrushSet(){emit SaveBrushSetTriggered();}
 private:
     QPixmap mStrokePreview;
     QLabel* mStrokePreviewLabel;
@@ -356,13 +362,36 @@ private:
 
 class CustomBrushWidget : public QWidget
 {
+    Q_OBJECT
 public:
     CustomBrushWidget();
     virtual ~CustomBrushWidget();
 signals:
-
+    void LoadStencilTriggered();
+    void LoadBrushTriggered();
+    void LoadBrushSetTriggered();
+    void SaveStencilTriggered();
+    void SaveBrushTriggered();
+    void SaveBrushSetTriggered();
+    void StencilWidthChanged(int);
+    void StencilHeightChanged(int);
+    void BrushHardnessChanged(int);
+    void RotateChanged(int);
 public slots:
-
+    void UpdateLoadStencil(){emit LoadStencilTriggered();}
+    void UpdateLoadBrush(){emit LoadBrushTriggered();}
+    void UpdateLoadBrushSet(){emit LoadBrushSetTriggered();}
+    void UpdateSaveStencil(){emit SaveStencilTriggered();}
+    void UpdateSaveBrush(){emit SaveBrushTriggered();}
+    void UpdateSaveBrushSet(){emit SaveBrushSetTriggered();}
+    void UpdateStencilWidth(int);
+    void UpdateStencilWidth(QString);
+    void UpdateStencilHeight(int);
+    void UpdateStencilHeight(QString);
+    void UpdateBrushHardness(int);
+    void UpdateBrushHardness(QString);
+    void UpdateStencilRotate(int);
+    void UpdateStencilRotate(QString);
 private:
     /*--Custom--*/
     QLabel* mStencilLabel;
