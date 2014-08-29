@@ -29,6 +29,9 @@
 #include <QDebug>
 #include <QPushButton>
 #include <QScrollArea>
+#include <QTemporaryFile>
+#include <QImage>
+#include <QRgb>
 
 #include "../Structure/brush.h"
 
@@ -46,6 +49,8 @@ public:
     enum BrushShape{CIRCLE_SHAPE, SQUARE_SHAPE, CUSTOM};
     BrushDockWidget(QWidget *parent = 0);
     virtual ~BrushDockWidget();
+protected:
+    void resizeEvent(QResizeEvent*);
 signals:
     void BrushSizeChanged(int);
     void BrushOpacityChanged(int);
@@ -57,6 +62,7 @@ signals:
     void StencilHeightChanged(int);
     void StencilRotateChanged(int);
     void BrushStencilChanged(QPixmap);
+    void BrushStencilPathChanged(QString);
     void StencilBaseShapeChanged(BrushShape);
 private slots:
     void UpdateSize(int);
@@ -71,19 +77,16 @@ private slots:
     void UpdateTransferOpacity(QString);
     void ToggleTransferSize(bool);
     void ToggleTransferOpacity(bool);
+    void UpdateStencil(QPixmap);
+    void UpdateStencilPath(QString);
+    void LoadStencilAct();
+    void LoadBrushAct();
+    void LoadBrushSetAct();
+    void SaveStencilAct();
+    void SaveBrushAct();
+    void SaveBrushSetAct();
 private:
-
-    QPixmap mStencil, mStrokePreview;
-    QLabel* mStencilLabel, *mStrokePreviewLabel;
-    QListWidget* mBrushIndex;
-    QToolButton* mToolBtn;
-    QMenu* mToolMenu;
-    QAction* mLoadStencilAct;
-    QAction* mLoadBrushAct;
-    QAction* mLoadBrushSetAct;
-    QAction* mSaveStencilAct;
-    QAction* mSaveBrushAct;
-    QAction* mSaveBrushSetAct;
+    unsigned int mCurrentBrushIndex;
     QTabWidget* mTabWidget;
 
     /*--General Parameters--*/
@@ -119,34 +122,6 @@ private:
 
     /*--Custom--*/
     CustomBrushWidget* mStencilWidget;
-    /*-Width-*/
-    QLabel* mWidthLabel;
-    QSlider* mWidthSlider;
-    QLineEdit* mWidthLE;
-
-    /*-Height-*/
-    QLabel* mHeightLabel;
-    QSlider* mHeightSlider;
-    QLineEdit* mHeightLE;
-
-    /*-Hardness-*/
-    QLabel* mHardnessLabel;
-    QSlider* mHardnessSlider;
-    QLineEdit* mHardnessLE;
-
-    /*-Rotate-*/
-    QLabel* mRotateLabel;
-    QSlider* mRotateSlider;
-    QLineEdit* mRotateLE;
-
-    /*-SelectShape-*/
-    QPushButton* mCircleButton;
-    QPushButton* mSquareButton;
-    QPushButton* mCustomButton;
-
-    QLabel* mTextureLabel;
-    QLineEdit* mTextureFileLE;
-    QPushButton* mTextureBtn;
 
 
 };
@@ -331,7 +306,8 @@ class GeneralBrushWidget : public QWidget
 public:
     GeneralBrushWidget();
     virtual ~GeneralBrushWidget();
-
+    void AddBrush(int iD, Brush brush);
+    void AddBrush(Brush brush);
 signals:
     void LoadStencilTriggered();
     void LoadBrushTriggered();
@@ -346,7 +322,9 @@ public slots:
     void UpdateSaveStencil(){emit SaveStencilTriggered();}
     void UpdateSaveBrush(){emit SaveBrushTriggered();}
     void UpdateSaveBrushSet(){emit SaveBrushSetTriggered();}
+    void UpdateStencil(QPixmap);
 private:
+    QVector<Brush> mBrushData;
     QPixmap mStrokePreview;
     QLabel* mStrokePreviewLabel;
     QListWidget* mBrushIndex;
@@ -364,8 +342,13 @@ class CustomBrushWidget : public QWidget
 {
     Q_OBJECT
 public:
+    enum BrushShape{CIRCLE_SHAPE, SQUARE_SHAPE, CUSTOM};
     CustomBrushWidget();
     virtual ~CustomBrushWidget();
+    void TempSave(QPixmap);
+    QPixmap GetPixmap(){return mStencilPreview;}
+protected:
+    void paintEvent(QPaintEvent*);
 signals:
     void LoadStencilTriggered();
     void LoadBrushTriggered();
@@ -377,6 +360,8 @@ signals:
     void StencilHeightChanged(int);
     void BrushHardnessChanged(int);
     void RotateChanged(int);
+    void StencilChanged(QPixmap);
+    void StencilPathChanged(QString);
 public slots:
     void UpdateLoadStencil(){emit LoadStencilTriggered();}
     void UpdateLoadBrush(){emit LoadBrushTriggered();}
@@ -392,10 +377,19 @@ public slots:
     void UpdateBrushHardness(QString);
     void UpdateStencilRotate(int);
     void UpdateStencilRotate(QString);
+    void UpdateStencil(QPixmap);
+    void UpdateBrushShape_Circle();
+    void UpdateBrushShape_Square();
+    void UpdateBrushShape_Polygon();
+    void UpdateStencilTexture();
+    void UpdateStencilTextureLE(QString);
 private:
+
     /*--Custom--*/
     QLabel* mStencilLabel;
     QPixmap mStencilPreview;
+    QPixmap mStencilTexture;
+    bool hasTexture;
 
     /*-Width-*/
     QLabel* mWidthLabel;
@@ -418,6 +412,7 @@ private:
     QLineEdit* mRotateLE;
 
     /*-SelectShape-*/
+    BrushShape mBrushShape;
     QPushButton* mCircleButton;
     QPushButton* mSquareButton;
     QPushButton* mCustomButton;
@@ -436,6 +431,8 @@ private:
     QAction* mSaveBrushAct;
     QAction* mSaveBrushSetAct;
 
+    /*-File Stuff-*/
+    QTemporaryFile tempFile;
 };
 
 #endif // DOCKWIDGETS_H

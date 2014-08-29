@@ -23,12 +23,11 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
 
     mOpacityLabel = new QLabel("Opacity:", this);
     mOpacitySlider = new QSlider(Qt::Horizontal, this);
-    mOpacitySlider->setRange(0, 255);
-    mOpacitySlider->setValue(255);
-    mOpacitySlider->setValue(150);
+    mOpacitySlider->setRange(0, 100);
+    mOpacitySlider->setValue(100);
     mOpacityLE = new QLineEdit(this);
     mOpacityLE->setFixedWidth(32);
-    mOpacityLE->setText(QString::number(255));
+    mOpacityLE->setText(QString::number(100));
     QHBoxLayout* opacityLayout = new QHBoxLayout;
     opacityLayout->addWidget(mOpacityLabel);
     opacityLayout->addWidget(mOpacitySlider);
@@ -121,6 +120,7 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     mTabWidget->setTabShape(QTabWidget::Rounded);
 
     setWidget(mTabWidget);
+    this->setMinimumWidth(292);
 
     connect(mSizeSlider, SIGNAL(valueChanged(int)), SLOT(UpdateSize(int)));
     connect(mSizeLE, SIGNAL(textChanged(QString)), SLOT(UpdateSize(QString)));
@@ -134,6 +134,10 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(mTransferOpacityToggle, SIGNAL(toggled(bool)), SLOT(ToggleTransferOpacity(bool)));
     connect(mTransferOpacitySlider, SIGNAL(valueChanged(int)), SLOT(UpdateTransferOpacity(int)));
     connect(mTransferOpacityLE, SIGNAL(textChanged(QString)), SLOT(UpdateTransferOpacity(QString)));
+    connect(mStencilWidget, SIGNAL(StencilChanged(QPixmap)), SLOT(UpdateStencil(QPixmap)));
+    connect(mStencilWidget, SIGNAL(StencilChanged(QPixmap)), mGenBrushWidget, SLOT(UpdateStencil(QPixmap)));
+    connect(mStencilWidget, SIGNAL(StencilChanged(QPixmap)), mTransBrushWidget, SLOT(UpdateStencil(QPixmap)));
+    connect(mStencilWidget, SIGNAL(StencilPathChanged(QString)), SLOT(UpdateStencilPath(QString)));
 }
 
 void BrushDockWidget::UpdateSize(int val)
@@ -211,6 +215,11 @@ void BrushDockWidget::ToggleTransferOpacity(bool val)
         emit BrushTransferOpacityChanged(0);
     }
 }
+
+void BrushDockWidget::UpdateStencil(QPixmap pixmap){
+    emit BrushStencilChanged(pixmap);
+}
+
 //void BrushDockWidget::UpdateRotate(int val){
 //    int range = val;
 //    if(range > 360){
@@ -230,6 +239,37 @@ void BrushDockWidget::ToggleTransferOpacity(bool val)
 //    mRotateSlider->setValue(range);
 //    emit StencilRotateChanged(range);
 //}
+
+void BrushDockWidget::UpdateStencilPath(QString filePath){
+    emit BrushStencilPathChanged(filePath);
+}
+
+void BrushDockWidget::LoadStencilAct(){
+
+}
+
+void BrushDockWidget::LoadBrushAct(){
+
+}
+
+void BrushDockWidget::LoadBrushSetAct(){
+
+}
+
+void BrushDockWidget::SaveStencilAct(){
+
+}
+
+void BrushDockWidget::SaveBrushAct(){
+
+}
+
+void BrushDockWidget::SaveBrushSetAct(){
+
+}
+
+void BrushDockWidget::resizeEvent(QResizeEvent *e){
+}
 
 BrushDockWidget::~BrushDockWidget()
 {
@@ -701,7 +741,27 @@ GeneralBrushWidget::GeneralBrushWidget(){
     connect(mSaveStencilAct, SIGNAL(triggered()), SLOT(UpdateSaveStencil()));
     connect(mSaveBrushAct, SIGNAL(triggered()), SLOT(UpdateSaveBrush()));
     connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(UpdateSaveBrushSet()));
+}
 
+void GeneralBrushWidget::AddBrush(int iD, Brush brush){
+    mBrushData.push_back(brush);
+}
+
+void GeneralBrushWidget::AddBrush(Brush brush){
+    mBrushData.push_back(brush);
+}
+
+void GeneralBrushWidget::UpdateStencil(QPixmap pixmap){
+    int targetWidth = mStrokePreview.width();
+    int targetHeight = mStrokePreview.height();
+    int sourceWidth = pixmap.width();
+    int sourceHeight = pixmap.height();
+    if(sourceWidth > targetWidth, sourceHeight > targetHeight){
+        pixmap = pixmap.scaled(mStrokePreview.size(), Qt::IgnoreAspectRatio, Qt::FastTransformation);
+        mStrokePreview = pixmap;
+    }else{
+        qDebug() << "Unable to load Pixmap" << endl;
+    }
 }
 
 GeneralBrushWidget::~GeneralBrushWidget(){
@@ -710,8 +770,11 @@ GeneralBrushWidget::~GeneralBrushWidget(){
 
 CustomBrushWidget::CustomBrushWidget(){
 
+    mBrushShape = CIRCLE_SHAPE;
+    hasTexture = false;
+
     mStencilPreview = QPixmap(160, 160);
-    mStencilPreview.fill(Qt::gray);
+    mStencilPreview.fill(Qt::transparent);
     mStencilLabel = new QLabel(this);
     mStencilLabel->setPixmap(mStencilPreview);
 
@@ -831,11 +894,53 @@ CustomBrushWidget::CustomBrushWidget(){
     connect(mHardnessLE, SIGNAL(textChanged(QString)), SLOT(UpdateBrushHardness(QString)));
     connect(mRotateSlider, SIGNAL(valueChanged(int)), SLOT(UpdateStencilRotate(int)));
     connect(mRotateLE, SIGNAL(textChanged(QString)), SLOT(UpdateStencilRotate(QString)));
+    connect(this, SIGNAL(StencilChanged(QPixmap)), SLOT(UpdateStencil(QPixmap)));
+    connect(mCircleButton, SIGNAL(clicked()), SLOT(UpdateBrushShape_Circle()));
+    connect(mSquareButton, SIGNAL(clicked()), SLOT(UpdateBrushShape_Square()));
+    connect(mCustomButton, SIGNAL(clicked()), SLOT(UpdateBrushShape_Polygon()));
+    connect(mTextureBtn, SIGNAL(clicked()), SLOT(UpdateStencilTexture()));
+    connect(mTextureFileLE, SIGNAL(textChanged(QString)), SLOT(UpdateStencilTextureLE(QString)));
+}
+
+void CustomBrushWidget::TempSave(QPixmap pixmap){
+    QImage image = pixmap.toImage();
+    image.convertToFormat(QImage::Format_RGB888, Qt::AutoColor);
+    if(tempFile.open()){
+        image.save(tempFile.fileName());
+    }
+    tempFile.close();
+    emit StencilPathChanged(tempFile.fileName());
+}
+
+void CustomBrushWidget::UpdateStencil(QPixmap pixmap){
+    TempSave(pixmap);
+}
+
+void CustomBrushWidget::UpdateStencilTexture(){
+    hasTexture = true;
+    QString fileName = QFileDialog::getOpenFileName(this, "Load Texture", QDir::currentPath());
+    mStencilTexture.load(fileName);
+    QImage image = mStencilTexture.toImage();
+    QRgb col;
+    int gray;
+    int width = mStencilTexture.width();
+    int height = mStencilTexture.height();
+    for(unsigned int i = 0; i < width; i++){
+        for(unsigned int j = 0; j < height; j++){
+            col = image.pixel(i, j);
+            gray = qGray(col);
+            image.setPixel(i, j, qRgb(gray, gray, gray));
+        }
+    }
+    mStencilTexture = mStencilTexture.fromImage(image);
+    mStencilTexture = mStencilTexture.scaled(mStencilPreview.width(), mStencilPreview.height(), Qt::IgnoreAspectRatio, Qt::FastTransformation);
+    mTextureFileLE->setText(fileName);
 }
 
 void CustomBrushWidget::UpdateStencilWidth(int val){
    mWidthLE->setText(QString::number(val));
    emit StencilWidthChanged(val);
+   emit StencilChanged(mStencilPreview);
 }
 
 void CustomBrushWidget::UpdateStencilWidth(QString val){
@@ -846,6 +951,7 @@ void CustomBrushWidget::UpdateStencilWidth(QString val){
 void CustomBrushWidget::UpdateStencilHeight(int val){
     mHeightLE->setText(QString::number(val));
     emit StencilHeightChanged(val);
+    emit StencilChanged(mStencilPreview);
 }
 
 void CustomBrushWidget::UpdateStencilHeight(QString val){
@@ -856,6 +962,7 @@ void CustomBrushWidget::UpdateStencilHeight(QString val){
 void CustomBrushWidget::UpdateBrushHardness(int val){
     mHardnessLE->setText(QString::number(val));
     emit BrushHardnessChanged(val);
+    emit StencilChanged(mStencilPreview);
 }
 
 void CustomBrushWidget::UpdateBrushHardness(QString val){
@@ -864,13 +971,85 @@ void CustomBrushWidget::UpdateBrushHardness(QString val){
 }
 
 void CustomBrushWidget::UpdateStencilRotate(int val){
+    if(val > 360){
+        val = 0;
+    }
     mRotateLE->setText(QString::number(val));
-    emit UpdateStencilRotate(val);
+    emit RotateChanged(val);
+    emit StencilChanged(mStencilPreview);
 }
 
 void CustomBrushWidget::UpdateStencilRotate(QString val){
-    mRotateSlider->setValue(val.toInt());
-    emit UpdateStencilRotate(val.toInt());
+    if(val.toInt() > 360){
+        mRotateSlider->setValue(0);
+        emit RotateChanged(0);
+    }else{
+        mRotateSlider->setValue(val.toInt());
+        emit RotateChanged(val.toInt());
+    }
+}
+
+void CustomBrushWidget::UpdateStencilTextureLE(QString val){
+    if(val.isEmpty()){
+        hasTexture = false;
+    }else{
+        hasTexture = true;
+    }
+}
+
+void CustomBrushWidget::paintEvent(QPaintEvent *event){
+
+    int stencilWidth = (mStencilPreview.width() * mWidthSlider->value()/10)/2;
+    int stencilHeight = (mStencilPreview.height()* mHeightSlider->value()/10)/2;
+    qreal hardness = 78 * ((qreal)mHardnessSlider->value()/100);
+    QPoint midPoint(mStencilPreview.width()/2, mStencilPreview.height()/2);
+    mStencilPreview.fill(Qt::transparent);
+    QRadialGradient radGrad(midPoint, mStencilPreview.width()/2);
+    radGrad.setColorAt(midPoint.x(), Qt::black);
+    radGrad.setFocalRadius(hardness);
+    QPainter painter(&mStencilPreview);
+    painter.setPen(Qt::NoPen);
+    switch(mBrushShape){
+    case CIRCLE_SHAPE:
+        if(hasTexture){
+            QBrush brush;
+            brush.setTexture(mStencilTexture);
+            painter.setBrush(brush);
+        }else{
+            painter.setBrush(radGrad);
+        }
+        painter.drawEllipse(midPoint, stencilWidth, stencilHeight);
+        break;
+    case SQUARE_SHAPE:
+        int originX =  midPoint.x() - stencilWidth;
+        int originY = midPoint.y() - stencilHeight;
+        int dimX = stencilWidth*2;
+        int dimY = stencilHeight*2;
+
+        if(hasTexture){
+            QBrush brush;
+            brush.setTexture(mStencilTexture);
+            painter.setBrush(brush);
+        }else{
+            painter.setBrush(Qt::black);
+        }
+
+        painter.drawRect(originX, originY, dimX, dimY);
+        break;
+    }
+    mStencilLabel->setPixmap(mStencilPreview);
+}
+
+void CustomBrushWidget::UpdateBrushShape_Circle(){
+    mBrushShape = CIRCLE_SHAPE;
+}
+
+void CustomBrushWidget::UpdateBrushShape_Square(){
+    mBrushShape = SQUARE_SHAPE;
+}
+
+void CustomBrushWidget::UpdateBrushShape_Polygon(){
+    mBrushShape = CUSTOM;
 }
 
 CustomBrushWidget::~CustomBrushWidget(){

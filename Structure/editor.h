@@ -85,8 +85,10 @@ public slots:
 
     void scale(double scaleVal);
 
+    void SetBrushStencil(QPixmap);
+    void SetBrushStencilPath(QString);
+
     void setBrushSize(int);
-    void setBrushFeather(int);
     void setBrushSpacing(int);
 
     void setSizeTransfer(int);

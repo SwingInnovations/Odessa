@@ -332,6 +332,45 @@ void Editor::setBrush(ToolType type)
     }
 }
 
+void Editor::SetBrushStencil(QPixmap pixmap){
+    m_CurrentTool.SetStencil(pixmap);
+    switch(m_ToolType){
+    case BRUSH_TOOL:
+        m_Brush.SetStencil(pixmap);
+        break;
+    case ERASER_TOOL:
+        m_Eraser.SetStencil(pixmap);
+        break;
+    case TEXT_TOOL:
+        break;
+    case EYEDROPPER_TOOL:
+        break;
+    default:
+        break;
+    }
+}
+
+void Editor::SetBrushStencilPath(QString filePath){
+    m_CurrentTool.SetStencilPath(filePath);
+    m_CurrentTool.LoadBrush(filePath);
+    switch(m_ToolType){
+      case BRUSH_TOOL:
+        m_Brush.SetStencilPath(filePath);
+        m_Brush.LoadBrush(filePath);
+        break;
+    case ERASER_TOOL:
+        m_Eraser.SetStencilPath(filePath);
+        m_Eraser.LoadBrush(filePath);
+        break;
+    case TEXT_TOOL:
+        break;
+    case EYEDROPPER_TOOL:
+        break;
+    default:
+        break;
+    };
+}
+
 void Editor::setBrushSize(int val)
 {
     m_CurrentTool.setWidth(val);
@@ -346,11 +385,6 @@ void Editor::setBrushSize(int val)
     default:
         break;
     }
-}
-
-void Editor::setBrushFeather(int val)
-{
-
 }
 
 void Editor::setBrushSpacing(int val)
@@ -419,6 +453,17 @@ void Editor::backup()
 void Editor::scale(double scaleVal)
 {
     //scale the image directly through the layers
+    for(unsigned int i = 0; i < m_Layers.size(); i++){
+        for(unsigned int j = 0; j < m_Layers.at(i)->GetFrameListSize(); i++){
+            QPixmap scaled = m_Layers.at(i)->getFrame(j)->getPixmap();
+            int sizeX = scaled.width();
+            int sizeY = scaled.height();
+            sizeX*=scaleVal;
+            sizeY*=scaleVal;
+            scaled = scaled.scaled(sizeX, sizeY, Qt::IgnoreAspectRatio, Qt::FastTransformation);
+            m_Layers.at(i)->getFrame(j)->setPixmap(scaled);
+        }
+    }
 }
 
 void Editor::backup(int backupLayer, int backupFrame)

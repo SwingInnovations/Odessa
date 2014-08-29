@@ -6,6 +6,7 @@
 #include <QColor>
 #include <QDebug>
 #include <QPixmap>
+#include <QFile>
 
 class Brush
 {
@@ -42,6 +43,39 @@ public:
         m_yTilt = val;
     }
 
+    void SetStencilPath(QString fileName){
+        mStencilPath = fileName;
+    }
+
+    void LoadBrush(QString filePath){
+        stencilInput = new QFile(filePath);
+        stencilInput->open(QIODevice::ReadOnly);
+        QDataStream in;
+        in.setDevice(stencilInput);
+        int size = stencilInput->size();
+
+        brushProto = new char[size];
+        in.readRawData(brushProto, size);
+        brushData = new uchar[size];
+
+        for(unsigned int i = 0; i < size; i++){
+            brushData[i] = (uchar)brushProto[i];
+        }
+
+        QImage tempStencil(brushData, 160, 160, QImage::Format_Indexed8);
+        QVector<QRgb> vecCol(256);
+        for(unsigned int i = 0; i < 256; i++){
+            vecCol[i] = qRgb(i, i, i);
+        }
+        tempStencil.setColorTable(vecCol);
+
+        mStencil = QPixmap::fromImage(tempStencil);
+
+        delete[] brushProto;
+        delete[] brushData;
+        delete stencilInput;
+    }
+
     void SetOpacity(int val){mOpacity = val;}
     void SetTransferSize(int val){mTSize = val;}
     void SetTransferOpacity(int val){mTOpacity = val;}
@@ -67,7 +101,14 @@ public:
     int GetTransferOpacity(){return mTOpacity;}
     int getOpacity(){return mOpacity;}
 
+    QPixmap GetStencil(){return mStencil;}
+    QString GetStencilPath(){return mStencilPath;}
+
 private:
+
+    QFile* stencilInput;
+    char* brushProto;
+    uchar* brushData;
 
     BrushShape brushShape;
 
@@ -88,6 +129,7 @@ private:
     qreal m_yTilt;
 
     QPixmap mStencil;
+    QString mStencilPath;
 };
 
 #endif // BRUSH_H

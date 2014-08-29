@@ -153,6 +153,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(brushDockWidget, SIGNAL(BrushSizeChanged(int)), mEditor, SLOT(setBrushSize(int)));
     connect(brushDockWidget, SIGNAL(BrushOpacityChanged(int)), mEditor, SLOT(setOpacity(int)));
+    connect(brushDockWidget, SIGNAL(BrushStencilChanged(QPixmap)), mEditor, SLOT(SetBrushStencil(QPixmap)));
+//    connect(brushDockWidget, SIGNAL(BrushStencilPathChanged(QString)), mEditor, SLOT(SetBrushStencilPath(QString)));
     connect(colorDockWidget, SIGNAL(redChanged(int)), mEditor, SLOT(setRedValue(int)));
     connect(colorDockWidget, SIGNAL(greenChanged(int)), mEditor, SLOT(setGreenValue(int)));
     connect(colorDockWidget, SIGNAL(blueChanged(int)), mEditor, SLOT(setBlueValue(int)));
@@ -171,6 +173,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     addDockWidget(Qt::RightDockWidgetArea, brushDockWidget);
     addDockWidget(Qt::RightDockWidgetArea, colorDockWidget);
+    this->tabifyDockWidget(brushDockWidget, colorDockWidget);
     addDockWidget(Qt::BottomDockWidgetArea, timelineDockWidget);
     addDockWidget(Qt::RightDockWidgetArea, layerDockWidget);
 

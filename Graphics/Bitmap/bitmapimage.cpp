@@ -120,14 +120,18 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
 
 void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt)
 {
+
+    /*-Prepare Stencil-*/
+    QImage stencilImage = brush.GetStencil().toImage();
+    QPainter stencilColorize(&stencilImage);
+    stencilColorize.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+    stencilColorize.fillRect(stencilImage.rect(), brush.getColor());
+    stencilColorize.end();
+    stencilImage = stencilImage.scaled(brush.GetSize(), brush.GetSize(),Qt::KeepAspectRatio, Qt::FastTransformation);
+    QPixmap stencil = QPixmap::fromImage(stencilImage);
+
     QPainter painter(&m_pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
-    painter.setBrush(brush.getBrush());
-    QPen pen(brush.getPen());
-    pen.setWidthF((float)brush.GetSize() + brush.GetTransferSize());
-    painter.setPen(pen);
-    painter.setOpacity((brush.getOpacity()/255.0));
-
     QPointF point, drawPoint;
     point = pointInfo.last() - pointInfo.first();
     int length = point.manhattanLength();
@@ -135,11 +139,33 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
     xInc = point.x() / length;
     yInc = point.y() / length;
     drawPoint = pointInfo.first();
+    painter.setOpacity(brush.getOpacity()/ 255);
     for(unsigned int i = 0; i < length; i++){
         drawPoint.setX(drawPoint.x() + xInc);
         drawPoint.setY(drawPoint.y() + yInc);
-        painter.drawEllipse(drawPoint, brush.GetSize(), brush.GetSize());
+        painter.drawPixmap(QPoint(drawPoint.x() - stencil.width() / 2, drawPoint.y() - stencil.height()/2), stencil);
     }
+
+//    QPainter painter(&m_pixmap);
+//    painter.setRenderHint(QPainter::Antialiasing);
+//    painter.setBrush(brush.getBrush());
+//    QPen pen(brush.getPen());
+//    pen.setWidthF((float)brush.GetSize() + brush.GetTransferSize());
+//    painter.setPen(pen);
+//    painter.setOpacity((brush.getOpacity()/255.0));
+
+//    QPointF point, drawPoint;
+//    point = pointInfo.last() - pointInfo.first();
+//    int length = point.manhattanLength();
+//    double xInc, yInc;
+//    xInc = point.x() / length;
+//    yInc = point.y() / length;
+//    drawPoint = pointInfo.first();
+//    for(unsigned int i = 0; i < length; i++){
+//        drawPoint.setX(drawPoint.x() + xInc);
+//        drawPoint.setY(drawPoint.y() + yInc);
+//        painter.drawEllipse(drawPoint, brush.GetSize(), brush.GetSize());
+//    }
 
 }
 
