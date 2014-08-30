@@ -389,7 +389,17 @@ void Editor::setBrushSize(int val)
 
 void Editor::setBrushSpacing(int val)
 {
-
+    m_CurrentTool.SetSpacing(val);
+    switch(m_ToolType){
+    case BRUSH_TOOL:
+        m_Brush.SetSpacing(val);
+        break;
+    case ERASER_TOOL:
+        m_Eraser.SetSpacing(val);
+        break;
+    default:
+        break;
+    }
 }
 
 void Editor::setRedValue(int val)

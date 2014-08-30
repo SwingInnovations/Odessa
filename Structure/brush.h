@@ -28,6 +28,10 @@ public:
         myPen.setWidthF(mSize);
     }
 
+    void SetSpacing(int val){
+        mSpacing = val;
+    }
+
     void setPressureVal(qreal val)
     {
         m_PressureVal = val;
@@ -96,6 +100,7 @@ public:
     QBrush getBrush(){ return myBrush; }
     QColor getColor() { return myColor; }
 
+    int GetSpacing(){return mSpacing;}
     int GetSize(){return mSize;}
     int GetTransferSize(){return mTSize;}
     int GetTransferOpacity(){return mTOpacity;}
@@ -120,6 +125,7 @@ private:
     bool mHardness;
     unsigned int mSize;
     int mOpacity;
+    int mSpacing;
 
     unsigned int mTSize;
     unsigned int mTOpacity;
