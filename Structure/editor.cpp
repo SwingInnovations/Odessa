@@ -428,7 +428,6 @@ void Editor::setOpacity(int val)
     m_OpacityVal = val;
     //m_PrimaryColor.setAlpha(m_OpacityVal);
     m_CurrentTool.SetOpacity(val);
-    m_CurrentTool.setColor(m_PrimaryColor);
 }
 
 void Editor::setOpacityTransfer(int val)

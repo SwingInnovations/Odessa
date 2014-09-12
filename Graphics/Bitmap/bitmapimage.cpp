@@ -126,12 +126,15 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
     stencilBase.createAlphaMask();
     stencilBase.convertToFormat(QImage::Format_RGB888, Qt::AutoColor);
     QImage stencilImage = QImage(stencilBase);
-    stencilImage.fill(brush.getColor());
+    QColor color = brush.getColor();
+    color.setAlpha(brush.getOpacity());
+    stencilImage.fill(color);
     stencilImage.setAlphaChannel(stencilBase);
     QPixmap stencil = QPixmap::fromImage(stencilImage.scaled(brush.GetSize(), brush.GetSize(), Qt::IgnoreAspectRatio, Qt::FastTransformation));
 
     QPainter painter(&m_pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
+
     QPointF point, drawPoint;
     point = pointInfo.last() - pointInfo.first();
     int length = point.manhattanLength();
@@ -139,7 +142,6 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
     xInc = point.x() / length;
     yInc = point.y() / length;
     drawPoint = pointInfo.first();
-    painter.setOpacity(brush.getOpacity()/ 255);
     for(unsigned int i = 0; i < length; i++){
         drawPoint.setX(drawPoint.x() + (xInc * brush.GetSpacing() ));
         drawPoint.setY(drawPoint.y() + (yInc * brush.GetSpacing() ));
