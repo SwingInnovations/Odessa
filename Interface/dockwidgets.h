@@ -24,6 +24,7 @@
 #include <QMouseEvent>
 #include <QToolButton>
 #include <QFileDialog>
+#include <QFile>
 #include <QAction>
 #include <QMenu>
 #include <QDebug>
@@ -32,8 +33,14 @@
 #include <QTemporaryFile>
 #include <QImage>
 #include <QRgb>
+#include <QMap>
+#include <QVector>
+#include <QDataStream>
+#include <QSettings>
+#include <QMessageBox>
 
 #include "../Structure/brush.h"
+#include "Overloads.h"
 
 //handling the Brush System
 
@@ -48,6 +55,7 @@ class BrushDockWidget : public QDockWidget
 public:
     enum BrushShape{CIRCLE_SHAPE, SQUARE_SHAPE, CUSTOM};
     BrushDockWidget(QWidget *parent = 0);
+    void SetDirectory(QString dir);
     virtual ~BrushDockWidget();
 protected:
     void resizeEvent(QResizeEvent*);
@@ -65,6 +73,7 @@ signals:
     void BrushStencilPathChanged(QString);
     void StencilBaseShapeChanged(BrushShape);
 private slots:
+    void SetCurrentIndex(int);
     void UpdateSize(int);
     void UpdateSize(QString);
     void UpdateSpacing(int);
@@ -86,7 +95,14 @@ private slots:
     void SaveBrushAct();
     void SaveBrushSetAct();
 private:
-    unsigned int mCurrentBrushIndex;
+    void ReadSettings();
+    void WriteSettings();
+    QVector<Brush> LoadBrushLib(QString filePath);
+    void SaveBrushLib(QString filePath);
+
+    QString mBrushLib;
+    QString mProjectPath;
+    int mCurrentBrushIndex;
     QTabWidget* mTabWidget;
 
     /*--General Parameters--*/
@@ -123,6 +139,9 @@ private:
     /*--Custom--*/
     CustomBrushWidget* mStencilWidget;
 
+    /*-Data-*/
+    QVector<Brush> mTempBrushList;
+    QVector<Brush> mActualBrushList;
 
 };
 
@@ -308,6 +327,10 @@ public:
     virtual ~GeneralBrushWidget();
     void AddBrush(int iD, Brush brush);
     void AddBrush(Brush brush);
+    int SetBrushIndex(int val){this->mCurrentBrushIndex = val;}
+    void SetDir(QString dir){this->mDir = dir;}
+    int GetBrushIndex(){return this->mCurrentBrushIndex;}
+    QString GetDir(){return this->mDir;}
 signals:
     void LoadStencilTriggered();
     void LoadBrushTriggered();
@@ -315,6 +338,7 @@ signals:
     void SaveStencilTriggered();
     void SaveBrushTriggered();
     void SaveBrushSetTriggered();
+    void BrushLibIndexChanged(int);
 public slots:
     void UpdateLoadStencil(){emit LoadStencilTriggered();}
     void UpdateLoadBrush(){emit LoadBrushTriggered();}
@@ -322,9 +346,11 @@ public slots:
     void UpdateSaveStencil(){emit SaveStencilTriggered();}
     void UpdateSaveBrush(){emit SaveBrushTriggered();}
     void UpdateSaveBrushSet(){emit SaveBrushSetTriggered();}
+    void UpdateBrushLibIndex(int val){mCurrentBrushIndex = val; emit BrushLibIndexChanged(val);}
     void UpdateStencil(QPixmap);
 private:
-    QVector<Brush> mBrushData;
+    unsigned int mCurrentBrushIndex;
+    QString mDir;
     QPixmap mStrokePreview;
     QLabel* mStrokePreviewLabel;
     QListWidget* mBrushIndex;
@@ -345,7 +371,9 @@ public:
     enum BrushShape{CIRCLE_SHAPE, SQUARE_SHAPE, CUSTOM};
     CustomBrushWidget();
     virtual ~CustomBrushWidget();
+    void SetDir(QString dir){this->mDir = dir;}
     void TempSave(QPixmap);
+    QString GetDir(){return this->mDir;}
     QPixmap GetPixmap(){return mStencilPreview;}
 protected:
     void paintEvent(QPaintEvent*);
@@ -384,6 +412,8 @@ public slots:
     void UpdateStencilTexture();
     void UpdateStencilTextureLE(QString);
 private:
+
+    QString mDir;
 
     /*--Custom--*/
     QLabel* mStencilLabel;

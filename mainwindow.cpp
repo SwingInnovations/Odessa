@@ -5,6 +5,27 @@ MainWindow::MainWindow(QWidget *parent)
 {
 //    resize(1024, 768);
 
+    readSettings();
+    if(projectPath.isEmpty()){
+        QMessageBox projectMsgBx;
+        projectMsgBx.setText("No Project Path set");
+        projectMsgBx.setInformativeText("You must set a project path.");
+        projectMsgBx.setStandardButtons(QMessageBox::Ok);
+        projectMsgBx.setDefaultButton(QMessageBox::Ok);
+        int ret = projectMsgBx.exec();
+        switch(ret){
+            case QMessageBox::Ok:
+                projectPath = QFileDialog::getExistingDirectory(this, "Set Project Path", QDir::currentPath());
+                break;
+        default:
+            break;
+        }
+    }else{
+        qDebug() << projectPath << endl;
+        QDir dir(projectPath);
+        dir.mkpath("Brush");
+    }
+    
     mEditor = new Editor(this);
     mEditor->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     mEditor->setScaledContents(true);
@@ -14,7 +35,6 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(imageArea);
 
     mEditor->setStyleSheet("background-color: grey;");
-    //mEditor->resize(imageArea->size());
 
     toolBar = this->addToolBar("Tools");
     toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::TopToolBarArea);
@@ -23,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
     prefDialog = new OdessaPrefDialog();
     brushDockWidget = new BrushDockWidget(this);
     brushDockWidget->setWindowTitle("Brush");
+    brushDockWidget->SetDirectory(projectPath+"/Brush/");
     brushDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     colorDockWidget = new ColorDockWidget(this);
@@ -183,7 +204,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-
+    writeSettings();
 }
 
 void MainWindow::showNewDocWin()
@@ -284,5 +305,16 @@ void MainWindow::scaleImage(double val)
 void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
 {
     scrollBar->setValue(int(factor * scrollBar->value() + ((factor - 1) * scrollBar->pageStep()/2)));
+}
+
+void MainWindow::readSettings(){
+    QSettings settings("SwingInnovations", "Odessa");
+    projectPath = settings.value("projectPath").toString();
+}
+
+void MainWindow::writeSettings(){
+    QSettings settings("SwingInnovations", "Odessa");
+    qDebug()<<"Project Path" << projectPath+"/Brush/" << endl;
+    settings.setValue("projectPath", projectPath);
 }
 

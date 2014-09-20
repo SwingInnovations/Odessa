@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QPixmap>
 #include <QFile>
+#include <QDataStream>
 
 class Brush
 {
@@ -23,6 +24,9 @@ public:
     void setWidth(int val){
         mSize = val + (mTSize * m_PressureVal);
         myPen.setWidth(mSize); }
+    void SetName(QString name){
+        mName = name;
+    }
     void setWidth(qreal val){
         mSize = val + (mTSize * m_PressureVal );
         myPen.setWidthF(mSize);
@@ -51,35 +55,18 @@ public:
         mStencilPath = fileName;
     }
 
-    void LoadBrush(QString filePath){
-        stencilInput = new QFile(filePath);
-        stencilInput->open(QIODevice::ReadOnly);
-        QDataStream in;
-        in.setDevice(stencilInput);
-        int size = stencilInput->size();
-
-        brushProto = new char[size];
-        in.readRawData(brushProto, size);
-        brushData = new uchar[size];
-
-        for(unsigned int i = 0; i < size; i++){
-            brushData[i] = (uchar)brushProto[i];
-        }
-
-        QImage tempStencil(brushData, 160, 160, QImage::Format_Indexed8);
-        QVector<QRgb> vecCol(256);
-        for(unsigned int i = 0; i < 256; i++){
-            vecCol[i] = qRgb(i, i, i);
-        }
-        tempStencil.setColorTable(vecCol);
-
-        mStencil = QPixmap::fromImage(tempStencil);
-
-        delete[] brushProto;
-        delete[] brushData;
-        delete stencilInput;
+    void SetSWidth(int val){
+        sWidth = val;
     }
 
+    void SetSHeight(int val){
+        sHeight = val;
+    }
+
+    void SetRotate(int val){mRotate = val;}
+
+    int getHardness()const{return mHardness;}
+    int getRotate()const{return mRotate;}
     void SetOpacity(int val){mOpacity = val;}
     void SetTransferSize(int val){mTSize = val;}
     void SetTransferOpacity(int val){mTOpacity = val;}
@@ -100,22 +87,25 @@ public:
     QBrush getBrush(){ return myBrush; }
     QColor getColor() { return myColor; }
 
-    int GetSpacing(){return mSpacing;}
+    int GetSWidth()const{return sWidth;}
+    int GetSHeight()const{return sHeight;}
+    int GetSpacing()const{return mSpacing;}
     int GetSize(){return mSize;}
-    int GetTransferSize(){return mTSize;}
-    int GetTransferOpacity(){return mTOpacity;}
-    int getOpacity(){return mOpacity;}
+    int GetTransferSize()const{return mTSize;}
+    int GetTransferOpacity()const{return mTOpacity;}
+    int getOpacity()const{return mOpacity;}
 
     QPixmap GetStencil(){return mStencil;}
     QString GetStencilPath(){return mStencilPath;}
 
-private:
+    /*-Data Type-*/
 
     QFile* stencilInput;
     char* brushProto;
     uchar* brushData;
 
     BrushShape brushShape;
+    QString mName;
 
     QPen myPen;
     QBrush myBrush;
@@ -127,8 +117,12 @@ private:
     int mOpacity;
     int mSpacing;
 
+    int sWidth, sHeight;
+
     unsigned int mTSize;
     unsigned int mTOpacity;
+
+    int mRotate;
 
     qreal m_PressureVal;
     qreal m_xTilt;

@@ -19,6 +19,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_Brush.setBrush(QBrush(Qt::SolidPattern));
     m_Brush.setWidth(5);
     m_Brush.SetOpacity(m_OpacityVal);
+    m_Brush.SetSpacing(1);
     m_CurrentTool = m_Brush;
      m_ToolType = BRUSH_TOOL;
 
@@ -30,6 +31,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_BackupIndex = 0;
 
     setScaledContents(true);
+
 }
 
 void Editor::mousePressEvent(QMouseEvent *event)
@@ -349,26 +351,26 @@ void Editor::SetBrushStencil(QPixmap pixmap){
         break;
     }
 }
-
+/*-Deprecate-*/
 void Editor::SetBrushStencilPath(QString filePath){
-    m_CurrentTool.SetStencilPath(filePath);
-    m_CurrentTool.LoadBrush(filePath);
-    switch(m_ToolType){
-      case BRUSH_TOOL:
-        m_Brush.SetStencilPath(filePath);
-        m_Brush.LoadBrush(filePath);
-        break;
-    case ERASER_TOOL:
-        m_Eraser.SetStencilPath(filePath);
-        m_Eraser.LoadBrush(filePath);
-        break;
-    case TEXT_TOOL:
-        break;
-    case EYEDROPPER_TOOL:
-        break;
-    default:
-        break;
-    };
+//    m_CurrentTool.SetStencilPath(filePath);
+//    m_CurrentTool.LoadBrush(filePath);
+//    switch(m_ToolType){
+//      case BRUSH_TOOL:
+//        m_Brush.SetStencilPath(filePath);
+//        m_Brush.LoadBrush(filePath);
+//        break;
+//    case ERASER_TOOL:
+//        m_Eraser.SetStencilPath(filePath);
+//        m_Eraser.LoadBrush(filePath);
+//        break;
+//    case TEXT_TOOL:
+//        break;
+//    case EYEDROPPER_TOOL:
+//        break;
+//    default:
+//        break;
+//    };
 }
 
 void Editor::setBrushSize(int val)

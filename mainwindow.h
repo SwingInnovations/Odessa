@@ -13,6 +13,7 @@
 #include <QStatusBar>
 #include <QLabel>
 #include <QSlider>
+#include <QSettings>
 
 #include "Structure/editor.h"
 #include "Interface/dialogwindows.h"
@@ -27,7 +28,6 @@ public:
     ~MainWindow();
 
 private slots:
-
     void assignBrushTool();
     void assignEraserTool();
     void assignTextTool();
@@ -41,10 +41,13 @@ private slots:
     void zoomIn();
     void zoomOut();
     void about();
+    void readSettings();
+    void writeSettings();
 
 private:
     void scaleImage(double);
     void adjustScrollBar(QScrollBar* scrollBar, double factor);
+
     int scaleFactor = 1;
 
     Editor *mEditor;
@@ -107,6 +110,8 @@ private:
     QSlider* zoomSlider;
     QAction* zoomInAct;
     QAction* zoomOutAct;
+
+    QString projectPath;
 };
 
 #endif // MAINWINDOW_H

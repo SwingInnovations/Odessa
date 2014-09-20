@@ -34,4 +34,5 @@ HEADERS  += mainwindow.h \
     Structure/editor.h \
     Interface/dialogwindows.h \
     Interface/dockwidgets.h \
-    Structure/brush.h
+    Structure/brush.h \
+    Overloads.h

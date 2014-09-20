@@ -267,6 +267,8 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSlider \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSettings \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsettings.h \
 		Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
@@ -311,7 +313,6 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qprocess.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qresource.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsavefile.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsettings.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstandardpaths.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtemporarydir.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QScopedPointer \
@@ -480,6 +481,8 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream \
 		Interface/dialogwindows.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
@@ -529,6 +532,10 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QTemporaryFile \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRgb \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QMap \
+		Overloads.h \
 		mainwindow.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) mainwindow.h -o debug\moc_mainwindow.cpp
 
@@ -855,6 +862,8 @@ debug/moc_editor.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream \
 		Structure/editor.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) Structure\editor.h -o debug\moc_editor.cpp
 
@@ -1186,12 +1195,136 @@ debug/moc_dockwidgets.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdir.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfileinfo.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QAction \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qaction.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qactiongroup.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMenu \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmenu.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QPushButton \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qpushbutton.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QScrollArea \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qscrollarea.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QTemporaryFile \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtemporaryfile.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRgb \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QMap \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSettings \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsettings.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMessageBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmessagebox.h \
+		Structure/brush.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
+		Overloads.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QtCore \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QtCoreDepends \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstractanimation.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qanimationgroup.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qparallelanimationgroup.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpauseanimation.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpropertyanimation.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvariantanimation.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qeasingcurve.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsequentialanimationgroup.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtextcodec.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qendian.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlibraryinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdatetime.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qnumeric.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qbuffer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdiriterator.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfileselector.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QObject \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QStringList \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfilesystemwatcher.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlockfile.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qloggingcategory.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qprocess.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qresource.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsavefile.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstandardpaths.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtemporarydir.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QScopedPointer \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstractproxymodel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qidentityproxymodel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsortfilterproxymodel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstringlistmodel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qjsonarray.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qjsonvalue.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qjsondocument.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qjsonobject.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstracteventdispatcher.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qeventloop.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstractnativeeventfilter.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qbasictimer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcoreapplication.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmath.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmetaobject.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmimedata.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectcleanuphandler.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpointer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsharedmemory.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsignalmapper.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsocketnotifier.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsystemsemaphore.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtimer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtranslator.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qwineventnotifier.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmimedatabase.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmimetype.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfactoryinterface.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlibrary.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qplugin.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpluginloader.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/quuid.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstractstate.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstracttransition.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qeventtransition.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfinalstate.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qhistorystate.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsignaltransition.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstate.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstatemachine.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qexception.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfuture.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfutureinterface.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qrunnable.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qresultstore.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfuturesynchronizer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfuturewatcher.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qreadwritelock.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsemaphore.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qthread.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qthreadpool.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qthreadstorage.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qwaitcondition.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qarraydataops.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qarraydatapointer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qbitarray.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qbytearraymatcher.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcache.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcollator.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcommandlineoption.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcommandlineparser.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcryptographichash.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qelapsedtimer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlinkedlist.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmessageauthenticationcode.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qqueue.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qscopedvaluerollback.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstack.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtextboundaryfinder.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtimeline.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtimezone.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qxmlstream.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtcoreversion.h \
 		Interface/dockwidgets.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) Interface\dockwidgets.h -o debug\moc_dockwidgets.cpp
 
@@ -1350,6 +1483,8 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSlider \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSettings \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsettings.h \
 		Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
@@ -1394,7 +1529,6 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qprocess.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qresource.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsavefile.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsettings.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstandardpaths.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtemporarydir.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QScopedPointer \
@@ -1563,6 +1697,8 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream \
 		Interface/dialogwindows.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
@@ -1612,6 +1748,10 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QTemporaryFile \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRgb \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QMap \
+		Overloads.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QApplication \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qapplication.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdesktopwidget.h
@@ -1756,6 +1896,8 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qlabel.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSlider \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSettings \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsettings.h \
 		Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
@@ -1800,7 +1942,6 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qprocess.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qresource.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsavefile.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsettings.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstandardpaths.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtemporarydir.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QScopedPointer \
@@ -1969,6 +2110,8 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream \
 		Interface/dialogwindows.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QWidget \
@@ -2017,7 +2160,11 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolButton \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QTemporaryFile \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRgb \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QMap \
+		Overloads.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mainwindow.o mainwindow.cpp
 
 debug/bitmapimage.o: Graphics/Bitmap/bitmapimage.cpp Graphics/Bitmap/bitmapimage.h \
@@ -2331,7 +2478,9 @@ debug/bitmapimage.o: Graphics/Bitmap/bitmapimage.cpp Graphics/Bitmap/bitmapimage
 		Structure/brush.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\bitmapimage.o Graphics\Bitmap\bitmapimage.cpp
 
 debug/object.o: Structure/object.cpp Structure/object.h \
@@ -2709,7 +2858,9 @@ debug/layer.o: Structure/layer.cpp Structure/layer.h \
 		Structure/brush.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\layer.o Structure\layer.cpp
 
 debug/editor.o: Structure/editor.cpp Structure/editor.h \
@@ -3035,7 +3186,9 @@ debug/editor.o: Structure/editor.cpp Structure/editor.h \
 		Structure/brush.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\editor.o Structure\editor.cpp
 
 debug/dialogwindows.o: Interface/dialogwindows.cpp Interface/dialogwindows.h \
@@ -3367,12 +3520,136 @@ debug/dockwidgets.o: Interface/dockwidgets.cpp Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdir.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfileinfo.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QAction \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qaction.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qactiongroup.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMenu \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmenu.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QPushButton \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qpushbutton.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QScrollArea \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qscrollarea.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QTemporaryFile \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtemporaryfile.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRgb \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QMap \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSettings \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsettings.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMessageBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmessagebox.h \
+		Structure/brush.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
+		Overloads.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QtCore \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QtCoreDepends \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstractanimation.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qanimationgroup.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qparallelanimationgroup.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpauseanimation.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpropertyanimation.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvariantanimation.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qeasingcurve.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsequentialanimationgroup.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtextcodec.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qendian.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlibraryinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdatetime.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qnumeric.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qbuffer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdiriterator.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfileselector.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QObject \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QStringList \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfilesystemwatcher.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlockfile.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qloggingcategory.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qprocess.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qresource.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsavefile.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstandardpaths.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtemporarydir.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QScopedPointer \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstractproxymodel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qidentityproxymodel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsortfilterproxymodel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstringlistmodel.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qjsonarray.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qjsonvalue.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qjsondocument.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qjsonobject.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstracteventdispatcher.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qeventloop.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstractnativeeventfilter.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qbasictimer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcoreapplication.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmath.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmetaobject.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmimedata.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qobjectcleanuphandler.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpointer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsharedmemory.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsignalmapper.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsocketnotifier.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsystemsemaphore.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtimer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtranslator.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qwineventnotifier.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmimedatabase.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmimetype.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfactoryinterface.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlibrary.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qplugin.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qpluginloader.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/quuid.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstractstate.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstracttransition.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qeventtransition.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfinalstate.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qhistorystate.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsignaltransition.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstate.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstatemachine.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qexception.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfuture.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfutureinterface.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qrunnable.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qresultstore.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfuturesynchronizer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfuturewatcher.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qreadwritelock.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsemaphore.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qthread.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qthreadpool.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qthreadstorage.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qwaitcondition.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qarraydataops.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qarraydatapointer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qbitarray.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qbytearraymatcher.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcache.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcollator.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcommandlineoption.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcommandlineparser.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcryptographichash.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qelapsedtimer.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlinkedlist.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qmessageauthenticationcode.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qqueue.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qscopedvaluerollback.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstack.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtextboundaryfinder.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtimeline.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtimezone.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qxmlstream.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtcoreversion.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\dockwidgets.o Interface\dockwidgets.cpp
 
 debug/brush.o: Structure/brush.cpp Structure/brush.h \
@@ -3471,7 +3748,12 @@ debug/brush.o: Structure/brush.cpp Structure/brush.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qlocale.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qvariant.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qset.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcontiguouscache.h
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcontiguouscache.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfile.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfiledevice.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\brush.o Structure\brush.cpp
 
 debug/moc_mainwindow.o: debug/moc_mainwindow.cpp 
