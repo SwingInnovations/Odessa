@@ -523,9 +523,6 @@ ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
     QWidget* masterColorWidget = new QWidget(this);
     masterColorWidget->setLayout(masterColorLayout);
 
-//    connect(colorWheel, SIGNAL(redChanged(int)), SLOT(set_RLE(int)));
-//    connect(colorWheel, SIGNAL(blueChanged(int)), SLOT(set_BLE(int)));
-//    connect(colorWheel, SIGNAL(greenChanged(int)), SLOT(set_GLE(int)));
     connect(colorWheel, SIGNAL(redChanged(int)), SLOT(setRed(int)));
     connect(colorWheel, SIGNAL(greenChanged(int)), SLOT(setGreen(int)));
     connect(colorWheel, SIGNAL(blueChanged(int)), SLOT(setBlue(int)));
