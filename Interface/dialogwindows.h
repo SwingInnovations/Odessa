@@ -13,6 +13,9 @@
 #include <QStackedWidget>
 #include <QListWidgetItem>
 #include <QDebug>
+#include <QFileDialog>
+#include <QSettings>
+#include <QSpinBox>
 
 //handle the dialog windows
 class GeneralPrefPage;
@@ -66,9 +69,15 @@ class OdessaPrefDialog : public QDialog
 public:
     OdessaPrefDialog();
     ~OdessaPrefDialog();
+signals:
+    void ProjectPathChanged(QString);
+
+public slots:
+    void UpdateProjectPath(QString);
 private:
     QListWidget* contentWidget;
     QStackedWidget* pagesWidget;
+    GeneralPrefPage* genPref;
     QPushButton* m_OkButton;
     QPushButton* m_ApplyButton;
     QPushButton* m_CancelButton;
@@ -80,7 +89,24 @@ class GeneralPrefPage : public QWidget
 public:
     GeneralPrefPage(QWidget* parent = 0);
     ~GeneralPrefPage();
+signals:
+    void ProjectPathChanged(QString);
+    void HistoryStepsChanged(int);
 
+public slots:
+    void ChangeProjectPath();
+    void ChangeHistorySteps(int);
+private:
+    /*-Project Path-*/
+    QLabel* mProjectPathLbl;
+    QLineEdit* mProjectPathLE;
+    QPushButton* mChangeProjectPathBtn;
+
+    /*-History stack settings-*/
+    QLabel* mHistoryLbl;
+    QSpinBox* mStepsBox;
 };
+
+
 
 #endif // DIALOGWINDOWS_H

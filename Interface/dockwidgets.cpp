@@ -11,9 +11,11 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     mActualBrushList = QVector<Brush>();
     mTempBrushList = QVector<Brush>();
 
+    mCurrentBrushIndex = 0;
+
     ReadSettings();
 
-    if(mProjectPath.isEmpty()){
+    if(!QFile(mBrushLib).exists()){
         //generate default
         mActualBrushList.append(Brush());
         mActualBrushList[0].SetSWidth(10);
@@ -24,6 +26,7 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
         mTransBrushWidget->AddBrush(mActualBrushList.at(0));
         mStencilWidget->UpdateStencilWidth(mTempBrushList.at(0).GetSWidth());
         mStencilWidget->UpdateStencilHeight(mTempBrushList.at(0).GetSHeight());
+        qDebug() << "Generating new Library" << endl;
     }else{
         //use loaded data
         mActualBrushList = LoadBrushLib(mBrushLib);
@@ -35,9 +38,10 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     mSizeSlider->setRange(0, 500);
     mSizeSlider->setValue(5);
     mSizeSlider->setMinimumWidth(150);
-    mSizeLE = new QLineEdit(this);
-    mSizeLE->setFixedWidth(32);
-    mSizeLE->setText(QString::number(5));
+    mSizeLE = new QSpinBox(this);
+    mSizeLE->setRange(0, 500);
+    mSizeLE->setFixedWidth(48);
+    mSizeLE->setValue(5);
     QHBoxLayout* sizeLayout = new QHBoxLayout();
     sizeLayout->addWidget(mSizeLabel);
     sizeLayout->addWidget(mSizeSlider);
@@ -47,9 +51,10 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     mOpacitySlider = new QSlider(Qt::Horizontal, this);
     mOpacitySlider->setRange(0, 100);
     mOpacitySlider->setValue(100);
-    mOpacityLE = new QLineEdit(this);
-    mOpacityLE->setFixedWidth(32);
-    mOpacityLE->setText(QString::number(100));
+    mOpacityLE = new QSpinBox(this);
+    mOpacityLE->setRange(0, 100);
+    mOpacityLE->setFixedWidth(48);
+    mOpacityLE->setValue(100);
     QHBoxLayout* opacityLayout = new QHBoxLayout;
     opacityLayout->addWidget(mOpacityLabel);
     opacityLayout->addWidget(mOpacitySlider);
@@ -61,9 +66,9 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     mSpacingSlider->setPageStep(0.1);
     mSpacingSlider->setValue(1);
     mSpacingSlider->setMinimumWidth(150);
-    mSpacingLE = new QLineEdit(this);
-    mSpacingLE->setFixedWidth(32);
-    mSpacingLE->setText(QString::number(1));
+    mSpacingLE = new QSpinBox(this);
+    mSpacingLE->setFixedWidth(48);
+    mSpacingLE->setValue(1);
     QHBoxLayout* spacingLayout = new QHBoxLayout;
     spacingLayout->addWidget(mSpacingLabel);
     spacingLayout->addWidget(mSpacingSlider);
@@ -145,11 +150,11 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     this->setMinimumWidth(292);
 
     connect(mSizeSlider, SIGNAL(valueChanged(int)), SLOT(UpdateSize(int)));
-    connect(mSizeLE, SIGNAL(textChanged(QString)), SLOT(UpdateSize(QString)));
+    connect(mSizeLE, SIGNAL(valueChanged(QString)), SLOT(UpdateSize(QString)));
     connect(mOpacitySlider, SIGNAL(valueChanged(int)), SLOT(UpdateOpacity(int)));
-    connect(mOpacityLE, SIGNAL(textChanged(QString)), SLOT(UpdateOpacity(QString)));
+    connect(mOpacityLE, SIGNAL(valueChanged(QString)), SLOT(UpdateOpacity(QString)));
     connect(mSpacingSlider, SIGNAL(valueChanged(int)), SLOT(UpdateSpacing(int)));
-    connect(mSpacingLE, SIGNAL(textChanged(QString)), SLOT(UpdateSpacing(QString)));
+    connect(mSpacingLE, SIGNAL(valueChanged(QString)), SLOT(UpdateSpacing(QString)));
     connect(mTransferSizeToggle, SIGNAL(toggled(bool)), SLOT(ToggleTransferSize(bool)));
     connect(mTransferSizeSlider, SIGNAL(valueChanged(int)), SLOT(UpdateTransferSize(int)));
     connect(mTransferSizeLE, SIGNAL(textChanged(QString)), SLOT(UpdateTransferSize(QString)));
@@ -191,7 +196,7 @@ void BrushDockWidget::SetDirectory(QString dir){
 
 void BrushDockWidget::UpdateSize(int val)
 {
-    mSizeLE->setText(QString::number(val));
+    mSizeLE->setValue(val);
     emit BrushSizeChanged(val);
 }
 
@@ -203,7 +208,7 @@ void BrushDockWidget::UpdateSize(QString val)
 
 void BrushDockWidget::UpdateOpacity(int val)
 {
-    mOpacityLE->setText(QString::number(val));
+    mOpacityLE->setValue(val);
     emit BrushOpacityChanged(val);
 }
 
@@ -214,7 +219,7 @@ void BrushDockWidget::UpdateOpacity(QString val)
 }
 
 void BrushDockWidget::UpdateSpacing(int val){
-    mSpacingLE->setText(QString::number(val));
+    mSpacingLE->setValue(val);
     emit BrushSpacingChanged(val);
 }
 
@@ -290,7 +295,12 @@ void BrushDockWidget::LoadStencilAct(){
 }
 
 void BrushDockWidget::LoadBrushAct(){
-
+    QString filePath = QFileDialog::getOpenFileName(this, "Open Brush", mProjectPath, ".brsh");
+    Brush temp = LoadBrush(filePath);
+    mTempBrushList.append(temp);
+    mActualBrushList.append(temp);
+    mGenBrushWidget->AddBrush(temp);
+    mTransBrushWidget->AddBrush(temp);
     qDebug()<<"Loading Brush" << endl;
 }
 
@@ -303,11 +313,11 @@ void BrushDockWidget::LoadBrushSetAct(){
     msgBox.setButtonText(QMessageBox::Ok, "Load new set");
     msgBox.setButtonText(QMessageBox::Cancel, "Add to existing set");
     switch(msgBox.exec()){
-    case QMessageBox::Ok:
+    case QMessageBox::Ok:                       //Replaces Existing
        mActualBrushList = LoadBrushLib(filePath);
        mBrushLib = filePath;
         break;
-    case QMessageBox::Cancel:
+    case QMessageBox::Cancel:                   //Appends to brush set
         QVector<Brush> temp = LoadBrushLib(filePath);
         mActualBrushList = mActualBrushList + temp;
         break;
@@ -339,11 +349,26 @@ void BrushDockWidget::SaveBrushAct(){
         mTransBrushWidget->AddBrush(mTempBrushList.at(mCurrentBrushIndex));
         break;
     case QMessageBox::Cancel:
+        QString filePath = QFileDialog::getSaveFileName(this, "Save Brush", mProjectPath, ".brsh");
+        int encrypt = 5025;
+        Brush ret = mTempBrushList[mCurrentBrushIndex];
+        QFile file(filePath);
+        if(!file.open(QIODevice::WriteOnly)){
+            qDebug() << "Error, cannot open file";
+        }
+
+        QDataStream out(&file);
+        out.setVersion(QDataStream::Qt_5_0);
+        out << encrypt << ret;
+
+        file.flush();
+        file.close();
+
+        qDebug() << "Wrote Brush to Disk" << endl;
+
         mActualBrushList.append(mTempBrushList.at(mCurrentBrushIndex));
         mGenBrushWidget->AddBrush(mTempBrushList.at(mCurrentBrushIndex));
         mTransBrushWidget->AddBrush(mTempBrushList.at(mCurrentBrushIndex));
-        break;
-    default:
         break;
     }
     qDebug() << "Saving Brush" << endl;
@@ -382,6 +407,26 @@ void BrushDockWidget::SaveBrushLib(QString filePath){
 
     file.flush();
     file.close();
+    qDebug() << "Saved brush set";
+}
+
+Brush BrushDockWidget::LoadBrush(QString filePath){
+    Brush ret;
+    int encrypt = 5025;
+    QFile file(filePath);
+    if(!file.open(QIODevice::ReadOnly)){
+        qDebug()<< "Error, invalid file" << endl;
+    }
+    QDataStream in(&file);
+    in.setVersion(QDataStream::Qt_5_0);
+    in >> encrypt >> ret;
+
+    file.close();
+    return ret;
+}
+
+void BrushDockWidget::DeleteBrushAct(){
+
 }
 
 void BrushDockWidget::resizeEvent(QResizeEvent *e){
@@ -390,12 +435,14 @@ void BrushDockWidget::resizeEvent(QResizeEvent *e){
 
 void BrushDockWidget::ReadSettings(){
     QSettings settings("SwingInnovations", "Odessa");
-    settings.value("activeBrushLib").toString();
+    mProjectPath = settings.value("projectPath").toString();
+    mBrushLib = settings.value("activeBrushLib").toString();
 }
 
 void BrushDockWidget::WriteSettings(){
     QSettings settings("SwingInnovations", "Odessa");
     settings.setValue("activeBrushLib", mBrushLib);
+    qDebug() << mProjectPath <<"default.blib" << endl;
     SaveBrushLib(mProjectPath+"default.blib");
 }
 
@@ -834,6 +881,7 @@ GeneralBrushWidget::GeneralBrushWidget(){
     mSaveStencilAct = new QAction("&Save Stencil", this);
     mSaveBrushAct = new QAction("&Save Brush", this);
     mSaveBrushSetAct = new QAction("&Save Brush Set", this);
+    mDeleteBrushAct = new QAction("Delete Brush", this);
     mToolMenu->addAction(mLoadStencilAct);
     mToolMenu->addAction(mLoadBrushAct);
     mToolMenu->addAction(mLoadBrushSetAct);
@@ -841,6 +889,8 @@ GeneralBrushWidget::GeneralBrushWidget(){
     mToolMenu->addAction(mSaveStencilAct);
     mToolMenu->addAction(mSaveBrushAct);
     mToolMenu->addAction(mSaveBrushSetAct);
+    mToolMenu->addSeparator();
+    mToolMenu->addAction(mDeleteBrushAct);
     mToolBtn->setMenu(mToolMenu);
 
     mBrushIndex = new QListWidget(this);
@@ -866,6 +916,7 @@ GeneralBrushWidget::GeneralBrushWidget(){
     connect(mSaveStencilAct, SIGNAL(triggered()), SLOT(UpdateSaveStencil()));
     connect(mSaveBrushAct, SIGNAL(triggered()), SLOT(UpdateSaveBrush()));
     connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(UpdateSaveBrushSet()));
+    connect(mDeleteBrushAct, SIGNAL(triggered()), SLOT(UpdateDeleteBrush()));
     connect(mBrushIndex, SIGNAL(currentRowChanged(int)), SLOT(UpdateBrushLibIndex(int)));
 }
 
@@ -915,6 +966,7 @@ CustomBrushWidget::CustomBrushWidget(){
     mSaveStencilAct = new QAction("&Save Stencil", this);
     mSaveBrushAct = new QAction("&Save Brush", this);
     mSaveBrushSetAct = new QAction("&Save Brush Set", this);
+    mDeleteBrushAct = new QAction("Delete Brush", this);
     mToolMenu->addAction(mLoadStencilAct);
     mToolMenu->addAction(mLoadBrushAct);
     mToolMenu->addAction(mLoadBrushSetAct);
@@ -922,6 +974,8 @@ CustomBrushWidget::CustomBrushWidget(){
     mToolMenu->addAction(mSaveStencilAct);
     mToolMenu->addAction(mSaveBrushAct);
     mToolMenu->addAction(mSaveBrushSetAct);
+    mToolMenu->addSeparator();
+    mToolMenu->addAction(mDeleteBrushAct);
     mToolBtn->setMenu(mToolMenu);
 
     QHBoxLayout* StencilPreviewLayout = new QHBoxLayout;
@@ -1011,6 +1065,7 @@ CustomBrushWidget::CustomBrushWidget(){
     connect(mSaveStencilAct, SIGNAL(triggered()), SLOT(UpdateSaveStencil()));
     connect(mSaveBrushAct, SIGNAL(triggered()), SLOT(UpdateSaveBrush()));
     connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(UpdateSaveBrushSet()));
+    connect(mDeleteBrushAct, SIGNAL(triggered()), SLOT(UpdateDeleteBrush()));
     connect(mWidthLE, SIGNAL(textChanged(QString)), SLOT(UpdateStencilWidth(QString)));
     connect(mWidthSlider, SIGNAL(valueChanged(int)), SLOT(UpdateStencilWidth(int)));
     connect(mHeightLE, SIGNAL(textChanged(QString)), SLOT(UpdateStencilHeight(QString)));

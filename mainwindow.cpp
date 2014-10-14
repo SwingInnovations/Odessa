@@ -166,6 +166,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(textTool, SIGNAL(triggered()), SLOT(assignTextTool()));
     connect(primitiveTool, SIGNAL(triggered()), SLOT(assignPrimitiveTool()));
     connect(newDialogWin, SIGNAL(newProject(int,int,int,int)), mEditor, SLOT(newProject(int,int,int,int)));
+    connect(prefDialog, SIGNAL(ProjectPathChanged(QString)), SLOT(setProjectPath(QString)));
     connect(zoomInAct, SIGNAL(triggered()), SLOT(zoomIn()));
     connect(zoomOutAct, SIGNAL(triggered()), SLOT(zoomOut()));
     connect(showBrushDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowBrushDock(bool)));
@@ -279,6 +280,10 @@ void MainWindow::assignEyeDropperTool()
 {
     mEditor->setBrush(Editor::EYEDROPPER_TOOL);
     qDebug() << "Zing";
+}
+
+void MainWindow::setProjectPath(QString val){
+    projectPath = val;
 }
 
 void MainWindow::zoomIn()

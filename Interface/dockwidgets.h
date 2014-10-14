@@ -38,6 +38,7 @@
 #include <QDataStream>
 #include <QSettings>
 #include <QMessageBox>
+#include <QSpinBox>
 
 #include "../Structure/brush.h"
 #include "Overloads.h"
@@ -94,9 +95,11 @@ private slots:
     void SaveStencilAct();
     void SaveBrushAct();
     void SaveBrushSetAct();
+    void DeleteBrushAct();
 private:
     void ReadSettings();
     void WriteSettings();
+    Brush LoadBrush(QString filePath);
     QVector<Brush> LoadBrushLib(QString filePath);
     void SaveBrushLib(QString filePath);
 
@@ -112,17 +115,17 @@ private:
     /*-Size-*/
     QLabel* mSizeLabel;
     QSlider* mSizeSlider;
-    QLineEdit* mSizeLE;
+    QSpinBox* mSizeLE;
 
     /*-Opacity-*/
     QLabel* mOpacityLabel;
     QSlider* mOpacitySlider;
-    QLineEdit* mOpacityLE;
+    QSpinBox* mOpacityLE;
 
     /*-Spacing-*/
     QLabel* mSpacingLabel;
     QSlider* mSpacingSlider;
-    QLineEdit* mSpacingLE;
+    QSpinBox* mSpacingLE;
 
     /*--Transfer--*/
 
@@ -338,6 +341,7 @@ signals:
     void SaveStencilTriggered();
     void SaveBrushTriggered();
     void SaveBrushSetTriggered();
+    void DeleteBrushTriggered();
     void BrushLibIndexChanged(int);
 public slots:
     void UpdateLoadStencil(){emit LoadStencilTriggered();}
@@ -346,6 +350,7 @@ public slots:
     void UpdateSaveStencil(){emit SaveStencilTriggered();}
     void UpdateSaveBrush(){emit SaveBrushTriggered();}
     void UpdateSaveBrushSet(){emit SaveBrushSetTriggered();}
+    void UpdateDeleteBrush(){emit DeleteBrushTriggered();}
     void UpdateBrushLibIndex(int val){mCurrentBrushIndex = val; emit BrushLibIndexChanged(val);}
     void UpdateStencil(QPixmap);
 private:
@@ -362,6 +367,7 @@ private:
     QAction* mSaveStencilAct;
     QAction* mSaveBrushAct;
     QAction* mSaveBrushSetAct;
+    QAction* mDeleteBrushAct;
 };
 
 class CustomBrushWidget : public QWidget
@@ -384,6 +390,7 @@ signals:
     void SaveStencilTriggered();
     void SaveBrushTriggered();
     void SaveBrushSetTriggered();
+    void DelteBrushTriggered();
     void StencilWidthChanged(int);
     void StencilHeightChanged(int);
     void BrushHardnessChanged(int);
@@ -397,6 +404,7 @@ public slots:
     void UpdateSaveStencil(){emit SaveStencilTriggered();}
     void UpdateSaveBrush(){emit SaveBrushTriggered();}
     void UpdateSaveBrushSet(){emit SaveBrushSetTriggered();}
+    void UpdateDeleteBrush(){emit DelteBrushTriggered();}
     void UpdateStencilWidth(int);
     void UpdateStencilWidth(QString);
     void UpdateStencilHeight(int);
@@ -460,7 +468,7 @@ private:
     QAction* mSaveStencilAct;
     QAction* mSaveBrushAct;
     QAction* mSaveBrushSetAct;
-
+    QAction* mDeleteBrushAct;
     /*-File Stuff-*/
     QTemporaryFile tempFile;
 };

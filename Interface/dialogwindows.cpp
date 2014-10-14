@@ -85,8 +85,10 @@ OdessaPrefDialog::OdessaPrefDialog()
     contentWidget = new QListWidget(this);
     contentWidget->setMaximumWidth(128);
 
+    genPref = new GeneralPrefPage(this);
+
     pagesWidget = new QStackedWidget(this);
-    pagesWidget->addWidget(new GeneralPrefPage);
+    pagesWidget->addWidget(genPref);
 
     m_OkButton = new QPushButton("Ok", this);
     m_ApplyButton = new QPushButton("Apply", this);
@@ -120,6 +122,11 @@ OdessaPrefDialog::OdessaPrefDialog()
 
     setLayout(mainLayout);
 
+    connect(genPref, SIGNAL(ProjectPathChanged(QString)), SLOT(UpdateProjectPath(QString)));
+}
+
+void OdessaPrefDialog::UpdateProjectPath(QString val){
+    emit ProjectPathChanged(val);
 }
 
 OdessaPrefDialog::~OdessaPrefDialog()
@@ -129,7 +136,43 @@ OdessaPrefDialog::~OdessaPrefDialog()
 
 GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
 {
+    QSettings settings("SwingInnovations", "Odessa");
+    QString filePath = settings.value("projectPath").toString();
 
+    mProjectPathLbl = new QLabel("Project path:", this);
+    mProjectPathLE = new QLineEdit(this);
+    mProjectPathLE->setText(filePath);
+    mChangeProjectPathBtn = new QPushButton("...", this);
+    QHBoxLayout* projectPathGrp = new QHBoxLayout;
+    projectPathGrp->addWidget(mProjectPathLbl);
+    projectPathGrp->addWidget(mProjectPathLE);
+    projectPathGrp->addWidget(mChangeProjectPathBtn);
+
+    mHistoryLbl = new QLabel("History Steps: ", this);
+    mStepsBox = new QSpinBox(this);
+    mStepsBox->setValue(24);
+    QHBoxLayout* historyGrp = new QHBoxLayout;
+    historyGrp->addWidget(mHistoryLbl);
+    historyGrp->addWidget(mStepsBox);
+
+    QVBoxLayout* masterLayout = new QVBoxLayout;
+    masterLayout->addLayout(projectPathGrp);
+    masterLayout->addLayout(historyGrp);
+
+    setLayout(masterLayout);
+
+    connect(mChangeProjectPathBtn, SIGNAL(clicked()), SLOT(ChangeProjectPath()));
+    connect(mStepsBox, SIGNAL(valueChanged(int)), SLOT(ChangeHistorySteps(int)));
+}
+
+void GeneralPrefPage::ChangeProjectPath(){
+    QString filePath = QFileDialog::getExistingDirectory(this, "Set Project Path: ", QDir::currentPath());
+    mProjectPathLE->setText(filePath);
+    emit ProjectPathChanged(filePath);
+}
+
+void GeneralPrefPage::ChangeHistorySteps(int val){
+    mStepsBox->setValue(val);
 }
 
 GeneralPrefPage::~GeneralPrefPage()
