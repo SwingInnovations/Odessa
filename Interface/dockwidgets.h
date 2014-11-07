@@ -58,6 +58,7 @@ public:
     BrushDockWidget(QWidget *parent = 0);
     void SetDirectory(QString dir);
     virtual ~BrushDockWidget();
+    Brush GetStartBrush();
 protected:
     void resizeEvent(QResizeEvent*);
 signals:
@@ -374,13 +375,14 @@ class CustomBrushWidget : public QWidget
 {
     Q_OBJECT
 public:
-    enum BrushShape{CIRCLE_SHAPE, SQUARE_SHAPE, CUSTOM};
+    enum BrushShape{LINE_SHAPE, CIRCLE_SHAPE, SQUARE_SHAPE, CUSTOM};
     CustomBrushWidget();
     virtual ~CustomBrushWidget();
     void SetDir(QString dir){this->mDir = dir;}
     void TempSave(QPixmap);
     QString GetDir(){return this->mDir;}
     QPixmap GetPixmap(){return mStencilPreview;}
+    QPixmap GeneratePixmap();
 protected:
     void paintEvent(QPaintEvent*);
 signals:

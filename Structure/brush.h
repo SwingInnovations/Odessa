@@ -6,6 +6,9 @@
 #include <QColor>
 #include <QDebug>
 #include <QPixmap>
+#include <QPainter>
+#include <QRadialGradient>
+#include <QPoint>
 #include <QFile>
 #include <QDataStream>
 
@@ -27,6 +30,9 @@ public:
     void SetName(QString name){
         mName = name;
     }
+
+    void GeneratePixmap();
+
     void setWidth(qreal val){
         mSize = val + (mTSize * m_PressureVal );
         myPen.setWidthF(mSize);
@@ -98,12 +104,6 @@ public:
     QPixmap GetStencil(){return mStencil;}
     QString GetStencilPath(){return mStencilPath;}
 
-    /*-Data Type-*/
-
-    QFile* stencilInput;
-    char* brushProto;
-    uchar* brushData;
-
     BrushShape brushShape;
     QString mName;
 
@@ -114,7 +114,7 @@ public:
     bool mPressure;
     bool mHardness;
     unsigned int mSize;
-    int mOpacity;
+    int mOpacity;//responsible for spacing
     int mSpacing;
 
     int sWidth, sHeight;

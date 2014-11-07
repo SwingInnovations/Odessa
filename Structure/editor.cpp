@@ -12,7 +12,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_RedVal = 0;
     m_GreenVal = 0;
     m_BlueVal = 0;
-    m_OpacityVal = 255;
+    m_OpacityVal = 100;
 
     m_Brush = Brush();
     m_Brush.setColor(Qt::black);
@@ -21,7 +21,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_Brush.SetOpacity(m_OpacityVal);
     m_Brush.SetSpacing(1);
     m_CurrentTool = m_Brush;
-     m_ToolType = BRUSH_TOOL;
+    m_ToolType = BRUSH_TOOL;
 
     m_Eraser = Brush();
     m_Eraser.setWidth(5);
@@ -131,79 +131,23 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
     update();
 }
 
+void Editor::SetBrush(Brush b){
+    m_CurrentTool.SetStencil(b.GetStencil());
+    if(m_ToolType == BRUSH_TOOL){
+        m_Brush.SetSWidth(b.GetSWidth());
+        m_Brush.SetSHeight(b.GetSHeight());
+        m_Brush.SetStencil(b.GetStencil());
+    }else if(m_ToolType == ERASER_TOOL){
+        m_Eraser = b;
+    }else{
+
+    }
+}
+
 void Editor::tabletEvent(QTabletEvent *event)
 {
     if(!m_Layers.isEmpty())
     {
-//        switch(m_ToolType)
-//        {
-//        case BRUSH_TOOL:
-//            switch(event->type())
-//            {
-//                case QEvent::TabletPress:
-//                if(!m_DeviceDown)
-//                {
-//                    m_DeviceDown = true;
-//                    m_DrawPath[0] = m_DrawPath[1] = m_DrawPath[2] = event->pos();
-//                }
-//                break;
-//            case QEvent::TabletRelease:
-//                if(m_DeviceDown)
-//                {
-//                    m_DeviceDown = false;
-//                }
-//                if(m_TabletInUse)
-//                {
-//                    m_TabletInUse = false;
-//                }
-//                break;
-//            case QEvent::TabletMove:
-//                if(m_DeviceDown)
-//                {
-//                    m_DrawPath[2] = m_DrawPath[1];
-//                    m_DrawPath[1] = m_DrawPath[0];
-//                    m_DrawPath[0] = event->pos();
-//                    m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(event, m_CurrentTool, m_DrawPath);
-//                    //setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
-//                }
-//                break;
-//            default:
-//                qDebug() << "Nothing Happened" << endl;
-//            }
-//            break;
-//        case ERASER_TOOL:
-//            switch(event->type())
-//            {
-//                case QEvent::TabletPress:
-//                if(!m_DeviceDown)
-//                {
-//                    m_DeviceDown = true;
-//                    m_DrawPath[0] = m_DrawPath[1] = m_DrawPath[2] = event->pos();
-//                }
-//                break;
-//            case QEvent::TabletRelease:
-//                if(m_DeviceDown)
-//                {
-//                    m_DeviceDown = false;
-//                }
-//                break;
-//            case QEvent::TabletMove:
-//                if(m_DeviceDown)
-//                {
-//                    m_DrawPath[2] = m_DrawPath[1];
-//                    m_DrawPath[1] = m_DrawPath[0];
-//                    m_DrawPath[0] = event->pos();
-//                    m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(event, m_CurrentTool, m_DrawPath);
-//                    setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
-//                }
-//                break;
-//            default:
-//            qDebug() << "Nothing Happened" << endl;
-//            }
-//            break;
-//        default:
-//            break;
-//        }
         switch(event->type())
         {
         case QEvent::TabletPress:

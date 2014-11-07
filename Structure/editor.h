@@ -44,6 +44,8 @@ public:
 
     Editor(QWidget *parent = 0);
 
+    void SetBrush(Brush b);
+
     void setBrush(ToolType type);
     QSize getPixmapSize(){
         if(!m_Layers.isEmpty())

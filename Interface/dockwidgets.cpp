@@ -14,6 +14,7 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     mCurrentBrushIndex = 0;
 
     ReadSettings();
+    mBrushLib = mProjectPath + "/Brush/default.blib";
 
     if(!QFile(mBrushLib).exists()){
         //generate default
@@ -21,15 +22,21 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
         mActualBrushList[0].SetSWidth(10);
         mActualBrushList[0].SetSHeight(10);
         mActualBrushList[0].SetName("Default");
+        mActualBrushList[0].SetStencil(mStencilWidget->GeneratePixmap());
         mTempBrushList = mActualBrushList;
         mGenBrushWidget->AddBrush(mActualBrushList.at(0));
         mTransBrushWidget->AddBrush(mActualBrushList.at(0));
         mStencilWidget->UpdateStencilWidth(mTempBrushList.at(0).GetSWidth());
         mStencilWidget->UpdateStencilHeight(mTempBrushList.at(0).GetSHeight());
-        qDebug() << "Generating new Library" << endl;
+        qDebug() << "Generating new Library" << mBrushLib << endl;
     }else{
         //use loaded data
         mActualBrushList = LoadBrushLib(mBrushLib);
+        for(unsigned int i = 0; i < mActualBrushList.size(); i++){
+            qDebug()<< mBrushLib <<"Loaded brush " << i << endl;
+            mGenBrushWidget->AddBrush(mActualBrushList.at(i));
+            mTransBrushWidget->AddBrush(mActualBrushList.at(i));
+        }
         mTempBrushList = mActualBrushList;
     }
 
@@ -410,6 +417,10 @@ void BrushDockWidget::SaveBrushLib(QString filePath){
     qDebug() << "Saved brush set";
 }
 
+Brush BrushDockWidget::GetStartBrush(){
+    return mActualBrushList[0];
+}
+
 Brush BrushDockWidget::LoadBrush(QString filePath){
     Brush ret;
     int encrypt = 5025;
@@ -442,12 +453,13 @@ void BrushDockWidget::ReadSettings(){
 void BrushDockWidget::WriteSettings(){
     QSettings settings("SwingInnovations", "Odessa");
     settings.setValue("activeBrushLib", mBrushLib);
-    qDebug() << mProjectPath <<"default.blib" << endl;
+    qDebug() << mBrushLib << endl;
     SaveBrushLib(mProjectPath+"default.blib");
 }
 
 BrushDockWidget::~BrushDockWidget()
 {
+    SaveBrushLib(mBrushLib);
     WriteSettings();
 }
 
@@ -1177,6 +1189,51 @@ void CustomBrushWidget::UpdateStencilTextureLE(QString val){
     }else{
         hasTexture = true;
     }
+}
+
+QPixmap CustomBrushWidget::GeneratePixmap(){
+    int stencilWidth = (mStencilPreview.width() * mWidthSlider->value()/10)/2;
+    int stencilHeight = (mStencilPreview.height()* mHeightSlider->value()/10)/2;
+    qreal hardness = 78 * ((qreal)mHardnessSlider->value()/100);
+    QPoint midPoint(mStencilPreview.width()/2, mStencilPreview.height()/2);
+    mStencilPreview.fill(Qt::transparent);
+    QRadialGradient radGrad(midPoint, mStencilPreview.width()/2);
+    radGrad.setColorAt(midPoint.x(), Qt::black);
+    radGrad.setFocalRadius(hardness);
+    QPainter p;
+    p.begin(&mStencilPreview);
+    p.setPen(Qt::NoPen);
+    switch(mBrushShape){
+    case CIRCLE_SHAPE:
+        if(hasTexture){
+            QBrush brush;
+            brush.setTexture(mStencilTexture);
+            p.setBrush(brush);
+        }else{
+            p.setBrush(radGrad);
+        }
+        p.drawEllipse(midPoint, stencilWidth, stencilHeight);
+        p.end();
+        break;
+    case SQUARE_SHAPE:
+        int originX =  midPoint.x() - stencilWidth;
+        int originY = midPoint.y() - stencilHeight;
+        int dimX = stencilWidth*2;
+        int dimY = stencilHeight*2;
+
+        if(hasTexture){
+            QBrush brush;
+            brush.setTexture(mStencilTexture);
+            p.setBrush(brush);
+        }else{
+            p.setBrush(Qt::black);
+        }
+
+        p.drawRect(originX, originY, dimX, dimY);
+        break;
+    }
+    qDebug() << "Generated pixmap "<< endl;
+    return mStencilPreview;
 }
 
 void CustomBrushWidget::paintEvent(QPaintEvent *event){
