@@ -1,10 +1,18 @@
 #include "brush.h"
 
-Brush::Brush()
+Brush::Brush() : mHardness(0),
+    mSize(0),
+    mOpacity(0),
+    mSpacing(1),
+    sWidth(0),
+    sHeight(0),
+    mRotate(0)
 {
     myBrush = QBrush();
     myPen = QPen();
     myPen.setCapStyle(Qt::RoundCap);
+    mName = "";
+    mStencil = QPixmap();
 }
 
 void Brush::GeneratePixmap(){

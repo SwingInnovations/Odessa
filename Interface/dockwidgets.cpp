@@ -21,6 +21,8 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
         mActualBrushList.append(Brush());
         mActualBrushList[0].SetSWidth(10);
         mActualBrushList[0].SetSHeight(10);
+        mActualBrushList[0].SetSpacing(1);
+        mActualBrushList[0].SetHardness(100);
         mActualBrushList[0].SetName("Default");
         mActualBrushList[0].SetStencil(mStencilWidget->GeneratePixmap());
         mTempBrushList = mActualBrushList;
@@ -366,7 +368,7 @@ void BrushDockWidget::SaveBrushAct(){
 
         QDataStream out(&file);
         out.setVersion(QDataStream::Qt_5_0);
-        out << encrypt << ret;
+        out << encrypt <<ret;
 
         file.flush();
         file.close();
@@ -398,6 +400,14 @@ QVector<Brush> BrushDockWidget::LoadBrushLib(QString filePath){
     in.setVersion(QDataStream::Qt_5_0);
     in >> encrypt >> ret;
     file.close();
+
+    qDebug() << "sWidth: " << ret.at(0).GetSWidth() << endl;
+    qDebug() << "sHeight: " << ret.at(0).GetSHeight() << endl;
+    qDebug() << "mHardness: " << ret.at(0).getHardness() << endl;
+    qDebug() << "Rotate: " << ret.at(0).getRotate() << endl;
+    qDebug() << "Spacing: " << ret.at(0).GetSpacing() << endl;
+    qDebug() << "Name: " << ret.at(0).GetName() << endl;
+
     return ret;
 }
 
@@ -433,6 +443,14 @@ Brush BrushDockWidget::LoadBrush(QString filePath){
     in >> encrypt >> ret;
 
     file.close();
+
+    qDebug() << "sWidth: " << ret.GetSWidth() << endl;
+    qDebug() << "sHeight: " << ret.GetSHeight() << endl;
+    qDebug() << "mHardness: " << ret.getHardness() << endl;
+    qDebug() << "Rotate: " << ret.getRotate() << endl;
+    qDebug() << "Spacing: " << ret.GetSpacing() << endl;
+    qDebug() << "Name: " << ret.GetName() << endl;
+
     return ret;
 }
 
@@ -454,7 +472,7 @@ void BrushDockWidget::WriteSettings(){
     QSettings settings("SwingInnovations", "Odessa");
     settings.setValue("activeBrushLib", mBrushLib);
     qDebug() << mBrushLib << endl;
-    SaveBrushLib(mProjectPath+"default.blib");
+    SaveBrushLib(mBrushLib);
 }
 
 BrushDockWidget::~BrushDockWidget()

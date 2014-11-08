@@ -57,10 +57,6 @@ public:
         m_yTilt = val;
     }
 
-    void SetStencilPath(QString fileName){
-        mStencilPath = fileName;
-    }
-
     void SetSWidth(int val){
         sWidth = val;
     }
@@ -80,7 +76,7 @@ public:
     qreal GetPressureVal(){return m_PressureVal;}
 
     void SetPressure(bool val){ mPressure = val; }
-    void SetHardness(bool val){ mHardness = val; }
+    void SetHardness(int val){ mHardness = val; }
 
     void SetBrushShape(BrushShape shape){ brushShape = shape; }
 
@@ -93,16 +89,18 @@ public:
     QBrush getBrush(){ return myBrush; }
     QColor getColor() { return myColor; }
 
+    QString GetName()const{return mName;}
+
     int GetSWidth()const{return sWidth;}
     int GetSHeight()const{return sHeight;}
     int GetSpacing()const{return mSpacing;}
-    int GetSize(){return mSize;}
+    int GetSize()const{return mSize;}
     int GetTransferSize()const{return mTSize;}
     int GetTransferOpacity()const{return mTOpacity;}
     int getOpacity()const{return mOpacity;}
+    QPixmap GetStencil()const{return mStencil;}
 
-    QPixmap GetStencil(){return mStencil;}
-    QString GetStencilPath(){return mStencilPath;}
+    /*-Variables-*/
 
     BrushShape brushShape;
     QString mName;
@@ -112,9 +110,9 @@ public:
     QColor myColor;
 
     bool mPressure;
-    bool mHardness;
+    int mHardness;
     unsigned int mSize;
-    int mOpacity;//responsible for spacing
+    int mOpacity;//responsible for Opacity
     int mSpacing;
 
     int sWidth, sHeight;
@@ -129,7 +127,6 @@ public:
     qreal m_yTilt;
 
     QPixmap mStencil;
-    QString mStencilPath;
 };
 
 #endif // BRUSH_H
