@@ -93,6 +93,9 @@ MainWindow::MainWindow(QWidget *parent)
     pasteAct = new QAction(this);
     pasteAct->setText("&Paste");
 
+    sendFeedbackAct = new QAction(this);
+    sendFeedbackAct->setText("&Send Feedback");
+
     //Select Menu
     selectRegionAct = new QAction(this);
     selectRegionAct->setText("&Select Region");
@@ -146,6 +149,8 @@ MainWindow::MainWindow(QWidget *parent)
     viewMenu->addAction(preferenceAct);
 
     helpMenu = this->menuBar()->addMenu("&Help");
+    helpMenu->addAction(sendFeedbackAct);
+    helpMenu->addSeparator();
     helpMenu->addAction(aboutAct);
 
     eyeDropper = new QShortcut(QKeySequence(Qt::ALT), this);
@@ -191,6 +196,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(mEditor, SIGNAL(blueChanged(int)), colorDockWidget, SLOT(setBlue(int)));
     connect(eyeDropperTool, SIGNAL(triggered()), SLOT(assignEyeDropperTool()));
     connect(eyeDropper, SIGNAL(activated()), SLOT(assignEyeDropperTool()));
+    connect(sendFeedbackAct, SIGNAL(triggered()), SLOT(sendFeedBack()));
     connect(aboutAct, SIGNAL(triggered()), SLOT(about()));
     connect(closeAct, SIGNAL(triggered()), SLOT(close()));
 
@@ -295,6 +301,10 @@ void MainWindow::zoomIn()
 void MainWindow::zoomOut()
 {
     scaleImage(0.8);
+}
+
+void MainWindow::sendFeedBack(){
+    QDesktopServices::openUrl(QUrl("mailto:swinginnovations@gmail.com?subject=Odessa-Feedback"));
 }
 
 void MainWindow::scaleImage(double val)

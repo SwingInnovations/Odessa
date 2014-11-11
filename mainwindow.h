@@ -14,6 +14,8 @@
 #include <QLabel>
 #include <QSlider>
 #include <QSettings>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include "Structure/editor.h"
 #include "Interface/dialogwindows.h"
@@ -28,6 +30,7 @@ public:
     ~MainWindow();
 
 private slots:
+    void sendFeedBack();
     void assignBrushTool();
     void assignEraserTool();
     void assignTextTool();
@@ -93,6 +96,7 @@ private:
 
     QShortcut* eyeDropper;
 
+    QAction *sendFeedbackAct;
     QAction *aboutAct;
 
     QMenu *fileMenu;

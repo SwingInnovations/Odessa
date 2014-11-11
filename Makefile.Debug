@@ -481,6 +481,8 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream \
 		Interface/dialogwindows.h \
@@ -513,6 +515,10 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSpinBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qspinbox.h \
 		Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
@@ -523,19 +529,16 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QTabWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QGradient \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QConicalGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedlayout.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolButton \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QTemporaryFile \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRgb \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QMap \
 		Overloads.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVariant \
 		mainwindow.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) mainwindow.h -o debug\moc_mainwindow.cpp
 
@@ -862,6 +865,8 @@ debug/moc_editor.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QLabel \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream \
 		Structure/editor.h
@@ -1021,6 +1026,14 @@ debug/moc_dialogwindows.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDialog \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdir.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfileinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSettings \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsettings.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSpinBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qspinbox.h \
 		Interface/dialogwindows.h
 	C:\Qt\Qt-5.2.0-x86_64\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 $(INCPATH) Interface\dialogwindows.h -o debug\moc_dialogwindows.cpp
 
@@ -1217,12 +1230,16 @@ debug/moc_dockwidgets.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsettings.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMessageBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmessagebox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSpinBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qspinbox.h \
 		Structure/brush.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
 		Overloads.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVariant \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QtCore \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QtCoreDepends \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstractanimation.h \
@@ -1697,6 +1714,8 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream \
 		Interface/dialogwindows.h \
@@ -1729,6 +1748,10 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSpinBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qspinbox.h \
 		Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
@@ -1739,19 +1762,16 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QTabWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QGradient \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QConicalGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedlayout.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolButton \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QTemporaryFile \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRgb \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QMap \
 		Overloads.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVariant \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QApplication \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qapplication.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdesktopwidget.h
@@ -2110,6 +2130,8 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream \
 		Interface/dialogwindows.h \
@@ -2142,6 +2164,10 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSpinBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qspinbox.h \
 		Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QDockWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qdockwidget.h \
@@ -2152,19 +2178,16 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QGridLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QTabWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QGradient \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QConicalGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedLayout \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedlayout.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QToolButton \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qtoolbutton.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QTemporaryFile \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRgb \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QMap \
-		Overloads.h
+		Overloads.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVariant
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mainwindow.o mainwindow.cpp
 
 debug/bitmapimage.o: Graphics/Bitmap/bitmapimage.cpp Graphics/Bitmap/bitmapimage.h \
@@ -2479,6 +2502,8 @@ debug/bitmapimage.o: Graphics/Bitmap/bitmapimage.cpp Graphics/Bitmap/bitmapimage
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\bitmapimage.o Graphics\Bitmap\bitmapimage.cpp
@@ -2859,6 +2884,8 @@ debug/layer.o: Structure/layer.cpp Structure/layer.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\layer.o Structure\layer.cpp
@@ -3187,6 +3214,8 @@ debug/editor.o: Structure/editor.cpp Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDataStream
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\editor.o Structure\editor.cpp
@@ -3345,7 +3374,15 @@ debug/dialogwindows.o: Interface/dialogwindows.cpp Interface/dialogwindows.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QStackedWidget \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qstackedwidget.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QListWidgetItem \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QDebug \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QFileDialog \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qfiledialog.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qdir.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfileinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSettings \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsettings.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSpinBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qspinbox.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\dialogwindows.o Interface\dialogwindows.cpp
 
 debug/dockwidgets.o: Interface/dockwidgets.cpp Interface/dockwidgets.h \
@@ -3542,12 +3579,16 @@ debug/dockwidgets.o: Interface/dockwidgets.cpp Interface/dockwidgets.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsettings.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMessageBox \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qmessagebox.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QSpinBox \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qspinbox.h \
 		Structure/brush.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QBrush \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPen \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QColor \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
 		Overloads.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVariant \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QtCore \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QtCoreDepends \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qabstractanimation.h \
@@ -3750,6 +3791,14 @@ debug/brush.o: Structure/brush.cpp Structure/brush.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qset.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qcontiguouscache.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPixmap \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPainter \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qpainter.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtextoption.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qfontinfo.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qfont.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qfontmetrics.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QRadialGradient \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QPoint \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QFile \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfile.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qfiledevice.h \
