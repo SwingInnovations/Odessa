@@ -1299,14 +1299,17 @@ void CustomBrushWidget::paintEvent(QPaintEvent *event){
 
 void CustomBrushWidget::UpdateBrushShape_Circle(){
     mBrushShape = CIRCLE_SHAPE;
+    emit StencilChanged(this->GeneratePixmap());
 }
 
 void CustomBrushWidget::UpdateBrushShape_Square(){
     mBrushShape = SQUARE_SHAPE;
+    emit StencilChanged(this->GeneratePixmap());
 }
 
 void CustomBrushWidget::UpdateBrushShape_Polygon(){
     mBrushShape = CUSTOM;
+    emit StencilChanged(this->GeneratePixmap());
 }
 
 CustomBrushWidget::~CustomBrushWidget(){
