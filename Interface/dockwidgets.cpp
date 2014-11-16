@@ -293,6 +293,11 @@ void BrushDockWidget::SetCurrentIndex(int val){
     mStencilWidget->UpdateStencilHeight(mActualBrushList.at(mCurrentBrushIndex).GetSHeight());
     mStencilWidget->UpdateBrushHardness(mActualBrushList.at(mCurrentBrushIndex).getHardness());
     mStencilWidget->UpdateStencilRotate(mActualBrushList.at(mCurrentBrushIndex).getRotate());
+    emit StencilWidthChanged(mActualBrushList.at(mCurrentBrushIndex).GetSWidth());
+    emit StencilHeightChanged(mActualBrushList.at(mCurrentBrushIndex).GetSHeight());
+    emit BrushHardnessChanged(mActualBrushList.at(mCurrentBrushIndex).getHardness());
+    emit StencilRotateChanged(mActualBrushList.at(mCurrentBrushIndex).getRotate());
+    emit BrushStencilChanged(mActualBrushList.at(mCurrentBrushIndex).GetStencil());
 }
 
 void BrushDockWidget::LoadStencilAct(){
@@ -353,9 +358,10 @@ void BrushDockWidget::SaveBrushAct(){
     msgBox.setButtonText(QMessageBox::Cancel, "Save to library and external");
     switch(msgBox.exec()){
     case QMessageBox::Ok:
-        mActualBrushList.append(mTempBrushList.at(mCurrentBrushIndex));
+        mActualBrushList.push_back(mTempBrushList.at(mCurrentBrushIndex));
         mGenBrushWidget->AddBrush(mTempBrushList.at(mCurrentBrushIndex));
         mTransBrushWidget->AddBrush(mTempBrushList.at(mCurrentBrushIndex));
+        mTempBrushList = mActualBrushList;
         break;
     case QMessageBox::Cancel:
         QString filePath = QFileDialog::getSaveFileName(this, "Save Brush", mProjectPath, ".brsh");
@@ -375,9 +381,10 @@ void BrushDockWidget::SaveBrushAct(){
 
         qDebug() << "Wrote Brush to Disk" << endl;
 
-        mActualBrushList.append(mTempBrushList.at(mCurrentBrushIndex));
+        mActualBrushList.push_back(mTempBrushList.at(mCurrentBrushIndex));
         mGenBrushWidget->AddBrush(mTempBrushList.at(mCurrentBrushIndex));
         mTransBrushWidget->AddBrush(mTempBrushList.at(mCurrentBrushIndex));
+        mTempBrushList = mActualBrushList;
         break;
     }
     qDebug() << "Saving Brush" << endl;
@@ -400,13 +407,6 @@ QVector<Brush> BrushDockWidget::LoadBrushLib(QString filePath){
     in.setVersion(QDataStream::Qt_5_0);
     in >> encrypt >> ret;
     file.close();
-
-    qDebug() << "sWidth: " << ret.at(0).GetSWidth() << endl;
-    qDebug() << "sHeight: " << ret.at(0).GetSHeight() << endl;
-    qDebug() << "mHardness: " << ret.at(0).getHardness() << endl;
-    qDebug() << "Rotate: " << ret.at(0).getRotate() << endl;
-    qDebug() << "Spacing: " << ret.at(0).GetSpacing() << endl;
-    qDebug() << "Name: " << ret.at(0).GetName() << endl;
 
     return ret;
 }
@@ -443,13 +443,6 @@ Brush BrushDockWidget::LoadBrush(QString filePath){
     in >> encrypt >> ret;
 
     file.close();
-
-    qDebug() << "sWidth: " << ret.GetSWidth() << endl;
-    qDebug() << "sHeight: " << ret.GetSHeight() << endl;
-    qDebug() << "mHardness: " << ret.getHardness() << endl;
-    qDebug() << "Rotate: " << ret.getRotate() << endl;
-    qDebug() << "Spacing: " << ret.GetSpacing() << endl;
-    qDebug() << "Name: " << ret.GetName() << endl;
 
     return ret;
 }

@@ -269,6 +269,10 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSettings \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsettings.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QDesktopServices \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qdesktopservices.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstandardpaths.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QUrl \
 		Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
@@ -313,7 +317,6 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qprocess.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qresource.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsavefile.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstandardpaths.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtemporarydir.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QScopedPointer \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtemporaryfile.h \
@@ -472,7 +475,6 @@ debug/moc_mainwindow.cpp: C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/QMainWindow \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtextdocumentwriter.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtextlist.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtexttable.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qdesktopservices.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
@@ -1502,6 +1504,10 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSettings \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsettings.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QDesktopServices \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qdesktopservices.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstandardpaths.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QUrl \
 		Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
@@ -1546,7 +1552,6 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qprocess.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qresource.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsavefile.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstandardpaths.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtemporarydir.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QScopedPointer \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtemporaryfile.h \
@@ -1705,7 +1710,6 @@ debug/main.o: main.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtextdocumentwriter.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtextlist.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtexttable.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qdesktopservices.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
@@ -1918,6 +1922,10 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtWidgets/qslider.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QSettings \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsettings.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QDesktopServices \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qdesktopservices.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstandardpaths.h \
+		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QUrl \
 		Structure/editor.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QVector \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QPaintEvent \
@@ -1962,7 +1970,6 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qprocess.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qresource.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qsavefile.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qstandardpaths.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtemporarydir.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/QScopedPointer \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtCore/qtemporaryfile.h \
@@ -2121,7 +2128,6 @@ debug/mainwindow.o: mainwindow.cpp mainwindow.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtextdocumentwriter.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtextlist.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtexttable.h \
-		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qdesktopservices.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qvalidator.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/qtguiversion.h \
 		C:/Qt/Qt-5.2.0-x86_64/include/QtGui/QImage \
