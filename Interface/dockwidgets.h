@@ -56,7 +56,7 @@ class BrushDockWidget : public QDockWidget
 public:
     enum BrushShape{CIRCLE_SHAPE, SQUARE_SHAPE, CUSTOM};
     BrushDockWidget(QWidget *parent = 0);
-    void SetDirectory(QString dir);
+    void setDirectory(QString dir);
     virtual ~BrushDockWidget();
     Brush GetStartBrush();
 protected:
@@ -75,7 +75,7 @@ signals:
     void BrushStencilPathChanged(QString);
     void StencilBaseShapeChanged(BrushShape);
 private slots:
-    void SetCurrentIndex(int);
+    void setCurrentIndex(int);
     void UpdateSize(int);
     void UpdateSize(QString);
     void UpdateSpacing(int);
@@ -98,8 +98,8 @@ private slots:
     void SaveBrushSetAct();
     void DeleteBrushAct();
 private:
-    void ReadSettings();
-    void WriteSettings();
+    void readSettings();
+    void writeSettings();
     Brush LoadBrush(QString filePath);
     QVector<Brush> LoadBrushLib(QString filePath);
     void SaveBrushLib(QString filePath);

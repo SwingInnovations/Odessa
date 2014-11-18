@@ -15,7 +15,7 @@ Brush::Brush() : mHardness(0),
     mStencil = QPixmap();
 }
 
-void Brush::GeneratePixmap(){
+void Brush::generatePixmap(){
     QPoint midPoint(sWidth/2, sHeight/2);
     mStencil = QPixmap(sWidth, sHeight);
     mStencil.fill(Qt::transparent);

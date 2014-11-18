@@ -44,7 +44,7 @@ public:
 
     Editor(QWidget *parent = 0);
 
-    void SetBrush(Brush b);
+    void setBrush(Brush b);
 
     void setBrush(ToolType type);
     QSize getPixmapSize(){
@@ -87,8 +87,7 @@ public slots:
 
     void scale(double scaleVal);
 
-    void SetBrushStencil(QPixmap);
-    void SetBrushStencilPath(QString);
+    void setBrushStencil(QPixmap);
 
     void setBrushSize(int);
     void setBrushSpacing(int);

@@ -58,7 +58,7 @@ void BitmapImage::paintImage(QTabletEvent *event, Brush brush, QPoint points[])
 {
     QPainter painter(&m_pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
-    brush.setWidth(brush.GetSize() + (event->pressure() * brush.GetTransferSize()));
+    brush.setWidth(brush.getSize() + (event->pressure() * brush.getTransferSize()));
     painter.setBrush(brush.getBrush());
     painter.setPen(Qt::NoPen);
     painter.setPen(brush.getPen());
@@ -81,10 +81,10 @@ void BitmapImage::paintImage(QPainterPath painterPath, Brush brush)
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setBrush(Qt::NoBrush);
     QPen copyPen = brush.getPen();
-    if(brush.GetSize() > 0)
+    if(brush.getSize() > 0)
     {
         copyPen.setBrush(brush.getBrush());
-        copyPen.setWidth(brush.GetSize());
+        copyPen.setWidth(brush.getSize());
         painter.setPen(copyPen);
     }else{
         copyPen.setBrush(Qt::NoBrush);
@@ -114,14 +114,14 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
     for(unsigned int i = 0; i < length; i++){
         drawPoint.setX(drawPoint.x() + xInc);
         drawPoint.setY(drawPoint.y() + yInc);
-        painter.drawEllipse(drawPoint, brush.GetSize(), brush.GetSize());
+        painter.drawEllipse(drawPoint, brush.getSize(), brush.getSize());
     }
 }
 
 void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt)
 {
     /*-Prepare Stencil-*/
-    QImage stencilBase = brush.GetStencil().toImage();
+    QImage stencilBase = brush.getStencil().toImage();
     stencilBase.invertPixels(QImage::InvertRgb);
     stencilBase.createAlphaMask();
     stencilBase.convertToFormat(QImage::Format_RGB888, Qt::AutoColor);
@@ -130,7 +130,7 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
     color.setAlpha(brush.getOpacity());
     stencilImage.fill(color);
     stencilImage.setAlphaChannel(stencilBase);
-    QPixmap stencil = QPixmap::fromImage(stencilImage.scaled(brush.GetSize(), brush.GetSize(), Qt::IgnoreAspectRatio, Qt::FastTransformation));
+    QPixmap stencil = QPixmap::fromImage(stencilImage.scaled(brush.getSize(), brush.getSize(), Qt::IgnoreAspectRatio, Qt::FastTransformation));
 
     QPainter painter(&m_pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -143,8 +143,8 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
     yInc = point.y() / length;
     drawPoint = pointInfo.first();
     for(unsigned int i = 0; i < length; i++){
-        drawPoint.setX(drawPoint.x() + (xInc * brush.GetSpacing() ));
-        drawPoint.setY(drawPoint.y() + (yInc * brush.GetSpacing() ));
+        drawPoint.setX(drawPoint.x() + (xInc * brush.getSpacing() ));
+        drawPoint.setY(drawPoint.y() + (yInc * brush.getSpacing() ));
         painter.drawPixmap(QPoint(drawPoint.x() - stencil.width() / 2, drawPoint.y() - stencil.height()/2), stencil);
     }
 }

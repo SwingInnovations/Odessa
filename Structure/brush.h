@@ -31,14 +31,14 @@ public:
         mName = name;
     }
 
-    void GeneratePixmap();
+    void generatePixmap();
 
     void setWidth(qreal val){
         mSize = val + (mTSize * m_PressureVal );
         myPen.setWidthF(mSize);
     }
 
-    void SetSpacing(int val){
+    void setSpacing(int val){
         mSpacing = val;
     }
 
@@ -57,11 +57,11 @@ public:
         m_yTilt = val;
     }
 
-    void SetSWidth(int val){
+    void setSWidth(int val){
         sWidth = val;
     }
 
-    void SetSHeight(int val){
+    void setSHeight(int val){
         sHeight = val;
     }
 
@@ -70,15 +70,15 @@ public:
     int getHardness()const{return mHardness;}
     int getRotate()const{return mRotate;}
     void SetOpacity(int val){mOpacity = val;}
-    void SetTransferSize(int val){mTSize = val;}
-    void SetTransferOpacity(int val){mTOpacity = val;}
+    void setTransferSize(int val){mTSize = val;}
+    void setTransferOpacity(int val){mTOpacity = val;}
 
-    qreal GetPressureVal(){return m_PressureVal;}
+    qreal getPressureVal(){return m_PressureVal;}
 
-    void SetPressure(bool val){ mPressure = val; }
-    void SetHardness(int val){ mHardness = val; }
+    void setPressure(bool val){ mPressure = val; }
+    void setHardness(int val){ mHardness = val; }
 
-    void SetBrushShape(BrushShape shape){ brushShape = shape; }
+    void setBrushShape(BrushShape shape){ brushShape = shape; }
 
     //color Centric
     void setRed(int val){myColor.setRed(val);}
@@ -89,16 +89,16 @@ public:
     QBrush getBrush(){ return myBrush; }
     QColor getColor() { return myColor; }
 
-    QString GetName()const{return mName;}
+    QString getName()const{return mName;}
 
-    int GetSWidth()const{return sWidth;}
-    int GetSHeight()const{return sHeight;}
-    int GetSpacing()const{return mSpacing;}
-    int GetSize()const{return mSize;}
-    int GetTransferSize()const{return mTSize;}
-    int GetTransferOpacity()const{return mTOpacity;}
+    int getSWidth()const{return sWidth;}
+    int getSHeight()const{return sHeight;}
+    int getSpacing()const{return mSpacing;}
+    int getSize()const{return mSize;}
+    int getTransferSize()const{return mTSize;}
+    int getTransferOpacity()const{return mTOpacity;}
     int getOpacity()const{return mOpacity;}
-    QPixmap GetStencil()const{return mStencil;}
+    QPixmap getStencil()const{return mStencil;}
 
     /*-Variables-*/
 

@@ -14,7 +14,7 @@ inline QDataStream &operator >>(QDataStream &in, Brush &brush);
 
 
 inline QDataStream &operator <<(QDataStream &out, const Brush &brush){
-    out << brush.GetSWidth() << brush.GetSHeight() << brush.getHardness() << brush.getRotate() << brush.GetSpacing() << brush.GetStencil() << brush.GetName();
+    out << brush.getSWidth() << brush.getSHeight() << brush.getHardness() << brush.getRotate() << brush.getSpacing() << brush.getStencil() << brush.getName();
     return out;
 }
 

@@ -43,9 +43,9 @@ MainWindow::MainWindow(QWidget *parent)
     prefDialog = new OdessaPrefDialog();
     brushDockWidget = new BrushDockWidget(this);
     brushDockWidget->setWindowTitle("Brush");
-    brushDockWidget->SetDirectory(projectPath+"/Brush/");
+    brushDockWidget->setDirectory(projectPath+"/Brush/");
     brushDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    mEditor->SetBrush(brushDockWidget->GetStartBrush());
+    mEditor->setBrush(brushDockWidget->GetStartBrush());
 
     colorDockWidget = new ColorDockWidget(this);
     colorDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -181,7 +181,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(brushDockWidget, SIGNAL(BrushSizeChanged(int)), mEditor, SLOT(setBrushSize(int)));
     connect(brushDockWidget, SIGNAL(BrushOpacityChanged(int)), mEditor, SLOT(setOpacity(int)));
-    connect(brushDockWidget, SIGNAL(BrushStencilChanged(QPixmap)), mEditor, SLOT(SetBrushStencil(QPixmap)));
+    connect(brushDockWidget, SIGNAL(BrushStencilChanged(QPixmap)), mEditor, SLOT(setBrushStencil(QPixmap)));
     connect(brushDockWidget, SIGNAL(BrushSpacingChanged(int)), mEditor, SLOT(setBrushSpacing(int)));
     connect(colorDockWidget, SIGNAL(redChanged(int)), mEditor, SLOT(setRedValue(int)));
     connect(colorDockWidget, SIGNAL(greenChanged(int)), mEditor, SLOT(setGreenValue(int)));

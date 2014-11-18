@@ -18,7 +18,7 @@ public:
     Layer(LayerType type, int index, int width, int height);
     int getIndex(){ return m_currentIndex; }
     int getFrameIndeX(){ return mFrameIndex; }
-    int GetFrameListSize(){return frame.size();}
+    int getFrameListSize(){return frame.size();}
     BitmapImage *getFrame(int frameIndex){return frame.at(frameIndex);}
     bool getFocusStatus()const{ return isFocus; }
 

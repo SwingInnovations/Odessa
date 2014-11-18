@@ -19,7 +19,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_Brush.setBrush(QBrush(Qt::SolidPattern));
     m_Brush.setWidth(5);
     m_Brush.SetOpacity(m_OpacityVal);
-    m_Brush.SetSpacing(1);
+    m_Brush.setSpacing(1);
     m_CurrentTool = m_Brush;
     m_ToolType = BRUSH_TOOL;
 
@@ -107,7 +107,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
 
                 m_CurrentTool.setPressureVal(m_Pressure);
 
-                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool, m_Pressure, m_CurrentTool.GetPressureVal());
+                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool, m_Pressure, m_CurrentTool.getPressureVal());
                 setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
 //                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(*m_PainterPath, m_CurrentTool);
 //                setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
@@ -131,12 +131,12 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
     update();
 }
 
-void Editor::SetBrush(Brush b){
-    m_CurrentTool.SetStencil(b.GetStencil());
+void Editor::setBrush(Brush b){
+    m_CurrentTool.SetStencil(b.getStencil());
     if(m_ToolType == BRUSH_TOOL){
-        m_Brush.SetSWidth(b.GetSWidth());
-        m_Brush.SetSHeight(b.GetSHeight());
-        m_Brush.SetStencil(b.GetStencil());
+        m_Brush.setSWidth(b.getSWidth());
+        m_Brush.setSHeight(b.getSHeight());
+        m_Brush.SetStencil(b.getStencil());
     }else if(m_ToolType == ERASER_TOOL){
         m_Eraser = b;
     }else{
@@ -194,13 +194,13 @@ void Editor::paintEvent(QPaintEvent *event)
         this->setCursor(QCursor(Qt::CrossCursor));
         painter.setPen(Qt::darkGray);
         painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
-        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.GetSize()-3, m_CurrentTool.GetSize()-3);
+        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize()-3, m_CurrentTool.getSize()-3);
         painter.end();
     }else if(m_ToolType == ERASER_TOOL){
         this->setCursor(QCursor(Qt::CrossCursor));
         painter.setPen(Qt::darkGray);
         painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
-        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.GetSize()-3, m_CurrentTool.GetSize()-3);
+        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize()-3, m_CurrentTool.getSize()-3);
         painter.end();
     }else if(m_ToolType == EYEDROPPER_TOOL){
         setCursor(QCursor(Qt::ArrowCursor));
@@ -264,11 +264,11 @@ void Editor::setBrush(ToolType type)
     case BRUSH_TOOL:
         m_CurrentTool = m_Brush;
         m_CurrentTool.setColor(m_PrimaryColor);
-        emit brushSizeChanged(m_Brush.GetSize());
+        emit brushSizeChanged(m_Brush.getSize());
         break;
     case ERASER_TOOL:
         m_CurrentTool = m_Eraser;
-        emit brushSizeChanged(m_Eraser.GetSize());
+        emit brushSizeChanged(m_Eraser.getSize());
     case TEXT_TOOL:
         break;
     case EYEDROPPER_TOOL:
@@ -278,7 +278,7 @@ void Editor::setBrush(ToolType type)
     }
 }
 
-void Editor::SetBrushStencil(QPixmap pixmap){
+void Editor::setBrushStencil(QPixmap pixmap){
     m_CurrentTool.SetStencil(pixmap);
     switch(m_ToolType){
     case BRUSH_TOOL:
@@ -294,27 +294,6 @@ void Editor::SetBrushStencil(QPixmap pixmap){
     default:
         break;
     }
-}
-/*-Deprecate-*/
-void Editor::SetBrushStencilPath(QString filePath){
-//    m_CurrentTool.SetStencilPath(filePath);
-//    m_CurrentTool.LoadBrush(filePath);
-//    switch(m_ToolType){
-//      case BRUSH_TOOL:
-//        m_Brush.SetStencilPath(filePath);
-//        m_Brush.LoadBrush(filePath);
-//        break;
-//    case ERASER_TOOL:
-//        m_Eraser.SetStencilPath(filePath);
-//        m_Eraser.LoadBrush(filePath);
-//        break;
-//    case TEXT_TOOL:
-//        break;
-//    case EYEDROPPER_TOOL:
-//        break;
-//    default:
-//        break;
-//    };
 }
 
 void Editor::setBrushSize(int val)
@@ -335,13 +314,13 @@ void Editor::setBrushSize(int val)
 
 void Editor::setBrushSpacing(int val)
 {
-    m_CurrentTool.SetSpacing(val);
+    m_CurrentTool.setSpacing(val);
     switch(m_ToolType){
     case BRUSH_TOOL:
-        m_Brush.SetSpacing(val);
+        m_Brush.setSpacing(val);
         break;
     case ERASER_TOOL:
-        m_Eraser.SetSpacing(val);
+        m_Eraser.setSpacing(val);
         break;
     default:
         break;
@@ -383,14 +362,14 @@ void Editor::setOpacityTransfer(int val)
 
 void Editor::setSizeTransfer(int val)
 {
-    m_CurrentTool.SetTransferSize(val);
+    m_CurrentTool.setTransferSize(val);
     switch(m_ToolType)
     {
     case BRUSH_TOOL:
-        m_Brush.SetTransferSize(val);
+        m_Brush.setTransferSize(val);
         break;
     case ERASER_TOOL:
-        m_Eraser.SetTransferSize(val);
+        m_Eraser.setTransferSize(val);
         break;
     default:
         break;
@@ -409,7 +388,7 @@ void Editor::scale(double scaleVal)
 {
     //scale the image directly through the layers
     for(unsigned int i = 0; i < m_Layers.size(); i++){
-        for(unsigned int j = 0; j < m_Layers.at(i)->GetFrameListSize(); i++){
+        for(unsigned int j = 0; j < m_Layers.at(i)->getFrameListSize(); i++){
             QPixmap scaled = m_Layers.at(i)->getFrame(j)->getPixmap();
             int sizeX = scaled.width();
             int sizeY = scaled.height();

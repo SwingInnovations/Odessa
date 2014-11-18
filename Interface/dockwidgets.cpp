@@ -13,23 +13,23 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
 
     mCurrentBrushIndex = 0;
 
-    ReadSettings();
+    readSettings();
     mBrushLib = mProjectPath + "/Brush/default.blib";
 
     if(!QFile(mBrushLib).exists()){
         //generate default
         mActualBrushList.append(Brush());
-        mActualBrushList[0].SetSWidth(10);
-        mActualBrushList[0].SetSHeight(10);
-        mActualBrushList[0].SetSpacing(1);
-        mActualBrushList[0].SetHardness(100);
+        mActualBrushList[0].setSWidth(10);
+        mActualBrushList[0].setSHeight(10);
+        mActualBrushList[0].setSpacing(1);
+        mActualBrushList[0].setHardness(100);
         mActualBrushList[0].SetName("Default");
         mActualBrushList[0].SetStencil(mStencilWidget->GeneratePixmap());
         mTempBrushList = mActualBrushList;
         mGenBrushWidget->AddBrush(mActualBrushList.at(0));
         mTransBrushWidget->AddBrush(mActualBrushList.at(0));
-        mStencilWidget->UpdateStencilWidth(mTempBrushList.at(0).GetSWidth());
-        mStencilWidget->UpdateStencilHeight(mTempBrushList.at(0).GetSHeight());
+        mStencilWidget->UpdateStencilWidth(mTempBrushList.at(0).getSWidth());
+        mStencilWidget->UpdateStencilHeight(mTempBrushList.at(0).getSHeight());
         qDebug() << "Generating new Library" << mBrushLib << endl;
     }else{
         //use loaded data
@@ -192,11 +192,11 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(mStencilWidget, SIGNAL(SaveStencilTriggered()), SLOT(SaveStencilAct()));
     connect(mStencilWidget, SIGNAL(SaveBrushTriggered()), SLOT(SaveBrushAct()));
     connect(mStencilWidget, SIGNAL(SaveBrushSetTriggered()), SLOT(SaveBrushSetAct()));
-    connect(mGenBrushWidget, SIGNAL(BrushLibIndexChanged(int)), SLOT(SetCurrentIndex(int)));
-    connect(mGenBrushWidget, SIGNAL(BrushLibIndexChanged(int)), SLOT(SetCurrentIndex(int)));
+    connect(mGenBrushWidget, SIGNAL(BrushLibIndexChanged(int)), SLOT(setCurrentIndex(int)));
+    connect(mGenBrushWidget, SIGNAL(BrushLibIndexChanged(int)), SLOT(setCurrentIndex(int)));
 }
 
-void BrushDockWidget::SetDirectory(QString dir){
+void BrushDockWidget::setDirectory(QString dir){
     mProjectPath = dir;
     mGenBrushWidget->SetDir(dir);
     mTransBrushWidget->SetDir(dir);
@@ -287,17 +287,17 @@ void BrushDockWidget::UpdateStencilPath(QString filePath){
     emit BrushStencilPathChanged(filePath);
 }
 
-void BrushDockWidget::SetCurrentIndex(int val){
+void BrushDockWidget::setCurrentIndex(int val){
     mCurrentBrushIndex = val;
-    mStencilWidget->UpdateStencilWidth(mActualBrushList.at(mCurrentBrushIndex).GetSWidth());
-    mStencilWidget->UpdateStencilHeight(mActualBrushList.at(mCurrentBrushIndex).GetSHeight());
+    mStencilWidget->UpdateStencilWidth(mActualBrushList.at(mCurrentBrushIndex).getSWidth());
+    mStencilWidget->UpdateStencilHeight(mActualBrushList.at(mCurrentBrushIndex).getSHeight());
     mStencilWidget->UpdateBrushHardness(mActualBrushList.at(mCurrentBrushIndex).getHardness());
     mStencilWidget->UpdateStencilRotate(mActualBrushList.at(mCurrentBrushIndex).getRotate());
-    emit StencilWidthChanged(mActualBrushList.at(mCurrentBrushIndex).GetSWidth());
-    emit StencilHeightChanged(mActualBrushList.at(mCurrentBrushIndex).GetSHeight());
+    emit StencilWidthChanged(mActualBrushList.at(mCurrentBrushIndex).getSWidth());
+    emit StencilHeightChanged(mActualBrushList.at(mCurrentBrushIndex).getSHeight());
     emit BrushHardnessChanged(mActualBrushList.at(mCurrentBrushIndex).getHardness());
     emit StencilRotateChanged(mActualBrushList.at(mCurrentBrushIndex).getRotate());
-    emit BrushStencilChanged(mActualBrushList.at(mCurrentBrushIndex).GetStencil());
+    emit BrushStencilChanged(mActualBrushList.at(mCurrentBrushIndex).getStencil());
 }
 
 void BrushDockWidget::LoadStencilAct(){
@@ -455,13 +455,13 @@ void BrushDockWidget::resizeEvent(QResizeEvent *e){
 
 }
 
-void BrushDockWidget::ReadSettings(){
+void BrushDockWidget::readSettings(){
     QSettings settings("SwingInnovations", "Odessa");
     mProjectPath = settings.value("projectPath").toString();
     mBrushLib = settings.value("activeBrushLib").toString();
 }
 
-void BrushDockWidget::WriteSettings(){
+void BrushDockWidget::writeSettings(){
     QSettings settings("SwingInnovations", "Odessa");
     settings.setValue("activeBrushLib", mBrushLib);
     qDebug() << mBrushLib << endl;
@@ -471,7 +471,7 @@ void BrushDockWidget::WriteSettings(){
 BrushDockWidget::~BrushDockWidget()
 {
     SaveBrushLib(mBrushLib);
-    WriteSettings();
+    writeSettings();
 }
 
 ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
