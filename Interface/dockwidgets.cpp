@@ -26,18 +26,18 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
         mActualBrushList[0].SetName("Default");
         mActualBrushList[0].SetStencil(mStencilWidget->GeneratePixmap());
         mTempBrushList = mActualBrushList;
-        mGenBrushWidget->AddBrush(mActualBrushList.at(0));
-        mTransBrushWidget->AddBrush(mActualBrushList.at(0));
-        mStencilWidget->UpdateStencilWidth(mTempBrushList.at(0).getSWidth());
-        mStencilWidget->UpdateStencilHeight(mTempBrushList.at(0).getSHeight());
+        mGenBrushWidget->addBrush(mActualBrushList.at(0));
+        mTransBrushWidget->addBrush(mActualBrushList.at(0));
+        mStencilWidget->updateStencilWidth(mTempBrushList.at(0).getSWidth());
+        mStencilWidget->updateStencilHeight(mTempBrushList.at(0).getSHeight());
         qDebug() << "Generating new Library" << mBrushLib << endl;
     }else{
         //use loaded data
-        mActualBrushList = LoadBrushLib(mBrushLib);
+        mActualBrushList = loadBrushLib(mBrushLib);
         for(unsigned int i = 0; i < mActualBrushList.size(); i++){
             qDebug()<< mBrushLib <<"Loaded brush " << i << endl;
-            mGenBrushWidget->AddBrush(mActualBrushList.at(i));
-            mTransBrushWidget->AddBrush(mActualBrushList.at(i));
+            mGenBrushWidget->addBrush(mActualBrushList.at(i));
+            mTransBrushWidget->addBrush(mActualBrushList.at(i));
         }
         mTempBrushList = mActualBrushList;
     }
@@ -158,167 +158,167 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     setWidget(mTabWidget);
     this->setMinimumWidth(292);
 
-    connect(mSizeSlider, SIGNAL(valueChanged(int)), SLOT(UpdateSize(int)));
-    connect(mSizeLE, SIGNAL(valueChanged(QString)), SLOT(UpdateSize(QString)));
-    connect(mOpacitySlider, SIGNAL(valueChanged(int)), SLOT(UpdateOpacity(int)));
-    connect(mOpacityLE, SIGNAL(valueChanged(QString)), SLOT(UpdateOpacity(QString)));
-    connect(mSpacingSlider, SIGNAL(valueChanged(int)), SLOT(UpdateSpacing(int)));
-    connect(mSpacingLE, SIGNAL(valueChanged(QString)), SLOT(UpdateSpacing(QString)));
-    connect(mTransferSizeToggle, SIGNAL(toggled(bool)), SLOT(ToggleTransferSize(bool)));
-    connect(mTransferSizeSlider, SIGNAL(valueChanged(int)), SLOT(UpdateTransferSize(int)));
-    connect(mTransferSizeLE, SIGNAL(textChanged(QString)), SLOT(UpdateTransferSize(QString)));
-    connect(mTransferOpacityToggle, SIGNAL(toggled(bool)), SLOT(ToggleTransferOpacity(bool)));
-    connect(mTransferOpacitySlider, SIGNAL(valueChanged(int)), SLOT(UpdateTransferOpacity(int)));
-    connect(mTransferOpacityLE, SIGNAL(textChanged(QString)), SLOT(UpdateTransferOpacity(QString)));
-    connect(mStencilWidget, SIGNAL(StencilChanged(QPixmap)), SLOT(UpdateStencil(QPixmap)));
-    connect(mStencilWidget, SIGNAL(StencilChanged(QPixmap)), mGenBrushWidget, SLOT(UpdateStencil(QPixmap)));
-    connect(mStencilWidget, SIGNAL(StencilChanged(QPixmap)), mTransBrushWidget, SLOT(UpdateStencil(QPixmap)));
-    connect(mStencilWidget, SIGNAL(StencilPathChanged(QString)), SLOT(UpdateStencilPath(QString)));
-    connect(mGenBrushWidget, SIGNAL(LoadStencilTriggered()), SLOT(LoadStencilAct()));
-    connect(mGenBrushWidget, SIGNAL(LoadBrushTriggered()), SLOT(LoadBrushAct()));
-    connect(mGenBrushWidget, SIGNAL(LoadBrushSetTriggered()), SLOT(LoadBrushSetAct()));
-    connect(mGenBrushWidget, SIGNAL(SaveStencilTriggered()), SLOT(SaveStencilAct()));
-    connect(mGenBrushWidget, SIGNAL(SaveBrushTriggered()), SLOT(SaveBrushAct()));
-    connect(mGenBrushWidget, SIGNAL(SaveBrushSetTriggered()), SLOT(SaveBrushSetAct()));
-    connect(mTransBrushWidget, SIGNAL(LoadStencilTriggered()), SLOT(LoadStencilAct()));
-    connect(mTransBrushWidget, SIGNAL(LoadBrushTriggered()), SLOT(LoadBrushAct()));
-    connect(mTransBrushWidget, SIGNAL(LoadBrushSetTriggered()), SLOT(LoadBrushSetAct()));
-    connect(mTransBrushWidget, SIGNAL(SaveStencilTriggered()), SLOT(SaveStencilAct()));
-    connect(mTransBrushWidget, SIGNAL(SaveBrushTriggered()), SLOT(SaveBrushAct()));
-    connect(mTransBrushWidget, SIGNAL(SaveBrushSetTriggered()), SLOT(SaveBrushSetAct()));
-    connect(mStencilWidget, SIGNAL(LoadStencilTriggered()), SLOT(LoadStencilAct()));
-    connect(mStencilWidget, SIGNAL(LoadBrushTriggered()), SLOT(LoadBrushAct()));
-    connect(mStencilWidget, SIGNAL(LoadBrushSetTriggered()), SLOT(LoadBrushSetAct()));
-    connect(mStencilWidget, SIGNAL(SaveStencilTriggered()), SLOT(SaveStencilAct()));
-    connect(mStencilWidget, SIGNAL(SaveBrushTriggered()), SLOT(SaveBrushAct()));
-    connect(mStencilWidget, SIGNAL(SaveBrushSetTriggered()), SLOT(SaveBrushSetAct()));
+    connect(mSizeSlider, SIGNAL(valueChanged(int)), SLOT(updateSize(int)));
+    connect(mSizeLE, SIGNAL(valueChanged(QString)), SLOT(updateSize(QString)));
+    connect(mOpacitySlider, SIGNAL(valueChanged(int)), SLOT(updateOpacity(int)));
+    connect(mOpacityLE, SIGNAL(valueChanged(QString)), SLOT(updateOpacity(QString)));
+    connect(mSpacingSlider, SIGNAL(valueChanged(int)), SLOT(updateSpacing(int)));
+    connect(mSpacingLE, SIGNAL(valueChanged(QString)), SLOT(updateSpacing(QString)));
+    connect(mTransferSizeToggle, SIGNAL(toggled(bool)), SLOT(toggleTransferSize(bool)));
+    connect(mTransferSizeSlider, SIGNAL(valueChanged(int)), SLOT(updateTransferSize(int)));
+    connect(mTransferSizeLE, SIGNAL(textChanged(QString)), SLOT(updateTransferSize(QString)));
+    connect(mTransferOpacityToggle, SIGNAL(toggled(bool)), SLOT(toggleTransferOpacity(bool)));
+    connect(mTransferOpacitySlider, SIGNAL(valueChanged(int)), SLOT(updateTransferOpacity(int)));
+    connect(mTransferOpacityLE, SIGNAL(textChanged(QString)), SLOT(updateTransferOpacity(QString)));
+    connect(mStencilWidget, SIGNAL(StencilChanged(QPixmap)), SLOT(updateStencil(QPixmap)));
+    connect(mStencilWidget, SIGNAL(StencilChanged(QPixmap)), mGenBrushWidget, SLOT(updateStencil(QPixmap)));
+    connect(mStencilWidget, SIGNAL(StencilChanged(QPixmap)), mTransBrushWidget, SLOT(updateStencil(QPixmap)));
+    connect(mStencilWidget, SIGNAL(StencilPathChanged(QString)), SLOT(updateStencilPath(QString)));
+    connect(mGenBrushWidget, SIGNAL(LoadStencilTriggered()), SLOT(loadStencilAct()));
+    connect(mGenBrushWidget, SIGNAL(LoadBrushTriggered()), SLOT(loadBrushAct()));
+    connect(mGenBrushWidget, SIGNAL(LoadBrushSetTriggered()), SLOT(loadBrushSetAct()));
+    connect(mGenBrushWidget, SIGNAL(SaveStencilTriggered()), SLOT(saveStencilAct()));
+    connect(mGenBrushWidget, SIGNAL(SaveBrushTriggered()), SLOT(saveBrushAct()));
+    connect(mGenBrushWidget, SIGNAL(SaveBrushSetTriggered()), SLOT(saveBrushSetAct()));
+    connect(mTransBrushWidget, SIGNAL(LoadStencilTriggered()), SLOT(loadStencilAct()));
+    connect(mTransBrushWidget, SIGNAL(LoadBrushTriggered()), SLOT(loadBrushAct()));
+    connect(mTransBrushWidget, SIGNAL(LoadBrushSetTriggered()), SLOT(loadBrushSetAct()));
+    connect(mTransBrushWidget, SIGNAL(SaveStencilTriggered()), SLOT(saveStencilAct()));
+    connect(mTransBrushWidget, SIGNAL(SaveBrushTriggered()), SLOT(saveBrushAct()));
+    connect(mTransBrushWidget, SIGNAL(SaveBrushSetTriggered()), SLOT(saveBrushSetAct()));
+    connect(mStencilWidget, SIGNAL(LoadStencilTriggered()), SLOT(loadStencilAct()));
+    connect(mStencilWidget, SIGNAL(LoadBrushTriggered()), SLOT(loadBrushAct()));
+    connect(mStencilWidget, SIGNAL(LoadBrushSetTriggered()), SLOT(loadBrushSetAct()));
+    connect(mStencilWidget, SIGNAL(SaveStencilTriggered()), SLOT(saveStencilAct()));
+    connect(mStencilWidget, SIGNAL(SaveBrushTriggered()), SLOT(saveBrushAct()));
+    connect(mStencilWidget, SIGNAL(SaveBrushSetTriggered()), SLOT(saveBrushSetAct()));
     connect(mGenBrushWidget, SIGNAL(BrushLibIndexChanged(int)), SLOT(setCurrentIndex(int)));
     connect(mGenBrushWidget, SIGNAL(BrushLibIndexChanged(int)), SLOT(setCurrentIndex(int)));
 }
 
 void BrushDockWidget::setDirectory(QString dir){
     mProjectPath = dir;
-    mGenBrushWidget->SetDir(dir);
-    mTransBrushWidget->SetDir(dir);
+    mGenBrushWidget->setDir(dir);
+    mTransBrushWidget->setDir(dir);
     mStencilWidget->SetDir(dir);
 }
 
-void BrushDockWidget::UpdateSize(int val)
+void BrushDockWidget::updateSize(int val)
 {
     mSizeLE->setValue(val);
-    emit BrushSizeChanged(val);
+    emit brushSizeChanged(val);
 }
 
-void BrushDockWidget::UpdateSize(QString val)
+void BrushDockWidget::updateSize(QString val)
 {
     mSizeSlider->setValue(val.toInt());
-    emit BrushSizeChanged(val.toInt());
+    emit brushSizeChanged(val.toInt());
 }
 
-void BrushDockWidget::UpdateOpacity(int val)
+void BrushDockWidget::updateOpacity(int val)
 {
     mOpacityLE->setValue(val);
-    emit BrushOpacityChanged(val);
+    emit brushOpacityChanged(val);
 }
 
-void BrushDockWidget::UpdateOpacity(QString val)
+void BrushDockWidget::updateOpacity(QString val)
 {
     mOpacitySlider->setValue(val.toInt());
-    emit BrushOpacityChanged(val.toInt());
+    emit brushOpacityChanged(val.toInt());
 }
 
-void BrushDockWidget::UpdateSpacing(int val){
+void BrushDockWidget::updateSpacing(int val){
     mSpacingLE->setValue(val);
-    emit BrushSpacingChanged(val);
+    emit brushSpacingChanged(val);
 }
 
-void BrushDockWidget::UpdateSpacing(QString val){
+void BrushDockWidget::updateSpacing(QString val){
     mSpacingSlider->setValue(val.toInt());
-    emit BrushSpacingChanged(val.toInt());
+    emit brushSpacingChanged(val.toInt());
 }
 
-void BrushDockWidget::UpdateTransferSize(int val)
+void BrushDockWidget::updateTransferSize(int val)
 {
     mTransferSizeLE->setText(QString::number(val));
-    emit BrushTransferSizeChanged(val);
+    emit brushTransferSizeChanged(val);
 }
 
-void BrushDockWidget::UpdateTransferSize(QString val)
+void BrushDockWidget::updateTransferSize(QString val)
 {
     mTransferSizeSlider->setValue(val.toInt());
-    emit BrushTransferSizeChanged(val.toInt());
+    emit brushTransferSizeChanged(val.toInt());
 }
 
-void BrushDockWidget::UpdateTransferOpacity(int val)
+void BrushDockWidget::updateTransferOpacity(int val)
 {
     mTransferOpacityLE->setText(QString::number(val));
-    emit BrushTransferOpacityChanged(val);
+    emit brushTransferOpacityChanged(val);
 }
 
-void BrushDockWidget::UpdateTransferOpacity(QString val)
+void BrushDockWidget::updateTransferOpacity(QString val)
 {
     mTransferOpacitySlider->setValue(val.toInt());
-    emit BrushTransferOpacityChanged(val.toInt());
+    emit brushTransferOpacityChanged(val.toInt());
 }
 
-void BrushDockWidget::ToggleTransferSize(bool val)
+void BrushDockWidget::toggleTransferSize(bool val)
 {
     mTransferSizeSlider->setEnabled(val);
     mTransferSizeLE->setEnabled(val);
     if(val == false){
-        emit BrushTransferSizeChanged(0);
+        emit brushTransferSizeChanged(0);
     }
 }
 
-void BrushDockWidget::ToggleTransferOpacity(bool val)
+void BrushDockWidget::toggleTransferOpacity(bool val)
 {
     mTransferOpacitySlider->setEnabled(val);
     mTransferOpacityLE->setEnabled(val);
     if(val == false){
-        emit BrushTransferOpacityChanged(0);
+        emit brushTransferOpacityChanged(0);
     }
 }
 
-void BrushDockWidget::UpdateStencil(QPixmap pixmap){
-    emit BrushStencilChanged(pixmap);
+void BrushDockWidget::updateStencil(QPixmap pixmap){
+    emit brushStencilChanged(pixmap);
 }
 
-void BrushDockWidget::UpdateStencilPath(QString filePath){
-    emit BrushStencilPathChanged(filePath);
+void BrushDockWidget::updateStencilPath(QString filePath){
+    emit brushStencilPathChanged(filePath);
 }
 
 void BrushDockWidget::setCurrentIndex(int val){
     mCurrentBrushIndex = val;
-    mStencilWidget->UpdateStencilWidth(mActualBrushList.at(mCurrentBrushIndex).getSWidth());
-    mStencilWidget->UpdateStencilHeight(mActualBrushList.at(mCurrentBrushIndex).getSHeight());
-    mStencilWidget->UpdateBrushHardness(mActualBrushList.at(mCurrentBrushIndex).getHardness());
-    mStencilWidget->UpdateStencilRotate(mActualBrushList.at(mCurrentBrushIndex).getRotate());
-    emit StencilWidthChanged(mActualBrushList.at(mCurrentBrushIndex).getSWidth());
-    emit StencilHeightChanged(mActualBrushList.at(mCurrentBrushIndex).getSHeight());
-    emit BrushHardnessChanged(mActualBrushList.at(mCurrentBrushIndex).getHardness());
-    emit StencilRotateChanged(mActualBrushList.at(mCurrentBrushIndex).getRotate());
-    emit BrushStencilChanged(mActualBrushList.at(mCurrentBrushIndex).getStencil());
+    mStencilWidget->updateStencilWidth(mActualBrushList.at(mCurrentBrushIndex).getSWidth());
+    mStencilWidget->updateStencilHeight(mActualBrushList.at(mCurrentBrushIndex).getSHeight());
+    mStencilWidget->updateBrushHardness(mActualBrushList.at(mCurrentBrushIndex).getHardness());
+    mStencilWidget->updateStencilRotate(mActualBrushList.at(mCurrentBrushIndex).getRotate());
+    emit stencilWidthChanged(mActualBrushList.at(mCurrentBrushIndex).getSWidth());
+    emit stencilHeightChanged(mActualBrushList.at(mCurrentBrushIndex).getSHeight());
+    emit brushHardnessChanged(mActualBrushList.at(mCurrentBrushIndex).getHardness());
+    emit stencilRotateChanged(mActualBrushList.at(mCurrentBrushIndex).getRotate());
+    emit brushStencilChanged(mActualBrushList.at(mCurrentBrushIndex).getStencil());
 }
 
-void BrushDockWidget::LoadStencilAct(){
+void BrushDockWidget::loadStencilAct(){
     qDebug()<<"Loading Stencil" << endl;
     QString filePath = QFileDialog::getOpenFileName(this, "Open Stencil", QDir::currentPath());
     QPixmap pixmap;
     pixmap.load(filePath);
-    mStencilWidget->UpdateStencil(pixmap);
+    mStencilWidget->updateStencil(pixmap);
 }
 
-void BrushDockWidget::LoadBrushAct(){
+void BrushDockWidget::loadBrushAct(){
     QString filePath = QFileDialog::getOpenFileName(this, "Open Brush", mProjectPath, ".brsh");
-    Brush temp = LoadBrush(filePath);
+    Brush temp = loadBrush(filePath);
     mTempBrushList.append(temp);
     mActualBrushList.append(temp);
-    mGenBrushWidget->AddBrush(temp);
-    mTransBrushWidget->AddBrush(temp);
+    mGenBrushWidget->addBrush(temp);
+    mTransBrushWidget->addBrush(temp);
     qDebug()<<"Loading Brush" << endl;
 }
 
-void BrushDockWidget::LoadBrushSetAct(){
+void BrushDockWidget::loadBrushSetAct(){
     QString filePath = QFileDialog::getOpenFileName(this, "Open Brush Library", mProjectPath, "*.blib");
 
     QMessageBox msgBox;
@@ -328,11 +328,11 @@ void BrushDockWidget::LoadBrushSetAct(){
     msgBox.setButtonText(QMessageBox::Cancel, "Add to existing set");
     switch(msgBox.exec()){
     case QMessageBox::Ok:                       //Replaces Existing
-       mActualBrushList = LoadBrushLib(filePath);
+       mActualBrushList = loadBrushLib(filePath);
        mBrushLib = filePath;
         break;
     case QMessageBox::Cancel:                   //Appends to brush set
-        QVector<Brush> temp = LoadBrushLib(filePath);
+        QVector<Brush> temp = loadBrushLib(filePath);
         mActualBrushList = mActualBrushList + temp;
         break;
     defualt:
@@ -342,7 +342,7 @@ void BrushDockWidget::LoadBrushSetAct(){
     qDebug()<<"Loading Brush Set" << endl;
 }
 
-void BrushDockWidget::SaveStencilAct(){
+void BrushDockWidget::saveStencilAct(){
     QString filePath = QFileDialog::getSaveFileName(this, "Save Stencil",QDir::currentPath());
     QPixmap pixmap = mStencilWidget->GetPixmap();
     pixmap.save(filePath);
@@ -350,7 +350,7 @@ void BrushDockWidget::SaveStencilAct(){
     qDebug() << "Saving Stencil" << endl;
 }
 
-void BrushDockWidget::SaveBrushAct(){
+void BrushDockWidget::saveBrushAct(){
     QMessageBox msgBox;
     msgBox.setText("Save just to library or to External Location?");
     msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
@@ -359,8 +359,8 @@ void BrushDockWidget::SaveBrushAct(){
     switch(msgBox.exec()){
     case QMessageBox::Ok:
         mActualBrushList.push_back(mTempBrushList.at(mCurrentBrushIndex));
-        mGenBrushWidget->AddBrush(mTempBrushList.at(mCurrentBrushIndex));
-        mTransBrushWidget->AddBrush(mTempBrushList.at(mCurrentBrushIndex));
+        mGenBrushWidget->addBrush(mTempBrushList.at(mCurrentBrushIndex));
+        mTransBrushWidget->addBrush(mTempBrushList.at(mCurrentBrushIndex));
         mTempBrushList = mActualBrushList;
         break;
     case QMessageBox::Cancel:
@@ -382,21 +382,21 @@ void BrushDockWidget::SaveBrushAct(){
         qDebug() << "Wrote Brush to Disk" << endl;
 
         mActualBrushList.push_back(mTempBrushList.at(mCurrentBrushIndex));
-        mGenBrushWidget->AddBrush(mTempBrushList.at(mCurrentBrushIndex));
-        mTransBrushWidget->AddBrush(mTempBrushList.at(mCurrentBrushIndex));
+        mGenBrushWidget->addBrush(mTempBrushList.at(mCurrentBrushIndex));
+        mTransBrushWidget->addBrush(mTempBrushList.at(mCurrentBrushIndex));
         mTempBrushList = mActualBrushList;
         break;
     }
     qDebug() << "Saving Brush" << endl;
 }
 
-void BrushDockWidget::SaveBrushSetAct(){
+void BrushDockWidget::saveBrushSetAct(){
     QString filePath = QFileDialog::getSaveFileName(this, "Save brush library", mProjectPath, ".blib");
-    SaveBrushLib(filePath);
+    saveBrushLib(filePath);
     qDebug() << "Saving Brush set" << endl;
 }
 
-QVector<Brush> BrushDockWidget::LoadBrushLib(QString filePath){
+QVector<Brush> BrushDockWidget::loadBrushLib(QString filePath){
     int encrypt = 5025;
     QVector<Brush> ret;
     QFile file(filePath);
@@ -411,7 +411,7 @@ QVector<Brush> BrushDockWidget::LoadBrushLib(QString filePath){
     return ret;
 }
 
-void BrushDockWidget::SaveBrushLib(QString filePath){
+void BrushDockWidget::saveBrushLib(QString filePath){
     int encrypt = 5025;
     QFile file(filePath);
     if(!file.open(QIODevice::WriteOnly)){
@@ -427,11 +427,11 @@ void BrushDockWidget::SaveBrushLib(QString filePath){
     qDebug() << "Saved brush set";
 }
 
-Brush BrushDockWidget::GetStartBrush(){
+Brush BrushDockWidget::getStartBrush(){
     return mActualBrushList[0];
 }
 
-Brush BrushDockWidget::LoadBrush(QString filePath){
+Brush BrushDockWidget::loadBrush(QString filePath){
     Brush ret;
     int encrypt = 5025;
     QFile file(filePath);
@@ -447,7 +447,7 @@ Brush BrushDockWidget::LoadBrush(QString filePath){
     return ret;
 }
 
-void BrushDockWidget::DeleteBrushAct(){
+void BrushDockWidget::deleteBrushAct(){
 
 }
 
@@ -465,12 +465,12 @@ void BrushDockWidget::writeSettings(){
     QSettings settings("SwingInnovations", "Odessa");
     settings.setValue("activeBrushLib", mBrushLib);
     qDebug() << mBrushLib << endl;
-    SaveBrushLib(mBrushLib);
+    saveBrushLib(mBrushLib);
 }
 
 BrushDockWidget::~BrushDockWidget()
 {
-    SaveBrushLib(mBrushLib);
+    saveBrushLib(mBrushLib);
     writeSettings();
 }
 
@@ -933,25 +933,25 @@ GeneralBrushWidget::GeneralBrushWidget(){
     generalBrushLayout->addWidget(mStrokePreviewLabel);
 
     setLayout(generalBrushLayout);
-    connect(mLoadStencilAct, SIGNAL(triggered()), SLOT(UpdateLoadStencil()));
-    connect(mLoadBrushAct, SIGNAL(triggered()), SLOT(UpdateLoadBrush()));
-    connect(mLoadBrushSetAct, SIGNAL(triggered()), SLOT(UpdateLoadBrushSet()));
-    connect(mSaveStencilAct, SIGNAL(triggered()), SLOT(UpdateSaveStencil()));
-    connect(mSaveBrushAct, SIGNAL(triggered()), SLOT(UpdateSaveBrush()));
-    connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(UpdateSaveBrushSet()));
-    connect(mDeleteBrushAct, SIGNAL(triggered()), SLOT(UpdateDeleteBrush()));
-    connect(mBrushIndex, SIGNAL(currentRowChanged(int)), SLOT(UpdateBrushLibIndex(int)));
+    connect(mLoadStencilAct, SIGNAL(triggered()), SLOT(updateLoadStencil()));
+    connect(mLoadBrushAct, SIGNAL(triggered()), SLOT(updateLoadBrush()));
+    connect(mLoadBrushSetAct, SIGNAL(triggered()), SLOT(updateLoadBrushSet()));
+    connect(mSaveStencilAct, SIGNAL(triggered()), SLOT(updateSaveStencil()));
+    connect(mSaveBrushAct, SIGNAL(triggered()), SLOT(updateSaveBrush()));
+    connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(updateSaveBrushSet()));
+    connect(mDeleteBrushAct, SIGNAL(triggered()), SLOT(updateDeleteBrush()));
+    connect(mBrushIndex, SIGNAL(currentRowChanged(int)), SLOT(updateBrushLibIndex(int)));
 }
 
-void GeneralBrushWidget::AddBrush(int iD, Brush brush){
+void GeneralBrushWidget::addBrush(int iD, Brush brush){
 
 }
 
-void GeneralBrushWidget::AddBrush(Brush brush){
+void GeneralBrushWidget::addBrush(Brush brush){
     mBrushIndex->addItem(brush.mName);
 }
 
-void GeneralBrushWidget::UpdateStencil(QPixmap pixmap){
+void GeneralBrushWidget::updateStencil(QPixmap pixmap){
     int targetWidth = mStrokePreview.width();
     int targetHeight = mStrokePreview.height();
     int sourceWidth = pixmap.width();
@@ -1082,28 +1082,28 @@ CustomBrushWidget::CustomBrushWidget(){
     AdvancedPanel->addLayout(advancedLayout);
     setLayout(AdvancedPanel);
 
-    connect(mLoadStencilAct, SIGNAL(triggered()), SLOT(UpdateLoadStencil()));
-    connect(mLoadBrushAct, SIGNAL(triggered()), SLOT(UpdateLoadBrush()));
-    connect(mLoadBrushSetAct, SIGNAL(triggered()), SLOT(UpdateLoadBrushSet()));
-    connect(mSaveStencilAct, SIGNAL(triggered()), SLOT(UpdateSaveStencil()));
-    connect(mSaveBrushAct, SIGNAL(triggered()), SLOT(UpdateSaveBrush()));
-    connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(UpdateSaveBrushSet()));
-    connect(mDeleteBrushAct, SIGNAL(triggered()), SLOT(UpdateDeleteBrush()));
-    connect(mWidthLE, SIGNAL(textChanged(QString)), SLOT(UpdateStencilWidth(QString)));
-    connect(mWidthSlider, SIGNAL(valueChanged(int)), SLOT(UpdateStencilWidth(int)));
-    connect(mHeightLE, SIGNAL(textChanged(QString)), SLOT(UpdateStencilHeight(QString)));
-    connect(mHeightSlider, SIGNAL(valueChanged(int)), SLOT(UpdateStencilHeight(int)));
-    connect(mHeightLE, SIGNAL(textChanged(QString)), SLOT(UpdateStencilHeight(QString)));
-    connect(mHardnessSlider, SIGNAL(valueChanged(int)), SLOT(UpdateBrushHardness(int)));
-    connect(mHardnessLE, SIGNAL(textChanged(QString)), SLOT(UpdateBrushHardness(QString)));
-    connect(mRotateSlider, SIGNAL(valueChanged(int)), SLOT(UpdateStencilRotate(int)));
-    connect(mRotateLE, SIGNAL(textChanged(QString)), SLOT(UpdateStencilRotate(QString)));
-    connect(this, SIGNAL(StencilChanged(QPixmap)), SLOT(UpdateStencil(QPixmap)));
-    connect(mCircleButton, SIGNAL(clicked()), SLOT(UpdateBrushShape_Circle()));
-    connect(mSquareButton, SIGNAL(clicked()), SLOT(UpdateBrushShape_Square()));
-    connect(mCustomButton, SIGNAL(clicked()), SLOT(UpdateBrushShape_Polygon()));
-    connect(mTextureBtn, SIGNAL(clicked()), SLOT(UpdateStencilTexture()));
-    connect(mTextureFileLE, SIGNAL(textChanged(QString)), SLOT(UpdateStencilTextureLE(QString)));
+    connect(mLoadStencilAct, SIGNAL(triggered()), SLOT(updateLoadStencil()));
+    connect(mLoadBrushAct, SIGNAL(triggered()), SLOT(updateLoadBrush()));
+    connect(mLoadBrushSetAct, SIGNAL(triggered()), SLOT(updateLoadBrushSet()));
+    connect(mSaveStencilAct, SIGNAL(triggered()), SLOT(updateSaveStencil()));
+    connect(mSaveBrushAct, SIGNAL(triggered()), SLOT(updateSaveBrush()));
+    connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(updateSaveBrushSet()));
+    connect(mDeleteBrushAct, SIGNAL(triggered()), SLOT(updateDeleteBrush()));
+    connect(mWidthLE, SIGNAL(textChanged(QString)), SLOT(updateStencilWidth(QString)));
+    connect(mWidthSlider, SIGNAL(valueChanged(int)), SLOT(updateStencilWidth(int)));
+    connect(mHeightLE, SIGNAL(textChanged(QString)), SLOT(updateStencilHeight(QString)));
+    connect(mHeightSlider, SIGNAL(valueChanged(int)), SLOT(updateStencilHeight(int)));
+    connect(mHeightLE, SIGNAL(textChanged(QString)), SLOT(updateStencilHeight(QString)));
+    connect(mHardnessSlider, SIGNAL(valueChanged(int)), SLOT(updateBrushHardness(int)));
+    connect(mHardnessLE, SIGNAL(textChanged(QString)), SLOT(updateBrushHardness(QString)));
+    connect(mRotateSlider, SIGNAL(valueChanged(int)), SLOT(updateStencilRotate(int)));
+    connect(mRotateLE, SIGNAL(textChanged(QString)), SLOT(updateStencilRotate(QString)));
+    connect(this, SIGNAL(stencilChanged(QPixmap)), SLOT(updateStencil(QPixmap)));
+    connect(mCircleButton, SIGNAL(clicked()), SLOT(updateBrushShape_Circle()));
+    connect(mSquareButton, SIGNAL(clicked()), SLOT(updateBrushShape_Square()));
+    connect(mCustomButton, SIGNAL(clicked()), SLOT(updateBrushShape_Polygon()));
+    connect(mTextureBtn, SIGNAL(clicked()), SLOT(updateStencilTexture()));
+    connect(mTextureFileLE, SIGNAL(textChanged(QString)), SLOT(updateStencilTextureLE(QString)));
 }
 
 void CustomBrushWidget::TempSave(QPixmap pixmap){
@@ -1113,14 +1113,14 @@ void CustomBrushWidget::TempSave(QPixmap pixmap){
         image.save(tempFile.fileName());
     }
     tempFile.close();
-    emit StencilPathChanged(tempFile.fileName());
+    emit stencilPathChanged(tempFile.fileName());
 }
 
-void CustomBrushWidget::UpdateStencil(QPixmap pixmap){
+void CustomBrushWidget::updateStencil(QPixmap pixmap){
     TempSave(pixmap);
 }
 
-void CustomBrushWidget::UpdateStencilTexture(){
+void CustomBrushWidget::updateStencilTexture(){
     hasTexture = true;
     QString fileName = QFileDialog::getOpenFileName(this, "Load Texture", QDir::currentPath());
     mStencilTexture.load(fileName);
@@ -1141,60 +1141,60 @@ void CustomBrushWidget::UpdateStencilTexture(){
     mTextureFileLE->setText(fileName);
 }
 
-void CustomBrushWidget::UpdateStencilWidth(int val){
+void CustomBrushWidget::updateStencilWidth(int val){
    mWidthLE->setText(QString::number(val));
    emit StencilWidthChanged(val);
-   emit StencilChanged(mStencilPreview);
+   emit stencilChanged(mStencilPreview);
 }
 
-void CustomBrushWidget::UpdateStencilWidth(QString val){
+void CustomBrushWidget::updateStencilWidth(QString val){
     mWidthSlider->setValue(val.toInt());
     emit StencilWidthChanged(val.toInt());
 }
 
-void CustomBrushWidget::UpdateStencilHeight(int val){
+void CustomBrushWidget::updateStencilHeight(int val){
     mHeightLE->setText(QString::number(val));
-    emit StencilHeightChanged(val);
-    emit StencilChanged(mStencilPreview);
+    emit stencilHeightChanged(val);
+    emit stencilChanged(mStencilPreview);
 }
 
-void CustomBrushWidget::UpdateStencilHeight(QString val){
+void CustomBrushWidget::updateStencilHeight(QString val){
     mHeightSlider->setValue(val.toInt());
-    emit StencilHeightChanged(val.toInt());
+    emit stencilHeightChanged(val.toInt());
 }
 
-void CustomBrushWidget::UpdateBrushHardness(int val){
+void CustomBrushWidget::updateBrushHardness(int val){
     mHardnessLE->setText(QString::number(val));
-    emit BrushHardnessChanged(val);
-    emit StencilChanged(mStencilPreview);
+    emit brushHardnessChanged(val);
+    emit stencilChanged(mStencilPreview);
 }
 
-void CustomBrushWidget::UpdateBrushHardness(QString val){
+void CustomBrushWidget::updateBrushHardness(QString val){
     mHardnessSlider->setValue(val.toInt());
-    emit BrushHardnessChanged(val.toInt());
+    emit brushHardnessChanged(val.toInt());
 }
 
-void CustomBrushWidget::UpdateStencilRotate(int val){
+void CustomBrushWidget::updateStencilRotate(int val){
     if(val > 360){
         val = 0;
         mRotateSlider->setValue(0);
     }
     mRotateLE->setText(QString::number(val));
-    emit RotateChanged(val);
-    emit StencilChanged(mStencilPreview);
+    emit rotateChanged(val);
+    emit stencilChanged(mStencilPreview);
 }
 
-void CustomBrushWidget::UpdateStencilRotate(QString val){
+void CustomBrushWidget::updateStencilRotate(QString val){
     if(val.toInt() > 360){
         mRotateSlider->setValue(0);
-        emit RotateChanged(0);
+        emit rotateChanged(0);
     }else{
         mRotateSlider->setValue(val.toInt());
-        emit RotateChanged(val.toInt());
+        emit rotateChanged(val.toInt());
     }
 }
 
-void CustomBrushWidget::UpdateStencilTextureLE(QString val){
+void CustomBrushWidget::updateStencilTextureLE(QString val){
     if(val.isEmpty()){
         hasTexture = false;
     }else{
@@ -1290,19 +1290,19 @@ void CustomBrushWidget::paintEvent(QPaintEvent *event){
     mStencilLabel->setPixmap(mStencilPreview);
 }
 
-void CustomBrushWidget::UpdateBrushShape_Circle(){
+void CustomBrushWidget::updateBrushShape_Circle(){
     mBrushShape = CIRCLE_SHAPE;
-    emit StencilChanged(this->GeneratePixmap());
+    emit stencilChanged(this->GeneratePixmap());
 }
 
-void CustomBrushWidget::UpdateBrushShape_Square(){
+void CustomBrushWidget::updateBrushShape_Square(){
     mBrushShape = SQUARE_SHAPE;
-    emit StencilChanged(this->GeneratePixmap());
+    emit stencilChanged(this->GeneratePixmap());
 }
 
-void CustomBrushWidget::UpdateBrushShape_Polygon(){
+void CustomBrushWidget::updateBrushShape_Polygon(){
     mBrushShape = CUSTOM;
-    emit StencilChanged(this->GeneratePixmap());
+    emit stencilChanged(this->GeneratePixmap());
 }
 
 CustomBrushWidget::~CustomBrushWidget(){

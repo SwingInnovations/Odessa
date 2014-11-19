@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent)
     brushDockWidget->setWindowTitle("Brush");
     brushDockWidget->setDirectory(projectPath+"/Brush/");
     brushDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    mEditor->setBrush(brushDockWidget->GetStartBrush());
+    mEditor->setBrush(brushDockWidget->getStartBrush());
 
     colorDockWidget = new ColorDockWidget(this);
     colorDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);

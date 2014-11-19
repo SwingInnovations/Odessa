@@ -58,51 +58,51 @@ public:
     BrushDockWidget(QWidget *parent = 0);
     void setDirectory(QString dir);
     virtual ~BrushDockWidget();
-    Brush GetStartBrush();
+    Brush getStartBrush();
 protected:
     void resizeEvent(QResizeEvent*);
 signals:
-    void BrushSizeChanged(int);
-    void BrushOpacityChanged(int);
-    void BrushSpacingChanged(int);
-    void BrushTransferSizeChanged(int);
-    void BrushTransferOpacityChanged(int);
-    void BrushHardnessChanged(int);
-    void StencilWidthChanged(int);
-    void StencilHeightChanged(int);
-    void StencilRotateChanged(int);
-    void BrushStencilChanged(QPixmap);
-    void BrushStencilPathChanged(QString);
-    void StencilBaseShapeChanged(BrushShape);
+    void brushSizeChanged(int);
+    void brushOpacityChanged(int);
+    void brushSpacingChanged(int);
+    void brushTransferSizeChanged(int);
+    void brushTransferOpacityChanged(int);
+    void brushHardnessChanged(int);
+    void stencilWidthChanged(int);
+    void stencilHeightChanged(int);
+    void stencilRotateChanged(int);
+    void brushStencilChanged(QPixmap);
+    void brushStencilPathChanged(QString);
+    void stencilBaseShapeChanged(BrushShape);
 private slots:
     void setCurrentIndex(int);
-    void UpdateSize(int);
-    void UpdateSize(QString);
-    void UpdateSpacing(int);
-    void UpdateSpacing(QString);
-    void UpdateOpacity(int);
-    void UpdateOpacity(QString);
-    void UpdateTransferSize(int);
-    void UpdateTransferSize(QString);
-    void UpdateTransferOpacity(int);
-    void UpdateTransferOpacity(QString);
-    void ToggleTransferSize(bool);
-    void ToggleTransferOpacity(bool);
-    void UpdateStencil(QPixmap);
-    void UpdateStencilPath(QString);
-    void LoadStencilAct();
-    void LoadBrushAct();
-    void LoadBrushSetAct();
-    void SaveStencilAct();
-    void SaveBrushAct();
-    void SaveBrushSetAct();
-    void DeleteBrushAct();
+    void updateSize(int);
+    void updateSize(QString);
+    void updateSpacing(int);
+    void updateSpacing(QString);
+    void updateOpacity(int);
+    void updateOpacity(QString);
+    void updateTransferSize(int);
+    void updateTransferSize(QString);
+    void updateTransferOpacity(int);
+    void updateTransferOpacity(QString);
+    void toggleTransferSize(bool);
+    void toggleTransferOpacity(bool);
+    void updateStencil(QPixmap);
+    void updateStencilPath(QString);
+    void loadStencilAct();
+    void loadBrushAct();
+    void loadBrushSetAct();
+    void saveStencilAct();
+    void saveBrushAct();
+    void saveBrushSetAct();
+    void deleteBrushAct();
 private:
     void readSettings();
     void writeSettings();
-    Brush LoadBrush(QString filePath);
-    QVector<Brush> LoadBrushLib(QString filePath);
-    void SaveBrushLib(QString filePath);
+    Brush loadBrush(QString filePath);
+    QVector<Brush> loadBrushLib(QString filePath);
+    void saveBrushLib(QString filePath);
 
     QString mBrushLib;
     QString mProjectPath;
@@ -329,31 +329,31 @@ class GeneralBrushWidget : public QWidget
 public:
     GeneralBrushWidget();
     virtual ~GeneralBrushWidget();
-    void AddBrush(int iD, Brush brush);
-    void AddBrush(Brush brush);
-    int SetBrushIndex(int val){this->mCurrentBrushIndex = val;}
-    void SetDir(QString dir){this->mDir = dir;}
-    int GetBrushIndex(){return this->mCurrentBrushIndex;}
-    QString GetDir(){return this->mDir;}
+    void addBrush(int iD, Brush brush);
+    void addBrush(Brush brush);
+    int setBrushIndex(int val){this->mCurrentBrushIndex = val;}
+    void setDir(QString dir){this->mDir = dir;}
+    int getBrushIndex(){return this->mCurrentBrushIndex;}
+    QString getDir(){return this->mDir;}
 signals:
-    void LoadStencilTriggered();
-    void LoadBrushTriggered();
-    void LoadBrushSetTriggered();
-    void SaveStencilTriggered();
-    void SaveBrushTriggered();
-    void SaveBrushSetTriggered();
-    void DeleteBrushTriggered();
-    void BrushLibIndexChanged(int);
+    void loadStencilTriggered();
+    void loadBrushTriggered();
+    void loadBrushSetTriggered();
+    void saveStencilTriggered();
+    void saveBrushTriggered();
+    void saveBrushSetTriggered();
+    void deleteBrushTriggered();
+    void brushLibIndexChanged(int);
 public slots:
-    void UpdateLoadStencil(){emit LoadStencilTriggered();}
-    void UpdateLoadBrush(){emit LoadBrushTriggered();}
-    void UpdateLoadBrushSet(){emit LoadBrushSetTriggered();}
-    void UpdateSaveStencil(){emit SaveStencilTriggered();}
-    void UpdateSaveBrush(){emit SaveBrushTriggered();}
-    void UpdateSaveBrushSet(){emit SaveBrushSetTriggered();}
-    void UpdateDeleteBrush(){emit DeleteBrushTriggered();}
-    void UpdateBrushLibIndex(int val){mCurrentBrushIndex = val; emit BrushLibIndexChanged(val);}
-    void UpdateStencil(QPixmap);
+    void updateLoadStencil(){emit loadStencilTriggered();}
+    void updateLoadBrush(){emit loadBrushTriggered();}
+    void updateLoadBrushSet(){emit loadBrushSetTriggered();}
+    void updateSaveStencil(){emit saveStencilTriggered();}
+    void updateSaveBrush(){emit saveBrushTriggered();}
+    void updateSaveBrushSet(){emit saveBrushSetTriggered();}
+    void updateDeleteBrush(){emit deleteBrushTriggered();}
+    void updateBrushLibIndex(int val){mCurrentBrushIndex = val; emit brushLibIndexChanged(val);}
+    void updateStencil(QPixmap);
 private:
     unsigned int mCurrentBrushIndex;
     QString mDir;
@@ -386,41 +386,41 @@ public:
 protected:
     void paintEvent(QPaintEvent*);
 signals:
-    void LoadStencilTriggered();
-    void LoadBrushTriggered();
-    void LoadBrushSetTriggered();
-    void SaveStencilTriggered();
-    void SaveBrushTriggered();
-    void SaveBrushSetTriggered();
-    void DelteBrushTriggered();
+    void loadStencilTriggered();
+    void loadBrushTriggered();
+    void loadBrushSetTriggered();
+    void saveStencilTriggered();
+    void saveBrushTriggered();
+    void saveBrushSetTriggered();
+    void deleteBrushTriggered();
     void StencilWidthChanged(int);
-    void StencilHeightChanged(int);
-    void BrushHardnessChanged(int);
-    void RotateChanged(int);
-    void StencilChanged(QPixmap);
-    void StencilPathChanged(QString);
+    void stencilHeightChanged(int);
+    void brushHardnessChanged(int);
+    void rotateChanged(int);
+    void stencilChanged(QPixmap);
+    void stencilPathChanged(QString);
 public slots:
-    void UpdateLoadStencil(){emit LoadStencilTriggered();}
-    void UpdateLoadBrush(){emit LoadBrushTriggered();}
-    void UpdateLoadBrushSet(){emit LoadBrushSetTriggered();}
-    void UpdateSaveStencil(){emit SaveStencilTriggered();}
-    void UpdateSaveBrush(){emit SaveBrushTriggered();}
-    void UpdateSaveBrushSet(){emit SaveBrushSetTriggered();}
-    void UpdateDeleteBrush(){emit DelteBrushTriggered();}
-    void UpdateStencilWidth(int);
-    void UpdateStencilWidth(QString);
-    void UpdateStencilHeight(int);
-    void UpdateStencilHeight(QString);
-    void UpdateBrushHardness(int);
-    void UpdateBrushHardness(QString);
-    void UpdateStencilRotate(int);
-    void UpdateStencilRotate(QString);
-    void UpdateStencil(QPixmap);
-    void UpdateBrushShape_Circle();
-    void UpdateBrushShape_Square();
-    void UpdateBrushShape_Polygon();
-    void UpdateStencilTexture();
-    void UpdateStencilTextureLE(QString);
+    void updateLoadStencil(){emit loadStencilTriggered();}
+    void updateLoadBrush(){emit loadBrushTriggered();}
+    void updateLoadBrushSet(){emit loadBrushSetTriggered();}
+    void updateSaveStencil(){emit saveStencilTriggered();}
+    void updateSaveBrush(){emit saveBrushTriggered();}
+    void updateSaveBrushSet(){emit saveBrushSetTriggered();}
+    void updateDeleteBrush(){emit deleteBrushTriggered();}
+    void updateStencilWidth(int);
+    void updateStencilWidth(QString);
+    void updateStencilHeight(int);
+    void updateStencilHeight(QString);
+    void updateBrushHardness(int);
+    void updateBrushHardness(QString);
+    void updateStencilRotate(int);
+    void updateStencilRotate(QString);
+    void updateStencil(QPixmap);
+    void updateBrushShape_Circle();
+    void updateBrushShape_Square();
+    void updateBrushShape_Polygon();
+    void updateStencilTexture();
+    void updateStencilTextureLE(QString);
 private:
 
     QString mDir;
