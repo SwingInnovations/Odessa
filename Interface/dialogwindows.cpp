@@ -122,11 +122,11 @@ OdessaPrefDialog::OdessaPrefDialog()
 
     setLayout(mainLayout);
 
-    connect(genPref, SIGNAL(ProjectPathChanged(QString)), SLOT(UpdateProjectPath(QString)));
+    connect(genPref, SIGNAL(projectPathChanged(QString)), SLOT(updateProjectPath(QString)));
 }
 
-void OdessaPrefDialog::UpdateProjectPath(QString val){
-    emit ProjectPathChanged(val);
+void OdessaPrefDialog::updateProjectPath(QString val){
+    emit projectPathChanged(val);
 }
 
 OdessaPrefDialog::~OdessaPrefDialog()
@@ -161,17 +161,17 @@ GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
 
     setLayout(masterLayout);
 
-    connect(mChangeProjectPathBtn, SIGNAL(clicked()), SLOT(ChangeProjectPath()));
-    connect(mStepsBox, SIGNAL(valueChanged(int)), SLOT(ChangeHistorySteps(int)));
+    connect(mChangeProjectPathBtn, SIGNAL(clicked()), SLOT(changeProjectPath()));
+    connect(mStepsBox, SIGNAL(valueChanged(int)), SLOT(changeHistorySteps(int)));
 }
 
-void GeneralPrefPage::ChangeProjectPath(){
+void GeneralPrefPage::changeProjectPath(){
     QString filePath = QFileDialog::getExistingDirectory(this, "Set Project Path: ", QDir::currentPath());
     mProjectPathLE->setText(filePath);
-    emit ProjectPathChanged(filePath);
+    emit projectPathChanged(filePath);
 }
 
-void GeneralPrefPage::ChangeHistorySteps(int val){
+void GeneralPrefPage::changeHistorySteps(int val){
     mStepsBox->setValue(val);
 }
 

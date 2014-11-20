@@ -70,10 +70,10 @@ public:
     OdessaPrefDialog();
     ~OdessaPrefDialog();
 signals:
-    void ProjectPathChanged(QString);
+    void projectPathChanged(QString);
 
 public slots:
-    void UpdateProjectPath(QString);
+    void updateProjectPath(QString);
 private:
     QListWidget* contentWidget;
     QStackedWidget* pagesWidget;
@@ -90,12 +90,12 @@ public:
     GeneralPrefPage(QWidget* parent = 0);
     ~GeneralPrefPage();
 signals:
-    void ProjectPathChanged(QString);
-    void HistoryStepsChanged(int);
+    void projectPathChanged(QString);
+    void historyStepsChanged(int);
 
 public slots:
-    void ChangeProjectPath();
-    void ChangeHistorySteps(int);
+    void changeProjectPath();
+    void changeHistorySteps(int);
 private:
     /*-Project Path-*/
     QLabel* mProjectPathLbl;
