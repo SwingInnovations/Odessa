@@ -155,8 +155,16 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     mTabWidget->setTabPosition(QTabWidget::South);
     mTabWidget->setTabShape(QTabWidget::Rounded);
 
-    setWidget(mTabWidget);
-    this->setMinimumWidth(292);
+//    setWidget(mTabWidget);
+//    this->setMinimumWidth(292);
+    QVBoxLayout* displayLayout = new QVBoxLayout;
+    displayLayout->addWidget(mTabWidget);
+    displayLayout->addSpacerItem(new QSpacerItem(292, 10, QSizePolicy::Expanding, QSizePolicy::Expanding));
+
+    QWidget* displayWidget = new QWidget(this);
+    displayWidget->setLayout(displayLayout);
+
+    setWidget(displayWidget);
 
     connect(mSizeSlider, SIGNAL(valueChanged(int)), SLOT(updateSize(int)));
     connect(mSizeLE, SIGNAL(valueChanged(QString)), SLOT(updateSize(QString)));
@@ -572,6 +580,8 @@ ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
     HSVPanel->setLayout(masterHSVLayout);
     colorModeTab->addTab(HSVPanel, "HSV");
 
+    colorModeTab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+
     colorWheelPixmap = QPixmap(200, 200);
     colorWheelPixmap.fill(QColor(Qt::gray));
 
@@ -589,6 +599,7 @@ ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
     QVBoxLayout* masterColorLayout = new QVBoxLayout;
     masterColorLayout->addWidget(m_ColorWheelContainer);
     masterColorLayout->addWidget(colorModeTab);
+    masterColorLayout->addSpacerItem(new QSpacerItem(m_ColorWheelContainer->width(), 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     QWidget* masterColorWidget = new QWidget(this);
     masterColorWidget->setLayout(masterColorLayout);
