@@ -201,6 +201,7 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(mStencilWidget, SIGNAL(saveBrushTriggered()), SLOT(saveBrushAct()));
     connect(mStencilWidget, SIGNAL(saveBrushSetTriggered()), SLOT(saveBrushSetAct()));
     connect(mGenBrushWidget, SIGNAL(brushLibIndexChanged(int)), SLOT(setCurrentIndex(int)));
+    connect(mGenBrushWidget, SIGNAL(brushNameChanged(QString)), SLOT(updateBrushName(QString)));
     connect(mGenBrushWidget, SIGNAL(brushLibIndexChanged(int)), SLOT(setCurrentIndex(int)));
 }
 
@@ -293,6 +294,11 @@ void BrushDockWidget::updateStencil(QPixmap pixmap){
 
 void BrushDockWidget::updateStencilPath(QString filePath){
     emit brushStencilPathChanged(filePath);
+}
+
+void BrushDockWidget::updateBrushName(QString name){
+    mActualBrushList[mCurrentBrushIndex].SetName(name);
+    mTempBrushList[mCurrentBrushIndex].SetName(name);
 }
 
 void BrushDockWidget::setCurrentIndex(int val){
@@ -952,6 +958,11 @@ GeneralBrushWidget::GeneralBrushWidget(){
     connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(updateSaveBrushSet()));
     connect(mDeleteBrushAct, SIGNAL(triggered()), SLOT(updateDeleteBrush()));
     connect(mBrushIndex, SIGNAL(currentRowChanged(int)), SLOT(updateBrushLibIndex(int)));
+    connect(mBrushIndex, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(updateName(QListWidgetItem*)));
+}
+
+void GeneralBrushWidget::updateName(QListWidgetItem *item){
+    emit brushNameChanged(item->text());
 }
 
 void GeneralBrushWidget::addBrush(int iD, Brush brush){
@@ -959,7 +970,9 @@ void GeneralBrushWidget::addBrush(int iD, Brush brush){
 }
 
 void GeneralBrushWidget::addBrush(Brush brush){
-    mBrushIndex->addItem(brush.mName);
+    QListWidgetItem* itm = new QListWidgetItem(brush.mName);
+    itm->setFlags(itm->flags() | Qt::ItemIsEditable);
+    mBrushIndex->addItem(itm);
 }
 
 void GeneralBrushWidget::updateStencil(QPixmap pixmap){

@@ -103,7 +103,7 @@ release/Odessa_resource_res.o: Odessa_resource.rc
 	windres -i Odessa_resource.rc -o release\Odessa_resource_res.o --include-dir=. $(DEFINES)
 
 qmake: FORCE
-	@$(QMAKE) -spec win32-g++ CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile.Release Odessa.pro
+	@$(QMAKE) -spec win32-g++ CONFIG+=release CONFIG+=declarative_debug CONFIG+=qml_debug -o Makefile.Release Odessa.pro
 
 qmake_all: FORCE
 

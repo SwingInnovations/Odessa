@@ -90,6 +90,7 @@ private slots:
     void toggleTransferOpacity(bool);
     void updateStencil(QPixmap);
     void updateStencilPath(QString);
+    void updateBrushName(QString);
     void loadStencilAct();
     void loadBrushAct();
     void loadBrushSetAct();
@@ -344,6 +345,7 @@ signals:
     void saveBrushSetTriggered();
     void deleteBrushTriggered();
     void brushLibIndexChanged(int);
+    void brushNameChanged(QString);
 public slots:
     void updateLoadStencil(){emit loadStencilTriggered();}
     void updateLoadBrush(){emit loadBrushTriggered();}
@@ -354,6 +356,7 @@ public slots:
     void updateDeleteBrush(){emit deleteBrushTriggered();}
     void updateBrushLibIndex(int val){mCurrentBrushIndex = val; emit brushLibIndexChanged(val);}
     void updateStencil(QPixmap);
+    void updateName(QListWidgetItem* item);
 private:
     unsigned int mCurrentBrushIndex;
     QString mDir;
