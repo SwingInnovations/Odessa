@@ -5,7 +5,6 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     /*-Constructor-*/
     mTabWidget = new QTabWidget(this);
     mGenBrushWidget = new GeneralBrushWidget;
-    mTransBrushWidget = new GeneralBrushWidget;
     mStencilWidget = new CustomBrushWidget;
 
     mActualBrushList = QVector<Brush>();
@@ -27,7 +26,6 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
         mActualBrushList[0].SetStencil(mStencilWidget->GeneratePixmap());
         mTempBrushList = mActualBrushList;
         mGenBrushWidget->addBrush(mActualBrushList.at(0));
-        mTransBrushWidget->addBrush(mActualBrushList.at(0));
         mStencilWidget->updateStencilWidth(mTempBrushList.at(0).getSWidth());
         mStencilWidget->updateStencilHeight(mTempBrushList.at(0).getSHeight());
         qDebug() << "Generating new Library" << mBrushLib << endl;
@@ -37,7 +35,6 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
         for(unsigned int i = 0; i < mActualBrushList.size(); i++){
             qDebug()<< mBrushLib <<"Loaded brush " << i << endl;
             mGenBrushWidget->addBrush(mActualBrushList.at(i));
-            mTransBrushWidget->addBrush(mActualBrushList.at(i));
         }
         mTempBrushList = mActualBrushList;
     }
@@ -95,9 +92,10 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     mTransferSizeSlider->setRange(0, 500);
     mTransferSizeSlider->setValue(0);
     mTransferSizeSlider->setEnabled(false);
-    mTransferSizeLE = new QLineEdit(this);
-    mTransferSizeLE->setFixedWidth(32);
-    mTransferSizeLE->setText(QString::number(0));
+    mTransferSizeLE = new QSpinBox(this);
+    mTransferSizeLE->setFixedWidth(48);
+    mTransferSizeLE->setRange(0, 500);
+    mTransferSizeLE->setValue(0);
     mTransferSizeLE->setEnabled(false);
     QHBoxLayout* transferSizeLayout = new QHBoxLayout;
     transferSizeLayout->addWidget(mTransferSizeToggle);
@@ -110,18 +108,32 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     mTransferOpacitySlider->setRange(0, 255);
     mTransferOpacitySlider->setValue(0);
     mTransferOpacitySlider->setEnabled(false);
-    mTransferOpacityLE = new QLineEdit(this);
-    mTransferOpacityLE->setFixedWidth(32);
-    mTransferOpacityLE->setText(QString::number(0));
+    mTransferOpacityLE = new QSpinBox(this);
+    mTransferOpacityLE->setRange(0, 100);
+    mTransferOpacityLE->setFixedWidth(48);
+    mTransferOpacityLE->setValue(0);
     mTransferOpacityLE->setEnabled(false);
     QHBoxLayout* transferOpacityLayout = new QHBoxLayout;
     transferOpacityLayout->addWidget(mTransferOpacityToggle);
     transferOpacityLayout->addWidget(mTransferOpacitySlider);
     transferOpacityLayout->addWidget(mTransferOpacityLE);
 
+    mTransferOpacityLE->setVisible(false);
+    mTransferOpacitySlider->setVisible(false);
+    mTransferOpacityToggle->setVisible(false);
+    mTransferSizeLE->setVisible(false);
+    mTransferSizeSlider->setVisible(false);
+    mTransferSizeToggle->setVisible(false);
+
     QVBoxLayout* transferParam = new QVBoxLayout;
     transferParam->addLayout(transferSizeLayout);
     transferParam->addLayout(transferOpacityLayout);
+    transGrpBox = new QGroupBox("Transfer" ,this);
+    transGrpBox->setCheckable(true);
+    transGrpBox->setChecked(false);
+    transGrpBox->setLayout(transferParam);
+
+    generalParam->addWidget(transGrpBox);
 
     /*-Brush_General-*/
 
@@ -130,15 +142,8 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     GeneralBrushLayout->addWidget(mGenBrushWidget);
     GeneralBrushLayout->addLayout(generalParam);
 
-    QVBoxLayout* TransferBrushLayout = new QVBoxLayout;
-    TransferBrushLayout->addWidget(mTransBrushWidget);
-    TransferBrushLayout->addLayout(transferParam);
-
     QWidget* GeneralBrushTab = new QWidget(this);
     GeneralBrushTab->setLayout(GeneralBrushLayout);
-
-    QWidget* TransferBrushTab = new QWidget(this);
-    TransferBrushTab->setLayout(TransferBrushLayout);
 
     /*-Brush_Advanced-*/
 
@@ -149,10 +154,9 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     AdvancedBrushTab->setLayout(AdvancedBrushLayout);
 
     mTabWidget->addTab(GeneralBrushTab, "General");
-    mTabWidget->addTab(TransferBrushTab, "Transfer");
     mTabWidget->addTab(AdvancedBrushTab, "Custom");
 
-    mTabWidget->setTabPosition(QTabWidget::South);
+    mTabWidget->setTabPosition(QTabWidget::West);
     mTabWidget->setTabShape(QTabWidget::Rounded);
 
 //    setWidget(mTabWidget);
@@ -180,20 +184,14 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(mTransferOpacityLE, SIGNAL(textChanged(QString)), SLOT(updateTransferOpacity(QString)));
     connect(mStencilWidget, SIGNAL(stencilChanged(QPixmap)), SLOT(updateStencil(QPixmap)));
     connect(mStencilWidget, SIGNAL(stencilChanged(QPixmap)), mGenBrushWidget, SLOT(updateStencil(QPixmap)));
-    connect(mStencilWidget, SIGNAL(stencilChanged(QPixmap)), mTransBrushWidget, SLOT(updateStencil(QPixmap)));
     connect(mStencilWidget, SIGNAL(stencilPathChanged(QString)), SLOT(updateStencilPath(QString)));
+    connect(transGrpBox, SIGNAL(toggled(bool)), SLOT(toggleTransferVisibility(bool)));
     connect(mGenBrushWidget, SIGNAL(loadStencilTriggered()), SLOT(loadStencilAct()));
     connect(mGenBrushWidget, SIGNAL(loadBrushTriggered()), SLOT(loadBrushAct()));
     connect(mGenBrushWidget, SIGNAL(loadBrushSetTriggered()), SLOT(loadBrushSetAct()));
     connect(mGenBrushWidget, SIGNAL(saveStencilTriggered()), SLOT(saveStencilAct()));
     connect(mGenBrushWidget, SIGNAL(saveBrushTriggered()), SLOT(saveBrushAct()));
     connect(mGenBrushWidget, SIGNAL(saveBrushSetTriggered()), SLOT(saveBrushSetAct()));
-    connect(mTransBrushWidget, SIGNAL(loadStencilTriggered()), SLOT(loadStencilAct()));
-    connect(mTransBrushWidget, SIGNAL(loadBrushTriggered()), SLOT(loadBrushAct()));
-    connect(mTransBrushWidget, SIGNAL(loadBrushSetTriggered()), SLOT(loadBrushSetAct()));
-    connect(mTransBrushWidget, SIGNAL(saveStencilTriggered()), SLOT(saveStencilAct()));
-    connect(mTransBrushWidget, SIGNAL(saveBrushTriggered()), SLOT(saveBrushAct()));
-    connect(mTransBrushWidget, SIGNAL(saveBrushSetTriggered()), SLOT(saveBrushSetAct()));
     connect(mStencilWidget, SIGNAL(loadStencilTriggered()), SLOT(loadStencilAct()));
     connect(mStencilWidget, SIGNAL(loadBrushTriggered()), SLOT(loadBrushAct()));
     connect(mStencilWidget, SIGNAL(loadBrushSetTriggered()), SLOT(loadBrushSetAct()));
@@ -208,8 +206,6 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
 void BrushDockWidget::setDirectory(QString dir){
     mProjectPath = dir;
     mGenBrushWidget->setDir(dir);
-    mTransBrushWidget->setDir(dir);
-    mStencilWidget->SetDir(dir);
 }
 
 void BrushDockWidget::updateSize(int val)
@@ -248,7 +244,7 @@ void BrushDockWidget::updateSpacing(QString val){
 
 void BrushDockWidget::updateTransferSize(int val)
 {
-    mTransferSizeLE->setText(QString::number(val));
+    mTransferSizeLE->setValue(val);
     emit brushTransferSizeChanged(val);
 }
 
@@ -260,7 +256,7 @@ void BrushDockWidget::updateTransferSize(QString val)
 
 void BrushDockWidget::updateTransferOpacity(int val)
 {
-    mTransferOpacityLE->setText(QString::number(val));
+    mTransferOpacityLE->setValue(val);
     emit brushTransferOpacityChanged(val);
 }
 
@@ -285,6 +281,24 @@ void BrushDockWidget::toggleTransferOpacity(bool val)
     mTransferOpacityLE->setEnabled(val);
     if(val == false){
         emit brushTransferOpacityChanged(0);
+    }
+}
+
+void BrushDockWidget::toggleTransferVisibility(bool val){
+    if(val){
+        mTransferOpacityLE->setVisible(true);
+        mTransferOpacitySlider->setVisible(true);
+        mTransferOpacityToggle->setVisible(true);
+        mTransferSizeLE->setVisible(true);
+        mTransferSizeSlider->setVisible(true);
+        mTransferSizeToggle->setVisible(true);
+    }else{
+        mTransferOpacityLE->setVisible(false);
+        mTransferOpacitySlider->setVisible(false);
+        mTransferOpacityToggle->setVisible(false);
+        mTransferSizeLE->setVisible(false);
+        mTransferSizeSlider->setVisible(false);
+        mTransferSizeToggle->setVisible(false);
     }
 }
 
@@ -328,7 +342,6 @@ void BrushDockWidget::loadBrushAct(){
     mTempBrushList.append(temp);
     mActualBrushList.append(temp);
     mGenBrushWidget->addBrush(temp);
-    mTransBrushWidget->addBrush(temp);
     qDebug()<<"Loading Brush" << endl;
 }
 
@@ -374,7 +387,6 @@ void BrushDockWidget::saveBrushAct(){
     case QMessageBox::Ok:
         mActualBrushList.push_back(mTempBrushList.at(mCurrentBrushIndex));
         mGenBrushWidget->addBrush(mTempBrushList.at(mCurrentBrushIndex));
-        mTransBrushWidget->addBrush(mTempBrushList.at(mCurrentBrushIndex));
         mTempBrushList = mActualBrushList;
         break;
     case QMessageBox::Cancel:
@@ -397,7 +409,6 @@ void BrushDockWidget::saveBrushAct(){
 
         mActualBrushList.push_back(mTempBrushList.at(mCurrentBrushIndex));
         mGenBrushWidget->addBrush(mTempBrushList.at(mCurrentBrushIndex));
-        mTransBrushWidget->addBrush(mTempBrushList.at(mCurrentBrushIndex));
         mTempBrushList = mActualBrushList;
         break;
     }

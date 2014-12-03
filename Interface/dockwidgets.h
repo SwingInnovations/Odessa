@@ -91,6 +91,7 @@ private slots:
     void updateStencil(QPixmap);
     void updateStencilPath(QString);
     void updateBrushName(QString);
+    void toggleTransferVisibility(bool);
     void loadStencilAct();
     void loadBrushAct();
     void loadBrushSetAct();
@@ -112,7 +113,6 @@ private:
 
     /*--General Parameters--*/
     GeneralBrushWidget* mGenBrushWidget;
-    GeneralBrushWidget* mTransBrushWidget;
 
     /*-Size-*/
     QLabel* mSizeLabel;
@@ -130,16 +130,16 @@ private:
     QSpinBox* mSpacingLE;
 
     /*--Transfer--*/
-
+    QGroupBox* transGrpBox;
     /*-TransferSize-*/
     QCheckBox* mTransferSizeToggle;
     QSlider* mTransferSizeSlider;
-    QLineEdit* mTransferSizeLE;
+    QSpinBox* mTransferSizeLE;
 
     /*-TransferOpacity-*/
     QCheckBox* mTransferOpacityToggle;
     QSlider* mTransferOpacitySlider;
-    QLineEdit* mTransferOpacityLE;
+    QSpinBox* mTransferOpacityLE;
 
     /*--Custom--*/
     CustomBrushWidget* mStencilWidget;
