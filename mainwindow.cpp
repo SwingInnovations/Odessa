@@ -208,6 +208,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     isModified = false;
     resize(1024,768);
+    mEditor->setGeometry(this->centralWidget()->rect());
 }
 
 MainWindow::~MainWindow()

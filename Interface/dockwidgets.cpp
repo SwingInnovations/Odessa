@@ -39,6 +39,10 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
         mTempBrushList = mActualBrushList;
     }
 
+    mDrawModeComboBox = new QComboBox(this);
+    mDrawModeComboBox->addItem("Normal");
+    mDrawModeComboBox->addItem("Multiply");
+    mDrawModeComboBox->addItem("Color");
     mSizeLabel = new QLabel("Size:", this);
     mSizeSlider = new QSlider(Qt::Horizontal, this);
     mSizeSlider->setRange(0, 500);
@@ -81,6 +85,7 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     spacingLayout->addWidget(mSpacingLE);
 
     QVBoxLayout* generalParam = new QVBoxLayout;
+    generalParam->addWidget(mDrawModeComboBox);
     generalParam->addLayout(sizeLayout);
     generalParam->addLayout(opacityLayout);
     generalParam->addLayout(spacingLayout);
@@ -156,7 +161,7 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     mTabWidget->addTab(GeneralBrushTab, "General");
     mTabWidget->addTab(AdvancedBrushTab, "Custom");
 
-    mTabWidget->setTabPosition(QTabWidget::West);
+    mTabWidget->setTabPosition(QTabWidget::North);
     mTabWidget->setTabShape(QTabWidget::Rounded);
 
 //    setWidget(mTabWidget);
@@ -178,10 +183,10 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(mSpacingLE, SIGNAL(valueChanged(QString)), SLOT(updateSpacing(QString)));
     connect(mTransferSizeToggle, SIGNAL(toggled(bool)), SLOT(toggleTransferSize(bool)));
     connect(mTransferSizeSlider, SIGNAL(valueChanged(int)), SLOT(updateTransferSize(int)));
-    connect(mTransferSizeLE, SIGNAL(textChanged(QString)), SLOT(updateTransferSize(QString)));
+    connect(mTransferSizeLE, SIGNAL(valueChanged(QString)), SLOT(updateTransferSize(QString)));
     connect(mTransferOpacityToggle, SIGNAL(toggled(bool)), SLOT(toggleTransferOpacity(bool)));
     connect(mTransferOpacitySlider, SIGNAL(valueChanged(int)), SLOT(updateTransferOpacity(int)));
-    connect(mTransferOpacityLE, SIGNAL(textChanged(QString)), SLOT(updateTransferOpacity(QString)));
+    connect(mTransferOpacityLE, SIGNAL(valueChanged(QString)), SLOT(updateTransferOpacity(QString)));
     connect(mStencilWidget, SIGNAL(stencilChanged(QPixmap)), SLOT(updateStencil(QPixmap)));
     connect(mStencilWidget, SIGNAL(stencilChanged(QPixmap)), mGenBrushWidget, SLOT(updateStencil(QPixmap)));
     connect(mStencilWidget, SIGNAL(stencilPathChanged(QString)), SLOT(updateStencilPath(QString)));

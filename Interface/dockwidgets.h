@@ -113,7 +113,7 @@ private:
 
     /*--General Parameters--*/
     GeneralBrushWidget* mGenBrushWidget;
-
+    QComboBox* mDrawModeComboBox;
     /*-Size-*/
     QLabel* mSizeLabel;
     QSlider* mSizeSlider;
