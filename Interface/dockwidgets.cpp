@@ -32,7 +32,7 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     }else{
         //use loaded data
         mActualBrushList = loadBrushLib(mBrushLib);
-        for(unsigned int i = 0; i < mActualBrushList.size(); i++){
+        for(int i = 0; i < mActualBrushList.size(); i++){
             qDebug()<< mBrushLib <<"Loaded brush " << i << endl;
             mGenBrushWidget->addBrush(mActualBrushList.at(i));
         }
@@ -275,8 +275,10 @@ void BrushDockWidget::toggleTransferSize(bool val)
 {
     mTransferSizeSlider->setEnabled(val);
     mTransferSizeLE->setEnabled(val);
-    if(val == false){
+    if(!val){
         emit brushTransferSizeChanged(0);
+    }else{
+        emit brushTransferSizeChanged(mTransferSizeLE->value());
     }
 }
 
@@ -286,6 +288,8 @@ void BrushDockWidget::toggleTransferOpacity(bool val)
     mTransferOpacityLE->setEnabled(val);
     if(val == false){
         emit brushTransferOpacityChanged(0);
+    }else{
+        emit brushTransferOpacityChanged(mTransferSizeSlider->value());
     }
 }
 
@@ -366,8 +370,6 @@ void BrushDockWidget::loadBrushSetAct(){
     case QMessageBox::Cancel:                   //Appends to brush set
         QVector<Brush> temp = loadBrushLib(filePath);
         mActualBrushList = mActualBrushList + temp;
-        break;
-    defualt:
         break;
     }
 
@@ -482,7 +484,7 @@ void BrushDockWidget::deleteBrushAct(){
 }
 
 void BrushDockWidget::resizeEvent(QResizeEvent *e){
-
+    Q_UNUSED(e)
 }
 
 void BrushDockWidget::readSettings(){

@@ -25,7 +25,8 @@ public:
     void SetStencil(QPixmap pixmap){ mStencil = pixmap; }
     void setColor(QColor color){ myColor = color; myBrush.setColor(myColor); myPen.setColor(myColor); }
     void setWidth(int val){
-        mSize = val + (mTSize * m_PressureVal);
+        //mSize = val + (mTSize * m_PressureVal);
+        mSize = val;
         myPen.setWidth(mSize); }
     void SetName(QString name){
         mName = name;

@@ -56,16 +56,17 @@ void Editor::mousePressEvent(QMouseEvent *event)
             break;
         case EYEDROPPER_TOOL:
             m_Pix = QPixmap::grabWidget(this);
-            m_Img = m_Pix.toImage();
+            QImage m_Img = m_Pix.toImage();
             QColor color(m_Img.pixel(event->pos()));
             emit redChanged(color.red());
             emit greenChanged(color.green());
             emit blueChanged(color.blue());
             break;
-//        default:
-//            break;
+       defualt:
+            break;
         }
     }
+
     update();
 }
 
@@ -107,7 +108,8 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
 
                 m_CurrentTool.setPressureVal(m_Pressure);
 
-                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool, m_Pressure, m_CurrentTool.getPressureVal());
+                //m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool, m_Pressure, m_CurrentTool.getPressureVal());
+                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
                 setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
 //                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(*m_PainterPath, m_CurrentTool);
 //                setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
@@ -387,8 +389,8 @@ void Editor::backup()
 void Editor::scale(double scaleVal)
 {
     //scale the image directly through the layers
-    for(unsigned int i = 0; i < m_Layers.size(); i++){
-        for(unsigned int j = 0; j < m_Layers.at(i)->getFrameListSize(); i++){
+    for(int i = 0; i < m_Layers.size(); i++){
+        for(int j = 0; j < m_Layers.at(i)->getFrameListSize(); i++){
             QPixmap scaled = m_Layers.at(i)->getFrame(j)->getPixmap();
             int sizeX = scaled.width();
             int sizeY = scaled.height();

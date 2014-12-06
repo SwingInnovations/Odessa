@@ -183,6 +183,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(brushDockWidget, SIGNAL(brushOpacityChanged(int)), mEditor, SLOT(setOpacity(int)));
     connect(brushDockWidget, SIGNAL(brushStencilChanged(QPixmap)), mEditor, SLOT(setBrushStencil(QPixmap)));
     connect(brushDockWidget, SIGNAL(brushSpacingChanged(int)), mEditor, SLOT(setBrushSpacing(int)));
+    connect(brushDockWidget, SIGNAL(brushTransferSizeChanged(int)), mEditor, SLOT(setSizeTransfer(int)));
+    connect(brushDockWidget, SIGNAL(brushTransferOpacityChanged(int)), mEditor, SLOT(setOpacityTransfer(int)));
     connect(colorDockWidget, SIGNAL(redChanged(int)), mEditor, SLOT(setRedValue(int)));
     connect(colorDockWidget, SIGNAL(greenChanged(int)), mEditor, SLOT(setGreenValue(int)));
     connect(colorDockWidget, SIGNAL(blueChanged(int)), mEditor, SLOT(setBlueValue(int)));

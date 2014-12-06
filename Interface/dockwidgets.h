@@ -74,6 +74,7 @@ signals:
     void brushStencilChanged(QPixmap);
     void brushStencilPathChanged(QString);
     void stencilBaseShapeChanged(BrushShape);
+    void brushPressureActive(bool);
 private slots:
     void setCurrentIndex(int);
     void updateSize(int);
@@ -332,7 +333,7 @@ public:
     virtual ~GeneralBrushWidget();
     void addBrush(int iD, Brush brush);
     void addBrush(Brush brush);
-    int setBrushIndex(int val){this->mCurrentBrushIndex = val;}
+    void setBrushIndex(int val){this->mCurrentBrushIndex = val;}
     void setDir(QString dir){this->mDir = dir;}
     int getBrushIndex(){return this->mCurrentBrushIndex;}
     QString getDir(){return this->mDir;}

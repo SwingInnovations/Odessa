@@ -126,7 +126,6 @@ private:
 
     ToolType m_ToolType;
     QPixmap m_Pix;
-    QImage m_Img;
 
     int m_RedVal, m_GreenVal, m_BlueVal, m_OpacityVal;
 
