@@ -109,6 +109,7 @@ private:
     QScrollArea *imageArea;
 
     QToolBar* toolBar;
+    QComboBox* mToolQuickSelect;
 
     QStatusBar* mStatBar;
     QLabel* activeToolLabel;

@@ -39,6 +39,13 @@ MainWindow::MainWindow(QWidget *parent)
     toolBar = this->addToolBar("Tools");
     toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::TopToolBarArea);
 
+    mToolQuickSelect = new QComboBox(this);
+    mToolQuickSelect->addItem("Brush");
+    mToolQuickSelect->addItem("Eraser");
+    mToolQuickSelect->addItem("Fill");
+
+    toolBar->addWidget(mToolQuickSelect);
+
     newDialogWin = new OdessaNewDocDialog();
     prefDialog = new OdessaPrefDialog();
     brushDockWidget = new BrushDockWidget(this);
