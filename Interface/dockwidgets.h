@@ -40,8 +40,8 @@
 #include <QMessageBox>
 #include <QSpinBox>
 
-#include "../Structure/brush.h"
-#include "Overloads.h"
+#include "../Odessa/Structure/brush.h"
+#include "../Odessa/Overloads.h"
 
 //handling the Brush System
 

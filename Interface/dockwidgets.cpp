@@ -848,12 +848,12 @@ void BrushShapeWidget::paintEvent(QPaintEvent *event)
 
 void BrushShapeWidget::mouseMoveEvent(QMouseEvent *event)
 {
-
+    Q_UNUSED(event);
 }
 
 void BrushShapeWidget::mousePressEvent(QMouseEvent *event)
 {
-
+    Q_UNUSED(event);
 }
 
 /*
@@ -984,7 +984,8 @@ void GeneralBrushWidget::updateName(QListWidgetItem *item){
 }
 
 void GeneralBrushWidget::addBrush(int iD, Brush brush){
-
+    int temp = iD;
+    Brush b = brush;
 }
 
 void GeneralBrushWidget::addBrush(Brush brush){
@@ -1171,8 +1172,8 @@ void CustomBrushWidget::updateStencilTexture(){
     int gray;
     int width = mStencilTexture.width();
     int height = mStencilTexture.height();
-    for(unsigned int i = 0; i < width; i++){
-        for(unsigned int j = 0; j < height; j++){
+    for(int i = 0; i < width; i++){
+        for(int j = 0; j < height; j++){
             col = image.pixel(i, j);
             gray = qGray(col);
             image.setPixel(i, j, qRgb(gray, gray, gray));
@@ -1290,7 +1291,7 @@ QPixmap CustomBrushWidget::GeneratePixmap(){
 }
 
 void CustomBrushWidget::paintEvent(QPaintEvent *event){
-
+    Q_UNUSED(event);
     int stencilWidth = (mStencilPreview.width() * mWidthSlider->value()/10)/2;
     int stencilHeight = (mStencilPreview.height()* mHeightSlider->value()/10)/2;
     qreal hardness = 78 * ((qreal)mHardnessSlider->value()/100);

@@ -6,7 +6,9 @@ Brush::Brush() : mHardness(0),
     mSpacing(1),
     sWidth(0),
     sHeight(0),
-    mRotate(0)
+    mRotate(0),
+    mTSize(0),
+    mTOpacity(0)
 {
     myBrush = QBrush();
     myPen = QPen();

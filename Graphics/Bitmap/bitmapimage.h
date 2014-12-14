@@ -9,7 +9,8 @@
 #include <QPoint>
 #include <QPointF>
 #include <QVector>
-#include "Structure/brush.h"
+
+#include "../Odessa/Structure/brush.h"
 
 class BitmapImage
 {
