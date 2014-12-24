@@ -3,6 +3,7 @@
 BitmapImage::BitmapImage()
 {
     m_Image = NULL;
+    visible = true;
     qDebug() << "Image drawn!" << endl;
 }
 
@@ -19,6 +20,7 @@ BitmapImage::BitmapImage(Object *parent, QRect boundaries, QColor color)
     this->boundaries = boundaries;
     m_Image = new QImage(boundaries.size(), QImage::Format_ARGB32_Premultiplied);
     m_Image->fill(color.rgba());
+    visible = true;
 }
 
 BitmapImage::BitmapImage(Object *parent, QRect boundaries, QImage image)
@@ -27,6 +29,7 @@ BitmapImage::BitmapImage(Object *parent, QRect boundaries, QImage image)
     this->boundaries = boundaries;
     m_Image = new QImage(image);
     if(m_Image->width() != boundaries.width() && m_Image->height() != boundaries.height()) qDebug() << "Error 0001: Failed to load Image" << endl;
+    visible = true;
 }
 
 BitmapImage::BitmapImage(QRect boundaries, QColor color)
@@ -41,12 +44,14 @@ BitmapImage::BitmapImage(QRect boundaries, QColor color)
     }
     painter.end();
     m_pixmap = temp;
+    visible = true;
 }
 
 BitmapImage::BitmapImage(QRect boundaries, QPixmap pixMap)
 {
     this->boundaries = boundaries;
     m_pixmap = pixMap;
+    visible = true;
 }
 
 void BitmapImage::paintImage(QPainter &painter)

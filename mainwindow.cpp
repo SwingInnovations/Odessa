@@ -80,8 +80,19 @@ MainWindow::MainWindow(QWidget *parent)
     toolBar->addAction(textTool);
     toolBar->addAction(primitiveTool);
 
+    /*-File Menu Actions-*/
     newAct = new QAction("&New", this);
     newAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
+    openAct = new QAction("&Open", this);
+    openAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
+    saveAct = new QAction("&Save", this);
+    saveAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
+    saveAsAct = new QAction("&Save As...", this);
+    saveAsAct->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
+    exportImgAct = new QAction("&Image", this);
+    exportSpriteSheetAct = new QAction("&Sprite Sheet", this);
+    exportImgSeqAct = new QAction("&Sequence", this);
+    exportAnimAct = new QAction("&Animation", this);
     aboutAct = new QAction("&About", this);
     closeAct = new QAction("&Close", this);
     closeAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
@@ -126,6 +137,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     fileMenu = this->menuBar()->addMenu("&File");
     fileMenu->addAction(newAct);
+    fileMenu->addAction(openAct);
+    fileMenu->addAction(saveAct);
+    fileMenu->addAction(saveAsAct);
+    fileMenu->addSeparator();
+    exportMenu = new QMenu("&Export", this);
+    exportMenu->addAction(exportImgAct);
+    exportMenu->addAction(exportSpriteSheetAct);
+    exportMenu->addAction(exportImgSeqAct);
+    exportMenu->addAction(exportAnimAct);
+    fileMenu->addMenu(exportMenu);
     fileMenu->addSeparator();
     fileMenu->addAction(closeAct);
 

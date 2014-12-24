@@ -65,7 +65,16 @@ private:
     bool isModified;
 
     QAction *addLayerAct;
+    /*-File Menu-*/
     QAction *newAct;
+    QAction *openAct;
+    QAction *saveAct;
+    QAction *saveAsAct;
+    QMenu *exportMenu;
+    QAction *exportImgAct;
+    QAction *exportSpriteSheetAct;
+    QAction *exportImgSeqAct;
+    QAction *exportAnimAct;
     QAction *closeAct;
 
     //edit menu actions

@@ -811,6 +811,8 @@ void ColorDockWidget::set_VSlider(QString val)
     emit valueChanged(val.toInt());
 }
 
+/*- TimeLine Widget -*/
+
 TimelineDockWidget::TimelineDockWidget(QWidget *parent) : QDockWidget(parent)
 {
     setWindowTitle("Timeline");
@@ -842,6 +844,7 @@ BrushShapeWidget::~BrushShapeWidget()
 
 void BrushShapeWidget::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
     QPainter painter(&brushPreviewPixmap);
     painter.drawEllipse(0, 0, 20, 20);
 }
@@ -1303,32 +1306,37 @@ void CustomBrushWidget::paintEvent(QPaintEvent *event){
     QPainter painter(&mStencilPreview);
     painter.setPen(Qt::NoPen);
     switch(mBrushShape){
-    case CIRCLE_SHAPE:
-        if(hasTexture){
-            QBrush brush;
-            brush.setTexture(mStencilTexture);
-            painter.setBrush(brush);
-        }else{
-            painter.setBrush(radGrad);
-        }
-        painter.drawEllipse(midPoint, stencilWidth, stencilHeight);
-        break;
-    case SQUARE_SHAPE:
-        int originX =  midPoint.x() - stencilWidth;
-        int originY = midPoint.y() - stencilHeight;
-        int dimX = stencilWidth*2;
-        int dimY = stencilHeight*2;
+        case CIRCLE_SHAPE:
+            if(hasTexture){
+                QBrush brush;
+                brush.setTexture(mStencilTexture);
+                painter.setBrush(brush);
+            }else{
+                painter.setBrush(radGrad);
+            }
+            painter.translate(midPoint);
+            painter.rotate(mRotateSlider->value());
+            painter.translate(-midPoint);
+            painter.drawEllipse(midPoint, stencilWidth, stencilHeight);
+            break;
+        case SQUARE_SHAPE:
+            int originX =  midPoint.x() - stencilWidth;
+            int originY = midPoint.y() - stencilHeight;
+            int dimX = stencilWidth*2;
+            int dimY = stencilHeight*2;
 
-        if(hasTexture){
-            QBrush brush;
-            brush.setTexture(mStencilTexture);
-            painter.setBrush(brush);
-        }else{
-            painter.setBrush(Qt::black);
-        }
-
-        painter.drawRect(originX, originY, dimX, dimY);
-        break;
+            if(hasTexture){
+                QBrush brush;
+                brush.setTexture(mStencilTexture);
+                painter.setBrush(brush);
+            }else{
+                painter.setBrush(Qt::black);
+            }
+            painter.translate(midPoint);
+            painter.rotate(mRotateSlider->value());
+            painter.translate(-midPoint);
+            painter.drawRect(originX, originY, dimX, dimY);
+            break;
     }
     mStencilLabel->setPixmap(mStencilPreview);
 }
