@@ -31,7 +31,6 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_BackupIndex = 0;
 
     setScaledContents(true);
-
 }
 
 void Editor::mousePressEvent(QMouseEvent *event)

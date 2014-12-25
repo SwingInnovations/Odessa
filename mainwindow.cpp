@@ -206,7 +206,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(showBrushDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowBrushDock(bool)));
     connect(showColorDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowColorDock(bool)));
     connect(showTimeDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowTimelineDock(bool)));
-
     connect(brushDockWidget, SIGNAL(brushSizeChanged(int)), mEditor, SLOT(setBrushSize(int)));
     connect(brushDockWidget, SIGNAL(brushOpacityChanged(int)), mEditor, SLOT(setOpacity(int)));
     connect(brushDockWidget, SIGNAL(brushStencilChanged(QPixmap)), mEditor, SLOT(setBrushStencil(QPixmap)));
@@ -218,12 +217,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(colorDockWidget, SIGNAL(blueChanged(int)), mEditor, SLOT(setBlueValue(int)));
     connect(mEditor, SIGNAL(brushSizeChanged(int)), brushDockWidget, SLOT(updateSize(int)));
     connect(mEditor, SIGNAL(brushOpacityChanged(int)), brushDockWidget, SLOT(updateOpacity(int)));
-    connect(mEditor, SIGNAL(redChanged(int)), colorDockWidget, SLOT(set_RLE(int)));
-    connect(mEditor, SIGNAL(greenChanged(int)), colorDockWidget, SLOT(set_GLE(int)));
-    connect(mEditor, SIGNAL(blueChanged(int)), colorDockWidget, SLOT(set_BLE(int)));
-    connect(mEditor, SIGNAL(redChanged(int)), colorDockWidget, SLOT(setRed(int)));
-    connect(mEditor, SIGNAL(greenChanged(int)), colorDockWidget, SLOT(setGreen(int)));
-    connect(mEditor, SIGNAL(blueChanged(int)), colorDockWidget, SLOT(setBlue(int)));
+    connect(mEditor, SIGNAL(redChanged(int)), colorDockWidget, SLOT(updateRed(int)));
+    connect(mEditor, SIGNAL(greenChanged(int)), colorDockWidget, SLOT(updateGreen(int)));
+    connect(mEditor, SIGNAL(blueChanged(int)), colorDockWidget, SLOT(updateBlue(int)));
     connect(eyeDropperTool, SIGNAL(triggered()), SLOT(assignEyeDropperTool()));
     connect(eyeDropper, SIGNAL(activated()), SLOT(assignEyeDropperTool()));
     connect(sendFeedbackAct, SIGNAL(triggered()), SLOT(sendFeedBack()));
@@ -232,7 +228,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     addDockWidget(Qt::RightDockWidgetArea, brushDockWidget);
     addDockWidget(Qt::RightDockWidgetArea, colorDockWidget);
-    this->tabifyDockWidget(brushDockWidget, colorDockWidget);
+    tabifyDockWidget(brushDockWidget, colorDockWidget);
     addDockWidget(Qt::BottomDockWidgetArea, timelineDockWidget);
     addDockWidget(Qt::RightDockWidgetArea, layerDockWidget);
 
@@ -278,9 +274,9 @@ void MainWindow::toggleShowColorDock(bool val)
 {
     if(val)
     {
-        colorDockWidget->show();
+
     }else{
-        colorDockWidget->close();
+
     }
 }
 

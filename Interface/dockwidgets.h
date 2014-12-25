@@ -45,7 +45,7 @@
 
 //handling the Brush System
 
-class ColorWheelWidget;
+class ColorWheel;
 class BrushShapeWidget;
 class GeneralBrushWidget;
 class CustomBrushWidget;
@@ -156,109 +156,90 @@ class ColorDockWidget : public QDockWidget
     Q_OBJECT
 public:
     ColorDockWidget(QWidget *parent = 0);
-    virtual ~ColorDockWidget();
-
-    int getRed(){return red;}
-    int getGreen(){return green;}
-    int getBlue(){return blue;}
-    int getHue(){return hue;}
-    int getSaturation(){return saturation;}
-    int getValue(){return value;}
-
-    QRect getColorZoneRect(){return refineColorRect;}
-
+public slots:
+    void updateRed(int);
+    void updateRed(QString);
+    void updateGreen(int);
+    void updateGreen(QString);
+    void updateBlue(int);
+    void updateBlue(QString);
+    void updateHue(int);
+    void updateHue(QString);
+    void updateSat(int);
+    void updateSat(QString);
+    void updateVal(int);
+    void updateVal(QString);
 signals:
     void redChanged(int);
     void greenChanged(int);
     void blueChanged(int);
-    void actualRedChanged(int);
-    void actualBlueChanged(int);
-    void actualGreenChanged(int);
-    void hueChanged(int);
-    void saturationChanged(int);
-    void valueChanged(int);
-public slots:
-    void set_RLE(int);
-    void set_GLE(int);
-    void set_BLE(int);
-    void set_HLE(int);
-    void set_SLE(int);
-    void set_VLE(int);
-
-    void set_RSlider(QString);
-    void set_GSlider(QString);
-    void set_BSlider(QString);
-    void set_HSlider(QString);
-    void set_SSlider(QString);
-    void set_VSlider(QString);
-
-    void setRed(int val){this->red = val;}
-    void setGreen(int val){this->green = val;}
-    void setBlue(int val){this->blue = val;}
-
-    void setActualColor(QColor);
-    void setActualColorPos(QPoint);
-
-protected:
-    void paintEvent(QPaintEvent* event);
 private:
-    QTabWidget* colorModeTab;
+    ColorWheel* mColorWheel;
+    QTabWidget* mColorTabs;
 
-    QLabel* colorDisplayLabel;
-    ColorWheelWidget* colorWheel;
-    QPixmap colorWheelPixmap;
-    QImage tempImage;
+    /*-RGB Parameters-*/
+    QLabel *mRLabel;
+    QSlider *mRSlider;
+    QSpinBox *mRSpinBox;
 
-    //for RGB
-    QLabel* m_RLabel;
-    QLabel* m_GLabel;
-    QLabel* m_BLabel;
-    QSlider* m_RSlider;
-    QSlider* m_GSlider;
-    QSlider* m_BSlider;
-    QLineEdit* m_RLineEdit;
-    QLineEdit* m_GLineEdit;
-    QLineEdit* m_BLineEdit;
+    QLabel *mGLabel;
+    QSlider *mGSlider;
+    QSpinBox *mGSpinBox;
 
-    QHBoxLayout* RLayout;
-    QHBoxLayout* GLayout;
-    QHBoxLayout* BLayout;
-    QVBoxLayout* masterRGBLayout;
+    QLabel *mBLabel;
+    QSlider *mBSlider;
+    QSpinBox *mBSpinBox;
 
-    QLabel* m_HLabel;
-    QLabel* m_SLabel;
-    QLabel* m_VLabel;
-    QSlider* m_HSlider;
-    QSlider* m_SSLider;
-    QSlider* m_VSlider;
-    QLineEdit* m_HLineEdit;
-    QLineEdit* m_SLineEdit;
-    QLineEdit* m_VLineEdit;
+    /*-HSV Parameters-*/
+    QLabel *mHLabel;
+    QSlider *mHSlider;
+    QSpinBox *mHSpinBox;
 
-    QHBoxLayout* HLayout;
-    QHBoxLayout* SLayout;
-    QHBoxLayout* VLayout;
-    QVBoxLayout* masterHSVLayout;
+    QLabel *mSLabel;
+    QSlider *mSSlider;
+    QSpinBox *mSSpinBox;
 
-    QGroupBox* m_ColorWheelContainer;
+    QLabel * mVLabel;
+    QSlider *mVSlider;
+    QSpinBox *mVSpinBox;
+};
 
-    int red;
-    int green;
-    int blue;
-
+class ColorWheel : public QLabel
+{
+    Q_OBJECT
+public:
+    ColorWheel(QWidget* parent = 0);
+    void setRed(int);
+    void setGreen(int);
+    void setBlue(int);
+signals:
+    void redChanged(int);
+    void blueChanged(int);
+    void greenChanged(int);
+protected:
+    void paintEvent(QPaintEvent *e);
+    void mouseMoveEvent(QMouseEvent* e);
+    void mousePressEvent(QMouseEvent *ev);
+    void mouseReleaseEvent(QMouseEvent *ev);
+private:
+    QColor getColorFromPoint(QPoint);
+    QPixmap mPixmap;
     int actualRed;
-    int actualBlue;
     int actualGreen;
-
-    int hue;
-    int saturation;
-    int value;
-
-    //color wheel
-    QPoint primaryColorPos;
-    QPoint complementColorPos;
-    QPoint actualColorPos;
-    QRect refineColorRect;
+    int actualBlue;
+    int primaryRed;
+    int primaryBlue;
+    int primaryGreen;
+    int altRed;
+    int altGreen;
+    int altBlue;
+    QRect primaryColorRect, altColorRect;
+    QPoint preciseColor;
+    QPoint primaryBasePoint, altBasePoint, centerRectPoint;
+    QVector<QPoint>points;
+    QPainterPath colorRangeTri;
+    double rotationAngle;
+    bool mouseDown;
 };
 
 class TimelineDockWidget : public QDockWidget
@@ -283,34 +264,6 @@ private:
     QPixmap brushPreviewPixmap;
 };
 
-class ColorWheelWidget : public QLabel
-{
-    Q_OBJECT
-public:
-    ColorWheelWidget(QWidget *parent = 0);
-    virtual ~ColorWheelWidget();
-
-    void setRefineRect(QRect rect){ refineColorRect = rect; }
-signals:
-    void redChanged(int);
-    void greenChanged(int);
-    void blueChanged(int);
-
-    void actualRedChanged(int);
-    void actualGreenChanged(int);
-    void actualBlueChanged(int);
-
-    void colorChanged(QColor);
-    void actualColorPoint(QPoint);
-protected:
-    void mousePressEvent(QMouseEvent *event);
-private:
-    QPixmap pixmap;
-    QRect refineColorRect;
-    QPoint primaryColorPos;
-    QPoint complementColorPos;
-    QPoint actualColorPos;
-};
 
 class LayerDockWidget : public QDockWidget
 {

@@ -143,7 +143,6 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     /*-Brush_General-*/
 
     QVBoxLayout* GeneralBrushLayout = new QVBoxLayout;
-    //GeneralBrushLayout->addLayout(GeneralBrushWidget);
     GeneralBrushLayout->addWidget(mGenBrushWidget);
     GeneralBrushLayout->addLayout(generalParam);
 
@@ -506,310 +505,364 @@ BrushDockWidget::~BrushDockWidget()
     writeSettings();
 }
 
+/*- Color Widget -*/
 ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
 {
     setWindowTitle("Color");
+    //initialize everything
+    mColorWheel = new ColorWheel(this);
+    mColorTabs = new QTabWidget(this);
 
-    colorModeTab = new QTabWidget(this);
+    //Red Parameters
+    mRLabel = new QLabel("R:", this);
+    mRSlider = new QSlider(this);
+    mRSlider->setOrientation(Qt::Horizontal);
+    mRSlider->setRange(0, 255);
+    mRSlider->setValue(0);
+    mRSpinBox = new QSpinBox(this);
+    mRSpinBox->setRange(0, 255);
+    mRSpinBox->setValue(0);
 
-    //RGB
-    m_RLabel = new QLabel(this);
-    m_RLabel->setText("R");
-    m_RSlider = new QSlider(this);
-    m_RSlider->setOrientation(Qt::Horizontal);
-    m_RSlider->setRange(0, 255);
-    m_RLineEdit = new QLineEdit(this);
-    m_RLineEdit->setFixedWidth(32);
-    RLayout = new QHBoxLayout;
-    RLayout->addWidget(m_RLabel);
-    RLayout->addWidget(m_RSlider);
-    RLayout->addWidget(m_RLineEdit);
+    QHBoxLayout* rBoxLayout = new QHBoxLayout;
+    rBoxLayout->addWidget(mRLabel);
+    rBoxLayout->addWidget(mRSlider);
+    rBoxLayout->addWidget(mRSpinBox);
 
-    m_GLabel = new QLabel(this);
-    m_GLabel->setText("G");
-    m_GSlider = new QSlider(this);
-    m_GSlider->setOrientation(Qt::Horizontal);
-    m_GSlider->setRange(0, 255);
-    m_GLineEdit = new QLineEdit(this);
-    m_GLineEdit->setFixedWidth(32);
-    GLayout = new QHBoxLayout;
-    GLayout->addWidget(m_GLabel);
-    GLayout->addWidget(m_GSlider);
-    GLayout->addWidget(m_GLineEdit);
+    //Green Parameters
+    mGLabel = new QLabel("G:", this);
+    mGSlider = new QSlider(this);
+    mGSlider->setOrientation(Qt::Horizontal);
+    mGSlider->setRange(0, 255);
+    mGSlider->setValue(0);
+    mGSpinBox = new QSpinBox(this);
+    mGSpinBox->setRange(0, 255);
+    mGSpinBox->setValue(0);
 
-    m_BLabel = new QLabel(this);
-    m_BLabel->setText("B");
-    m_BSlider = new QSlider(this);
-    m_BSlider->setOrientation(Qt::Horizontal);
-    m_BSlider->setRange(0, 255);
-    m_BLineEdit = new QLineEdit(this);
-    m_BLineEdit->setFixedWidth(32);
-    BLayout = new QHBoxLayout;
-    BLayout->addWidget(m_BLabel);
-    BLayout->addWidget(m_BSlider);
-    BLayout->addWidget(m_BLineEdit);
+    QHBoxLayout* gBoxLayout = new QHBoxLayout;
+    gBoxLayout->addWidget(mGLabel);
+    gBoxLayout->addWidget(mGSlider);
+    gBoxLayout->addWidget(mGSpinBox);
 
-    masterRGBLayout = new QVBoxLayout;
-    masterRGBLayout->addLayout(RLayout);
-    masterRGBLayout->addLayout(GLayout);
-    masterRGBLayout->addLayout(BLayout);
+    //Blue Parameters
+    mBLabel = new QLabel("B:", this);
+    mBSlider = new QSlider(this);
+    mBSlider->setOrientation(Qt::Horizontal);
+    mBSlider->setRange(0, 255);
+    mBSlider->setValue(0);
+    mBSpinBox = new QSpinBox(this);
+    mBSpinBox->setRange(0, 255);
+    mBSpinBox->setValue(0);
 
+    QHBoxLayout* bBoxLayout = new QHBoxLayout;
+    bBoxLayout->addWidget(mBLabel);
+    bBoxLayout->addWidget(mBSlider);
+    bBoxLayout->addWidget(mBSpinBox);
+
+    //Hue Parameters
+    mHLabel = new QLabel("H:", this);
+    mHSlider = new QSlider(this);
+    mHSlider->setOrientation(Qt::Horizontal);
+    mHSlider->setRange(0, 255);
+    mHSlider->setValue(0);
+    mHSpinBox = new QSpinBox(this);
+    mHSpinBox->setRange(0, 255);
+    mHSpinBox->setValue(0);
+
+    QHBoxLayout* hBoxLayout = new QHBoxLayout;
+    hBoxLayout->addWidget(mHLabel);
+    hBoxLayout->addWidget(mHSlider);
+    hBoxLayout->addWidget(mHSpinBox);
+
+    //Saturation Parameters
+    mSLabel = new QLabel("S:", this);
+    mSSlider = new QSlider(this);
+    mSSlider->setOrientation(Qt::Horizontal);
+    mSSlider->setRange(0, 255);
+    mSSlider->setValue(0);
+    mSSpinBox = new QSpinBox(this);
+    mSSpinBox->setRange(0, 255);
+    mSSpinBox->setValue(0);
+
+    QHBoxLayout* sBoxLayout = new QHBoxLayout;
+    sBoxLayout->addWidget(mSLabel);
+    sBoxLayout->addWidget(mSSlider);
+    sBoxLayout->addWidget(mSSpinBox);
+
+    //Value Parameters
+    mVLabel = new QLabel("V:", this);
+    mVSlider = new QSlider(this);
+    mVSlider->setOrientation(Qt::Horizontal);
+    mVSlider->setRange(0, 255);
+    mVSlider->setValue(0);
+    mVSpinBox = new QSpinBox(this);
+    mVSpinBox->setRange(0, 255);
+    mVSpinBox->setValue(0);
+
+    QHBoxLayout* vBoxLayout = new QHBoxLayout;
+    vBoxLayout->addWidget(mVLabel);
+    vBoxLayout->addWidget(mVSlider);
+    vBoxLayout->addWidget(mVSpinBox);
+
+    QVBoxLayout* RGBLayout = new QVBoxLayout;
+    RGBLayout->addLayout(rBoxLayout);
+    RGBLayout->addLayout(gBoxLayout);
+    RGBLayout->addLayout(bBoxLayout);
     QWidget* RGBPanel = new QWidget(this);
-    RGBPanel->setLayout(masterRGBLayout);
+    RGBPanel->setLayout(RGBLayout);
 
-    colorModeTab->addTab(RGBPanel, "RGB");
-
-    m_HLabel = new QLabel(this);
-    m_HLabel->setText("Hue:");
-    m_HSlider = new QSlider(this);
-    m_HSlider->setOrientation(Qt::Horizontal);
-    m_HSlider->setRange(0, 255);
-    m_HLineEdit = new QLineEdit(this);
-    m_HLineEdit->setFixedWidth(32);
-    HLayout = new QHBoxLayout;
-    HLayout->addWidget(m_HLabel);
-    HLayout->addWidget(m_HSlider);
-    HLayout->addWidget(m_HLineEdit);
-
-    m_SLabel = new QLabel(this);
-    m_SLabel->setText("Sat:");
-    m_SSLider = new QSlider(this);
-    m_SSLider->setOrientation(Qt::Horizontal);
-    m_SSLider->setRange(0, 255);
-    m_SLineEdit = new QLineEdit(this);
-    m_SLineEdit->setFixedWidth(32);
-    SLayout = new QHBoxLayout;
-    SLayout->addWidget(m_SLabel);
-    SLayout->addWidget(m_SSLider);
-    SLayout->addWidget(m_SLineEdit);
-
-    m_VLabel = new QLabel(this);
-    m_VLabel->setText("Val.");
-    m_VSlider = new QSlider(this);
-    m_VSlider->setOrientation(Qt::Horizontal);
-    m_VSlider->setRange(0, 255);
-    m_VLineEdit = new QLineEdit;
-    m_VLineEdit->setFixedWidth(32);
-    VLayout = new QHBoxLayout;
-    VLayout->addWidget(m_VLabel);
-    VLayout->addWidget(m_VSlider);
-    VLayout->addWidget(m_VLineEdit);
-
-    masterHSVLayout = new QVBoxLayout;
-    masterHSVLayout->addLayout(HLayout);
-    masterHSVLayout->addLayout(SLayout);
-    masterHSVLayout->addLayout(VLayout);
-
+    QVBoxLayout* HSVLayout = new QVBoxLayout;
+    HSVLayout->addLayout(hBoxLayout);
+    HSVLayout->addLayout(sBoxLayout);
+    HSVLayout->addLayout(vBoxLayout);
     QWidget* HSVPanel = new QWidget(this);
-    HSVPanel->setLayout(masterHSVLayout);
-    colorModeTab->addTab(HSVPanel, "HSV");
+    HSVPanel->setLayout(HSVLayout);
 
-    colorModeTab->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    mColorTabs->addTab(RGBPanel, "RGB");
+    mColorTabs->addTab(HSVPanel, "HSV");
 
-    colorWheelPixmap = QPixmap(200, 200);
-    colorWheelPixmap.fill(QColor(Qt::gray));
+    QVBoxLayout* masterLayout = new QVBoxLayout;
+    masterLayout->addWidget(mColorWheel);
+    masterLayout->setAlignment(mColorWheel, Qt::AlignCenter);
+    masterLayout->addWidget(mColorTabs);
+    masterLayout->addSpacerItem(new QSpacerItem(292, 10, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
-    colorWheel = new ColorWheelWidget(this);
-    colorWheel->setPixmap(colorWheelPixmap);
+    QWidget* masterWidget = new QWidget(this);
+    masterWidget->setLayout(masterLayout);
+    setWidget(masterWidget);
 
-    QHBoxLayout* colorDisplayLt = new QHBoxLayout;
-    colorDisplayLt->setAlignment(Qt::AlignCenter);
-    colorDisplayLt->addWidget(colorWheel);
-
-    m_ColorWheelContainer = new QGroupBox(this);
-    m_ColorWheelContainer->setTitle("Color Wheel");
-    m_ColorWheelContainer->setLayout(colorDisplayLt);
-
-    QVBoxLayout* masterColorLayout = new QVBoxLayout;
-    masterColorLayout->addWidget(m_ColorWheelContainer);
-    masterColorLayout->addWidget(colorModeTab);
-    masterColorLayout->addSpacerItem(new QSpacerItem(m_ColorWheelContainer->width(), 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
-
-    QWidget* masterColorWidget = new QWidget(this);
-    masterColorWidget->setLayout(masterColorLayout);
-
-    connect(colorWheel, SIGNAL(redChanged(int)), SLOT(setRed(int)));
-    connect(colorWheel, SIGNAL(greenChanged(int)), SLOT(setGreen(int)));
-    connect(colorWheel, SIGNAL(blueChanged(int)), SLOT(setBlue(int)));
-    connect(colorWheel, SIGNAL(actualRedChanged(int)), SLOT(set_RLE(int)));
-    connect(colorWheel, SIGNAL(actualGreenChanged(int)), SLOT(set_GLE(int)));
-    connect(colorWheel, SIGNAL(actualBlueChanged(int)), SLOT(set_BLE(int)));
-    connect(colorWheel, SIGNAL(actualColorPoint(QPoint)), SLOT(setActualColorPos(QPoint)));
-    connect(colorWheel, SIGNAL(colorChanged(QColor)), SLOT(setActualColor(QColor)));
-    connect(m_RSlider, SIGNAL(valueChanged(int)), SLOT(set_RLE(int)));
-    connect(m_RLineEdit, SIGNAL(textChanged(QString)), SLOT(set_RSlider(QString)));
-    connect(m_GSlider, SIGNAL(valueChanged(int)), SLOT(set_GLE(int)));
-    connect(m_GLineEdit, SIGNAL(textChanged(QString)), SLOT(set_GSlider(QString)));
-    connect(m_BSlider, SIGNAL(valueChanged(int)), SLOT(set_BLE(int)));
-    connect(m_BLineEdit, SIGNAL(textChanged(QString)), SLOT(set_BSlider(QString)));
-    connect(m_HSlider, SIGNAL(valueChanged(int)), SLOT(set_HLE(int)));
-    connect(m_HLineEdit, SIGNAL(textChanged(QString)), SLOT(set_HSlider(QString)));
-    connect(m_SSLider, SIGNAL(valueChanged(int)), SLOT(set_SLE(int)));
-    connect(m_SLineEdit, SIGNAL(textChanged(QString)), SLOT(set_SSlider(QString)));
-    connect(m_VSlider, SIGNAL(valueChanged(int)), SLOT(set_VLE(int)));
-    connect(m_VLineEdit, SIGNAL(textChanged(QString)), SLOT(set_VSlider(QString)));  
-
-    setWidget(masterColorWidget);
-    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    connect(mColorWheel, SIGNAL(redChanged(int)), SLOT(updateRed(int)));
+    connect(mColorWheel, SIGNAL(blueChanged(int)), SLOT(updateBlue(int)));
+    connect(mColorWheel, SIGNAL(greenChanged(int)), SLOT(updateGreen(int)));
+    connect(mRSlider, SIGNAL(valueChanged(int)), SLOT(updateRed(int)));
+    connect(mGSlider, SIGNAL(valueChanged(int)), SLOT(updateGreen(int)));
+    connect(mBSlider, SIGNAL(valueChanged(int)), SLOT(updateBlue(int)));
+    connect(mRSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateRed(QString)));
+    connect(mGSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateGreen(QString)));
+    connect(mBSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateBlue(QString)));
 }
 
-void ColorDockWidget::paintEvent(QPaintEvent *event)
-{
-    Q_UNUSED(event)
-    QPainter painter(&colorWheelPixmap);
-    //Start Color wheel
-    QConicalGradient grad;
-    grad.setCenter(100, 100);
-    grad.setColorAt(0, Qt::green);
-    grad.setColorAt(0.175, QColor(Qt::yellow));
-    grad.setColorAt(0.35, QColor(Qt::red));
-    grad.setColorAt(0.525, QColor(Qt::magenta));
-    grad.setColorAt(0.65, QColor(Qt::blue));
-    grad.setColorAt(0.8253, QColor(Qt::cyan));
-    grad.setColorAt(1, QColor(Qt::green));
-    painter.setBrush(grad);
-    painter.drawEllipse(0, 0, 200, 200);
-
-    painter.setBrush(Qt::gray);
-    painter.drawEllipse(50, 50, 100, 100);
-
-    //handle drawing
-    primaryColorPos = QPoint(175, 100);
-    painter.setBrush(QBrush(Qt::transparent));
-    painter.setPen(QColor(Qt::black));
-    painter.drawEllipse(primaryColorPos, 10, 10);
-
-    complementColorPos = QPoint(25, 100);
-    painter.setBrush(QBrush(Qt::transparent));
-    painter.setPen(QColor(Qt::gray));
-    painter.drawEllipse(complementColorPos, 10, 10);
-
-    QColor primaryColor(red, green, blue, 255);
-
-    //central painting wheel
-    QConicalGradient colorGrad;
-    colorGrad.setCenter(100, 100);
-    colorGrad.setColorAt(0, primaryColor);
-    colorGrad.setColorAt(0.25, Qt::white);
-    colorGrad.setColorAt(0.75, Qt::black);
-    colorGrad.setColorAt(1, primaryColor);
-    colorGrad.setAngle(45);
-
-    painter.setBrush(colorGrad);
-    painter.setPen(QColor(Qt::black));
-
-    refineColorRect = QRect(65, 65, 70, 70);
-    painter.translate(100, -40);
-    painter.rotate(45);
-    painter.drawRect(refineColorRect);
-
-    colorWheel->setRefineRect(refineColorRect);
-
-    painter.resetTransform();
-
-    painter.setBrush(Qt::transparent);
-    painter.setPen(Qt::black);
-    painter.drawPoint(actualColorPos);
-    painter.drawEllipse(actualColorPos, 5, 5);
-
-    //primary Color preview
-    painter.setBrush(QColor(actualRed, actualGreen, actualBlue, 255));
-    painter.drawRect(0, 175, 25, 25);
-
-    colorWheel->setPixmap(colorWheelPixmap);
-
-}
-
-ColorDockWidget::~ColorDockWidget()
-{
-
-}
-
-void ColorDockWidget::setActualColor(QColor color)
-{
-    actualRed = color.red();
-    actualGreen = color.green();
-    actualBlue = color.blue();
-}
-
-void ColorDockWidget::setActualColorPos(QPoint point)
-{
-    actualColorPos = point;
-}
-
-
-void ColorDockWidget::set_RLE(int val)
-{
-    m_RLineEdit->setText(QString::number(val));
+void ColorDockWidget::updateRed(int val){
+    mRSpinBox->setValue(val);
+    mColorWheel->setRed(val);
     emit redChanged(val);
 }
 
-void ColorDockWidget::set_RSlider(QString val)
-{
-    m_RSlider->setValue(val.toInt());
+void ColorDockWidget::updateRed(QString val){
+    mRSlider->setValue(val.toInt());
     emit redChanged(val.toInt());
 }
 
-void ColorDockWidget::set_GLE(int val)
-{
-    m_GLineEdit->setText(QString::number(val));
+void ColorDockWidget::updateGreen(int val){
+    mGSpinBox->setValue(val);
+    mColorWheel->setGreen(val);
     emit greenChanged(val);
 }
 
-void ColorDockWidget::set_GSlider(QString val)
-{
-    m_GSlider->setValue(val.toInt());
+void ColorDockWidget::updateGreen(QString val){
+    mGSlider->setValue(val.toInt());
     emit greenChanged(val.toInt());
 }
 
-void ColorDockWidget::set_BLE(int val)
-{
-    m_BLineEdit->setText(QString::number(val));
+void ColorDockWidget::updateBlue(int val){
+    mBSpinBox->setValue(val);
+    mColorWheel->setBlue(val);
     emit blueChanged(val);
-
 }
 
-void ColorDockWidget::set_BSlider(QString val)
-{
-    m_BSlider->setValue(val.toInt());
+void ColorDockWidget::updateBlue(QString val){
+    mBSlider->setValue(val.toInt());
     emit blueChanged(val.toInt());
 }
 
-void ColorDockWidget::set_HLE(int val)
-{
-    m_HLineEdit->setText(QString::number(val));
-    emit hueChanged(val);
+void ColorDockWidget::updateHue(int val){
+
 }
 
-void ColorDockWidget::set_HSlider(QString val)
-{
-    m_HSlider->setValue(val.toInt());
-    emit hueChanged(val.toInt());
+void ColorDockWidget::updateHue(QString val){
+
 }
 
-void ColorDockWidget::set_SLE(int val)
-{
-    m_SLineEdit->setText(QString::number(val));
-    emit saturationChanged(val);
+void ColorDockWidget::updateSat(int val){
+
 }
 
-void ColorDockWidget::set_SSlider(QString val)
-{
-    m_SSLider->setValue(val.toInt());
-    emit saturationChanged(val.toInt());
+void ColorDockWidget::updateSat(QString val){
+
 }
 
-void ColorDockWidget::set_VLE(int val)
-{
-    m_VLineEdit->setText(QString::number(val));
-    emit valueChanged(val);
+void ColorDockWidget::updateVal(int val){
+
 }
 
-void ColorDockWidget::set_VSlider(QString val)
-{
-    m_VSlider->setValue(val.toInt());
-    emit valueChanged(val.toInt());
+void ColorDockWidget::updateVal(QString val){
+
 }
+
+/*- Color wheel -*/
+ColorWheel::ColorWheel(QWidget *parent) : QLabel(parent)
+{
+    mPixmap = QPixmap(250, 200);
+    mPixmap.fill(Qt::gray);
+    setPixmap(mPixmap);
+
+    primaryRed = 0;
+    primaryGreen = 0;
+    primaryBlue = 0;
+    altRed = 255;
+    altGreen = 255;
+    altBlue = 255;
+
+    rotationAngle = 0.0;
+
+    primaryColorRect = QRect(210, 160, 20, 20);
+    altColorRect = QRect(220, 170, 20, 20);
+    QRect referenceRect(72, 47,105, 105);
+    points.reserve(3);
+//    points[0] = QPoint(referenceRect.topLeft().x() +  referenceRect.width()/2, referenceRect.top() - 20);
+//    points[1] = referenceRect.bottomLeft();
+//    points[2] = referenceRect.bottomRight();
+    points.push_back(QPoint(referenceRect.topLeft().x() + referenceRect.width()/2, referenceRect.top() - 20));
+    points.push_back(referenceRect.bottomLeft());
+    points.push_back(referenceRect.bottomRight());
+
+    centerRectPoint = QPoint(points.at(0).x(), 100);
+
+    colorRangeTri.moveTo(points.at(0));
+    colorRangeTri.lineTo(points.at(1));
+    colorRangeTri.lineTo(points.at(2));
+    colorRangeTri.lineTo(points.at(0));
+}
+
+QColor ColorWheel::getColorFromPoint(QPoint point){
+    QPixmap pic = QWidget::grab();
+    QImage img = pic.toImage();
+    return QColor(img.pixel(point));
+}
+
+void ColorWheel::setRed(int r){
+    primaryRed = r;
+    repaint();
+}
+
+void ColorWheel::setGreen(int g){
+    primaryGreen = g;
+    repaint();
+}
+
+void ColorWheel::setBlue(int b){
+    primaryBlue = b;
+    repaint();
+}
+
+void ColorWheel::mousePressEvent(QMouseEvent *ev){
+    if(ev->button() == Qt::LeftButton){
+        if(primaryColorRect.contains(ev->pos())){
+            emit redChanged(primaryRed);
+            emit greenChanged(primaryGreen);
+            emit blueChanged(primaryBlue);
+        }
+        if(altColorRect.contains(ev->pos())){
+            emit redChanged(altRed);
+            emit greenChanged(altGreen);
+            emit blueChanged(altBlue);
+        }
+        if(colorRangeTri.contains(ev->pos())){
+            //set the color
+            preciseColor = ev->pos();
+            QColor newColor = getColorFromPoint(ev->pos());
+            primaryRed = newColor.red();
+            primaryGreen = newColor.green();
+            primaryBlue = newColor.blue();
+            emit redChanged(primaryRed);
+            emit greenChanged(primaryGreen);
+            emit blueChanged(primaryBlue);
+        }
+        if(!mouseDown && !colorRangeTri.contains(ev->pos())) mouseDown = true;
+        if(mouseDown){
+            QPoint centerPoint(175, 100);
+            QPoint dPoint = centerPoint - ev->pos();
+            rotationAngle = atan2(dPoint.x(), dPoint.y());
+            rotationAngle = rotationAngle * (180.0 / M_PI);
+        }
+    }
+    if(ev->button() == Qt::RightButton){
+        int swapRed = 0, swapGreen = 0, swapBlue = 0;
+        swapRed = primaryRed;
+        swapGreen = primaryGreen;
+        swapBlue = primaryBlue;
+        primaryRed = altRed;
+        primaryGreen = altGreen;
+        primaryBlue = altBlue;
+        altRed = swapRed;
+        altGreen = swapGreen;
+        altBlue = swapBlue;
+        emit redChanged(primaryRed);
+        emit greenChanged(primaryGreen);
+        emit blueChanged(primaryBlue);
+    }
+    repaint();
+}
+
+void ColorWheel::paintEvent(QPaintEvent *e){
+    QPainter painter(this);
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(Qt::gray);
+    painter.drawRect(0, 0, 250, 200);
+    QConicalGradient externalColor;
+    externalColor.setCenter(100, 100);
+    externalColor.setColorAt(0, Qt::green);
+    externalColor.setColorAt(0.175, Qt::yellow);
+    externalColor.setColorAt(0.35, Qt::red);
+    externalColor.setColorAt(0.525, Qt::magenta);
+    externalColor.setColorAt(0.65, Qt::blue);
+    externalColor.setColorAt(0.8253, Qt::cyan);
+    externalColor.setColorAt(1.0, Qt::green);
+    painter.setBrush(externalColor);
+    painter.drawEllipse(25, 0, 200, 200);
+
+    painter.setBrush(Qt::lightGray);
+    QPoint ctrPoint(125, 100);
+    painter.drawEllipse(ctrPoint, 75, 75);
+
+    //Color Rect
+    QColor primaryColor(primaryRed, primaryGreen, primaryBlue);
+    QColor altColor(altRed, altGreen, altBlue);
+    painter.setPen(Qt::black);
+    painter.setBrush(altColor);
+    painter.drawRect(altColorRect);
+    painter.setBrush(primaryColor);
+    painter.drawRect(primaryColorRect);
+
+    QConicalGradient colorGrad;
+    colorGrad.setCenter(centerRectPoint);
+    colorGrad.setColorAt(0, primaryColor);
+    colorGrad.setColorAt(0.25, Qt::white);
+    colorGrad.setColorAt(0.75, Qt::black);
+    colorGrad.setColorAt(1.0, primaryColor);
+    colorGrad.setAngle(-rotationAngle);
+
+    painter.setBrush(colorGrad);
+    painter.translate(centerRectPoint);
+    painter.rotate(-rotationAngle);
+    painter.translate(-centerRectPoint);
+    painter.drawPath(colorRangeTri);
+}
+
+void ColorWheel::mouseMoveEvent(QMouseEvent *e){
+    if(mouseDown){
+        QPoint centerPoint(175, 100);
+        QPoint dPoint = centerPoint - e->pos();
+        rotationAngle = atan2(dPoint.x(), dPoint.y());
+        rotationAngle = rotationAngle * (180.0 / M_PI);
+        qDebug() << "Rotation Angle: " << rotationAngle << endl;
+    }
+    repaint();
+}
+
+void ColorWheel::mouseReleaseEvent(QMouseEvent *ev){
+    mouseDown = false;
+}
+
 
 /*- TimeLine Widget -*/
 
@@ -857,45 +910,6 @@ void BrushShapeWidget::mouseMoveEvent(QMouseEvent *event)
 void BrushShapeWidget::mousePressEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
-}
-
-/*
-
-  COLOR WHEEL WIDGET = Handles additional input
-
-*/
-ColorWheelWidget::ColorWheelWidget(QWidget *parent) : QLabel(parent)
-{
-
-}
-
-ColorWheelWidget::~ColorWheelWidget()
-{
-
-}
-
-void ColorWheelWidget::mousePressEvent(QMouseEvent *event)
-{
-        QPixmap pix = QWidget::grab();
-        QImage img = pix.toImage();
-        QColor color(img.pixel(event->pos()));
-        if(!refineColorRect.contains(event->pos()))
-        {
-            emit redChanged(color.red());
-            emit greenChanged(color.green());
-            emit blueChanged(color.blue());
-        }
-
-        if(refineColorRect.contains(event->pos()))
-        {
-            //draw the circle
-            emit colorChanged(color);
-            emit actualColorPoint(event->pos());
-            emit actualRedChanged(color.red());
-            emit actualGreenChanged(color.green());
-            emit actualBlueChanged(color.blue());
-        }
-        qDebug() << "Color Should Change" << endl;
 }
 
 LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
