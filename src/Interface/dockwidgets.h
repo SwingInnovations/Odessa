@@ -39,9 +39,11 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <QSpinBox>
+#include <QTransform>
+#include <QColorDialog>
 
-#include "../Odessa/Structure/brush.h"
-#include "../Odessa/Overloads.h"
+#include "../Odessa/src/Structure/brush.h"
+#include "../Odessa/src/Overloads.h"
 
 //handling the Brush System
 
@@ -93,6 +95,10 @@ private slots:
     void updateStencilPath(QString);
     void updateBrushName(QString);
     void toggleTransferVisibility(bool);
+    void updateStencilWidth(int);
+    void updateStencilHeight(int);
+    void updateStencilHardness(int);
+    void updateStencilRotate(int);
     void loadStencilAct();
     void loadBrushAct();
     void loadBrushSetAct();

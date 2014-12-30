@@ -202,9 +202,12 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(mStencilWidget, SIGNAL(saveStencilTriggered()), SLOT(saveStencilAct()));
     connect(mStencilWidget, SIGNAL(saveBrushTriggered()), SLOT(saveBrushAct()));
     connect(mStencilWidget, SIGNAL(saveBrushSetTriggered()), SLOT(saveBrushSetAct()));
+    connect(mStencilWidget, SIGNAL(StencilWidthChanged(int)), SLOT(updateStencilWidth(int)));
+    connect(mStencilWidget, SIGNAL(stencilHeightChanged(int)), SLOT(updateStencilHeight(int)));
+    connect(mStencilWidget, SIGNAL(brushHardnessChanged(int)), SLOT(updateStencilHardness(int)));
+    connect(mStencilWidget, SIGNAL(rotateChanged(int)), SLOT(updateStencilRotate(int)));
     connect(mGenBrushWidget, SIGNAL(brushLibIndexChanged(int)), SLOT(setCurrentIndex(int)));
     connect(mGenBrushWidget, SIGNAL(brushNameChanged(QString)), SLOT(updateBrushName(QString)));
-    connect(mGenBrushWidget, SIGNAL(brushLibIndexChanged(int)), SLOT(setCurrentIndex(int)));
 }
 
 void BrushDockWidget::setDirectory(QString dir){
@@ -310,6 +313,22 @@ void BrushDockWidget::toggleTransferVisibility(bool val){
     }
 }
 
+void BrushDockWidget::updateStencilWidth(int val){
+    mTempBrushList[mCurrentBrushIndex].setSWidth(val);
+}
+
+void BrushDockWidget::updateStencilHeight(int val){
+    mTempBrushList[mCurrentBrushIndex].setSHeight(val);
+}
+
+void BrushDockWidget::updateStencilHardness(int val){
+    mTempBrushList[mCurrentBrushIndex].setHardness(val);
+}
+
+void BrushDockWidget::updateStencilRotate(int val){
+    mTempBrushList[mCurrentBrushIndex].SetRotate(val);
+}
+
 void BrushDockWidget::updateStencil(QPixmap pixmap){
     emit brushStencilChanged(pixmap);
 }
@@ -329,6 +348,10 @@ void BrushDockWidget::setCurrentIndex(int val){
     mStencilWidget->updateStencilHeight(mActualBrushList.at(mCurrentBrushIndex).getSHeight());
     mStencilWidget->updateBrushHardness(mActualBrushList.at(mCurrentBrushIndex).getHardness());
     mStencilWidget->updateStencilRotate(mActualBrushList.at(mCurrentBrushIndex).getRotate());
+    qDebug() << "Stencil Width: " << mActualBrushList.at(mCurrentBrushIndex).getSWidth() << endl;
+    qDebug() << "Stencil Height: " << mActualBrushList.at(mCurrentBrushIndex).getSHeight() << endl;
+    qDebug() << "Hardness: " << mActualBrushList.at(mCurrentBrushIndex).getHardness() << endl;
+    qDebug() << "Rotate: " << mActualBrushList.at(mCurrentBrushIndex).getRotate() << endl;
     emit stencilWidthChanged(mActualBrushList.at(mCurrentBrushIndex).getSWidth());
     emit stencilHeightChanged(mActualBrushList.at(mCurrentBrushIndex).getSHeight());
     emit brushHardnessChanged(mActualBrushList.at(mCurrentBrushIndex).getHardness());
@@ -639,6 +662,7 @@ ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(mRSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateRed(QString)));
     connect(mGSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateGreen(QString)));
     connect(mBSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateBlue(QString)));
+
 }
 
 void ColorDockWidget::updateRed(int val){
@@ -717,10 +741,8 @@ ColorWheel::ColorWheel(QWidget *parent) : QLabel(parent)
     primaryColorRect = QRect(210, 160, 20, 20);
     altColorRect = QRect(220, 170, 20, 20);
     QRect referenceRect(72, 47,105, 105);
+
     points.reserve(3);
-//    points[0] = QPoint(referenceRect.topLeft().x() +  referenceRect.width()/2, referenceRect.top() - 20);
-//    points[1] = referenceRect.bottomLeft();
-//    points[2] = referenceRect.bottomRight();
     points.push_back(QPoint(referenceRect.topLeft().x() + referenceRect.width()/2, referenceRect.top() - 20));
     points.push_back(referenceRect.bottomLeft());
     points.push_back(referenceRect.bottomRight());
@@ -731,6 +753,9 @@ ColorWheel::ColorWheel(QWidget *parent) : QLabel(parent)
     colorRangeTri.lineTo(points.at(1));
     colorRangeTri.lineTo(points.at(2));
     colorRangeTri.lineTo(points.at(0));
+
+    primaryBasePoint = QPoint(125, 15);
+    altBasePoint = QPoint(125, 185);
 }
 
 QColor ColorWheel::getColorFromPoint(QPoint point){
@@ -757,9 +782,15 @@ void ColorWheel::setBlue(int b){
 void ColorWheel::mousePressEvent(QMouseEvent *ev){
     if(ev->button() == Qt::LeftButton){
         if(primaryColorRect.contains(ev->pos())){
-            emit redChanged(primaryRed);
-            emit greenChanged(primaryGreen);
-            emit blueChanged(primaryBlue);
+            QColor color = QColorDialog::getColor();
+            if(color.isValid()){
+                actualRed = color.red();
+                actualGreen = color.green();
+                actualBlue = color.blue();
+            }
+            emit redChanged(actualRed);
+            emit greenChanged(actualGreen);
+            emit blueChanged(actualBlue);
         }
         if(altColorRect.contains(ev->pos())){
             emit redChanged(altRed);
@@ -770,12 +801,12 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev){
             //set the color
             preciseColor = ev->pos();
             QColor newColor = getColorFromPoint(ev->pos());
-            primaryRed = newColor.red();
-            primaryGreen = newColor.green();
-            primaryBlue = newColor.blue();
-            emit redChanged(primaryRed);
-            emit greenChanged(primaryGreen);
-            emit blueChanged(primaryBlue);
+            actualRed = newColor.red();
+            actualGreen = newColor.green();
+            actualBlue = newColor.blue();
+            emit redChanged(actualRed);
+            emit greenChanged(actualGreen);
+            emit blueChanged(actualBlue);
         }
         if(!mouseDown && !colorRangeTri.contains(ev->pos())) mouseDown = true;
         if(mouseDown){
@@ -805,6 +836,7 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev){
 
 void ColorWheel::paintEvent(QPaintEvent *e){
     QPainter painter(this);
+
     painter.setPen(Qt::NoPen);
     painter.setBrush(Qt::gray);
     painter.drawRect(0, 0, 250, 200);
@@ -820,8 +852,30 @@ void ColorWheel::paintEvent(QPaintEvent *e){
     painter.setBrush(externalColor);
     painter.drawEllipse(25, 0, 200, 200);
 
-    painter.setBrush(Qt::lightGray);
     QPoint ctrPoint(125, 100);
+
+    QLine line;
+    line.setP1(QPoint(125,0));
+    line.setP2(QPoint(125, 200));
+    painter.setPen(Qt::black);
+    painter.setBrush(Qt::black);
+    QTransform transform = painter.transform();
+    painter.translate(ctrPoint);
+    painter.rotate(-rotationAngle);
+    painter.translate(-ctrPoint);
+    painter.drawLine(line);
+
+    primaryBasePoint = transform.map(primaryBasePoint);
+    altBasePoint = transform.map(altBasePoint);
+
+    painter.setBrush(Qt::transparent);
+    painter.drawEllipse(primaryBasePoint, 10, 10);
+    painter.drawEllipse(altBasePoint, 10, 10);
+
+    painter.resetTransform();
+
+    painter.setPen(Qt::NoPen);
+    painter.setBrush(Qt::lightGray);
     painter.drawEllipse(ctrPoint, 75, 75);
 
     //Color Rect
@@ -839,13 +893,13 @@ void ColorWheel::paintEvent(QPaintEvent *e){
     colorGrad.setColorAt(0.25, Qt::white);
     colorGrad.setColorAt(0.75, Qt::black);
     colorGrad.setColorAt(1.0, primaryColor);
-    colorGrad.setAngle(-rotationAngle);
 
     painter.setBrush(colorGrad);
     painter.translate(centerRectPoint);
     painter.rotate(-rotationAngle);
     painter.translate(-centerRectPoint);
     painter.drawPath(colorRangeTri);
+    painter.end();
 }
 
 void ColorWheel::mouseMoveEvent(QMouseEvent *e){
@@ -855,12 +909,22 @@ void ColorWheel::mouseMoveEvent(QMouseEvent *e){
         rotationAngle = atan2(dPoint.x(), dPoint.y());
         rotationAngle = rotationAngle * (180.0 / M_PI);
         qDebug() << "Rotation Angle: " << rotationAngle << endl;
+        //Adjust the primary color
+        QColor color = getColorFromPoint(primaryBasePoint);
+        primaryRed = color.red();
+        primaryGreen = color.green();
+        primaryBlue = color.blue();
+        emit redChanged(color.red());
+        emit greenChanged(color.green());
+        emit blueChanged(color.blue());
     }
     repaint();
 }
 
 void ColorWheel::mouseReleaseEvent(QMouseEvent *ev){
-    mouseDown = false;
+    if(mouseDown){
+        mouseDown = false;
+    }
 }
 
 
