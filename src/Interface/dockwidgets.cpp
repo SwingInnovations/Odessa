@@ -916,9 +916,6 @@ void ColorWheel::mouseMoveEvent(QMouseEvent *e){
         primaryRed = color.red();
         primaryGreen = color.green();
         primaryBlue = color.blue();
-        emit redChanged(color.red());
-        emit greenChanged(color.green());
-        emit blueChanged(color.blue());
     }
     repaint();
 }
