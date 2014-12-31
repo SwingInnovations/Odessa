@@ -247,6 +247,7 @@ private:
     QPainterPath colorRangeTri;
     double rotationAngle;
     bool mouseDown;
+    bool toggleAlt;
 };
 
 class TimelineDockWidget : public QDockWidget

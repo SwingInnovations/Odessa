@@ -114,6 +114,9 @@ MainWindow::MainWindow(QWidget *parent)
     sendFeedbackAct = new QAction(this);
     sendFeedbackAct->setText("&Send Feedback");
 
+    updateAct = new QAction(this);
+    updateAct->setText("&Check for updates...");
+
     //Select Menu
     selectRegionAct = new QAction(this);
     selectRegionAct->setText("&Select Region");
@@ -176,8 +179,10 @@ MainWindow::MainWindow(QWidget *parent)
     viewMenu->addSeparator();
     viewMenu->addAction(preferenceAct);
 
+    //Help Menu
     helpMenu = this->menuBar()->addMenu("&Help");
     helpMenu->addAction(sendFeedbackAct);
+    helpMenu->addAction(updateAct);
     helpMenu->addSeparator();
     helpMenu->addAction(aboutAct);
 

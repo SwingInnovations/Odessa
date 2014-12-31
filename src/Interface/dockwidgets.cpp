@@ -163,8 +163,6 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     mTabWidget->setTabPosition(QTabWidget::North);
     mTabWidget->setTabShape(QTabWidget::Rounded);
 
-//    setWidget(mTabWidget);
-//    this->setMinimumWidth(292);
     QVBoxLayout* displayLayout = new QVBoxLayout;
     displayLayout->addWidget(mTabWidget);
     displayLayout->addSpacerItem(new QSpacerItem(292, 10, QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -330,6 +328,7 @@ void BrushDockWidget::updateStencilRotate(int val){
 }
 
 void BrushDockWidget::updateStencil(QPixmap pixmap){
+    mTempBrushList[mCurrentBrushIndex].SetStencil(pixmap);
     emit brushStencilChanged(pixmap);
 }
 
@@ -348,6 +347,7 @@ void BrushDockWidget::setCurrentIndex(int val){
     mStencilWidget->updateStencilHeight(mActualBrushList.at(mCurrentBrushIndex).getSHeight());
     mStencilWidget->updateBrushHardness(mActualBrushList.at(mCurrentBrushIndex).getHardness());
     mStencilWidget->updateStencilRotate(mActualBrushList.at(mCurrentBrushIndex).getRotate());
+    mStencilWidget->updateStencil(mActualBrushList.at(mCurrentBrushIndex).getStencil());
     qDebug() << "Stencil Width: " << mActualBrushList.at(mCurrentBrushIndex).getSWidth() << endl;
     qDebug() << "Stencil Height: " << mActualBrushList.at(mCurrentBrushIndex).getSHeight() << endl;
     qDebug() << "Hardness: " << mActualBrushList.at(mCurrentBrushIndex).getHardness() << endl;
@@ -756,6 +756,7 @@ ColorWheel::ColorWheel(QWidget *parent) : QLabel(parent)
 
     primaryBasePoint = QPoint(125, 15);
     altBasePoint = QPoint(125, 185);
+    toggleAlt = false;
 }
 
 QColor ColorWheel::getColorFromPoint(QPoint point){
@@ -765,17 +766,17 @@ QColor ColorWheel::getColorFromPoint(QPoint point){
 }
 
 void ColorWheel::setRed(int r){
-    primaryRed = r;
+    actualRed = r;
     repaint();
 }
 
 void ColorWheel::setGreen(int g){
-    primaryGreen = g;
+    actualGreen = g;
     repaint();
 }
 
 void ColorWheel::setBlue(int b){
-    primaryBlue = b;
+    actualBlue = b;
     repaint();
 }
 
@@ -832,6 +833,22 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev){
         emit greenChanged(primaryGreen);
         emit blueChanged(primaryBlue);
     }
+    if(ev->button() == Qt::MidButton){
+        toggleAlt =! toggleAlt;
+        if(toggleAlt){
+            QColor newColor = getColorFromPoint(altBasePoint);
+            primaryRed = newColor.red();
+            primaryGreen = newColor.green();
+            primaryBlue = newColor.blue();
+            rotationAngle+= 180.0f;
+        }else{
+            QColor newColor = getColorFromPoint(primaryBasePoint);
+            primaryRed = newColor.red();
+            primaryGreen = newColor.green();
+            primaryBlue = newColor.blue();
+            rotationAngle+= 180.0f;
+        }
+    }
     repaint();
 }
 
@@ -860,8 +877,8 @@ void ColorWheel::paintEvent(QPaintEvent *e){
     QPoint abp = QPoint(altBasePoint.x(), altBasePoint.y());
 
     QLine line;
-    line.setP1(QPoint(125,0));
-    line.setP2(QPoint(125, 200));
+    line.setP1(QPoint(125,23));
+    line.setP2(QPoint(125, 177));
     painter.setPen(Qt::black);
     painter.setBrush(Qt::black);
     painter.translate(ctrPoint);
@@ -884,14 +901,17 @@ void ColorWheel::paintEvent(QPaintEvent *e){
     painter.setPen(Qt::black);
     painter.setBrush(altColor);
     painter.drawRect(altColorRect);
-    painter.setBrush(primaryColor);
+    QColor actualColor(actualRed, actualGreen, actualBlue);
+    painter.setBrush(actualColor);
     painter.drawRect(primaryColorRect);
 
     QConicalGradient colorGrad;
     colorGrad.setCenter(centerRectPoint);
-    colorGrad.setColorAt(0, primaryColor);
-    colorGrad.setColorAt(0.25, Qt::white);
-    colorGrad.setColorAt(0.65, Qt::black);
+    colorGrad.setAngle(90);
+    //colorGrad.setColorAt(0, Qt::white);
+    colorGrad.setColorAt(0.0, primaryColor);
+    colorGrad.setColorAt(0.40, Qt::black);
+    colorGrad.setColorAt(0.60, Qt::white);
     colorGrad.setColorAt(1.0, primaryColor);
 
     painter.setBrush(colorGrad);
@@ -911,11 +931,20 @@ void ColorWheel::mouseMoveEvent(QMouseEvent *e){
         rotationAngle = rotationAngle * (180.0 / M_PI);
         qDebug() << "Rotation Angle: " << rotationAngle << endl;
         processBaseMovePoint();
+
         //Adjust the primary color
-        QColor color = getColorFromPoint(primaryBasePoint);
-        primaryRed = color.red();
-        primaryGreen = color.green();
-        primaryBlue = color.blue();
+        if(!toggleAlt){
+            QColor color = getColorFromPoint(primaryBasePoint);
+            primaryRed = color.red();
+            primaryGreen = color.green();
+            primaryBlue = color.blue();
+        }else{
+            QColor color = getColorFromPoint(altBasePoint);
+            primaryRed = color.red();
+            primaryGreen = color.green();
+            primaryBlue = color.blue();
+            rotationAngle += 180.0f;
+        }
     }
     repaint();
 }

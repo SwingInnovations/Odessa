@@ -106,6 +106,7 @@ private:
     QShortcut* eyeDropper;
 
     QAction *sendFeedbackAct;
+    QAction *updateAct;
     QAction *aboutAct;
 
     QMenu *fileMenu;
