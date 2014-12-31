@@ -229,6 +229,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *ev);
 private:
     QColor getColorFromPoint(QPoint);
+    void processBaseMovePoint();
     QPixmap mPixmap;
     int actualRed;
     int actualGreen;

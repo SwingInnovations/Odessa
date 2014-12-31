@@ -814,6 +814,7 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev){
             QPoint dPoint = centerPoint - ev->pos();
             rotationAngle = atan2(dPoint.x(), dPoint.y());
             rotationAngle = rotationAngle * (180.0 / M_PI);
+            processBaseMovePoint();
         }
     }
     if(ev->button() == Qt::RightButton){
@@ -835,7 +836,9 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev){
 }
 
 void ColorWheel::paintEvent(QPaintEvent *e){
+    Q_UNUSED(e);
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing, true);
 
     painter.setPen(Qt::NoPen);
     painter.setBrush(Qt::gray);
@@ -853,26 +856,23 @@ void ColorWheel::paintEvent(QPaintEvent *e){
     painter.drawEllipse(25, 0, 200, 200);
 
     QPoint ctrPoint(125, 100);
+    QPoint pbp = QPoint(primaryBasePoint.x(), primaryBasePoint.y());
+    QPoint abp = QPoint(altBasePoint.x(), altBasePoint.y());
 
     QLine line;
     line.setP1(QPoint(125,0));
     line.setP2(QPoint(125, 200));
     painter.setPen(Qt::black);
     painter.setBrush(Qt::black);
-    QTransform transform = painter.transform();
     painter.translate(ctrPoint);
     painter.rotate(-rotationAngle);
     painter.translate(-ctrPoint);
     painter.drawLine(line);
-
-    primaryBasePoint = transform.map(primaryBasePoint);
-    altBasePoint = transform.map(altBasePoint);
+    painter.resetTransform();
 
     painter.setBrush(Qt::transparent);
-    painter.drawEllipse(primaryBasePoint, 10, 10);
-    painter.drawEllipse(altBasePoint, 10, 10);
-
-    painter.resetTransform();
+    painter.drawEllipse(pbp, 8, 8);
+    painter.drawEllipse(abp, 8, 8);
 
     painter.setPen(Qt::NoPen);
     painter.setBrush(Qt::lightGray);
@@ -891,7 +891,7 @@ void ColorWheel::paintEvent(QPaintEvent *e){
     colorGrad.setCenter(centerRectPoint);
     colorGrad.setColorAt(0, primaryColor);
     colorGrad.setColorAt(0.25, Qt::white);
-    colorGrad.setColorAt(0.75, Qt::black);
+    colorGrad.setColorAt(0.65, Qt::black);
     colorGrad.setColorAt(1.0, primaryColor);
 
     painter.setBrush(colorGrad);
@@ -899,6 +899,7 @@ void ColorWheel::paintEvent(QPaintEvent *e){
     painter.rotate(-rotationAngle);
     painter.translate(-centerRectPoint);
     painter.drawPath(colorRangeTri);
+    painter.resetTransform();
     painter.end();
 }
 
@@ -909,6 +910,7 @@ void ColorWheel::mouseMoveEvent(QMouseEvent *e){
         rotationAngle = atan2(dPoint.x(), dPoint.y());
         rotationAngle = rotationAngle * (180.0 / M_PI);
         qDebug() << "Rotation Angle: " << rotationAngle << endl;
+        processBaseMovePoint();
         //Adjust the primary color
         QColor color = getColorFromPoint(primaryBasePoint);
         primaryRed = color.red();
@@ -925,6 +927,18 @@ void ColorWheel::mouseReleaseEvent(QMouseEvent *ev){
     if(mouseDown){
         mouseDown = false;
     }
+}
+
+void ColorWheel::processBaseMovePoint(){
+    QTransform transform;
+    QPoint ctrPoint(125, 100);
+    primaryBasePoint = QPoint(125, 15);
+    altBasePoint = QPoint(125, 185);
+    transform.translate(ctrPoint.x(), ctrPoint.y());
+    transform.rotate(-rotationAngle);
+    transform.translate(-ctrPoint.x(), -ctrPoint.y());
+    primaryBasePoint = transform.map(primaryBasePoint);
+    altBasePoint = transform.map(altBasePoint);
 }
 
 
