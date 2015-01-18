@@ -38,9 +38,9 @@ public:
     void paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt);//Keep
     void setColor(const QColor color){ m_Color = color; m_Image->fill(m_Color);}
 
-    bool isVisible(){return visible;}
+    void fillImage(QPoint point, QRgb oldColor, Brush brush);
 
-    void optimizeImage(Brush brush);
+    bool isVisible(){return visible;}
 
     BitmapImage copy(){return BitmapImage(boundaries, m_pixmap);}
 

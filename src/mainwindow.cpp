@@ -73,12 +73,14 @@ MainWindow::MainWindow(QWidget *parent)
     primitiveTool->setText("Prim");
     eyeDropperTool = new QAction(this);
     eyeDropperTool->setText("EyeDropper");
+    fillTool = new QAction("Fill", this);
 
     toolBar->addAction(eyeDropperTool);
     toolBar->addAction(brushTool);
     toolBar->addAction(eraserTool);
     toolBar->addAction(textTool);
     toolBar->addAction(primitiveTool);
+    toolBar->addAction(fillTool);
 
     /*-File Menu Actions-*/
     newAct = new QAction("&New", this);
@@ -227,6 +229,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(mEditor, SIGNAL(blueChanged(int)), colorDockWidget, SLOT(updateBlue(int)));
     connect(eyeDropperTool, SIGNAL(triggered()), SLOT(assignEyeDropperTool()));
     connect(eyeDropper, SIGNAL(activated()), SLOT(assignEyeDropperTool()));
+    connect(fillTool, SIGNAL(triggered()), SLOT(assignFillTool()));
     connect(sendFeedbackAct, SIGNAL(triggered()), SLOT(sendFeedBack()));
     connect(aboutAct, SIGNAL(triggered()), SLOT(about()));
     connect(closeAct, SIGNAL(triggered()), SLOT(close()));
@@ -313,6 +316,10 @@ void MainWindow::assignTextTool()
 void MainWindow::assignPrimitiveTool()
 {
     mEditor->setBrush(Editor::PRIMITIVE_TOOL);
+}
+
+void MainWindow::assignFillTool(){
+    mEditor->setBrush(Editor::FILL_TOOL);
 }
 
 void MainWindow::assignEyeDropperTool()

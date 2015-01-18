@@ -86,9 +86,9 @@ public:
     void setGreen(int val){myColor.setGreen(val);}
     void setBlue(int val){myColor.setBlue(val);}
 
-    QPen getPen(){return myPen;}
-    QBrush getBrush(){ return myBrush; }
-    QColor getColor() { return myColor; }
+    QPen getPen()const{return myPen;}
+    QBrush getBrush()const{ return myBrush; }
+    QColor getColor()const{ return myColor; }
 
     QString getName()const{return mName;}
 

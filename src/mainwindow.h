@@ -36,6 +36,7 @@ private slots:
     void assignTextTool();
     void assignPrimitiveTool();
     void assignEyeDropperTool();
+    void assignFillTool();
     void showNewDocWin();
     void showPrefWin();
     void toggleShowBrushDock(bool);
@@ -102,6 +103,7 @@ private:
     QAction *textTool;
     QAction *primitiveTool;
     QAction *eyeDropperTool;
+    QAction *fillTool;
 
     QShortcut* eyeDropper;
 

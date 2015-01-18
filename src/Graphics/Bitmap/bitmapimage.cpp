@@ -156,25 +156,37 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
     xInc = point.x() / length;
     yInc = point.y() / length;
     drawPoint = pointInfo.first();
-    for(unsigned int i = 0; i < length; i++){
+    for(int i = 0; i < length; i++){
         drawPoint.setX(drawPoint.x() + (xInc * brush.getSpacing() ));
         drawPoint.setY(drawPoint.y() + (yInc * brush.getSpacing() ));
         painter.drawPixmap(QPoint(drawPoint.x() - stencil.width() / 2, drawPoint.y() - stencil.height()/2), stencil);
     }
 }
 
-void BitmapImage::optimizeImage(Brush brush)
-{
-    QPixmap temp = this->copy().getPixmap();
-    QPainter painter(&m_pixmap);
-    painter.setCompositionMode(QPainter::CompositionMode_Source);
-    painter.drawPixmap(0,0, m_pixmap);
-    painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
-    painter.setOpacity(0.1);
-    painter.drawPixmap(0, 0, temp);
-    painter.end();
-    m_pixmap = temp;
-    qDebug() << "Optimizing Image" << endl;
+void BitmapImage::fillImage(QPoint point, QRgb oldColor, Brush brush){
+    QImage img = m_pixmap.toImage();
+    if(point.x() >= 0 && point.y() >= 0 && point.x() < img.width() && point.y() < img.height()){
+        if(oldColor == brush.getColor().rgb()){
+            qDebug() << "\nColor matched. " << endl;
+            return;
+        }
+        if(oldColor != brush.getColor().rgb()){
+            qDebug() << "Color Mismatched " << endl;
+
+                img.setPixel(point, brush.getColor().rgb());
+
+                qDebug() << "Painting point: " << point << endl;
+
+                fillImage(QPoint(point.x()+1, point.y()), oldColor, brush);
+                fillImage(QPoint(point.x()-1, point.y()), oldColor, brush);
+                fillImage(QPoint(point.x(), point.y()+1), oldColor, brush);
+                fillImage(QPoint(point.x(), point.y()-1), oldColor, brush);
+                m_pixmap = QPixmap::fromImage(img);
+        }
+    }else{
+        return;
+    }
+    qDebug() << "End of fill method reached" << endl;
 }
 
 QPixmap BitmapImage::getCompositeImage()

@@ -45,6 +45,7 @@ void Editor::mousePressEvent(QMouseEvent *event)
             if(!m_MousePath.isEmpty())
             {
                 m_MousePath.clear();
+                m_MousePath.append(event->pos());
             }
             backup();
             break;
@@ -54,12 +55,21 @@ void Editor::mousePressEvent(QMouseEvent *event)
             backup();
             break;
         case EYEDROPPER_TOOL:
+        {
             m_Pix = QPixmap::grabWidget(this);
             QImage m_Img = m_Pix.toImage();
             QColor color(m_Img.pixel(event->pos()));
             emit redChanged(color.red());
             emit greenChanged(color.green());
             emit blueChanged(color.blue());
+        }
+            break;
+       case FILL_TOOL:{
+            m_DeviceDown = true;
+            QImage img = m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().toImage();
+            QRgb oldColor = img.pixel(event->pos());
+            m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->fillImage(event->pos(), oldColor, m_CurrentTool);
+        }
             break;
        defualt:
             break;
