@@ -36,3 +36,6 @@ HEADERS  += mainwindow.h \
     Interface/dockwidgets.h \
     Structure/brush.h \
     Overloads.h
+
+RESOURCES += \
+    icons.qrc

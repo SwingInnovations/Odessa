@@ -85,7 +85,9 @@ MainWindow::MainWindow(QWidget *parent)
     /*-File Menu Actions-*/
     newAct = new QAction("&New", this);
     newAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
+    newAct->setIcon(QIcon(":/icon/resource/temp_New.svg"));
     openAct = new QAction("&Open", this);
+    openAct->setIcon(QIcon(":/icon/resource/temp_Open.svg"));
     openAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
     saveAct = new QAction("&Save", this);
     saveAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));

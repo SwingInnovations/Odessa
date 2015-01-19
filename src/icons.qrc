@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>resource/temp_New.svg</file>
+        <file>resource/temp_Open.svg</file>
+    </qresource>
+</RCC>

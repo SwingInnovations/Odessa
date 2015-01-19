@@ -42,8 +42,8 @@
 #include <QTransform>
 #include <QColorDialog>
 
-#include "../Odessa/src/Structure/brush.h"
-#include "../Odessa/src/Overloads.h"
+#include "../src/Structure/brush.h"
+#include "../Overloads.h"
 
 //handling the Brush System
 
