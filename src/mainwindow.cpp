@@ -186,7 +186,9 @@ MainWindow::MainWindow(QWidget *parent)
     //Help Menu
     helpMenu = this->menuBar()->addMenu("&Help");
     helpMenu->addAction(sendFeedbackAct);
+#ifdef Q_OS_WIN32
     helpMenu->addAction(updateAct);
+#endif
     helpMenu->addSeparator();
     helpMenu->addAction(aboutAct);
 
