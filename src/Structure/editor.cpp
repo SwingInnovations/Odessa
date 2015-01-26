@@ -64,6 +64,15 @@ void Editor::mousePressEvent(QMouseEvent *event)
             emit blueChanged(color.blue());
         }
             break;
+       case RECT_SELECT_TOOL:
+            {
+                m_DeviceDown = true;
+                if(!m_MousePath.isEmpty()){
+                    m_MousePath.clear();
+                    m_MousePath.push_back(event->pos());
+                }
+            }
+            break;
        case FILL_TOOL:{
             m_DeviceDown = true;
             QImage img = m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().toImage();
@@ -86,6 +95,11 @@ void Editor::mouseReleaseEvent(QMouseEvent *event)
     if(m_DeviceDown)
     {
         m_DeviceDown = false;
+    }
+
+    if(m_ToolType == RECT_SELECT_TOOL){
+        m_MousePath.push_back(event->pos());
+        //Reorder the layer array
     }
 
     if(!m_Layers.empty())
