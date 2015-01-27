@@ -38,14 +38,22 @@ public:
     void paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt);//Keep
     void setColor(const QColor color){ m_Color = color; m_Image->fill(m_Color);}
 
-    void fillImage(QPoint point, QRgb oldColor, Brush brush);
-
+    void fillImage(QPoint point, Brush brush);
     bool isVisible(){return visible;}
 
     BitmapImage copy(){return BitmapImage(boundaries, m_pixmap);}
+    BitmapImage copy(QRect bounds){
+        BitmapImage ret(*this);
+        QPixmap map = m_pixmap.copy(bounds);
+        ret.setPixmap(map);
+        ret.setBoundaries(QRect(boundaries.x(), boundaries.y(), map.width(), map.height()));
+        return ret;
+    }
 
     QImage *getImage(){return m_Image;}
-    QPixmap getPixmap(){return m_pixmap;}
+    QPixmap getPixmap(){
+                       QPixmap ret = m_pixmap.scaled((int)(m_pixmap.width() * m_WScaleFactor), (int)(m_pixmap.height() * m_HScaleFactor));
+                       return ret;}
     QPixmap getCompositeImage();
 
     QPoint getTopLeft(){return boundaries.topLeft();}
@@ -64,6 +72,8 @@ private:
     QImage *m_Image;
     QRect boundaries;
     QColor m_Color;
+    double m_WScaleFactor;
+    double m_HScaleFactor;
 
     //handle history
     int m_MaxSizeOfHistory;

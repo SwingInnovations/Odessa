@@ -75,9 +75,7 @@ void Editor::mousePressEvent(QMouseEvent *event)
             break;
        case FILL_TOOL:{
             m_DeviceDown = true;
-            QImage img = m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().toImage();
-            QRgb oldColor = img.pixel(event->pos());
-            m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->fillImage(event->pos(), oldColor, m_CurrentTool);
+            m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->fillImage(event->pos(), m_CurrentTool);
         }
             break;
        defualt:

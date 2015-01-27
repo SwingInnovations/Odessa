@@ -5,6 +5,8 @@ BitmapImage::BitmapImage()
     m_Image = NULL;
     visible = true;
     qDebug() << "Image drawn!" << endl;
+    m_WScaleFactor = 1.0;
+    m_HScaleFactor = 1.0;
 }
 
 BitmapImage::BitmapImage(const BitmapImage &image)
@@ -12,6 +14,8 @@ BitmapImage::BitmapImage(const BitmapImage &image)
     m_pixmap = image.m_pixmap;
     boundaries = image.boundaries;
     m_Color = image.m_Color;
+    m_WScaleFactor = 1.0;
+    m_HScaleFactor = 1.0;
 }
 
 BitmapImage::BitmapImage(Object *parent, QRect boundaries, QColor color)
@@ -21,6 +25,8 @@ BitmapImage::BitmapImage(Object *parent, QRect boundaries, QColor color)
     m_Image = new QImage(boundaries.size(), QImage::Format_ARGB32_Premultiplied);
     m_Image->fill(color.rgba());
     visible = true;
+    m_WScaleFactor = 1.0;
+    m_HScaleFactor = 1.0;
 }
 
 BitmapImage::BitmapImage(Object *parent, QRect boundaries, QImage image)
@@ -30,6 +36,8 @@ BitmapImage::BitmapImage(Object *parent, QRect boundaries, QImage image)
     m_Image = new QImage(image);
     if(m_Image->width() != boundaries.width() && m_Image->height() != boundaries.height()) qDebug() << "Error 0001: Failed to load Image" << endl;
     visible = true;
+    m_WScaleFactor = 1.0;
+    m_HScaleFactor = 1.0;
 }
 
 BitmapImage::BitmapImage(QRect boundaries, QColor color)
@@ -45,6 +53,8 @@ BitmapImage::BitmapImage(QRect boundaries, QColor color)
     painter.end();
     m_pixmap = temp;
     visible = true;
+    m_WScaleFactor = 1.0;
+    m_HScaleFactor = 1.0;
 }
 
 BitmapImage::BitmapImage(QRect boundaries, QPixmap pixMap)
@@ -52,6 +62,8 @@ BitmapImage::BitmapImage(QRect boundaries, QPixmap pixMap)
     this->boundaries = boundaries;
     m_pixmap = pixMap;
     visible = true;
+    m_WScaleFactor = 1.0;
+    m_HScaleFactor = 1.0;
 }
 
 void BitmapImage::paintImage(QPainter &painter)
@@ -155,7 +167,7 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
     double xInc, yInc;
     xInc = point.x() / length;
     yInc = point.y() / length;
-    drawPoint = pointInfo.first();
+b      drawPoint = pointInfo.first();
     for(int i = 0; i < length; i++){
         drawPoint.setX(drawPoint.x() + (xInc * brush.getSpacing() ));
         drawPoint.setY(drawPoint.y() + (yInc * brush.getSpacing() ));
@@ -163,30 +175,58 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
     }
 }
 
-void BitmapImage::fillImage(QPoint point, QRgb oldColor, Brush brush){
+void BitmapImage::fillImage(QPoint point, Brush brush){
     QImage img = m_pixmap.toImage();
-    if(point.x() >= 0 && point.y() >= 0 && point.x() < img.width() && point.y() < img.height()){
-        if(oldColor == brush.getColor().rgb()){
-            qDebug() << "\nColor matched. " << endl;
-            return;
-        }
-        if(oldColor != brush.getColor().rgb()){
-            qDebug() << "Color Mismatched " << endl;
-
-                img.setPixel(point, brush.getColor().rgb());
-
-                qDebug() << "Painting point: " << point << endl;
-
-                fillImage(QPoint(point.x()+1, point.y()), oldColor, brush);
-                fillImage(QPoint(point.x()-1, point.y()), oldColor, brush);
-                fillImage(QPoint(point.x(), point.y()+1), oldColor, brush);
-                fillImage(QPoint(point.x(), point.y()-1), oldColor, brush);
-                m_pixmap = QPixmap::fromImage(img);
-        }
+    QRgb oldColor = img.pixel(point);
+    if(oldColor == brush.getColor().rgb()){
+        return;
     }else{
+        if(point.x() >= 0){
+            QPainter p(&img);
+            p.setPen(brush.getColor());
+            p.setBrush(brush.getColor());
+            p.drawPoint(point);
+            p.end();
+
+            m_pixmap = QPixmap::fromImage(img);
+            fillImage(QPoint(point.x() + 1, point.y()), brush);
+
+        }else if(point.x() < img.width()){
+            QPainter p(&img);
+            p.setPen(brush.getColor());
+            p.setBrush(brush.getColor());
+            p.drawPoint(point);
+            p.end();
+
+            m_pixmap = QPixmap::fromImage(img);
+            fillImage(QPoint(point.x()-1, point.y()), brush);
+        }else{
+
+        }
+
+        if(point.y() >= 0){
+            QPainter p(&img);
+            p.setPen(brush.getColor());
+            p.setBrush(brush.getColor());
+            p.drawPoint(point);
+            p.end();
+
+            m_pixmap = QPixmap::fromImage(img);
+            fillImage(QPoint(point.x(), point.y() + 1), brush);
+        }else if(point.y() < img.height()){
+            QPainter p(&img);
+            p.setPen(brush.getColor());
+            p.setBrush(brush.getColor());
+            p.drawPoint(point);
+            p.end();
+
+            m_pixmap = QPixmap::fromImage(img);
+            fillImage(QPoint(point.x(), point.y()-1), brush);
+        }else{
+
+        }
         return;
     }
-    qDebug() << "End of fill method reached" << endl;
 }
 
 QPixmap BitmapImage::getCompositeImage()
