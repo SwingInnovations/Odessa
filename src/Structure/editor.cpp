@@ -203,14 +203,28 @@ void Editor::tabletEvent(QTabletEvent *event)
     update();
 }
 
+/*Paint Image*/
+
 void Editor::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
 
     if(!m_Layers.isEmpty())
     {
-        m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(painter);
-        setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+        QPixmap drawnPixmap(m_Layers.at(0)->getFrame(0)->getPixmap().size());
+        QPainter p(&drawnPixmap);
+        for(int i = 0; i < m_Layers.size(); i++){
+           if(m_Layers.at(i)->getFrame(m_CurrentFrame-1)->isVisible()){
+               m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(painter);
+               QPixmap tPixmap = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap();
+               p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+               p.drawPixmap(0, 0, tPixmap);
+           }
+        }
+        p.end();
+        setPixmap(drawnPixmap);
+//        m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(painter);
+//        setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
     }
 
     if(m_ToolType == BRUSH_TOOL){
@@ -409,18 +423,14 @@ void Editor::backup()
 
 void Editor::scale(double scaleVal)
 {
-    //scale the image directly through the layers
-    for(int i = 0; i < m_Layers.size(); i++){
-        for(int j = 0; j < m_Layers.at(i)->getFrameListSize(); i++){
-            QPixmap scaled = m_Layers.at(i)->getFrame(j)->getPixmap();
-            int sizeX = scaled.width();
-            int sizeY = scaled.height();
-            sizeX*=scaleVal;
-            sizeY*=scaleVal;
-            scaled = scaled.scaled(sizeX, sizeY, Qt::IgnoreAspectRatio, Qt::FastTransformation);
-            m_Layers.at(i)->getFrame(j)->setPixmap(scaled);
+    if(!m_Layers.empty()){
+        for(int i = 0; i < m_Layers.size(); i++){
+            for(int j = 0; j < m_Layers.at(i)->getFrameListSize(); j++){
+                m_Layers.at(i)->getFrame(j)->setScaleFactor(scaleVal);
+            }
         }
     }
+    update();
 }
 
 void Editor::backup(int backupLayer, int backupFrame)

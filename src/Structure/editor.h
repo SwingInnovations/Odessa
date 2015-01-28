@@ -101,6 +101,9 @@ public slots:
     void setOpacity(int);
 private:
 
+    void shiftLayerForward();
+    void shiftLayerBack();
+
     bool m_DeviceDown;
     bool m_TabletInUse;
     bool m_Modified;

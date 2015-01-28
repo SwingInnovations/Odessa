@@ -75,12 +75,23 @@ MainWindow::MainWindow(QWidget *parent)
     eyeDropperTool->setText("EyeDropper");
     fillTool = new QAction("Fill", this);
 
+    /*
+    *
+    * Temporarily disable
+    *
+    */
+    textTool->setEnabled(false);
+    primitiveTool->setEnabled(false);
+    fillTool->setEnabled(false);
+
     toolBar->addAction(eyeDropperTool);
     toolBar->addAction(brushTool);
     toolBar->addAction(eraserTool);
     toolBar->addAction(textTool);
     toolBar->addAction(primitiveTool);
     toolBar->addAction(fillTool);
+
+    scaleFactor = 1.0;
 
     /*-File Menu Actions-*/
     newAct = new QAction("&New", this);
@@ -212,6 +223,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(primitiveTool, SIGNAL(triggered()), SLOT(assignPrimitiveTool()));
     connect(newDialogWin, SIGNAL(newProject(int,int,int,int)), mEditor, SLOT(newProject(int,int,int,int)));
     connect(prefDialog, SIGNAL(projectPathChanged(QString)), SLOT(setProjectPath(QString)));
+    connect(exportImgAct, SIGNAL(triggered()), SLOT(exportImage()));
     connect(zoomInAct, SIGNAL(triggered()), SLOT(zoomIn()));
     connect(zoomOutAct, SIGNAL(triggered()), SLOT(zoomOut()));
     connect(showBrushDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowBrushDock(bool)));
@@ -268,7 +280,7 @@ void MainWindow::about()
 {
     QMessageBox msgbox(this);
     msgbox.setTextFormat(Qt::RichText);
-    msgbox.setText("Odessa Ver. 0.0.70<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
+    msgbox.setText("Odessa Ver. 0.0.72<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright 2014 <br> Test Build || Use at your own risk!");
     msgbox.exec();
 }
 
@@ -346,6 +358,11 @@ void MainWindow::zoomOut()
     scaleImage(0.8);
 }
 
+void MainWindow::exportImage(){
+    QString saveName = QFileDialog::getSaveFileName(this, "Save File.", QDir::currentPath(), ".png");
+    mEditor->pixmap()->save(saveName);
+}
+
 void MainWindow::sendFeedBack(){
     QDesktopServices::openUrl(QUrl("mailto:swinginnovations@gmail.com?subject=Odessa-Feedback"));
 }
@@ -353,8 +370,7 @@ void MainWindow::sendFeedBack(){
 void MainWindow::scaleImage(double val)
 {
     scaleFactor *= val;
-    mEditor->resize(scaleFactor * mEditor->getPixmapSize());
-    mEditor->adjustSize();
+    mEditor->scale(scaleFactor);
     adjustScrollBar(imageArea->horizontalScrollBar(), val);
     adjustScrollBar(imageArea->verticalScrollBar(), val);
 

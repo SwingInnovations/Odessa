@@ -9,6 +9,7 @@
 #include <QPoint>
 #include <QPointF>
 #include <QVector>
+#include <QQueue>
 
 #include "../src/Structure/brush.h"
 
@@ -41,6 +42,19 @@ public:
     void fillImage(QPoint point, Brush brush);
     bool isVisible(){return visible;}
 
+    void setScaleFactor(double w){ m_ScaleFactor = w; }
+
+    void combineLayer(BitmapImage img){
+        QPixmap temp(m_pixmap.size());
+        QPainter p(&temp);
+        p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+        p.drawPixmap(getOffset(), m_pixmap);
+
+        p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+        p.drawPixmap(img.getOffset(), img.getPixmap());
+        p.end();
+    }
+
     BitmapImage copy(){return BitmapImage(boundaries, m_pixmap);}
     BitmapImage copy(QRect bounds){
         BitmapImage ret(*this);
@@ -52,7 +66,7 @@ public:
 
     QImage *getImage(){return m_Image;}
     QPixmap getPixmap(){
-                       QPixmap ret = m_pixmap.scaled((int)(m_pixmap.width() * m_WScaleFactor), (int)(m_pixmap.height() * m_HScaleFactor));
+                       QPixmap ret = m_pixmap.scaled((int)(m_pixmap.width() * m_ScaleFactor), (int)(m_pixmap.height() * m_ScaleFactor));
                        return ret;}
     QPixmap getCompositeImage();
 
@@ -62,18 +76,18 @@ public:
     QPoint getBottomRight(){ return boundaries.bottomRight(); }
 
     QColor getColor(){ return m_Color; }
-
+    QPoint getOffset(){return offset;}
 protected:
     Object *myParent;
 
 private:
+    QPoint offset;
     bool visible;
     QPixmap m_pixmap;
     QImage *m_Image;
     QRect boundaries;
     QColor m_Color;
-    double m_WScaleFactor;
-    double m_HScaleFactor;
+    double m_ScaleFactor;
 
     //handle history
     int m_MaxSizeOfHistory;
