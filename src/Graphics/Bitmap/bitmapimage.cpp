@@ -175,10 +175,13 @@ void BitmapImage::fillImage(QPoint point, Brush brush){
     QRgb oldColor;
     if(img.valid(point)) oldColor = img.pixel(point);
     QRgb newColor = brush.getColor().rgb();
+    qDebug() << "Old Color: " << oldColor << endl;
+    qDebug() << "New Color: " << newColor << endl;
     if(oldColor == newColor){
-        qDebug() << "Found No matching colors" << endl;
+        qDebug() << "Found No differing colors" << endl;
         return;
     }
+
 
     QQueue<QPoint> queue;
     queue.enqueue(point);
@@ -196,7 +199,14 @@ void BitmapImage::fillImage(QPoint point, Brush brush){
         QPoint p = queue.dequeue();
         if(img.valid(p))oldColor = img.pixel(p);
 
-        if(oldColor == newColor){ if(!queue.empty()){p = queue.dequeue();} qDebug() << "Matching color found, moving on in processing" << endl;}
+        qDebug() << "Old Color: " << oldColor << endl;
+        qDebug() << "New Color: " << newColor << endl;
+
+        if(oldColor == newColor){
+            qDebug() << "Matching color found, moving on in processing" << endl;
+            qDebug() << "Old Color: " << oldColor << endl;
+            qDebug() << "New Color: " << newColor << endl;
+           }
 
         if(oldColor != newColor){
             qDebug() << "Painting point at: " << p << endl;
