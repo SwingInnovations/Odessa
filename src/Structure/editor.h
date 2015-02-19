@@ -40,7 +40,16 @@ class Editor : public QLabel
     Q_OBJECT
 public:
 
-    enum ToolType{BRUSH_TOOL, ERASER_TOOL, TEXT_TOOL, PRIMITIVE_TOOL, EYEDROPPER_TOOL, RECT_SELECT_TOOL, FILL_TOOL};
+    enum ToolType{BRUSH_TOOL,
+                  ERASER_TOOL,
+                  TEXT_TOOL,
+                  PRIMITIVE_TOOL,
+                  EYEDROPPER_TOOL,
+                  RECT_SELECT_TOOL,
+                  FILL_TOOL,
+                  TRANSFORM_TRANSLATE,
+                  TRANSFORM_ROTATE,
+                  TRANSFORM_SCALE };
 
     Editor(QWidget *parent = 0);
 

@@ -82,7 +82,7 @@ MainWindow::MainWindow(QWidget *parent)
     */
     textTool->setEnabled(false);
     primitiveTool->setEnabled(false);
-    fillTool->setEnabled(false);
+    //fillTool->setEnabled(false);
 
     toolBar->addAction(eyeDropperTool);
     toolBar->addAction(brushTool);

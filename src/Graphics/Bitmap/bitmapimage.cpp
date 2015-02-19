@@ -169,28 +169,49 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
         painter.drawPixmap(QPoint(drawPoint.x() - stencil.width() / 2, drawPoint.y() - stencil.height()/2), stencil);
     }
 }
-
+/*-Flood fill function. TODO get this working right-*/
 void BitmapImage::fillImage(QPoint point, Brush brush){
-
     QImage img = m_pixmap.toImage();
-    if(img.valid(point)){
-        QColor oldColor = QColor(img.pixel(point));
-        if(oldColor == brush.getColor()){
-            return;
-        }else{
-            QPainter p(&img);
-            p.setBrush(brush.getColor());
-            p.setPen(brush.getColor());
-            while(oldColor != brush.getColor()){
-                if(img.valid(point)){
-                    p.drawPoint(point);
-                    point.setX(point.x()+1);
-                }
-            }
-        }
-    }else{
+    QRgb oldColor;
+    if(img.valid(point)) oldColor = img.pixel(point);
+    QRgb newColor = brush.getColor().rgb();
+    if(oldColor == newColor){
+        qDebug() << "Found No matching colors" << endl;
         return;
     }
+
+    QQueue<QPoint> queue;
+    queue.enqueue(point);
+
+    while(!queue.empty()){
+        qDebug() << "Queue Size" << queue.size() << endl;
+        if(queue.size() >= (img.width()*img.height())){
+            qDebug() << "Queue exceeeds image area, attempting to clear" << endl;
+            while(!queue.empty()){
+                QPoint p = queue.dequeue();
+                img.setPixel(p, newColor);
+            }
+            return;
+        }
+        QPoint p = queue.dequeue();
+        if(img.valid(p))oldColor = img.pixel(p);
+
+        if(oldColor == newColor){ if(!queue.empty()){p = queue.dequeue();} qDebug() << "Matching color found, moving on in processing" << endl;}
+
+        if(oldColor != newColor){
+            qDebug() << "Painting point at: " << p << endl;
+            if(img.valid(p)){ img.setPixel(p, newColor);}
+            qDebug() << "Adding Points" << endl;
+            if((p.x() > 0) && (p.x() < img.width()) ){ queue.enqueue(QPoint(p.x()+1, p.y()));}
+            if((p.x() > 0) && (p.x() < img.width()) ){ queue.enqueue(QPoint(p.x()-1, p.y()));}
+            if((p.y() > 0) && (p.y() < img.height()) ){ queue.enqueue(QPoint(p.x(), p.y()+1));}
+            if((p.y() > 0) && (p.y() < img.height()) ){ queue.enqueue(QPoint(p.x(), p.y()-1));}
+            qDebug() << "Added Points size: " << queue.size() << endl;
+        }
+    }
+    qDebug() << "Exit Queue Size: " << queue.size() << endl;
+    m_pixmap = QPixmap::fromImage(img);
+    return;
 }
 
 QPixmap BitmapImage::getCompositeImage()
