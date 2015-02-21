@@ -10,6 +10,7 @@
 #include <QPointF>
 #include <QVector>
 #include <QQueue>
+#include <vector>
 
 #include "../src/Structure/brush.h"
 
@@ -43,6 +44,7 @@ public:
     bool isVisible(){return visible;}
 
     void setScaleFactor(double w){ m_ScaleFactor = w; }
+
 
     void combineLayer(BitmapImage img){
         QPixmap temp(m_pixmap.size());

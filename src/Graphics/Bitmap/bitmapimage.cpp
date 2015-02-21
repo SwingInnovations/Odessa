@@ -169,6 +169,7 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
         painter.drawPixmap(QPoint(drawPoint.x() - stencil.width() / 2, drawPoint.y() - stencil.height()/2), stencil);
     }
 }
+
 /*-Flood fill function. TODO get this working right-*/
 void BitmapImage::fillImage(QPoint point, Brush brush){
     QImage img = m_pixmap.toImage();
@@ -188,7 +189,7 @@ void BitmapImage::fillImage(QPoint point, Brush brush){
 
     while(!queue.empty()){
         qDebug() << "Queue Size" << queue.size() << endl;
-        if(queue.size() >= (img.width()*img.height())){
+        if(queue.size() >= 16777216){
             qDebug() << "Queue exceeeds image area, attempting to clear" << endl;
             while(!queue.empty()){
                 QPoint p = queue.dequeue();
