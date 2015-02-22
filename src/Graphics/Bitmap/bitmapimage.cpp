@@ -172,57 +172,62 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
 
 /*-Flood fill function. TODO get this working right-*/
 void BitmapImage::fillImage(QPoint point, Brush brush){
+
     QImage img = m_pixmap.toImage();
-    QRgb oldColor;
-    if(img.valid(point)) oldColor = img.pixel(point);
+    QRgb oldColor = img.pixel(point);
     QRgb newColor = brush.getColor().rgb();
-    qDebug() << "Old Color: " << oldColor << endl;
-    qDebug() << "New Color: " << newColor << endl;
-    if(oldColor == newColor){
-        qDebug() << "Found No differing colors" << endl;
-        return;
-    }
+    qDebug() << "Filling" << endl;
+    fillRecurs(point, img, oldColor, newColor);
 
-
-    QQueue<QPoint> queue;
-    queue.enqueue(point);
-
-    while(!queue.empty()){
-        qDebug() << "Queue Size" << queue.size() << endl;
-        if(queue.size() >= 16777216){
-            qDebug() << "Queue exceeeds image area, attempting to clear" << endl;
-            while(!queue.empty()){
-                QPoint p = queue.dequeue();
-                img.setPixel(p, newColor);
-            }
-            return;
-        }
-        QPoint p = queue.dequeue();
-        if(img.valid(p))oldColor = img.pixel(p);
-
-        qDebug() << "Old Color: " << oldColor << endl;
-        qDebug() << "New Color: " << newColor << endl;
-
-        if(oldColor == newColor){
-            qDebug() << "Matching color found, moving on in processing" << endl;
-            qDebug() << "Old Color: " << oldColor << endl;
-            qDebug() << "New Color: " << newColor << endl;
-           }
-
-        if(oldColor != newColor){
-            qDebug() << "Painting point at: " << p << endl;
-            if(img.valid(p)){ img.setPixel(p, newColor);}
-            qDebug() << "Adding Points" << endl;
-            if((p.x() > 0) && (p.x() < img.width()) ){ queue.enqueue(QPoint(p.x()+1, p.y()));}
-            if((p.x() > 0) && (p.x() < img.width()) ){ queue.enqueue(QPoint(p.x()-1, p.y()));}
-            if((p.y() > 0) && (p.y() < img.height()) ){ queue.enqueue(QPoint(p.x(), p.y()+1));}
-            if((p.y() > 0) && (p.y() < img.height()) ){ queue.enqueue(QPoint(p.x(), p.y()-1));}
-            qDebug() << "Added Points size: " << queue.size() << endl;
-        }
-    }
-    qDebug() << "Exit Queue Size: " << queue.size() << endl;
     m_pixmap = QPixmap::fromImage(img);
-    return;
+}
+
+void BitmapImage::fillRecurs(QPoint pos, QImage& img, QRgb oldColor, QRgb newColor){
+    qDebug() << "Activelly Filling" << endl;
+    int temp_x(pos.x());
+    int left_x = 0;
+    while(true){
+        if(img.pixel(temp_x, pos.y()) != oldColor){
+            break;
+        }
+        img.setPixel(temp_x, pos.y(), newColor);
+        if(temp_x > 0){
+            temp_x--;
+            left_x = temp_x;
+        }else{
+            break;
+        }
+    }
+
+    int right_x(0);
+    temp_x = pos.x() + 1;
+    while(true){
+        if(img.pixel(temp_x, pos.y()) != oldColor){
+            break;
+        }
+        img.setPixel(temp_x, pos.y(), newColor);
+        if(temp_x < img.width() -1){
+            temp_x++;
+            right_x = temp_x;
+        }else{
+            break;
+        }
+    }
+
+    for(int x = left_x+1; x < right_x; x++){
+        if(pos.y() < 1 || pos.y() >= img.height() - 1){
+            break;
+        }
+        if(right_x > img.width()){ break; }
+        QRgb currentColor = img.pixel(x, pos.y()-1);
+        if(currentColor == oldColor && currentColor != newColor){
+            fillRecurs(QPoint(x, pos.y() -1), img, oldColor, newColor);
+        }
+        currentColor = img.pixel(x, pos.y() + 1);
+        if(currentColor == oldColor && currentColor != newColor){
+            fillRecurs(QPoint(x, pos.y() + 1), img, oldColor, newColor);
+        }
+    }
 }
 
 QPixmap BitmapImage::getCompositeImage()

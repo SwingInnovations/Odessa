@@ -41,6 +41,7 @@ public:
     void setColor(const QColor color){ m_Color = color; m_Image->fill(m_Color);}
 
     void fillImage(QPoint point, Brush brush);
+    void fillRecurs(QPoint pos, QImage& img, QRgb oldColor, QRgb newColor);
     bool isVisible(){return visible;}
 
     void setScaleFactor(double w){ m_ScaleFactor = w; }
