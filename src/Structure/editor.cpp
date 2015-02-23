@@ -76,6 +76,7 @@ void Editor::mousePressEvent(QMouseEvent *event)
        case FILL_TOOL:{
             m_DeviceDown = true;
             m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->fillImage(event->pos(), m_CurrentTool);
+            backup();
         }
             break;
        defualt:

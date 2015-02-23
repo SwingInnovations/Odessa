@@ -182,6 +182,11 @@ void BitmapImage::fillImage(QPoint point, Brush brush){
     m_pixmap = QPixmap::fromImage(img);
 }
 
+/*
+*
+*   Implementation of this function is as close to the version in EasyPaint.
+*
+*/
 void BitmapImage::fillRecurs(QPoint pos, QImage& img, QRgb oldColor, QRgb newColor){
     qDebug() << "Activelly Filling" << endl;
     int temp_x(pos.x());

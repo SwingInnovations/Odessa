@@ -820,18 +820,18 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev){
     }
     if(ev->button() == Qt::RightButton){
         int swapRed = 0, swapGreen = 0, swapBlue = 0;
-        swapRed = primaryRed;
-        swapGreen = primaryGreen;
-        swapBlue = primaryBlue;
-        primaryRed = altRed;
-        primaryGreen = altGreen;
-        primaryBlue = altBlue;
+        swapRed = actualRed;
+        swapGreen = actualGreen;
+        swapBlue = actualBlue;
+        actualRed = altRed;
+        actualGreen = altGreen;
+        actualBlue = altBlue;
         altRed = swapRed;
         altGreen = swapGreen;
         altBlue = swapBlue;
-        emit redChanged(primaryRed);
-        emit greenChanged(primaryGreen);
-        emit blueChanged(primaryBlue);
+        emit redChanged(actualRed);
+        emit greenChanged(actualGreen);
+        emit blueChanged(actualBlue);
     }
     if(ev->button() == Qt::MidButton){
         toggleAlt =! toggleAlt;
