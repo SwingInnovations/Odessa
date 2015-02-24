@@ -33,8 +33,6 @@ public:
     void setVisible(bool val){visible = val;}
 
     void paintImage(QPainter &painter);
-    void paintImage(QMouseEvent *event, Brush brush, QPoint points[]);//Deprecate
-    void paintImage(QTabletEvent *event, Brush brush, QPoint points[]);//Deprecate
     void paintImage(QPainterPath painterPath, Brush brush); //works
     void paintImage(QVector<QPointF> pointInfo, Brush brush);//Keep
     void paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt);//Keep

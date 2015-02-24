@@ -118,10 +118,6 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
         case BRUSH_TOOL:
             if(m_DeviceDown)
             {
-                m_DrawPath[2] = m_DrawPath[1];
-                m_DrawPath[1] = m_DrawPath[0];
-                m_DrawPath[0] = event->pos();
-
                 m_MousePath.append(event->pos());
                 if(m_MousePath.size() > 2)
                 {
@@ -130,20 +126,18 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
 
                 m_CurrentTool.setPressureVal(m_Pressure);
 
-                //m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool, m_Pressure, m_CurrentTool.getPressureVal());
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
                 setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
-//                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(*m_PainterPath, m_CurrentTool);
-//                setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
             }
             break;
         case ERASER_TOOL:
             if(m_DeviceDown)
             {
-                m_DrawPath[2] = m_DrawPath[1];
-                m_DrawPath[1] = m_DrawPath[0];
-                m_DrawPath[0] = event->pos();
-                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(event, m_CurrentTool, m_DrawPath);
+                m_MousePath.append(event->pos());
+                if(m_MousePath.size() > 2){
+                    m_MousePath.removeFirst();
+                }
+                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
                 setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
             }
             break;
@@ -224,8 +218,6 @@ void Editor::paintEvent(QPaintEvent *event)
         }
         p.end();
         setPixmap(drawnPixmap);
-//        m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(painter);
-//        setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
     }
 
     if(m_ToolType == BRUSH_TOOL){
@@ -390,6 +382,7 @@ void Editor::setOpacity(int val)
 {
     m_OpacityVal = val;
     //m_PrimaryColor.setAlpha(m_OpacityVal);
+    m_PrimaryColor.setAlpha(val);
     m_CurrentTool.SetOpacity(val);
 }
 

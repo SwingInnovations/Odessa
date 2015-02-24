@@ -66,27 +66,6 @@ void BitmapImage::paintImage(QPainter &painter)
     painter.drawPixmap(0, 0, m_pixmap);
 }
 
-void BitmapImage::paintImage(QTabletEvent *event, Brush brush, QPoint points[])
-{
-    QPainter painter(&m_pixmap);
-    painter.setRenderHint(QPainter::Antialiasing);
-    brush.setWidth(brush.getSize() + (event->pressure() * brush.getTransferSize()));
-    painter.setBrush(brush.getBrush());
-    painter.setPen(Qt::NoPen);
-    painter.setPen(brush.getPen());
-    painter.drawLine(points[1], event->pos());
-}
-/*-FLAG - Deprecate-*/
-void BitmapImage::paintImage(QMouseEvent *event, Brush brush, QPoint points[])
-{
-    QPainter painter(&m_pixmap);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setBrush(brush.getBrush());
-    painter.setPen(Qt::NoPen);
-    painter.setPen(brush.getPen());
-    painter.drawLine(points[2], points[1]);
-}
-
 void BitmapImage::paintImage(QPainterPath painterPath, Brush brush)
 {
     QPainter painter(&m_pixmap);
@@ -170,7 +149,6 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabP
     }
 }
 
-/*-Flood fill function. TODO get this working right-*/
 void BitmapImage::fillImage(QPoint point, Brush brush){
 
     QImage img = m_pixmap.toImage();
@@ -188,7 +166,6 @@ void BitmapImage::fillImage(QPoint point, Brush brush){
 *
 */
 void BitmapImage::fillRecurs(QPoint pos, QImage& img, QRgb oldColor, QRgb newColor){
-    qDebug() << "Activelly Filling" << endl;
     int temp_x(pos.x());
     int left_x = 0;
     while(true){
