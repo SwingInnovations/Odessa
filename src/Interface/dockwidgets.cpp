@@ -783,7 +783,7 @@ void ColorWheel::setBlue(int b){
 void ColorWheel::mousePressEvent(QMouseEvent *ev){
     if(ev->button() == Qt::LeftButton){
         if(primaryColorRect.contains(ev->pos())){
-            QColor color = QColorDialog::getColor();
+            QColor color = QColorDialog::getColor(QColor(actualRed, actualGreen, actualBlue));
             if(color.isValid()){
                 actualRed = color.red();
                 actualGreen = color.green();
