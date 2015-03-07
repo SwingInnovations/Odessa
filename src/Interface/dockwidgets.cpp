@@ -726,7 +726,7 @@ void ColorDockWidget::updateVal(QString val){
 ColorWheel::ColorWheel(QWidget *parent) : QLabel(parent)
 {
     mPixmap = QPixmap(250, 200);
-    mPixmap.fill(Qt::gray);
+    mPixmap.fill(QColor(53, 53, 53));
     setPixmap(mPixmap);
 
     primaryRed = 0;
@@ -858,7 +858,7 @@ void ColorWheel::paintEvent(QPaintEvent *e){
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     painter.setPen(Qt::NoPen);
-    painter.setBrush(Qt::gray);
+    painter.setBrush(QColor(53, 53, 53));
     painter.drawRect(0, 0, 250, 200);
     QConicalGradient externalColor;
     externalColor.setCenter(100, 100);
@@ -892,7 +892,7 @@ void ColorWheel::paintEvent(QPaintEvent *e){
     painter.drawEllipse(abp, 8, 8);
 
     painter.setPen(Qt::NoPen);
-    painter.setBrush(Qt::lightGray);
+    painter.setBrush(QColor(53, 53, 53));
     painter.drawEllipse(ctrPoint, 75, 75);
 
     //Color Rect
