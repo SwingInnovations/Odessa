@@ -218,19 +218,27 @@ public:
     void setRed(int);
     void setGreen(int);
     void setBlue(int);
+    void setHue(int);
+    void setSaturation(int);
+    void setValue(int);
 signals:
     void redChanged(int);
     void blueChanged(int);
     void greenChanged(int);
+    void colorChanged(QColor);
 protected:
     void paintEvent(QPaintEvent *e);
     void mouseMoveEvent(QMouseEvent* e);
     void mousePressEvent(QMouseEvent *ev);
     void mouseReleaseEvent(QMouseEvent *ev);
 private:
+    void processHSV(QColor col);
     QColor getColorFromPoint(QPoint);
     void processBaseMovePoint();
     QPixmap mPixmap;
+    int mHue;
+    int mSaturation;
+    int mValue;
     int actualRed;
     int actualGreen;
     int actualBlue;

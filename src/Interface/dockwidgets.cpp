@@ -757,6 +757,10 @@ ColorWheel::ColorWheel(QWidget *parent) : QLabel(parent)
     primaryBasePoint = QPoint(125, 15);
     altBasePoint = QPoint(125, 185);
     toggleAlt = false;
+    QColor col(primaryRed, primaryGreen, primaryBlue);
+    mHue = col.hue();
+    mSaturation = col.saturation();
+    mValue = col.value();
 }
 
 QColor ColorWheel::getColorFromPoint(QPoint point){
@@ -778,6 +782,12 @@ void ColorWheel::setGreen(int g){
 void ColorWheel::setBlue(int b){
     actualBlue = b;
     repaint();
+}
+
+void ColorWheel::processHSV(QColor col){
+    mHue = col.hslHue();
+    mSaturation = col.saturation();
+    mValue = col.value();
 }
 
 void ColorWheel::mousePressEvent(QMouseEvent *ev){

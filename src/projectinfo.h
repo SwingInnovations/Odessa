@@ -19,8 +19,8 @@ public:
     int getHeight()const{return height;}
     int getDPI()const{return dpi;}
     int getType()const{return type;}
-    int getFrameCount(){return frameCount;}
-    int getFPS(){return fps;}
+    int getFrameCount()const{return frameCount;}
+    int getFPS()const{return fps;}
 
 private:
     int width, height;
