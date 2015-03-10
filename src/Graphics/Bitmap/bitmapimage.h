@@ -42,9 +42,6 @@ public:
     void fillRecurs(QPoint pos, QImage& img, QRgb oldColor, QRgb newColor);
     bool isVisible(){return visible;}
 
-    void setScaleFactor(double w){ m_ScaleFactor = w; }
-
-
     void combineLayer(BitmapImage img){
         QPixmap temp(m_pixmap.size());
         QPainter p(&temp);
@@ -66,9 +63,7 @@ public:
     }
 
     QImage *getImage(){return m_Image;}
-    QPixmap getPixmap(){
-                       QPixmap ret = m_pixmap.scaled((int)(m_pixmap.width() * m_ScaleFactor), (int)(m_pixmap.height() * m_ScaleFactor));
-                       return ret;}
+    QPixmap getPixmap(){return m_pixmap;}
     QPixmap getCompositeImage();
 
     QPoint getTopLeft(){return boundaries.topLeft();}
@@ -88,7 +83,6 @@ private:
     QImage *m_Image;
     QRect boundaries;
     QColor m_Color;
-    double m_ScaleFactor;
 
     //handle history
     int m_MaxSizeOfHistory;

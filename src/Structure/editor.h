@@ -132,6 +132,8 @@ private:
     qreal m_XTilt;
     qreal m_YTilt;
 
+    double m_ScaleFactor;
+
     int m_CurrentFrame;
     int m_CurrentIndex;
     QVector<Layer*> m_Layers;

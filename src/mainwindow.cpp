@@ -351,12 +351,14 @@ void MainWindow::setProjectPath(QString val){
 
 void MainWindow::zoomIn()
 {
-    scaleImage(1.5);
+    scaleFactor += 0.1;
+    scaleImage(scaleFactor);
 }
 
 void MainWindow::zoomOut()
 {
-    scaleImage(0.8);
+    scaleFactor -= 0.1;
+    scaleImage(scaleFactor);
 }
 
 void MainWindow::exportImage(){
@@ -370,7 +372,6 @@ void MainWindow::sendFeedBack(){
 
 void MainWindow::scaleImage(double val)
 {
-    scaleFactor *= val;
     mEditor->scale(scaleFactor);
     adjustScrollBar(imageArea->horizontalScrollBar(), val);
     adjustScrollBar(imageArea->verticalScrollBar(), val);
