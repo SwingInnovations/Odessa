@@ -27,14 +27,16 @@ MainWindow::MainWindow(QWidget *parent)
     }
     
     mEditor = new Editor(this);
+    mEditor->setAlignment(Qt::AlignCenter);
     mEditor->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     mEditor->setScaledContents(true);
 
     imageArea = new QScrollArea(this);
+    imageArea->setAlignment(Qt::AlignCenter);
     imageArea->setWidget(mEditor);
     setCentralWidget(imageArea);
 
-    mEditor->setStyleSheet("background-color: grey;");
+    mEditor->setStyleSheet("background-color: rgb(53, 53, 53);");
 
     toolBar = this->addToolBar("Tools");
     toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::TopToolBarArea);
@@ -82,7 +84,6 @@ MainWindow::MainWindow(QWidget *parent)
     */
     textTool->setEnabled(false);
     primitiveTool->setEnabled(false);
-    //fillTool->setEnabled(false);
 
     toolBar->addAction(eyeDropperTool);
     toolBar->addAction(brushTool);

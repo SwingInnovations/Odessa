@@ -31,6 +31,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_BackupIndex = 0;
 
     setScaledContents(true);
+    setAlignment(Qt::AlignCenter);
 }
 
 void Editor::mousePressEvent(QMouseEvent *event)
@@ -217,6 +218,7 @@ void Editor::paintEvent(QPaintEvent *event)
            }
         }
         p.end();
+        setAlignment(Qt::AlignCenter);
         setPixmap(drawnPixmap);
     }
 
@@ -266,7 +268,7 @@ void Editor::newProject(int type, int width, int height, int dpi)
             break;
         }
     }
-
+    backup();
     update();
 }
 
@@ -389,6 +391,14 @@ void Editor::setOpacity(int val)
 void Editor::setOpacityTransfer(int val)
 {
 
+}
+
+void Editor::processCanvas(){
+    if(this->pixmap()->size().width() < this->size().width() && this->pixmap()->size().height() < this->size().height()){
+        qDebug() << "Can resize to be centered:" << endl;
+    }else{
+        qDebug() << "Can remain the same size" << endl;
+    }
 }
 
 void Editor::setSizeTransfer(int val)

@@ -49,7 +49,6 @@ private slots:
     void about();
     void readSettings();
     void writeSettings();
-
 private:
     void scaleImage(double);
     void adjustScrollBar(QScrollBar* scrollBar, double factor);
