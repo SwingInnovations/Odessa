@@ -1,12 +1,11 @@
 #ifndef PROJECTINFO_H
 #define PROJECTINFO_H
 
-
 class ProjectInfo
 {
-
 public:
     ProjectInfo();
+    ProjectInfo(const ProjectInfo &other);
     ~ProjectInfo();
 
     void setWidth(int w);
@@ -30,4 +29,7 @@ private:
     int fps;
 };
 
-#endif // PROJECTINFO_H
+Q_DECLARE_METATYPE(ProjectInfo);
+
+
+#endif

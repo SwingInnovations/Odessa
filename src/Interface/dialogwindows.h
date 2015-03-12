@@ -16,9 +16,11 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QSpinBox>
+#include "../projectinfo.h"
 
 //handle the dialog windows
 class GeneralPrefPage;
+class ProjectInfo;
 
 //new Document
 class OdessaNewDocDialog : public QDialog
@@ -41,6 +43,7 @@ private slots:
 
 private:
     int width, height, dpi;
+    ProjectInfo info;
     QComboBox *optionsComboBox;
     QLabel *m_WidthLabel;
     QLabel *m_HeightLabel;
@@ -106,7 +109,5 @@ private:
     QLabel* mHistoryLbl;
     QSpinBox* mStepsBox;
 };
-
-
 
 #endif // DIALOGWINDOWS_H

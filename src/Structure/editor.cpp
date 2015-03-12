@@ -37,7 +37,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
 
 void Editor::mousePressEvent(QMouseEvent *event)
 {
-    if(!m_Layers.isEmpty())
+    if(!m_Layers.isEmpty() && event->button() == Qt::LeftButton)
     {
         switch(m_ToolType)
         {
