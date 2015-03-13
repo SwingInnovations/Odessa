@@ -25,8 +25,7 @@ SOURCES += main.cpp\
     Structure/editor.cpp \
     Interface/dialogwindows.cpp \
     Interface/dockwidgets.cpp \
-    Structure/brush.cpp \
-    projectinfo.cpp
+    Structure/brush.cpp
 
 HEADERS  += mainwindow.h \
     Graphics/Bitmap/bitmapimage.h \
@@ -35,9 +34,8 @@ HEADERS  += mainwindow.h \
     Structure/editor.h \
     Interface/dialogwindows.h \
     Interface/dockwidgets.h \
-    Structure/brush.h \
-    Overloads.h \
-    projectinfo.h
+    Structure/brush.h
+
 
 RESOURCES += \
     icons.qrc

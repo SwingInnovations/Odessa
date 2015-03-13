@@ -16,11 +16,38 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QSpinBox>
-#include "../projectinfo.h"
 
 //handle the dialog windows
 class GeneralPrefPage;
-class ProjectInfo;
+//Project Info
+class ProjectInfo
+{
+public:
+    ProjectInfo();
+    ProjectInfo(const ProjectInfo &other);
+    ~ProjectInfo();
+
+    void setWidth(int w);
+    void setHeight(int h);
+    void setType(int t);
+    void setFrameCount(int fc);
+    void setFPS(int fps);
+
+    int getWidth()const{return width;}
+    int getHeight()const{return height;}
+    int getDPI()const{return dpi;}
+    int getType()const{return type;}
+    int getFrameCount()const{return frameCount;}
+    int getFPS()const{return fps;}
+
+private:
+    int width, height;
+    int dpi;
+    int type;
+    int frameCount;
+    int fps;
+};
+Q_DECLARE_METATYPE(ProjectInfo);
 
 //new Document
 class OdessaNewDocDialog : public QDialog
@@ -36,6 +63,7 @@ public:
 
 signals:
     void newProject(int type, int width, int height, int dpi);
+    void newProject(ProjectInfo& info);
 protected:
 
 private slots:
@@ -43,8 +71,8 @@ private slots:
 
 private:
     int width, height, dpi;
-    ProjectInfo info;
     QComboBox *optionsComboBox;
+    ProjectInfo info;
     QLabel *m_WidthLabel;
     QLabel *m_HeightLabel;
     QLabel *m_dpiLabel;
