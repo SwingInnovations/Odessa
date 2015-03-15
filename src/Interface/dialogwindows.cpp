@@ -6,59 +6,128 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     setWindowTitle("New Canvas");
     setModal(true);
 
-    resize(176, 186);
-    setFixedSize(this->size());
+    parameterInfo = "nil<br>null";
 
-    optionsComboBox = new QComboBox(this);
-    optionsComboBox->addItem("Standard Image");
-    optionsComboBox->addItem("Animation");
-    optionsComboBox->addItem("SpriteSheet");
+    m_TypeComboBox = new QComboBox(this);
+    m_TypeComboBox->addItem("Image");
+    m_TypeComboBox->addItem("SpriteSheet");
+    m_TypeComboBox->addItem("Animation");
 
-    m_WidthLabel = new QLabel("Width: ", this);
+    m_CanvasSizeComboBox = new QComboBox(this);
+    m_CanvasSizeComboBox->addItem("800 x 600");
+    m_CanvasSizeComboBox->addItem("1280 x 720");
+    m_CanvasSizeComboBox->addItem("1920 x 1080");
+
+    m_WidthLabel = new QLabel("Width: ",this);
+    m_WidthLE = new QLineEdit(this);
+    m_WidthLE->setFixedWidth(48);
+    QHBoxLayout* widthLayout = new QHBoxLayout;
+    widthLayout->addWidget(m_WidthLabel);
+    widthLayout->addWidget(m_WidthLE);
+
     m_HeightLabel = new QLabel("Height: ", this);
-    m_dpiLabel = new QLabel("DPI: ", this);
+    m_HeightLE = new QLineEdit(this);
+    m_HeightLE->setFixedWidth(48);
+    QHBoxLayout* heightLayout = new QHBoxLayout;
+    heightLayout->addWidget(m_HeightLabel);
+    heightLayout->addWidget(m_HeightLE);
 
-    m_widthLineEdit = new QLineEdit(this);
-    m_heightLineEdit = new QLineEdit(this);
-    m_dpiLineEdit = new QLineEdit(this);
+    m_DPILabel = new QLabel("DPI: ", this);
+    m_DPILE = new QLineEdit(this);
+    m_DPILE->setFixedWidth(48);
+    QHBoxLayout* dpiLayout = new QHBoxLayout;
+    dpiLayout->addWidget(m_DPILabel);
+    dpiLayout->addWidget(m_DPILE);
 
-    createButton = new QPushButton("&Create", this);
-    cancelButton = new QPushButton("&Cancel", this);
+    QVBoxLayout* essentialLayout = new QVBoxLayout;
+    essentialLayout->addWidget(m_CanvasSizeComboBox);
+    essentialLayout->addLayout(widthLayout);
+    essentialLayout->addLayout(heightLayout);
+    essentialLayout->addLayout(dpiLayout);
 
-    labelLayout = new QVBoxLayout();
-    labelLayout->addWidget(m_WidthLabel);
-    labelLayout->addWidget(m_HeightLabel);
-    labelLayout->addWidget(m_dpiLabel);
+    /*-Sprite Sheet specific things-*/
+    m_SpriteCount_RowLabel = new QLabel("Rows: ", this);
+    m_SpriteCount_RowLE = new QLineEdit(this);
+    m_SpriteCount_RowLE->setFixedWidth(48);
+    QHBoxLayout* spriteRowLayout = new QHBoxLayout;
+    spriteRowLayout->addWidget(m_SpriteCount_RowLabel);
+    spriteRowLayout->addWidget(m_SpriteCount_RowLE);
 
-    lineEditLayout = new QVBoxLayout();
-    lineEditLayout->addWidget(m_widthLineEdit);
-    lineEditLayout->addWidget(m_heightLineEdit);
-    lineEditLayout->addWidget(m_dpiLineEdit);
+    m_SpriteCount_ColLabel = new QLabel("Cols: ", this);
+    m_SpriteCount_ColLE = new QLineEdit(this);
+    m_SpriteCount_ColLE->setFixedWidth(48);
+    QHBoxLayout* spriteColLayout = new QHBoxLayout;
+    spriteColLayout->addWidget(m_SpriteCount_ColLabel);
+    spriteColLayout->addWidget(m_SpriteCount_ColLE);
 
-    labelAndLineLayout = new QHBoxLayout();
-    labelAndLineLayout->addLayout(labelLayout);
-    labelAndLineLayout->addLayout(lineEditLayout);
+    m_SpriteLayout = new QVBoxLayout;
+    m_SpriteLayout->addLayout(spriteRowLayout);
+    m_SpriteLayout->addLayout(spriteColLayout);
 
-    totalLayout = new QVBoxLayout();
-    totalLayout->addWidget(optionsComboBox);
-    totalLayout->addLayout(labelAndLineLayout);
+    /*-Animation Specific Things-*/
+    m_FrameCountLabel = new QLabel("Frames: ", this);
+    m_FrameCountLE = new QLineEdit(this);
+    m_FrameCountLE->setFixedWidth(48);
+    QHBoxLayout* frameCount_Layout = new QHBoxLayout;
+    frameCount_Layout->addWidget(m_FrameCountLabel);
+    frameCount_Layout->addWidget(m_FrameCountLE);
 
-    descripGroupBox = new QGroupBox(this);
-    descripGroupBox->setTitle("Properties:");
-    descripGroupBox->setLayout(totalLayout);
+    m_FpsLabel = new QLabel("FPS: ", this);
+    m_FpsLE = new QLineEdit(this);
+    m_FpsLE->setFixedWidth(48);
+    QHBoxLayout* fpsLayout = new QHBoxLayout;
+    fpsLayout->addWidget(m_FpsLabel);
+    fpsLayout->addWidget(m_FpsLE);
 
-    buttonLayout = new QHBoxLayout();
-    buttonLayout->addWidget(createButton);
-    buttonLayout->addWidget(cancelButton);
+    m_AnimLayout = new QVBoxLayout;
+    m_AnimLayout->addLayout(frameCount_Layout);
+    m_AnimLayout->addLayout(fpsLayout);
 
-    finalLayout = new QVBoxLayout;
-    finalLayout->addWidget(descripGroupBox);
+    m_InformationGrpBox = new QGroupBox("Info: ", this);
+    m_InformationGrpLbl = new QLabel(this);
+    m_InformationGrpLbl->setText(parameterInfo);
+    QVBoxLayout* infoLayout = new QVBoxLayout;
+    infoLayout->addWidget(m_InformationGrpLbl);
+    m_InformationGrpBox->setLayout(infoLayout);
+
+    QVBoxLayout* parameterLayout = new QVBoxLayout;
+    parameterLayout->addLayout(essentialLayout);
+    parameterLayout->addLayout(m_SpriteLayout);
+    parameterLayout->addLayout(m_AnimLayout);
+
+    QHBoxLayout* centralLayout = new QHBoxLayout;
+    centralLayout->addLayout(parameterLayout);
+    centralLayout->addWidget(m_InformationGrpBox);
+
+    /*-action Buttons-*/
+    m_OkBtn = new QPushButton("&Create", this);
+    m_CloseBtn = new QPushButton("&Close", this);
+    QHBoxLayout* buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(m_OkBtn);
+    buttonLayout->addWidget(m_CloseBtn);
+    buttonLayout->setAlignment(Qt::AlignRight);
+
+    QVBoxLayout* finalLayout = new QVBoxLayout;
+    finalLayout->addWidget(m_TypeComboBox);
+    finalLayout->addLayout(centralLayout);
     finalLayout->addLayout(buttonLayout);
 
     setLayout(finalLayout);
 
-    connect(createButton, SIGNAL(clicked()), SLOT(newProjectSlot()));
-    connect(cancelButton, SIGNAL(clicked()), SLOT(close()));
+    connect(m_OkBtn, SIGNAL(clicked()), SLOT(newProjectSlot()));
+    connect(m_CloseBtn, SIGNAL(clicked()), SLOT(close()));
+    connect(m_TypeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(setDocType(int)));
+
+    m_FpsLabel->hide();
+    m_FpsLE->hide();
+    m_FrameCountLabel->hide();
+    m_FrameCountLE->hide();
+
+    m_SpriteCount_ColLabel->hide();
+    m_SpriteCount_ColLE->hide();
+    m_SpriteCount_RowLabel->hide();
+    m_SpriteCount_RowLE->hide();
+    setFixedSize(188, 183);
 }
 
 OdessaNewDocDialog::~OdessaNewDocDialog()
@@ -66,14 +135,61 @@ OdessaNewDocDialog::~OdessaNewDocDialog()
 
 }
 
+void OdessaNewDocDialog::setDocType(int val){
+    info.setType(val);
+    switch(val){
+        case 0: //default
+            m_FpsLabel->hide();
+            m_FpsLE->hide();
+            m_FrameCountLabel->hide();
+            m_FrameCountLE->hide();
+
+            m_SpriteCount_ColLabel->hide();
+            m_SpriteCount_ColLE->hide();
+            m_SpriteCount_RowLabel->hide();
+            m_SpriteCount_RowLE->hide();
+            setFixedSize(188, 183);
+            break;
+        case 1:
+            m_FpsLabel->hide();
+            m_FpsLE->hide();
+            m_FrameCountLabel->hide();
+            m_FrameCountLE->hide();
+
+            m_SpriteCount_ColLabel->show();
+            m_SpriteCount_ColLE->show();
+            m_SpriteCount_RowLabel->show();
+            m_SpriteCount_RowLE->show();
+            setFixedSize(188, 239);
+            break;
+        case 2:
+            m_FpsLabel->show();
+            m_FpsLE->show();
+            m_FrameCountLabel->show();
+            m_FrameCountLE->show();
+
+            m_SpriteCount_ColLabel->hide();
+            m_SpriteCount_ColLE->hide();
+            m_SpriteCount_RowLabel->hide();
+            m_SpriteCount_RowLE->hide();
+            setFixedSize(188, 239);
+            break;
+        default:
+            break;
+    }
+}
+
 void OdessaNewDocDialog::newProjectSlot()
 {
-    int type = optionsComboBox->currentIndex();
-    int width = m_widthLineEdit->text().toInt();
-    int height = m_heightLineEdit->text().toInt();
-    int dpi = m_dpiLineEdit->text().toInt();
-    emit newProject(type, width, height, dpi);
+    if(m_WidthLE->text() != NULL){ info.setWidth(m_WidthLE->text().toInt()); }else{ info.setWidth(0); }
+    if(m_HeightLE->text() != NULL){ info.setHeight(m_HeightLE->text().toInt()); }else{ info.setHeight(0); }
+    if(m_DPILE->text() != NULL){ info.setDPI(m_DPILE->text().toInt()); }else{ info.setDPI(0); }
+    if(m_SpriteCount_RowLE->text() != NULL){ info.setSpriteCount_Row(m_SpriteCount_RowLE->text().toInt()); }else{ info.setSpriteCount_Row(0); }
+    if(m_SpriteCount_ColLE->text() != NULL){ info.setSpriteCount_Col(m_SpriteCount_ColLE->text().toInt()); }else{ info.setSpriteCount_Col(0); }
+    if(m_FrameCountLE->text() != NULL){ info.setFrameCount(m_FrameCountLE->text().toInt()); }else{ info.setFrameCount(0); }
+    if(m_FpsLE->text() != NULL){ info.setFPS(m_FpsLE->text().toInt()); }else{ info.setFPS(0); }
 
+    emit newProject(info);
     close();
 }
 
@@ -204,3 +320,34 @@ ProjectInfo::~ProjectInfo()
 
 }
 
+void ProjectInfo::setWidth(int w){
+    width = w;
+}
+
+void ProjectInfo::setHeight(int h){
+    height = h;
+}
+
+void ProjectInfo::setDPI(int d){
+    dpi = d;
+}
+
+void ProjectInfo::setType(int t){
+    type = t;
+}
+
+void ProjectInfo::setFrameCount(int fc){
+    frameCount = fc;
+}
+
+void ProjectInfo::setFPS(int fps){
+    this->fps = fps;
+}
+
+void ProjectInfo::setSpriteCount_Row(int row){
+    spriteCount_Row = row;
+}
+
+void ProjectInfo::setSpriteCount_Col(int col){
+    spriteCount_Col = col;
+}

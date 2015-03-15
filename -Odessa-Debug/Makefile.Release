@@ -16,7 +16,7 @@ CFLAGS        = -nologo -Zm200 -Zc:wchar_t -FS -O2 -MD -Zc:strictStrings -W3 $(D
 CXXFLAGS      = -nologo -Zm200 -Zc:wchar_t -FS -O2 -MD -Zc:strictStrings -GR -W3 -w34100 -w34189 -EHsc $(DEFINES)
 INCPATH       = -I"C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include" -I"C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtWidgets" -I"C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui" -I"C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtNetwork" -I"C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore" -I"release" -I"." -I"C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\mkspecs\win32-msvc2013"
 LINKER        = link
-LFLAGS        = /NOLOGO /DYNAMICBASE /NXCOMPAT /INCREMENTAL:NO /SUBSYSTEM:WINDOWS "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" /VERSION:0.070
+LFLAGS        = /NOLOGO /DYNAMICBASE /NXCOMPAT /INCREMENTAL:NO /SUBSYSTEM:WINDOWS "/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" /VERSION:0.072
 LIBS          = glu32.lib opengl32.lib gdi32.lib user32.lib /LIBPATH:C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\lib C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\lib\qtmain.lib shell32.lib C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\lib\Qt5Widgets.lib C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\lib\Qt5Gui.lib C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\lib\Qt5Network.lib C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\lib\Qt5Core.lib release\Odessa_resource.res 
 QMAKE         = C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\bin\qmake.exe
 IDC           = idc
@@ -78,8 +78,7 @@ DIST          =  ..\src\mainwindow.h \
 		..\src\Structure\editor.h \
 		..\src\Interface\dialogwindows.h \
 		..\src\Interface\dockwidgets.h \
-		..\src\Structure\brush.h \
-		..\src\Overloads.h ..\src\main.cpp \
+		..\src\Structure\brush.h ..\src\main.cpp \
 		..\src\mainwindow.cpp \
 		..\src\Graphics\Bitmap\bitmapimage.cpp \
 		..\src\Structure\object.cpp \
@@ -619,6 +618,7 @@ release\moc_mainwindow.cpp: C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtWidge
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\qvalidator.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\qtguiversion.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QPointF \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QQueue \
 		..\src\Structure\brush.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\QBrush \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\QPen \
@@ -1008,6 +1008,7 @@ release\moc_editor.cpp: C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtWidgets\Q
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\qvalidator.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\qtguiversion.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QPointF \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QQueue \
 		..\src\Structure\brush.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\QBrush \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\QPen \
@@ -1853,6 +1854,7 @@ release\main.obj: ..\src\main.cpp ..\src\mainwindow.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\qvalidator.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\qtguiversion.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QPointF \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QQueue \
 		..\src\Structure\brush.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\QBrush \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\QPen \
@@ -1919,7 +1921,9 @@ release\main.obj: ..\src\main.cpp ..\src\mainwindow.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QVariant \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtWidgets\QApplication \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtWidgets\qapplication.h \
-		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtWidgets\qdesktopwidget.h
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtWidgets\qdesktopwidget.h \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtWidgets\QStyleFactory \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtWidgets\qstylefactory.h
 
 release\mainwindow.obj: ..\src\mainwindow.cpp ..\src\mainwindow.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtWidgets\QMainWindow \
@@ -2275,6 +2279,7 @@ release\mainwindow.obj: ..\src\mainwindow.cpp ..\src\mainwindow.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\qvalidator.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\qtguiversion.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QPointF \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QQueue \
 		..\src\Structure\brush.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\QBrush \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\QPen \
@@ -2651,6 +2656,7 @@ release\bitmapimage.obj: ..\src\Graphics\Bitmap\bitmapimage.cpp ..\src\Graphics\
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QPoint \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QPointF \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QVector \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QQueue \
 		..\src\Structure\brush.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\QBrush \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\QPen \
@@ -3027,6 +3033,7 @@ release\layer.obj: ..\src\Structure\layer.cpp ..\src\Structure\layer.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QDebug \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QPoint \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QPointF \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QQueue \
 		..\src\Structure\brush.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\QBrush \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\QPen \
@@ -3359,6 +3366,7 @@ release\editor.obj: ..\src\Structure\editor.cpp ..\src\Structure\editor.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\qvalidator.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\qtguiversion.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QPointF \
+		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtCore\QQueue \
 		..\src\Structure\brush.h \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\QBrush \
 		C:\Qt\Qt5.4.0\5.4\msvc2013_64_opengl\include\QtGui\QPen \

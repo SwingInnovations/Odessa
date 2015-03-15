@@ -30,8 +30,11 @@ public:
     void setWidth(int w);
     void setHeight(int h);
     void setType(int t);
+    void setDPI(int d);
     void setFrameCount(int fc);
     void setFPS(int fps);
+    void setSpriteCount_Row(int row);
+    void setSpriteCount_Col(int col);
 
     int getWidth()const{return width;}
     int getHeight()const{return height;}
@@ -39,9 +42,13 @@ public:
     int getType()const{return type;}
     int getFrameCount()const{return frameCount;}
     int getFPS()const{return fps;}
+    int getSpriteCount_Row()const{ return spriteCount_Row; }
+    int getSpriteCount_Col()const{ return spriteCount_Col; }
 
 private:
     int width, height;
+    int spriteCount_Row;
+    int spriteCount_Col;
     int dpi;
     int type;
     int frameCount;
@@ -68,30 +75,42 @@ protected:
 
 private slots:
     void newProjectSlot();
-
+    void setDocType(int);
 private:
     int width, height, dpi;
-    QComboBox *optionsComboBox;
     ProjectInfo info;
-    QLabel *m_WidthLabel;
-    QLabel *m_HeightLabel;
-    QLabel *m_dpiLabel;
-    QLineEdit *m_widthLineEdit;
-    QLineEdit *m_heightLineEdit;
-    QLineEdit *m_dpiLineEdit;
+    QString parameterInfo;
 
-    QPushButton *createButton;
-    QPushButton *cancelButton;
+    QComboBox* m_TypeComboBox;
+    QComboBox* m_CanvasSizeComboBox;
 
-    QGroupBox *descripGroupBox;
+    QLabel* m_WidthLabel;
+    QLineEdit* m_WidthLE;
+    QLabel* m_HeightLabel;
+    QLineEdit* m_HeightLE;
+    QLabel* m_DPILabel;
+    QLineEdit* m_DPILE;
 
-    QVBoxLayout *labelLayout;
-    QVBoxLayout *lineEditLayout;
-    QHBoxLayout *labelAndLineLayout;
-    QVBoxLayout *totalLayout;
-    QVBoxLayout *finalLayout;
+    /*Sprite Sheet specific*/
+    QLabel* m_SpriteCount_RowLabel;
+    QLineEdit* m_SpriteCount_RowLE;
+    QLabel* m_SpriteCount_ColLabel;
+    QLineEdit* m_SpriteCount_ColLE;
+    QVBoxLayout* m_SpriteLayout;
 
-    QHBoxLayout *buttonLayout;
+    /*Animation Specific*/
+    QLabel* m_FrameCountLabel;
+    QLineEdit* m_FrameCountLE;
+    QLabel* m_FpsLabel;
+    QLineEdit* m_FpsLE;
+    QVBoxLayout* m_AnimLayout;
+
+    QGroupBox* m_InformationGrpBox;
+    QLabel* m_InformationGrpLbl;
+
+    QPushButton* m_OkBtn;
+    QPushButton* m_CloseBtn;
+
 };
 
 class OdessaPrefDialog : public QDialog

@@ -11,10 +11,12 @@
 #include <QPixmap>
 #include <QPointer>
 
+#include "../Interface/dialogwindows.h"
 #include "layer.h"
 #include "brush.h"
 
 class Editor;
+class ProjectInfo;
 
 class HistoryStack : public QObject
 {
@@ -84,6 +86,7 @@ protected:
 
 public slots:
     void newProject(int type, int width, int height, int dpi);
+    void newProject(ProjectInfo&);
 
     void addLayer();
     void addFrame();

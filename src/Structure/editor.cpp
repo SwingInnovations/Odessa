@@ -242,6 +242,26 @@ void Editor::paintEvent(QPaintEvent *event)
     }
 }
 
+void Editor::newProject(ProjectInfo &info){
+    if(!m_Layers.isEmpty()){
+        m_Layers.clear();
+        m_CurrentIndex = 0;
+        m_CurrentFrame = 0;
+    }else{
+        switch(info.getType()){
+            case 0:
+                m_CurrentIndex = 1;
+                m_CurrentFrame = 1;
+                m_Layers.push_back(new Layer(Layer::Bitmap, info.getWidth(), info.getHeight()));
+                break;
+        default:
+            break;
+        }
+    }
+    backup();
+    update();
+}
+
 void Editor::newProject(int type, int width, int height, int dpi)
 {
     if(!m_Layers.isEmpty())
