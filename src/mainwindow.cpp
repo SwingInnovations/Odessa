@@ -222,7 +222,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(eraserTool, SIGNAL(triggered()), SLOT(assignEraserTool()));
     connect(textTool, SIGNAL(triggered()), SLOT(assignTextTool()));
     connect(primitiveTool, SIGNAL(triggered()), SLOT(assignPrimitiveTool()));
-    connect(newDialogWin, SIGNAL(newProject(int,int,int,int)), mEditor, SLOT(newProject(int,int,int,int)));
+    //connect(newDialogWin, SIGNAL(newProject(int,int,int,int)), mEditor, SLOT(newProject(int,int,int,int)));
+    connect(newDialogWin, SIGNAL(newProject(ProjectInfo&)), mEditor, SLOT(newProject(ProjectInfo&)));
     connect(prefDialog, SIGNAL(projectPathChanged(QString)), SLOT(setProjectPath(QString)));
     connect(exportImgAct, SIGNAL(triggered()), SLOT(exportImage()));
     connect(zoomInAct, SIGNAL(triggered()), SLOT(zoomIn()));

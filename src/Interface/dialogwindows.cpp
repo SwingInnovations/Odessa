@@ -6,7 +6,7 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     setWindowTitle("New Canvas");
     setModal(true);
 
-    parameterInfo = "nil<br>null";
+    parameterInfo = "Create a standard image. <br> Width - Image's width in pixels.<br> Height - Image's height in pixels. <br> DPI - The Images DPI";
 
     m_TypeComboBox = new QComboBox(this);
     m_TypeComboBox->addItem("Image");
@@ -19,6 +19,7 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     m_CanvasSizeComboBox->addItem("1920 x 1080");
 
     m_WidthLabel = new QLabel("Width: ",this);
+    //m_WidthLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_WidthLE = new QLineEdit(this);
     m_WidthLE->setFixedWidth(48);
     QHBoxLayout* widthLayout = new QHBoxLayout;
@@ -26,6 +27,7 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     widthLayout->addWidget(m_WidthLE);
 
     m_HeightLabel = new QLabel("Height: ", this);
+    //m_HeightLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_HeightLE = new QLineEdit(this);
     m_HeightLE->setFixedWidth(48);
     QHBoxLayout* heightLayout = new QHBoxLayout;
@@ -33,6 +35,7 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     heightLayout->addWidget(m_HeightLE);
 
     m_DPILabel = new QLabel("DPI: ", this);
+    //m_DPILabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_DPILE = new QLineEdit(this);
     m_DPILE->setFixedWidth(48);
     QHBoxLayout* dpiLayout = new QHBoxLayout;
@@ -86,6 +89,7 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     m_InformationGrpBox = new QGroupBox("Info: ", this);
     m_InformationGrpLbl = new QLabel(this);
     m_InformationGrpLbl->setText(parameterInfo);
+    m_InformationGrpLbl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QVBoxLayout* infoLayout = new QVBoxLayout;
     infoLayout->addWidget(m_InformationGrpLbl);
     m_InformationGrpBox->setLayout(infoLayout);
@@ -117,6 +121,7 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     connect(m_OkBtn, SIGNAL(clicked()), SLOT(newProjectSlot()));
     connect(m_CloseBtn, SIGNAL(clicked()), SLOT(close()));
     connect(m_TypeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(setDocType(int)));
+    connect(m_CanvasSizeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(setPresetSize(int)));
 
     m_FpsLabel->hide();
     m_FpsLE->hide();
@@ -127,7 +132,7 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     m_SpriteCount_ColLE->hide();
     m_SpriteCount_RowLabel->hide();
     m_SpriteCount_RowLE->hide();
-    setFixedSize(188, 183);
+    setFixedSize(300, 183);
 }
 
 OdessaNewDocDialog::~OdessaNewDocDialog()
@@ -135,10 +140,30 @@ OdessaNewDocDialog::~OdessaNewDocDialog()
 
 }
 
+void OdessaNewDocDialog::setPresetSize(int val){
+    switch(val){
+    case 0:
+        m_WidthLE->setText("800");
+        m_HeightLE->setText("600");
+        break;
+    case 1:
+        m_WidthLE->setText("1280");
+        m_HeightLE->setText("720");
+        break;
+    case 2:
+        m_WidthLE->setText("1920");
+        m_HeightLE->setText("1080");
+        break;
+    default:
+        break;
+    }
+}
+
 void OdessaNewDocDialog::setDocType(int val){
     info.setType(val);
     switch(val){
         case 0: //default
+            parameterInfo = "Creates a standard image. <br> Width - Image's width in pixels.<br> Height - Image's height in pixels. <br> DPI - The image's DPI";
             m_FpsLabel->hide();
             m_FpsLE->hide();
             m_FrameCountLabel->hide();
@@ -148,9 +173,10 @@ void OdessaNewDocDialog::setDocType(int val){
             m_SpriteCount_ColLE->hide();
             m_SpriteCount_RowLabel->hide();
             m_SpriteCount_RowLE->hide();
-            setFixedSize(188, 183);
+            setFixedSize(300, 183);
             break;
         case 1:
+            parameterInfo = "Creates a Sprite Sheet. <br> Width - Image's width in pixels.<br> Height - Image's height in pixels. <br> DPI - The image's DPI <br> Rows: Number of rows. <br> Col: Number of columns.";
             m_FpsLabel->hide();
             m_FpsLE->hide();
             m_FrameCountLabel->hide();
@@ -160,9 +186,10 @@ void OdessaNewDocDialog::setDocType(int val){
             m_SpriteCount_ColLE->show();
             m_SpriteCount_RowLabel->show();
             m_SpriteCount_RowLE->show();
-            setFixedSize(188, 239);
+            setFixedSize(300, 239);
             break;
         case 2:
+            parameterInfo = "Creates a Animation Project. <br> Width - Image's width in pixels.<br> Height - Image's height in pixels. <br> DPI - The image's DPI <br> Frame Count: Number of frames. <br> FPS: Frames per second.";
             m_FpsLabel->show();
             m_FpsLE->show();
             m_FrameCountLabel->show();
@@ -172,11 +199,12 @@ void OdessaNewDocDialog::setDocType(int val){
             m_SpriteCount_ColLE->hide();
             m_SpriteCount_RowLabel->hide();
             m_SpriteCount_RowLE->hide();
-            setFixedSize(188, 239);
+            setFixedSize(300, 239);
             break;
         default:
             break;
     }
+    m_InformationGrpLbl->setText(parameterInfo);
 }
 
 void OdessaNewDocDialog::newProjectSlot()

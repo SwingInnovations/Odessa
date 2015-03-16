@@ -76,6 +76,7 @@ protected:
 private slots:
     void newProjectSlot();
     void setDocType(int);
+    void setPresetSize(int);
 private:
     int width, height, dpi;
     ProjectInfo info;
