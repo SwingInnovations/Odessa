@@ -5,6 +5,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_DeviceDown = false;
     m_TabletInUse = false;
     m_Modified = false;
+    m_SelectActive = false;
 
     m_CurrentIndex = 0;
     m_CurrentFrame = 0;
@@ -43,7 +44,6 @@ void Editor::mousePressEvent(QMouseEvent *event)
         {
         case BRUSH_TOOL:
             m_DeviceDown = true;
-            m_DrawPath[0] = m_DrawPath[1] = m_DrawPath[2] = event->pos();
             if(!m_MousePath.isEmpty())
             {
                 m_MousePath.clear();
@@ -53,7 +53,6 @@ void Editor::mousePressEvent(QMouseEvent *event)
             break;
         case ERASER_TOOL:
             m_DeviceDown = true;
-            m_DrawPath[0] = m_DrawPath[1] = m_DrawPath[2] = event->pos();
             backup();
             break;
         case EYEDROPPER_TOOL:
@@ -69,6 +68,8 @@ void Editor::mousePressEvent(QMouseEvent *event)
        case RECT_SELECT_TOOL:
             {
                 m_DeviceDown = true;
+                m_SelectActive = true;
+                m_SelectRect.setTopLeft(event->pos());
                 if(!m_MousePath.isEmpty()){
                     m_MousePath.clear();
                     m_MousePath.push_back(event->pos());
@@ -98,10 +99,7 @@ void Editor::mouseReleaseEvent(QMouseEvent *event)
         m_DeviceDown = false;
     }
 
-    if(m_ToolType == RECT_SELECT_TOOL){
-        m_MousePath.push_back(event->pos());
-        //Reorder the layer array
-    }
+    if(m_SelectActive){ m_SelectActive = false; }
 
     if(!m_Layers.empty())
     {
@@ -141,6 +139,11 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                 }
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
                 setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+            }
+            break;
+        case RECT_SELECT_TOOL:
+            if(m_DeviceDown){
+                m_SelectRect.setBottomRight(event->pos());
             }
             break;
         default:
@@ -247,7 +250,8 @@ void Editor::newProject(ProjectInfo &info){
         m_Layers.clear();
         m_CurrentIndex = 0;
         m_CurrentFrame = 0;
-    }else{
+    }
+    if(m_Layers.isEmpty()){
         switch(info.getType()){
             case 0:
                 m_CurrentIndex = 1;
@@ -255,39 +259,6 @@ void Editor::newProject(ProjectInfo &info){
                 m_Layers.push_back(new Layer(Layer::Bitmap, info.getWidth(), info.getHeight()));
                 this->resize(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().size());
                 break;
-        default:
-            break;
-        }
-    }
-    backup();
-    update();
-}
-
-void Editor::newProject(int type, int width, int height, int dpi)
-{
-    if(!m_Layers.isEmpty())
-    {
-        m_Layers.clear();
-        m_CurrentIndex = 0;
-        m_CurrentFrame = 0;
-    }
-
-    if(m_Layers.isEmpty())
-    {
-        switch(type)
-        {
-         case 0:
-            m_CurrentIndex = 1;
-            m_CurrentFrame = 1;
-            m_Layers.push_back(new Layer(Layer::Bitmap, width, height));
-            this->resize(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().size());
-            break;
-        case 1:
-            //create Animation project
-            break;
-        case 2:
-            //create Spritesheet
-            break;
         default:
             break;
         }

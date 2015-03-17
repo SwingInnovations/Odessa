@@ -85,7 +85,6 @@ protected:
     void tabletEvent(QTabletEvent *event);
 
 public slots:
-    void newProject(int type, int width, int height, int dpi);
     void newProject(ProjectInfo&);
 
     void addLayer();
@@ -119,6 +118,7 @@ private:
     bool m_DeviceDown;
     bool m_TabletInUse;
     bool m_Modified;
+    bool m_SelectActive;
 
     Brush m_CurrentTool;
     Brush m_Brush;
@@ -130,6 +130,7 @@ private:
     QPoint m_DrawPath[3];
     QVector<QPointF> m_MousePath;
     QPainterPath* m_PainterPath;
+    QRect m_SelectRect;
 
     qreal m_Pressure;
     qreal m_XTilt;

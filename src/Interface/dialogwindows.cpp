@@ -22,6 +22,7 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     //m_WidthLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_WidthLE = new QLineEdit(this);
     m_WidthLE->setFixedWidth(48);
+    m_WidthLE->setText("800");
     QHBoxLayout* widthLayout = new QHBoxLayout;
     widthLayout->addWidget(m_WidthLabel);
     widthLayout->addWidget(m_WidthLE);
@@ -30,6 +31,7 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     //m_HeightLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_HeightLE = new QLineEdit(this);
     m_HeightLE->setFixedWidth(48);
+    m_HeightLE->setText("600");
     QHBoxLayout* heightLayout = new QHBoxLayout;
     heightLayout->addWidget(m_HeightLabel);
     heightLayout->addWidget(m_HeightLE);
