@@ -43,6 +43,7 @@ private slots:
     void toggleShowBrushDock(bool);
     void toggleShowColorDock(bool);
     void toggleShowTimelineDock(bool);
+    void toggleShowToolsDock(bool);
     void exportImage();
     void setProjectPath(QString);
     void zoomIn();
@@ -63,6 +64,7 @@ private:
     ColorDockWidget *colorDockWidget;
     TimelineDockWidget *timelineDockWidget;
     LayerDockWidget *layerDockWidget;
+    ToolsPanel* toolPanelWidget;
 
     bool isModified;
 
@@ -96,6 +98,7 @@ private:
     QAction *showColorDockWinAct;
     QAction *showTimeDockWinAct;
     QAction *showLayersDockAct;
+    QAction *showToolsDockAct;
     QAction *preferenceAct;
 
     //basic Tools

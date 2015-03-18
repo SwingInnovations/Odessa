@@ -1489,9 +1489,183 @@ CustomBrushWidget::~CustomBrushWidget(){
 }
 
 ToolsPanel::ToolsPanel(QWidget* parent) : QDockWidget(parent){
-
+    setWindowTitle("Tools");
+    transTools = new TransformTools(this);
+    panelSpace = new QStackedWidget();
+    panelSpace->addWidget(transTools);
+    //panelSpace->setCurrentIndex(0);
+    QVBoxLayout* centralLayout = new QVBoxLayout;
+    centralLayout->addWidget(panelSpace);
+    centralLayout->addSpacerItem(new QSpacerItem(100, 10, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    QWidget *centralWidget = new QWidget(this);
+    centralWidget->setLayout(centralLayout);
+    setWidget(centralWidget);
 }
 
 ToolsPanel::~ToolsPanel(){
+
+}
+
+void ToolsPanel::setMode(int o){
+    panelSpace->setCurrentIndex(o);
+}
+
+TransformTools::TransformTools(QWidget *parent) : QWidget(parent){
+
+    QButtonGroup* modeGrp;
+    transformMode = 0;
+
+    m_Link4Trans = false;
+    m_Link4Rot = false;
+    m_Link4Scal = false;
+
+    m_TranslateBtn = new QRadioButton("&Translate", this);
+    m_TranslateBtn->setChecked(true);
+    m_RotateBtn = new QRadioButton("&Rotate", this);
+    m_ScaleBtn = new QRadioButton("&Scale", this);
+    modeGrp = new QButtonGroup(this);
+    modeGrp->addButton(m_TranslateBtn);
+    modeGrp->addButton(m_RotateBtn);
+    modeGrp->addButton(m_ScaleBtn);
+
+    QHBoxLayout* optionLayout = new QHBoxLayout;
+    optionLayout->addWidget(m_TranslateBtn);
+    optionLayout->addWidget(m_RotateBtn);
+    optionLayout->addWidget(m_ScaleBtn);
+
+    //Translate
+    m_TransXLbl = new QLabel("Translate X: ", this);
+    m_TransXSB = new QSpinBox(this);
+    QHBoxLayout* transXLayout = new QHBoxLayout;
+    transXLayout->addWidget(m_TransXLbl);
+    transXLayout->addWidget(m_TransXSB);
+
+    m_TransYLbl = new QLabel("Translate Y: ", this);
+    m_TransYSB = new QSpinBox(this);
+    QHBoxLayout* transYLayout = new QHBoxLayout;
+    transYLayout->addWidget(m_TransYLbl);
+    transYLayout->addWidget(m_TransYSB);
+
+    m_RotLbl = new QLabel("Rotate: ", this);
+    m_RotSB = new QSpinBox(this);
+    QHBoxLayout* rotXLayout = new QHBoxLayout;
+    rotXLayout->addWidget(m_RotLbl);
+    rotXLayout->addWidget(m_RotSB);
+
+    //Hide Rotate
+    m_RotLbl->hide();
+    m_RotSB->hide();
+
+    m_ScalXLbl = new QLabel("Scale X: ", this);
+    m_ScalXSB = new QSpinBox(this);
+    QHBoxLayout* scalXLayout = new QHBoxLayout;
+    scalXLayout->addWidget(m_ScalXLbl);
+    scalXLayout->addWidget(m_ScalXSB);
+
+    m_ScalYLbl = new QLabel("Scale Y: ", this);
+    m_ScalYSB = new QSpinBox(this);
+    QHBoxLayout* scalYLayout = new QHBoxLayout;
+    scalYLayout->addWidget(m_ScalYLbl);
+    scalYLayout->addWidget(m_ScalYSB);
+
+    //Hide other things
+    m_ScalXLbl->hide();
+    m_ScalXSB->hide();
+    m_ScalYLbl->hide();
+    m_ScalYSB->hide();
+
+    m_LinkTransformBtn = new QPushButton("[&L]", this);
+    m_LinkTransformBtn->setCheckable(true);
+    m_LinkTransformBtn->setChecked(false);
+
+    QHBoxLayout* transformManualCtlLayout = new QHBoxLayout;
+    transformManualCtlLayout->addLayout(transXLayout);
+    transformManualCtlLayout->addLayout(rotXLayout);
+    transformManualCtlLayout->addLayout(scalXLayout);
+    transformManualCtlLayout->addWidget(m_LinkTransformBtn);
+    transformManualCtlLayout->addLayout(transYLayout);
+    transformManualCtlLayout->addLayout(scalYLayout);
+
+    m_WorldTransformBtn = new QRadioButton("&World", this);
+    m_WorldTransformBtn->setChecked(true);
+    m_LocalTransformBtn = new QRadioButton("&Local", this);
+
+    QHBoxLayout* transTypeLayout = new QHBoxLayout;
+    transTypeLayout->addWidget(m_WorldTransformBtn);
+    transTypeLayout->addWidget(m_LocalTransformBtn);
+
+    QVBoxLayout* centralLayout = new QVBoxLayout;
+    centralLayout->addLayout(optionLayout);
+    centralLayout->addLayout(transformManualCtlLayout);
+    centralLayout->addLayout(transTypeLayout);
+
+    setLayout(centralLayout);
+
+    connect(m_TranslateBtn, SIGNAL(toggled(bool)), SLOT(changeToTrans(bool)));
+    connect(m_RotateBtn, SIGNAL(toggled(bool)), SLOT(changeToRot(bool)));
+    connect(m_ScaleBtn, SIGNAL(toggled(bool)), SLOT(changeToScal(bool)));
+}
+
+void TransformTools::changeToTrans(bool s){
+    m_Link4Trans = s;
+    m_Link4Rot = !s;
+    m_Link4Scal = !s;
+
+    m_TransXLbl->setVisible(s);
+    m_TransXSB->setVisible(s);
+    m_TransYLbl->setVisible(s);
+    m_TransYSB->setVisible(s);
+
+    m_RotLbl->setVisible(!s);
+    m_RotSB->setVisible(!s);
+
+    m_ScalXLbl->setVisible(!s);
+    m_ScalXSB->setVisible(!s);
+    m_ScalYLbl->setVisible(!s);
+    m_ScalYSB->setVisible(!s);
+    transformMode = 0;
+}
+
+void TransformTools::changeToRot(bool s){
+    m_Link4Trans = !s;
+    m_Link4Rot = s;
+    m_Link4Scal = !s;
+
+    m_TransXLbl->setVisible(!s);
+    m_TransXSB->setVisible(!s);
+    m_TransYLbl->setVisible(!s);
+    m_TransYSB->setVisible(!s);
+
+    m_RotLbl->setVisible(s);
+    m_RotSB->setVisible(s);
+
+    m_ScalXLbl->setVisible(!s);
+    m_ScalXSB->setVisible(!s);
+    m_ScalYLbl->setVisible(!s);
+    m_ScalYSB->setVisible(!s);
+    transformMode = 1;
+}
+
+void TransformTools::changeToScal(bool s){
+    m_Link4Trans = !s;
+    m_Link4Rot = !s;
+    m_Link4Scal = s;
+
+    m_TransXLbl->setVisible(!s);
+    m_TransXSB->setVisible(!s);
+    m_TransYLbl->setVisible(!s);
+    m_TransYSB->setVisible(!s);
+
+    m_RotLbl->setVisible(!s);
+    m_RotSB->setVisible(!s);
+
+    m_ScalXLbl->setVisible(s);
+    m_ScalXSB->setVisible(s);
+    m_ScalYLbl->setVisible(s);
+    m_ScalYSB->setVisible(s);
+    transformMode = 2;
+}
+
+TransformTools::~TransformTools(){
 
 }

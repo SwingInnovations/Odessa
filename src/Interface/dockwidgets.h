@@ -35,12 +35,14 @@
 #include <QRgb>
 #include <QMap>
 #include <QVector>
+#include <QRadioButton>
 #include <QDataStream>
 #include <QSettings>
 #include <QMessageBox>
 #include <QSpinBox>
 #include <QTransform>
 #include <QColorDialog>
+#include <QButtonGroup>
 
 #include "../src/Structure/brush.h"
 #include "../Overloads.h"
@@ -448,12 +450,64 @@ private:
     QTemporaryFile tempFile;
 };
 
+class TransformTools : public QWidget{
+    Q_OBJECT
+public:
+    TransformTools(QWidget* parent = 0);
+    ~TransformTools();
+    int getGetTransformMode() const{ return transformMode; }
+signals:
+private slots:
+    void changeToTrans(bool);
+    void changeToRot(bool);
+    void changeToScal(bool);
+private:
+    QRadioButton* m_TranslateBtn;
+    QRadioButton* m_RotateBtn;
+    QRadioButton* m_ScaleBtn;
+
+    /*-Refinement for transforms-*/
+
+    //Translate
+    QLabel* m_TransXLbl;
+    QSpinBox* m_TransXSB;
+    QLabel* m_TransYLbl;
+    QSpinBox* m_TransYSB;
+    //Rotate
+    QLabel* m_RotLbl;
+    QSpinBox* m_RotSB;
+
+    //scale
+    QLabel* m_ScalXLbl;
+    QSpinBox* m_ScalXSB;
+    QLabel* m_ScalYLbl;
+    QSpinBox* m_ScalYSB;
+
+    QPushButton* m_LinkTransformBtn;
+    bool m_Link4Trans;
+    bool m_Link4Rot;
+    bool m_Link4Scal;
+
+    QRadioButton* m_WorldTransformBtn;
+    QRadioButton* m_LocalTransformBtn;
+
+    QPoint m_Displacement;
+    int transformMode;
+};
+
 /*-Tools Panel-*/
 class ToolsPanel : public QDockWidget{
     Q_OBJECT
 public:
    ToolsPanel(QWidget* parent = 0);
    ~ToolsPanel();
+public slots:
+   void setMode(int);
+private:
+   TransformTools* transTools;
+   QStackedWidget* panelSpace;
 };
+
+
 
 #endif // DOCKWIDGETS_H

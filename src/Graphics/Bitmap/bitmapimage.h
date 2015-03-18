@@ -32,6 +32,9 @@ public:
     void setPixmap(QPixmap pixmap){m_pixmap = pixmap;}
     void setVisible(bool val){visible = val;}
 
+    void setClipboardPixmap(QPixmap, QRect);
+    void setClipboardPixmap(QPixmap, QPoint);
+
     void paintImage(QPainter &painter);
     void paintImage(QPainterPath painterPath, Brush brush); //works
     void paintImage(QVector<QPointF> pointInfo, Brush brush);//Keep
@@ -86,6 +89,9 @@ private:
 
     //handle history
     int m_MaxSizeOfHistory;
+
+    QRect usageBoundary;
+    QPixmap m_clipboardPixmap;
 };
 
 #endif // BITMAPIMAGE_H

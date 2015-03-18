@@ -65,6 +65,9 @@ MainWindow::MainWindow(QWidget *parent)
     layerDockWidget = new LayerDockWidget(this);
     layerDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
+    toolPanelWidget = new ToolsPanel(this);
+    toolPanelWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    toolPanelWidget->setVisible(false);
     brushTool = new QAction(this);
     brushTool->setText("Brush");
     eraserTool = new QAction(this);
@@ -151,6 +154,9 @@ MainWindow::MainWindow(QWidget *parent)
     showTimeDockWinAct = new QAction("Timeline", this);
     showTimeDockWinAct->setCheckable(true);
     showTimeDockWinAct->setChecked(true);
+    showToolsDockAct = new QAction("Tools", this);
+    showToolsDockAct->setCheckable(true);
+    showToolsDockAct->setChecked(false);
     zoomInAct = new QAction("&Zoom In",this);
     zoomOutAct = new QAction("&Zoom Out", this);
 
@@ -192,6 +198,7 @@ MainWindow::MainWindow(QWidget *parent)
     dockWinMenu->addAction(showBrushDockWinAct);
     dockWinMenu->addAction(showColorDockWinAct);
     dockWinMenu->addAction(showTimeDockWinAct);
+    dockWinMenu->addAction(showToolsDockAct);
     viewMenu->addSeparator();
     viewMenu->addAction(preferenceAct);
 
@@ -231,6 +238,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(showBrushDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowBrushDock(bool)));
     connect(showColorDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowColorDock(bool)));
     connect(showTimeDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowTimelineDock(bool)));
+    connect(showToolsDockAct, SIGNAL(toggled(bool)), SLOT(toggleShowToolsDock(bool)));
     connect(brushDockWidget, SIGNAL(brushSizeChanged(int)), m_Editor, SLOT(setBrushSize(int)));
     connect(brushDockWidget, SIGNAL(brushOpacityChanged(int)), m_Editor, SLOT(setOpacity(int)));
     connect(brushDockWidget, SIGNAL(brushStencilChanged(QPixmap)), m_Editor, SLOT(setBrushStencil(QPixmap)));
@@ -257,6 +265,7 @@ MainWindow::MainWindow(QWidget *parent)
     tabifyDockWidget(brushDockWidget, colorDockWidget);
     addDockWidget(Qt::BottomDockWidgetArea, timelineDockWidget);
     addDockWidget(Qt::RightDockWidgetArea, layerDockWidget);
+    addDockWidget(Qt::RightDockWidgetArea, toolPanelWidget);
 
     isModified = false;
     resize(1024,768);
@@ -314,6 +323,10 @@ void MainWindow::toggleShowTimelineDock(bool val)
     }else{
         timelineDockWidget->hide();
     }
+}
+
+void MainWindow::toggleShowToolsDock(bool s){
+    toolPanelWidget->setVisible(s);
 }
 
 void MainWindow::assignBrushTool()

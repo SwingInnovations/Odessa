@@ -104,13 +104,13 @@ void Editor::mouseReleaseEvent(QMouseEvent *event)
         m_DeviceDown = false;
     }
 
-
-
     if(!m_Layers.empty())
     {
 //        m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->optimizeImage(m_CurrentTool);
-            if(m_SelectActive) m_SelectRect.setBottomRight(event->pos());
-            setBrush(TRANSFORM_TRANSLATE);
+            if(m_SelectActive){
+                m_SelectRect.setBottomRight(event->pos());
+                setBrush(TRANSFORM_TRANSLATE);
+            }
     }
     update();
 }
@@ -132,7 +132,6 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                 }
 
                 m_CurrentTool.setPressureVal(m_Pressure);
-
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
                 setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
             }
@@ -446,7 +445,7 @@ void Editor::scale(double scaleVal)
 
 void Editor::backup(int backupLayer, int backupFrame)
 {
-    while(m_HistoryStack.size()-1 > m_BackupIndex && m_HistoryStack.size() > 0)
+    while(m_HistoryStack.size() > m_HistorySteps && m_HistoryStack.size() > 0)
     {
         delete m_HistoryStack.takeLast();
     }
