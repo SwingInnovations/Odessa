@@ -122,7 +122,7 @@ public:
     ~OdessaPrefDialog();
 signals:
     void projectPathChanged(QString);
-
+    void historyStepsChanged(int);
 public slots:
     void updateProjectPath(QString);
 private:

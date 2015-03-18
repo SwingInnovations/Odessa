@@ -58,6 +58,8 @@ public:
     void setBrush(Brush b);
     void processCanvas();
     void setBrush(ToolType type);
+    int getHistoryStep()const{ return m_HistorySteps; }
+    ProjectInfo getProjectInfo()const{ return m_Info; }
     QSize getPixmapSize(){
         if(!m_Layers.isEmpty())
         {
@@ -95,6 +97,8 @@ public slots:
 
     void undo();
     void redo();
+
+    void setHistoyStep(int);
 
     void scale(double scaleVal);
 
@@ -151,7 +155,10 @@ private:
     QColor m_SecondaryColor;
 
     QVector<HistoryStack*> m_HistoryStack;
+    int m_HistorySteps;
     int m_BackupIndex;
+
+    ProjectInfo m_Info;
 };
 
 #endif // EDITOR_H

@@ -26,17 +26,17 @@ MainWindow::MainWindow(QWidget *parent)
         dir.mkpath("Brush");
     }
     
-    mEditor = new Editor(this);
-    mEditor->setAlignment(Qt::AlignCenter);
-    mEditor->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    mEditor->setScaledContents(true);
+    m_Editor = new Editor(this);
+    m_Editor->setAlignment(Qt::AlignCenter);
+    m_Editor->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    m_Editor->setScaledContents(true);
 
     imageArea = new QScrollArea(this);
     imageArea->setAlignment(Qt::AlignCenter);
-    imageArea->setWidget(mEditor);
+    imageArea->setWidget(m_Editor);
     setCentralWidget(imageArea);
 
-    mEditor->setStyleSheet("background-color: rgb(53, 53, 53);");
+    m_Editor->setStyleSheet("background-color: rgb(53, 53, 53);");
 
     toolBar = this->addToolBar("Tools");
     toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::TopToolBarArea);
@@ -54,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent)
     brushDockWidget->setWindowTitle("Brush");
     brushDockWidget->setDirectory(projectPath+"/Brush/");
     brushDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    mEditor->setBrush(brushDockWidget->getStartBrush());
+    m_Editor->setBrush(brushDockWidget->getStartBrush());
 
     colorDockWidget = new ColorDockWidget(this);
     colorDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -216,35 +216,35 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(newAct, SIGNAL(triggered()), SLOT(showNewDocWin()));
     connect(preferenceAct, SIGNAL(triggered()),SLOT(showPrefWin()));
-    connect(undoAct, SIGNAL(triggered()), mEditor, SLOT(undo()));
-    connect(redoAct, SIGNAL(triggered()), mEditor, SLOT(redo()));
+    connect(undoAct, SIGNAL(triggered()), m_Editor, SLOT(undo()));
+    connect(redoAct, SIGNAL(triggered()), m_Editor, SLOT(redo()));
     connect(brushTool, SIGNAL(triggered()), SLOT(assignBrushTool()));
     connect(eraserTool, SIGNAL(triggered()), SLOT(assignEraserTool()));
     connect(textTool, SIGNAL(triggered()), SLOT(assignTextTool()));
     connect(primitiveTool, SIGNAL(triggered()), SLOT(assignPrimitiveTool()));
-    //connect(newDialogWin, SIGNAL(newProject(int,int,int,int)), mEditor, SLOT(newProject(int,int,int,int)));
-    connect(newDialogWin, SIGNAL(newProject(ProjectInfo&)), mEditor, SLOT(newProject(ProjectInfo&)));
+    connect(newDialogWin, SIGNAL(newProject(ProjectInfo&)), m_Editor, SLOT(newProject(ProjectInfo&)));
     connect(prefDialog, SIGNAL(projectPathChanged(QString)), SLOT(setProjectPath(QString)));
+    connect(prefDialog, SIGNAL(historyStepsChanged(int)), m_Editor, SLOT(setHistoyStep(int)));
     connect(exportImgAct, SIGNAL(triggered()), SLOT(exportImage()));
     connect(zoomInAct, SIGNAL(triggered()), SLOT(zoomIn()));
     connect(zoomOutAct, SIGNAL(triggered()), SLOT(zoomOut()));
     connect(showBrushDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowBrushDock(bool)));
     connect(showColorDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowColorDock(bool)));
     connect(showTimeDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowTimelineDock(bool)));
-    connect(brushDockWidget, SIGNAL(brushSizeChanged(int)), mEditor, SLOT(setBrushSize(int)));
-    connect(brushDockWidget, SIGNAL(brushOpacityChanged(int)), mEditor, SLOT(setOpacity(int)));
-    connect(brushDockWidget, SIGNAL(brushStencilChanged(QPixmap)), mEditor, SLOT(setBrushStencil(QPixmap)));
-    connect(brushDockWidget, SIGNAL(brushSpacingChanged(int)), mEditor, SLOT(setBrushSpacing(int)));
-    connect(brushDockWidget, SIGNAL(brushTransferSizeChanged(int)), mEditor, SLOT(setSizeTransfer(int)));
-    connect(brushDockWidget, SIGNAL(brushTransferOpacityChanged(int)), mEditor, SLOT(setOpacityTransfer(int)));
-    connect(colorDockWidget, SIGNAL(redChanged(int)), mEditor, SLOT(setRedValue(int)));
-    connect(colorDockWidget, SIGNAL(greenChanged(int)), mEditor, SLOT(setGreenValue(int)));
-    connect(colorDockWidget, SIGNAL(blueChanged(int)), mEditor, SLOT(setBlueValue(int)));
-    connect(mEditor, SIGNAL(brushSizeChanged(int)), brushDockWidget, SLOT(updateSize(int)));
-    connect(mEditor, SIGNAL(brushOpacityChanged(int)), brushDockWidget, SLOT(updateOpacity(int)));
-    connect(mEditor, SIGNAL(redChanged(int)), colorDockWidget, SLOT(updateRed(int)));
-    connect(mEditor, SIGNAL(greenChanged(int)), colorDockWidget, SLOT(updateGreen(int)));
-    connect(mEditor, SIGNAL(blueChanged(int)), colorDockWidget, SLOT(updateBlue(int)));
+    connect(brushDockWidget, SIGNAL(brushSizeChanged(int)), m_Editor, SLOT(setBrushSize(int)));
+    connect(brushDockWidget, SIGNAL(brushOpacityChanged(int)), m_Editor, SLOT(setOpacity(int)));
+    connect(brushDockWidget, SIGNAL(brushStencilChanged(QPixmap)), m_Editor, SLOT(setBrushStencil(QPixmap)));
+    connect(brushDockWidget, SIGNAL(brushSpacingChanged(int)), m_Editor, SLOT(setBrushSpacing(int)));
+    connect(brushDockWidget, SIGNAL(brushTransferSizeChanged(int)), m_Editor, SLOT(setSizeTransfer(int)));
+    connect(brushDockWidget, SIGNAL(brushTransferOpacityChanged(int)), m_Editor, SLOT(setOpacityTransfer(int)));
+    connect(colorDockWidget, SIGNAL(redChanged(int)), m_Editor, SLOT(setRedValue(int)));
+    connect(colorDockWidget, SIGNAL(greenChanged(int)), m_Editor, SLOT(setGreenValue(int)));
+    connect(colorDockWidget, SIGNAL(blueChanged(int)), m_Editor, SLOT(setBlueValue(int)));
+    connect(m_Editor, SIGNAL(brushSizeChanged(int)), brushDockWidget, SLOT(updateSize(int)));
+    connect(m_Editor, SIGNAL(brushOpacityChanged(int)), brushDockWidget, SLOT(updateOpacity(int)));
+    connect(m_Editor, SIGNAL(redChanged(int)), colorDockWidget, SLOT(updateRed(int)));
+    connect(m_Editor, SIGNAL(greenChanged(int)), colorDockWidget, SLOT(updateGreen(int)));
+    connect(m_Editor, SIGNAL(blueChanged(int)), colorDockWidget, SLOT(updateBlue(int)));
     connect(eyeDropperTool, SIGNAL(triggered()), SLOT(assignEyeDropperTool()));
     connect(eyeDropper, SIGNAL(activated()), SLOT(assignEyeDropperTool()));
     connect(fillTool, SIGNAL(triggered()), SLOT(assignFillTool()));
@@ -260,7 +260,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     isModified = false;
     resize(1024,768);
-    mEditor->setGeometry(this->centralWidget()->rect());
+    m_Editor->setGeometry(this->centralWidget()->rect());
 }
 
 MainWindow::~MainWindow()
@@ -318,31 +318,35 @@ void MainWindow::toggleShowTimelineDock(bool val)
 
 void MainWindow::assignBrushTool()
 {
-    mEditor->setBrush(Editor::BRUSH_TOOL);
+    m_Editor->setBrush(Editor::BRUSH_TOOL);
 }
 
 void MainWindow::assignEraserTool()
 {
-    mEditor->setBrush(Editor::ERASER_TOOL);
+    m_Editor->setBrush(Editor::ERASER_TOOL);
 }
 
 void MainWindow::assignTextTool()
 {
-    mEditor->setBrush(Editor::TEXT_TOOL);
+    m_Editor->setBrush(Editor::TEXT_TOOL);
 }
 
 void MainWindow::assignPrimitiveTool()
 {
-    mEditor->setBrush(Editor::PRIMITIVE_TOOL);
+    m_Editor->setBrush(Editor::PRIMITIVE_TOOL);
 }
 
 void MainWindow::assignFillTool(){
-    mEditor->setBrush(Editor::FILL_TOOL);
+    m_Editor->setBrush(Editor::FILL_TOOL);
+}
+
+void MainWindow::assignRectSelectTool(){
+    m_Editor->setBrush(Editor::RECT_SELECT_TOOL);
 }
 
 void MainWindow::assignEyeDropperTool()
 {
-    mEditor->setBrush(Editor::EYEDROPPER_TOOL);
+    m_Editor->setBrush(Editor::EYEDROPPER_TOOL);
     qDebug() << "Zing";
 }
 
@@ -364,7 +368,7 @@ void MainWindow::zoomOut()
 
 void MainWindow::exportImage(){
     QString saveName = QFileDialog::getSaveFileName(this, "Save File.", QDir::currentPath(), ".png");
-    mEditor->pixmap()->save(saveName);
+    m_Editor->pixmap()->save(saveName);
 }
 
 void MainWindow::sendFeedBack(){
@@ -373,11 +377,11 @@ void MainWindow::sendFeedBack(){
 
 void MainWindow::scaleImage(double val)
 {
-    mEditor->scale(scaleFactor);
+    m_Editor->scale(scaleFactor);
     adjustScrollBar(imageArea->horizontalScrollBar(), val);
     adjustScrollBar(imageArea->verticalScrollBar(), val);
 
-    qDebug() << "Image Size" << mEditor->getPixmapSize() << endl;
+    qDebug() << "Image Size" << m_Editor->getPixmapSize() << endl;
 }
 
 void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)

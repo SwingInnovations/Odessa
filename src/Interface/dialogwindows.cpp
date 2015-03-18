@@ -308,7 +308,7 @@ GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
     setLayout(masterLayout);
 
     connect(mChangeProjectPathBtn, SIGNAL(clicked()), SLOT(changeProjectPath()));
-    connect(mStepsBox, SIGNAL(valueChanged(int)), SLOT(changeHistorySteps(int)));
+
 }
 
 void GeneralPrefPage::changeProjectPath(){

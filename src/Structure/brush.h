@@ -70,7 +70,7 @@ public:
 
     int getHardness()const{return mHardness;}
     int getRotate()const{return mRotate;}
-    void SetOpacity(int val){mOpacity = val;}
+    void setOpacity(int val){mOpacity = val;}
     void setTransferSize(int val){mTSize = val;}
     void setTransferOpacity(int val){mTOpacity = val;}
 

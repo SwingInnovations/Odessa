@@ -1487,3 +1487,11 @@ void CustomBrushWidget::updateBrushShape_Polygon(){
 CustomBrushWidget::~CustomBrushWidget(){
 
 }
+
+ToolsPanel::ToolsPanel(QWidget* parent) : QDockWidget(parent){
+
+}
+
+ToolsPanel::~ToolsPanel(){
+
+}

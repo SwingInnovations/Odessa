@@ -19,7 +19,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_Brush.setColor(Qt::black);
     m_Brush.setBrush(QBrush(Qt::SolidPattern));
     m_Brush.setWidth(5);
-    m_Brush.SetOpacity(m_OpacityVal);
+    m_Brush.setOpacity(m_OpacityVal);
     m_Brush.setSpacing(1);
     m_CurrentTool = m_Brush;
     m_ToolType = BRUSH_TOOL;
@@ -31,9 +31,14 @@ Editor::Editor(QWidget *parent):QLabel(parent)
 
     m_BackupIndex = 0;
     m_ScaleFactor = 1.0;
+    m_HistorySteps = 24;
 
     setScaledContents(true);
     setAlignment(Qt::AlignCenter);
+}
+
+void Editor::setHistoyStep(int h){
+    m_HistorySteps = h;
 }
 
 void Editor::mousePressEvent(QMouseEvent *event)
@@ -99,11 +104,13 @@ void Editor::mouseReleaseEvent(QMouseEvent *event)
         m_DeviceDown = false;
     }
 
-    if(m_SelectActive){ m_SelectActive = false; }
+
 
     if(!m_Layers.empty())
     {
 //        m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->optimizeImage(m_CurrentTool);
+            if(m_SelectActive) m_SelectRect.setBottomRight(event->pos());
+            setBrush(TRANSFORM_TRANSLATE);
     }
     update();
 }
@@ -246,6 +253,7 @@ void Editor::paintEvent(QPaintEvent *event)
 }
 
 void Editor::newProject(ProjectInfo &info){
+    m_Info = info;
     if(!m_Layers.isEmpty()){
         m_Layers.clear();
         m_CurrentIndex = 0;
@@ -380,7 +388,17 @@ void Editor::setOpacity(int val)
     m_OpacityVal = val;
     //m_PrimaryColor.setAlpha(m_OpacityVal);
     m_PrimaryColor.setAlpha(val);
-    m_CurrentTool.SetOpacity(val);
+    m_CurrentTool.setOpacity(val);
+    switch(m_ToolType){
+    case BRUSH_TOOL:
+        m_Brush.setOpacity(val);
+        break;
+    case ERASER_TOOL:
+        m_Eraser.setOpacity(val);
+        break;
+    default:
+        break;
+    }
 }
 
 void Editor::setOpacityTransfer(int val)

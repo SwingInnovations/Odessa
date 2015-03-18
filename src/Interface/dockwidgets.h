@@ -448,4 +448,12 @@ private:
     QTemporaryFile tempFile;
 };
 
+/*-Tools Panel-*/
+class ToolsPanel : public QDockWidget{
+    Q_OBJECT
+public:
+   ToolsPanel(QWidget* parent = 0);
+   ~ToolsPanel();
+};
+
 #endif // DOCKWIDGETS_H

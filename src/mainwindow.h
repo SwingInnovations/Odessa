@@ -36,6 +36,7 @@ private slots:
     void assignTextTool();
     void assignPrimitiveTool();
     void assignEyeDropperTool();
+    void assignRectSelectTool();
     void assignFillTool();
     void showNewDocWin();
     void showPrefWin();
@@ -55,7 +56,7 @@ private:
 
     int scaleFactor = 1;
 
-    Editor *mEditor;
+    Editor *m_Editor;
     OdessaNewDocDialog *newDialogWin;
     OdessaPrefDialog *prefDialog;
     BrushDockWidget *brushDockWidget;
