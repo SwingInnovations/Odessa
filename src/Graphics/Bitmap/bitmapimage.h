@@ -85,6 +85,7 @@ private:
     QPixmap m_pixmap;
     QImage *m_Image;
     QRect boundaries;
+    QRect modifiedRect;
     QColor m_Color;
 
     //handle history

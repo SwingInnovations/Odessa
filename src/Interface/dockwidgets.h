@@ -457,10 +457,25 @@ public:
     ~TransformTools();
     int getGetTransformMode() const{ return transformMode; }
 signals:
+    void translateChanged(int, int);
+    void rotateChanged(int);
+    void scaleChanged(int, int);
+    void transformModeChanged(int);
+    void useWorldTransform(bool);
 private slots:
+    void activateLink(bool);
+    void setTransformMode(int);
     void changeToTrans(bool);
     void changeToRot(bool);
     void changeToScal(bool);
+    void updateTranslate();
+    void updateRotate();
+    void updateScale();
+    void syncTransX(int);
+    void syncTransY(int);
+    void syncScalX(int);
+    void syncScalY(int);
+    void updateWorldTransformUse(bool);
 private:
     QRadioButton* m_TranslateBtn;
     QRadioButton* m_RotateBtn;
@@ -501,8 +516,17 @@ class ToolsPanel : public QDockWidget{
 public:
    ToolsPanel(QWidget* parent = 0);
    ~ToolsPanel();
+signals:
+   void translateChanged(int, int);
+   void rotateChanged(int);
+   void scaleChanged(int, int);
+   void transformModeChanged(int);
 public slots:
    void setMode(int);
+   void updateTranslate(int, int);
+   void updateRotate(int);
+   void updateScale(int, int);
+   void updateTransformMode(int);
 private:
    TransformTools* transTools;
    QStackedWidget* panelSpace;

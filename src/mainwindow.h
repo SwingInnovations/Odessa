@@ -55,7 +55,7 @@ private:
     void scaleImage(double);
     void adjustScrollBar(QScrollBar* scrollBar, double factor);
 
-    int scaleFactor = 1;
+    double scaleFactor = 1.0;
 
     Editor *m_Editor;
     OdessaNewDocDialog *newDialogWin;

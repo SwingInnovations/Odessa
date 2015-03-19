@@ -218,13 +218,12 @@ void Editor::paintEvent(QPaintEvent *event)
     if(!m_Layers.isEmpty())
     {
         QPixmap drawnPixmap(m_Layers.at(0)->getFrame(0)->getPixmap().size());
-        QSize imageSize = m_Layers.at(0)->getFrame(0)->getPixmap().size();
-        drawnPixmap = drawnPixmap.scaled(imageSize.width() * m_ScaleFactor, imageSize.height() * m_ScaleFactor);
+        //QSize imageSize = m_Layers.at(0)->getFrame(0)->getPixmap().size();
         QPainter p(&drawnPixmap);
         for(int i = 0; i < m_Layers.size(); i++){
            if(m_Layers.at(i)->getFrame(m_CurrentFrame-1)->isVisible()){
                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(painter);
-               QPixmap tPixmap = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap().scaled(imageSize.width() * m_ScaleFactor, imageSize.height() * m_ScaleFactor);
+               QPixmap tPixmap = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap();
                p.setCompositionMode(QPainter::CompositionMode_SourceOver);
                p.drawPixmap(0, 0, tPixmap);
            }
@@ -403,14 +402,6 @@ void Editor::setOpacity(int val)
 void Editor::setOpacityTransfer(int val)
 {
 
-}
-
-void Editor::processCanvas(){
-    if(this->pixmap()->size().width() < this->size().width() && this->pixmap()->size().height() < this->size().height()){
-        qDebug() << "Can resize to be centered:" << endl;
-    }else{
-        qDebug() << "Can remain the same size" << endl;
-    }
 }
 
 void Editor::setSizeTransfer(int val)

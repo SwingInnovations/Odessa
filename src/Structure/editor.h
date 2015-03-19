@@ -56,7 +56,6 @@ public:
     Editor(QWidget *parent = 0);
 
     void setBrush(Brush b);
-    void processCanvas();
     void setBrush(ToolType type);
     int getHistoryStep()const{ return m_HistorySteps; }
     ProjectInfo getProjectInfo()const{ return m_Info; }

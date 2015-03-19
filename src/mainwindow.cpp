@@ -266,6 +266,7 @@ MainWindow::MainWindow(QWidget *parent)
     addDockWidget(Qt::BottomDockWidgetArea, timelineDockWidget);
     addDockWidget(Qt::RightDockWidgetArea, layerDockWidget);
     addDockWidget(Qt::RightDockWidgetArea, toolPanelWidget);
+    tabifyDockWidget(layerDockWidget, toolPanelWidget);
 
     isModified = false;
     resize(1024,768);
@@ -381,7 +382,10 @@ void MainWindow::zoomOut()
 
 void MainWindow::exportImage(){
     QString saveName = QFileDialog::getSaveFileName(this, "Save File.", QDir::currentPath(), ".png");
-    m_Editor->pixmap()->save(saveName);
+    QImage pix = m_Editor->pixmap()->toImage();
+    pix.setDotsPerMeterX(m_Editor->getProjectInfo().getDPI());
+    pix.setDotsPerMeterY(m_Editor->getProjectInfo().getDPI());
+    pix.save(saveName);
 }
 
 void MainWindow::sendFeedBack(){
@@ -390,11 +394,16 @@ void MainWindow::sendFeedBack(){
 
 void MainWindow::scaleImage(double val)
 {
-    m_Editor->scale(scaleFactor);
+    Q_ASSERT(m_Editor->pixmap());
+    //m_Editor->scale(scaleFactor);
+    QPixmap pix = *m_Editor->pixmap();
+    pix = pix.scaled(scaleFactor * m_Editor->pixmap()->size(), Qt::KeepAspectRatio, Qt::FastTransformation);
+    m_Editor->setPixmap(pix);
+    m_Editor->resize(m_Editor->pixmap()->size());
     adjustScrollBar(imageArea->horizontalScrollBar(), val);
     adjustScrollBar(imageArea->verticalScrollBar(), val);
 
-    qDebug() << "Image Size" << m_Editor->getPixmapSize() << endl;
+    qDebug() << "Image Size" << m_Editor->pixmap()->size() << endl;
 }
 
 void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)

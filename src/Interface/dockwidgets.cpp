@@ -1500,6 +1500,10 @@ ToolsPanel::ToolsPanel(QWidget* parent) : QDockWidget(parent){
     QWidget *centralWidget = new QWidget(this);
     centralWidget->setLayout(centralLayout);
     setWidget(centralWidget);
+    connect(transTools, SIGNAL(translateChanged(int,int)), SLOT(updateTranslate(int,int)));
+    connect(transTools, SIGNAL(rotateChanged(int)), SLOT(updateRotate(int)));
+    connect(transTools, SIGNAL(scaleChanged(int,int)), SLOT(updateScale(int,int)));
+    connect(transTools, SIGNAL(transformModeChanged(int)), SLOT(updateTransformMode(int)));
 }
 
 ToolsPanel::~ToolsPanel(){
@@ -1508,6 +1512,22 @@ ToolsPanel::~ToolsPanel(){
 
 void ToolsPanel::setMode(int o){
     panelSpace->setCurrentIndex(o);
+}
+
+void ToolsPanel::updateTranslate(int x, int y){
+    emit translateChanged(x, y);
+}
+
+void ToolsPanel::updateRotate(int x){
+    emit rotateChanged(x);
+}
+
+void ToolsPanel::updateScale(int x, int y){
+    emit scaleChanged(x, y);
+}
+
+void ToolsPanel::updateTransformMode(int v){
+    emit transformModeChanged(v);
 }
 
 TransformTools::TransformTools(QWidget *parent) : QWidget(parent){
@@ -1604,13 +1624,35 @@ TransformTools::TransformTools(QWidget *parent) : QWidget(parent){
     connect(m_TranslateBtn, SIGNAL(toggled(bool)), SLOT(changeToTrans(bool)));
     connect(m_RotateBtn, SIGNAL(toggled(bool)), SLOT(changeToRot(bool)));
     connect(m_ScaleBtn, SIGNAL(toggled(bool)), SLOT(changeToScal(bool)));
+    connect(m_LinkTransformBtn, SIGNAL(toggled(bool)), SLOT(activateLink(bool)));
+    connect(m_TransXSB, SIGNAL(valueChanged(int)), SLOT(syncTransY(int)));
+    connect(m_TransYSB, SIGNAL(valueChanged(int)), SLOT(syncTransX(int)));
+    connect(m_ScalXSB, SIGNAL(valueChanged(int)), SLOT(syncScalY(int)));
+    connect(m_ScalYSB, SIGNAL(valueChanged(int)), SLOT(syncScalX(int)));
+    connect(m_WorldTransformBtn, SIGNAL(toggled(bool)), SLOT(updateWorldTransformUse(bool)));
+}
+
+void TransformTools::activateLink(bool s){
+    switch(transformMode){
+    case 0:
+        m_Link4Trans = s;
+        break;
+    case 1:
+        m_Link4Rot = s;
+        break;
+    case 2:
+        m_Link4Scal = s;
+        break;
+    default:
+        break;
+    }
+}
+
+void TransformTools::setTransformMode(int t){
+    transformMode = t;
 }
 
 void TransformTools::changeToTrans(bool s){
-    m_Link4Trans = s;
-    m_Link4Rot = !s;
-    m_Link4Scal = !s;
-
     m_TransXLbl->setVisible(s);
     m_TransXSB->setVisible(s);
     m_TransYLbl->setVisible(s);
@@ -1619,18 +1661,17 @@ void TransformTools::changeToTrans(bool s){
     m_RotLbl->setVisible(!s);
     m_RotSB->setVisible(!s);
 
+    m_LinkTransformBtn->show();
+
     m_ScalXLbl->setVisible(!s);
     m_ScalXSB->setVisible(!s);
     m_ScalYLbl->setVisible(!s);
     m_ScalYSB->setVisible(!s);
     transformMode = 0;
+    emit transformModeChanged(transformMode);
 }
 
 void TransformTools::changeToRot(bool s){
-    m_Link4Trans = !s;
-    m_Link4Rot = s;
-    m_Link4Scal = !s;
-
     m_TransXLbl->setVisible(!s);
     m_TransXSB->setVisible(!s);
     m_TransYLbl->setVisible(!s);
@@ -1639,17 +1680,17 @@ void TransformTools::changeToRot(bool s){
     m_RotLbl->setVisible(s);
     m_RotSB->setVisible(s);
 
+    m_LinkTransformBtn->hide();
+
     m_ScalXLbl->setVisible(!s);
     m_ScalXSB->setVisible(!s);
     m_ScalYLbl->setVisible(!s);
     m_ScalYSB->setVisible(!s);
     transformMode = 1;
+    emit transformModeChanged(transformMode);
 }
 
 void TransformTools::changeToScal(bool s){
-    m_Link4Trans = !s;
-    m_Link4Rot = !s;
-    m_Link4Scal = s;
 
     m_TransXLbl->setVisible(!s);
     m_TransXSB->setVisible(!s);
@@ -1659,11 +1700,46 @@ void TransformTools::changeToScal(bool s){
     m_RotLbl->setVisible(!s);
     m_RotSB->setVisible(!s);
 
+    m_LinkTransformBtn->show();
+
     m_ScalXLbl->setVisible(s);
     m_ScalXSB->setVisible(s);
     m_ScalYLbl->setVisible(s);
     m_ScalYSB->setVisible(s);
     transformMode = 2;
+    emit transformModeChanged(transformMode);
+}
+
+void TransformTools::updateTranslate(){
+    emit translateChanged(m_TransXSB->text().toInt(), m_TransYSB->text().toInt());
+}
+
+void TransformTools::updateRotate(){
+    emit rotateChanged(m_RotSB->text().toInt());
+}
+
+void TransformTools::updateScale(){
+    emit scaleChanged(m_ScalXSB->text().toInt(), m_ScalYSB->text().toInt());
+}
+
+void TransformTools::syncTransX(int v){
+    if(m_Link4Trans){ m_TransXSB->setValue(v); }
+}
+
+void TransformTools::syncTransY(int v){
+    if(m_Link4Trans){ m_TransYSB->setValue(v); }
+}
+
+void TransformTools::syncScalX(int v){
+    if(m_Link4Scal){ m_ScalXSB->setValue(v); }
+}
+
+void TransformTools::syncScalY(int v){
+    if(m_Link4Scal){ m_ScalYSB->setValue(v); }
+}
+
+void TransformTools::updateWorldTransformUse(bool v){
+    emit useWorldTransform(v);
 }
 
 TransformTools::~TransformTools(){
