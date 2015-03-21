@@ -35,6 +35,7 @@ public:
     void setFPS(int fps);
     void setSpriteCount_Row(int row);
     void setSpriteCount_Col(int col);
+    void setStartColor(QColor col);
 
     int getWidth()const{return width;}
     int getHeight()const{return height;}
@@ -44,6 +45,7 @@ public:
     int getFPS()const{return fps;}
     int getSpriteCount_Row()const{ return spriteCount_Row; }
     int getSpriteCount_Col()const{ return spriteCount_Col; }
+    QColor getStartColor()const{ return startColor; }
 
 private:
     int width, height;
@@ -53,6 +55,7 @@ private:
     int type;
     int frameCount;
     int fps;
+    QColor startColor;
 };
 Q_DECLARE_METATYPE(ProjectInfo);
 
@@ -126,7 +129,7 @@ signals:
 public slots:
     void updateProjectPath(QString);
 private:
-    QListWidget* contentWidget;
+    QListWidget* m_ContentWidget;
     QStackedWidget* pagesWidget;
     GeneralPrefPage* genPref;
     QPushButton* m_OkButton;

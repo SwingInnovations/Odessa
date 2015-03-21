@@ -228,8 +228,8 @@ OdessaPrefDialog::OdessaPrefDialog()
     setWindowTitle("Preferences");
     setModal(true);
 
-    contentWidget = new QListWidget(this);
-    contentWidget->setMaximumWidth(128);
+    m_ContentWidget = new QListWidget(this);
+    m_ContentWidget->setMaximumWidth(128);
 
     genPref = new GeneralPrefPage(this);
 
@@ -240,20 +240,20 @@ OdessaPrefDialog::OdessaPrefDialog()
     m_ApplyButton = new QPushButton("Apply", this);
     m_CancelButton = new QPushButton("Cancel", this);
 
-    QListWidgetItem* generalItem = new QListWidgetItem(contentWidget);
+    QListWidgetItem* generalItem = new QListWidgetItem(m_ContentWidget);
     generalItem->setText("General");
     generalItem->setTextAlignment(Qt::AlignHCenter);
 
-    QListWidgetItem* animationItem = new QListWidgetItem(contentWidget);
+    QListWidgetItem* animationItem = new QListWidgetItem(m_ContentWidget);
     animationItem->setText("Animation");
     animationItem->setTextAlignment(Qt::AlignHCenter);
 
-    QListWidgetItem* spriteItem = new QListWidgetItem(contentWidget);
+    QListWidgetItem* spriteItem = new QListWidgetItem(m_ContentWidget);
     spriteItem->setText("Sprite Sheet");
     spriteItem->setTextAlignment(Qt::AlignHCenter);
 
     QHBoxLayout* contentLayout = new QHBoxLayout;
-    contentLayout->addWidget(contentWidget);
+    contentLayout->addWidget(m_ContentWidget);
     contentLayout->addWidget(pagesWidget);
 
     QHBoxLayout* buttonLayout = new QHBoxLayout;
@@ -380,4 +380,8 @@ void ProjectInfo::setSpriteCount_Row(int row){
 
 void ProjectInfo::setSpriteCount_Col(int col){
     spriteCount_Col = col;
+}
+
+void ProjectInfo::setStartColor(QColor col){
+    startColor = col;
 }

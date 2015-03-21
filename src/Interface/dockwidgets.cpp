@@ -1619,7 +1619,13 @@ TransformTools::TransformTools(QWidget *parent) : QWidget(parent){
     centralLayout->addLayout(transformManualCtlLayout);
     centralLayout->addLayout(transTypeLayout);
 
-    setLayout(centralLayout);
+    QGroupBox* grpBox = new QGroupBox(this);
+    grpBox->setTitle("Transform");
+    grpBox->setLayout(centralLayout);
+    QVBoxLayout* finalLayout = new QVBoxLayout;
+    finalLayout->addWidget(grpBox);
+
+    setLayout(finalLayout);
 
     connect(m_TranslateBtn, SIGNAL(toggled(bool)), SLOT(changeToTrans(bool)));
     connect(m_RotateBtn, SIGNAL(toggled(bool)), SLOT(changeToRot(bool)));
@@ -1653,11 +1659,6 @@ void TransformTools::setTransformMode(int t){
 }
 
 void TransformTools::changeToTrans(bool s){
-    m_TransXLbl->setVisible(s);
-    m_TransXSB->setVisible(s);
-    m_TransYLbl->setVisible(s);
-    m_TransYSB->setVisible(s);
-
     m_RotLbl->setVisible(!s);
     m_RotSB->setVisible(!s);
 
@@ -1667,6 +1668,12 @@ void TransformTools::changeToTrans(bool s){
     m_ScalXSB->setVisible(!s);
     m_ScalYLbl->setVisible(!s);
     m_ScalYSB->setVisible(!s);
+
+    m_TransXLbl->setVisible(s);
+    m_TransXSB->setVisible(s);
+    m_TransYLbl->setVisible(s);
+    m_TransYSB->setVisible(s);
+
     transformMode = 0;
     emit transformModeChanged(transformMode);
 }
@@ -1676,16 +1683,16 @@ void TransformTools::changeToRot(bool s){
     m_TransXSB->setVisible(!s);
     m_TransYLbl->setVisible(!s);
     m_TransYSB->setVisible(!s);
-
-    m_RotLbl->setVisible(s);
-    m_RotSB->setVisible(s);
-
     m_LinkTransformBtn->hide();
 
     m_ScalXLbl->setVisible(!s);
     m_ScalXSB->setVisible(!s);
     m_ScalYLbl->setVisible(!s);
     m_ScalYSB->setVisible(!s);
+
+    m_RotLbl->setVisible(s);
+    m_RotSB->setVisible(s);
+
     transformMode = 1;
     emit transformModeChanged(transformMode);
 }
@@ -1700,12 +1707,12 @@ void TransformTools::changeToScal(bool s){
     m_RotLbl->setVisible(!s);
     m_RotSB->setVisible(!s);
 
-    m_LinkTransformBtn->show();
-
     m_ScalXLbl->setVisible(s);
     m_ScalXSB->setVisible(s);
     m_ScalYLbl->setVisible(s);
     m_ScalYSB->setVisible(s);
+    m_LinkTransformBtn->show();
+
     transformMode = 2;
     emit transformModeChanged(transformMode);
 }
