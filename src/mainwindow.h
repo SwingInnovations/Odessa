@@ -36,6 +36,7 @@ private slots:
     void assignTextTool();
     void assignPrimitiveTool();
     void assignEyeDropperTool();
+    void assignDeselectTool();
     void assignRectSelectTool();
     void assignFillTool();
     void showNewDocWin();

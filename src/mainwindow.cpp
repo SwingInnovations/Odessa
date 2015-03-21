@@ -225,6 +225,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(preferenceAct, SIGNAL(triggered()),SLOT(showPrefWin()));
     connect(undoAct, SIGNAL(triggered()), m_Editor, SLOT(undo()));
     connect(redoAct, SIGNAL(triggered()), m_Editor, SLOT(redo()));
+    connect(selectRegionAct, SIGNAL(triggered()), SLOT(assignRectSelectTool()));
+    connect(deselectAct, SIGNAL(triggered()), SLOT(assignDeselectTool()));
     connect(brushTool, SIGNAL(triggered()), SLOT(assignBrushTool()));
     connect(eraserTool, SIGNAL(triggered()), SLOT(assignEraserTool()));
     connect(textTool, SIGNAL(triggered()), SLOT(assignTextTool()));
@@ -352,6 +354,10 @@ void MainWindow::assignPrimitiveTool()
 
 void MainWindow::assignFillTool(){
     m_Editor->setBrush(Editor::FILL_TOOL);
+}
+
+void MainWindow::assignDeselectTool(){
+
 }
 
 void MainWindow::assignRectSelectTool(){

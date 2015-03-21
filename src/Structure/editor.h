@@ -94,6 +94,8 @@ public slots:
     void backup();
     void backup(int backupLayer,int backupFrame);
 
+    void deselect();
+
     void undo();
     void redo();
 

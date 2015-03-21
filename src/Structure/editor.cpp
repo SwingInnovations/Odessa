@@ -33,6 +33,8 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_ScaleFactor = 1.0;
     m_HistorySteps = 24;
 
+    m_SelectRect = QRect(0, 0, 0, 0);
+
     setScaledContents(true);
     setAlignment(Qt::AlignCenter);
 }
@@ -49,6 +51,7 @@ void Editor::mousePressEvent(QMouseEvent *event)
         {
         case BRUSH_TOOL:
             m_DeviceDown = true;
+            if(m_SelectActive) m_SelectActive = false;
             if(!m_MousePath.isEmpty())
             {
                 m_MousePath.clear();
@@ -58,6 +61,7 @@ void Editor::mousePressEvent(QMouseEvent *event)
             break;
         case ERASER_TOOL:
             m_DeviceDown = true;
+            if(m_SelectActive) m_SelectActive = false;
             backup();
             break;
         case EYEDROPPER_TOOL:
@@ -73,12 +77,10 @@ void Editor::mousePressEvent(QMouseEvent *event)
        case RECT_SELECT_TOOL:
             {
                 m_DeviceDown = true;
-                m_SelectActive = true;
+                if(!m_SelectActive) m_SelectActive = true;
+                m_SelectRect.setTopLeft(QPoint(0, 0));
+                m_SelectRect.setBottomRight(QPoint(0,0));
                 m_SelectRect.setTopLeft(event->pos());
-                if(!m_MousePath.isEmpty()){
-                    m_MousePath.clear();
-                    m_MousePath.push_back(event->pos());
-                }
             }
             break;
        case FILL_TOOL:{
@@ -109,7 +111,7 @@ void Editor::mouseReleaseEvent(QMouseEvent *event)
 //        m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->optimizeImage(m_CurrentTool);
             if(m_SelectActive){
                 m_SelectRect.setBottomRight(event->pos());
-                setBrush(TRANSFORM_TRANSLATE);
+                //setBrush(TRANSFORM_TRANSLATE);
             }
     }
     update();
@@ -148,7 +150,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
             }
             break;
         case RECT_SELECT_TOOL:
-            if(m_DeviceDown){
+            if(m_DeviceDown && m_SelectActive){
                 m_SelectRect.setBottomRight(event->pos());
             }
             break;
@@ -156,8 +158,14 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
             break;
         }
     }
-    qDebug() << "Pressure:" << m_Pressure << endl;
+    qDebug() << " SelectActive: " << m_SelectActive << endl;
     update();
+}
+
+void Editor::deselect(){
+    m_SelectActive = false;
+    m_SelectRect.setTopLeft(QPoint(0, 0));
+    m_SelectRect.setBottomRight(QPoint(0, 0));
 }
 
 void Editor::setBrush(Brush b){
@@ -231,6 +239,14 @@ void Editor::paintEvent(QPaintEvent *event)
         p.end();
         setAlignment(Qt::AlignCenter);
         setPixmap(drawnPixmap);
+    }
+
+    qDebug() << "Painting the selection rect." << endl;
+    if(m_SelectActive){
+        painter.setPen(Qt::DashDotLine);
+        painter.setBrush(Qt::transparent);
+        painter.drawRect(m_SelectRect);
+        painter.end();
     }
 
     if(m_ToolType == BRUSH_TOOL){
