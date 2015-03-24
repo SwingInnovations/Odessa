@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     
     m_Editor = new Editor(this);
     m_Editor->setAlignment(Qt::AlignCenter);
-    m_Editor->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    m_Editor->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_Editor->setScaledContents(true);
 
     imageArea = new QScrollArea(this);
@@ -401,11 +401,11 @@ void MainWindow::sendFeedBack(){
 void MainWindow::scaleImage(double val)
 {
     Q_ASSERT(m_Editor->pixmap());
-    //m_Editor->scale(scaleFactor);
-    QPixmap pix = *m_Editor->pixmap();
-    pix = pix.scaled(scaleFactor * m_Editor->pixmap()->size(), Qt::KeepAspectRatio, Qt::FastTransformation);
-    m_Editor->setPixmap(pix);
-    m_Editor->resize(m_Editor->pixmap()->size());
+    m_Editor->scale(scaleFactor);
+    //    QPixmap pix = *m_Editor->pixmap();
+    //    pix = pix.scaled(scaleFactor * m_Editor->pixmap()->size(), Qt::KeepAspectRatio, Qt::FastTransformation);
+    //    m_Editor->setPixmap(pix);
+    //m_Editor->resize(m_Editor->pixmap()->size());
     adjustScrollBar(imageArea->horizontalScrollBar(), val);
     adjustScrollBar(imageArea->verticalScrollBar(), val);
 

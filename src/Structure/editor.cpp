@@ -35,8 +35,8 @@ Editor::Editor(QWidget *parent):QLabel(parent)
 
     m_SelectRect = QRect(0, 0, 0, 0);
 
-    setScaledContents(true);
-    setAlignment(Qt::AlignCenter);
+    //setScaledContents(true);
+    //setAlignment(Qt::AlignCenter);
 }
 
 void Editor::setHistoyStep(int h){
@@ -135,7 +135,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
 
                 m_CurrentTool.setPressureVal(m_Pressure);
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
-                setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+                setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().scaled(m_ScaleFactor * getPixmapSize(), Qt::KeepAspectRatio, Qt::FastTransformation));
             }
             break;
         case ERASER_TOOL:
@@ -146,7 +146,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                     m_MousePath.removeFirst();
                 }
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
-                setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+                setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().scaled(m_ScaleFactor * getPixmapSize(), Qt::KeepAspectRatio, Qt::FastTransformation));
             }
             break;
         case RECT_SELECT_TOOL:
@@ -225,20 +225,21 @@ void Editor::paintEvent(QPaintEvent *event)
 
     if(!m_Layers.isEmpty())
     {
-        QPixmap drawnPixmap(m_Layers.at(0)->getFrame(0)->getPixmap().size());
-        //QSize imageSize = m_Layers.at(0)->getFrame(0)->getPixmap().size();
+        QPixmap drawnPixmap(m_ScaleFactor * m_Layers.at(0)->getFrame(0)->getPixmap().size());
+        QSize imageSize = m_Layers.at(0)->getFrame(0)->getPixmap().size();
         QPainter p(&drawnPixmap);
         for(int i = 0; i < m_Layers.size(); i++){
            if(m_Layers.at(i)->getFrame(m_CurrentFrame-1)->isVisible()){
                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(painter);
-               QPixmap tPixmap = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap();
+               QPixmap tPixmap = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap().scaled(m_ScaleFactor * imageSize, Qt::KeepAspectRatio, Qt::FastTransformation);
                p.setCompositionMode(QPainter::CompositionMode_SourceOver);
                p.drawPixmap(0, 0, tPixmap);
            }
         }
         p.end();
-        setAlignment(Qt::AlignCenter);
         setPixmap(drawnPixmap);
+        qDebug() << "Drawn Pixmap Size: " << this->pixmap()->size() << endl;
+        this->resize(m_ScaleFactor * imageSize);
     }
 
     qDebug() << "Painting the selection rect." << endl;
@@ -456,16 +457,16 @@ void Editor::backup(int backupLayer, int backupFrame)
     {
         delete m_HistoryStack.takeLast();
     }
-        BitmapHistoryStack* element = new BitmapHistoryStack();
-        element->m_Layer = backupLayer;
-        element->m_Frame = backupFrame;
-        BitmapImage* bitmapImage = m_Layers.at(backupLayer)->getFrame(backupFrame);
-        if(bitmapImage != NULL)
-        {
-            element->m_Bitmap = bitmapImage->copy();
-            m_HistoryStack.append(element);
-            m_BackupIndex++;
-        }
+    BitmapHistoryStack* element = new BitmapHistoryStack();
+    element->m_Layer = backupLayer;
+    element->m_Frame = backupFrame;
+    BitmapImage* bitmapImage = m_Layers.at(backupLayer)->getFrame(backupFrame);
+    if(bitmapImage != NULL)
+    {
+        element->m_Bitmap = bitmapImage->copy();
+        m_HistoryStack.append(element);
+        m_BackupIndex++;
+    }
 }
 
 void Editor::undo()
