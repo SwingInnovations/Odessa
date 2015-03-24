@@ -250,6 +250,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(colorDockWidget, SIGNAL(redChanged(int)), m_Editor, SLOT(setRedValue(int)));
     connect(colorDockWidget, SIGNAL(greenChanged(int)), m_Editor, SLOT(setGreenValue(int)));
     connect(colorDockWidget, SIGNAL(blueChanged(int)), m_Editor, SLOT(setBlueValue(int)));
+    connect(toolPanelWidget, SIGNAL(useWorldTransform(bool)), m_Editor, SLOT(useWorldTransform(bool)));
     connect(m_Editor, SIGNAL(brushSizeChanged(int)), brushDockWidget, SLOT(updateSize(int)));
     connect(m_Editor, SIGNAL(brushOpacityChanged(int)), brushDockWidget, SLOT(updateOpacity(int)));
     connect(m_Editor, SIGNAL(redChanged(int)), colorDockWidget, SLOT(updateRed(int)));

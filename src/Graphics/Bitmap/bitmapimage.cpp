@@ -154,6 +154,11 @@ void BitmapImage::fillImage(QPoint point, Brush brush){
     m_pixmap = QPixmap::fromImage(img);
 }
 
+void BitmapImage::commitChanges(QPoint drawPoint, QPixmap pixmap){
+    QPainter p(&m_pixmap);
+    p.drawPixmap(drawPoint, pixmap);
+}
+
 /*
 *
 *   Implementation of this function is as close to the version in EasyPaint.

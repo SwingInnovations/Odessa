@@ -41,6 +41,8 @@ public:
     void paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt);//Keep
     void setColor(const QColor color){ m_Color = color; m_Image->fill(m_Color);}
 
+    void commitChanges(QPoint drawPoint, QPixmap pixmap);
+
     void fillImage(QPoint point, Brush brush);
     void fillRecurs(QPoint pos, QImage& img, QRgb oldColor, QRgb newColor);
     bool isVisible(){return visible;}
@@ -92,7 +94,6 @@ private:
     int m_MaxSizeOfHistory;
 
     QRect usageBoundary;
-    QPixmap m_clipboardPixmap;
 };
 
 #endif // BITMAPIMAGE_H

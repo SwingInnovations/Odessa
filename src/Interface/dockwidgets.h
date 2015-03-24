@@ -450,6 +450,15 @@ private:
     QTemporaryFile tempFile;
 };
 
+class DefaultToolPanel : public QWidget{
+    Q_OBJECT
+public:
+    DefaultToolPanel(QWidget* parent = 0);
+    ~DefaultToolPanel();
+private:
+    QString infoString;
+};
+
 class TransformTools : public QWidget{
     Q_OBJECT
 public:
@@ -521,14 +530,17 @@ signals:
    void rotateChanged(int);
    void scaleChanged(int, int);
    void transformModeChanged(int);
+   void useWorldTransform(bool);
 public slots:
    void setMode(int);
    void updateTranslate(int, int);
    void updateRotate(int);
    void updateScale(int, int);
    void updateTransformMode(int);
+   void updateWorldTransform(bool);
 private:
    TransformTools* transTools;
+   DefaultToolPanel* defTools;
    QStackedWidget* panelSpace;
 };
 

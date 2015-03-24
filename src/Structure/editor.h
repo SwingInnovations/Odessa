@@ -10,6 +10,9 @@
 #include <QPoint>
 #include <QPixmap>
 #include <QPointer>
+#include <QMimeData>
+#include <QClipboard>
+#include <QApplication>
 
 #include "../Interface/dialogwindows.h"
 #include "layer.h"
@@ -99,6 +102,10 @@ public slots:
     void undo();
     void redo();
 
+    void cut();
+    void copy();
+    void paste();
+
     void setHistoyStep(int);
 
     void scale(double scaleVal);
@@ -115,6 +122,10 @@ public slots:
     void setGreenValue(int);
     void setBlueValue(int);
     void setOpacity(int);
+
+    void setClipOffsetX(int);
+    void setClipOffsetY(int);
+    void useWorldTransform(bool);
 private:
 
     void shiftLayerForward();
@@ -158,6 +169,14 @@ private:
     QVector<HistoryStack*> m_HistoryStack;
     int m_HistorySteps;
     int m_BackupIndex;
+
+//Clipboard stuff
+    bool m_ClipWorldTransform;
+    QPoint m_ClipOffsetPoint;
+    double m_ClipScaleFactor;
+    int m_ClipRotateAngle;
+    QPixmap m_ClipboardPixmap;
+    boolean m_ClipboardPresent;
 
     ProjectInfo m_Info;
 };

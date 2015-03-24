@@ -35,8 +35,8 @@ Editor::Editor(QWidget *parent):QLabel(parent)
 
     m_SelectRect = QRect(0, 0, 0, 0);
 
-    //setScaledContents(true);
-    //setAlignment(Qt::AlignCenter);
+    m_ClipScaleFactor = 1.0;
+    m_ClipRotateAngle = 0.0;
 }
 
 void Editor::setHistoyStep(int h){
@@ -247,6 +247,12 @@ void Editor::paintEvent(QPaintEvent *event)
         painter.setPen(Qt::DashDotLine);
         painter.setBrush(Qt::transparent);
         painter.drawRect(m_SelectRect);
+        painter.end();
+    }
+
+    if(m_ClipboardPresent){
+        painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+        painter.drawPixmap(m_ClipOffsetPoint, m_ClipboardPixmap);
         painter.end();
     }
 
@@ -488,3 +494,38 @@ void Editor::redo()
     }
 }
 
+void Editor::cut(){
+    QClipboard* clip = QApplication::clipboard();
+    QPixmap cutPix = m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->copy(m_SelectRect).getPixmap();
+    clip->setPixmap(cutPix);
+    //Do something to clear the old Image;
+    backup();
+}
+
+void Editor::copy(){
+    QClipboard* clip = QApplication::clipboard();
+    QPixmap copyPix = m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->copy(m_SelectRect).getPixmap();
+    clip->setPixmap(copyPix);
+    backup();
+}
+
+void Editor::paste(){
+    QClipboard* clip = QApplication::clipboard();
+    if(!m_ClipboardPresent) m_ClipboardPresent = true;
+    m_ClipboardPixmap = clip->pixmap();
+    m_ClipOffsetPoint = QPoint( (this->pixmap()->width()/2 - m_ClipboardPixmap.width()/2), (this->pixmap()->height()/2 - m_ClipboardPixmap.height()/2) );
+
+    backup();
+}
+
+void Editor::setClipOffsetX(int x){
+    m_ClipOffsetPoint.setX(x);
+}
+
+void Editor::setClipOffsetY(int y){
+    m_ClipOffsetPoint.setY(y);
+}
+
+void Editor::useWorldTransform(bool val){
+    m_ClipWorldTransform = val;
+}

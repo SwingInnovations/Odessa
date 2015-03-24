@@ -1491,7 +1491,9 @@ CustomBrushWidget::~CustomBrushWidget(){
 ToolsPanel::ToolsPanel(QWidget* parent) : QDockWidget(parent){
     setWindowTitle("Tools");
     transTools = new TransformTools(this);
+    defTools = new DefaultToolPanel(this);
     panelSpace = new QStackedWidget();
+    panelSpace->addWidget(defTools);
     panelSpace->addWidget(transTools);
     //panelSpace->setCurrentIndex(0);
     QVBoxLayout* centralLayout = new QVBoxLayout;
@@ -1504,6 +1506,7 @@ ToolsPanel::ToolsPanel(QWidget* parent) : QDockWidget(parent){
     connect(transTools, SIGNAL(rotateChanged(int)), SLOT(updateRotate(int)));
     connect(transTools, SIGNAL(scaleChanged(int,int)), SLOT(updateScale(int,int)));
     connect(transTools, SIGNAL(transformModeChanged(int)), SLOT(updateTransformMode(int)));
+    connect(transTools, SIGNAL(useWorldTransform(bool)), SLOT(updateWorldTransform(bool)));
 }
 
 ToolsPanel::~ToolsPanel(){
@@ -1528,6 +1531,28 @@ void ToolsPanel::updateScale(int x, int y){
 
 void ToolsPanel::updateTransformMode(int v){
     emit transformModeChanged(v);
+}
+
+void ToolsPanel::updateWorldTransform(bool v){
+    emit useWorldTransform(v);
+}
+
+DefaultToolPanel::DefaultToolPanel(QWidget *parent) : QWidget(parent){
+    QGroupBox* grpBox = new QGroupBox(this);
+    grpBox->setTitle("Info");
+    infoString = "This is the tool panel, this will automatically change once special tools are active.";
+    QLabel* lbl = new QLabel(infoString, this);
+    lbl->setWordWrap(true);
+    QHBoxLayout* layout = new QHBoxLayout;
+    layout->addWidget(lbl);
+    grpBox->setLayout(layout);
+    QVBoxLayout* centralLayout = new QVBoxLayout;
+    centralLayout->addWidget(grpBox);
+    setLayout(centralLayout);
+}
+
+DefaultToolPanel::~DefaultToolPanel(){
+
 }
 
 TransformTools::TransformTools(QWidget *parent) : QWidget(parent){
