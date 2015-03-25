@@ -238,7 +238,7 @@ void Editor::paintEvent(QPaintEvent *event)
         }
         p.end();
         setPixmap(drawnPixmap);
-        qDebug() << "Drawn Pixmap Size: " << this->pixmap()->size() << endl;
+        painter.drawPixmap(0, 0, drawnPixmap);
         this->resize(m_ScaleFactor * imageSize);
     }
 
