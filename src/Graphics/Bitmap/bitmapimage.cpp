@@ -104,6 +104,7 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
     painter.setRenderHint(QPainter::Antialiasing);
 
     QPointF point, drawPoint;
+    for(QPointF p : pointInfo){ p = p * m_ScaleFactor; }
     point = pointInfo.last() - pointInfo.first();
     int length = point.manhattanLength();
     double xInc, yInc;

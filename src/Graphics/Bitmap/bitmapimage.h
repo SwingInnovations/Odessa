@@ -13,6 +13,7 @@
 #include <vector>
 
 #include "../src/Structure/brush.h"
+#include "../../Overloads.h"
 
 class BitmapImage
 {

@@ -4,6 +4,7 @@
 #include <QVariant>
 #include <QtCore>
 #include <QDataStream>
+#include <QPoint>
 
 Q_DECLARE_METATYPE(Brush)
 
@@ -14,7 +15,7 @@ inline QDataStream &operator <<(QDataStream &out, const Brush &brush);
 inline QDataStream &operator >>(QDataStream &in, Brush &brush);
 inline QDataStream &operator <<(QDataStream &out, const ProjectInfo &info);
 inline QDataStream &operator >>(QDataStream &in, ProjectInfo &info);
-
+inline QPoint &operator *(QPoint p, int scaleFactor);
 
 inline QDataStream &operator <<(QDataStream &out, const Brush &brush){
     out << brush.getSWidth() << brush.getSHeight() << brush.getHardness() << brush.getRotate() << brush.getSpacing() << brush.getStencil() << brush.getName();
@@ -46,5 +47,12 @@ inline QDataStream &operator >>(QDataStream &in, ProjectInfo &info){
     return in;
 }
 
+inline QPoint &operator *(QPoint p, int scaleFactor){
+    int _x = p.x() * scaleFactor;
+    int _y = p.y() * scaleFactor;
+    p.setX(_x);
+    p.setY(_y);
+    return p;
+}
 
 #endif // OVERLOADS_H
