@@ -42,6 +42,8 @@
 #include <QSpinBox>
 #include <QTransform>
 #include <QColorDialog>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QButtonGroup>
 
 #include "../src/Structure/brush.h"
@@ -291,7 +293,7 @@ public:
     virtual ~LayerDockWidget();
 private:
     QComboBox* compositionMode;
-    QListWidget* layerManager;
+    QTreeWidget* layerManager;
     QToolButton* layerOptionsButton;
     QMenu* layerOptionsMenu;
 };
@@ -517,6 +519,8 @@ private:
 
     QPoint m_Displacement;
     int transformMode;
+
+    QPushButton* m_CommitButton;
 };
 
 /*-Tools Panel-*/

@@ -81,6 +81,10 @@ signals:
     void greenChanged(int);
     void blueChanged(int);
 
+    void clipTranslateChanged(int, int);
+    void clipRotateChanged(int);
+    void clipScaleChanged(int, int);
+
 protected:
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
@@ -109,6 +113,7 @@ public slots:
     void setHistoyStep(int);
 
     void scale(double scaleVal);
+    void resetScale();
 
     void setBrushStencil(QPixmap);
 
@@ -122,6 +127,10 @@ public slots:
     void setGreenValue(int);
     void setBlueValue(int);
     void setOpacity(int);
+
+    void setClipTranslate(int, int);
+    void setClipRotate(int);
+    void setClipScale(int, int);
 
     void setClipOffsetX(int);
     void setClipOffsetY(int);
@@ -173,6 +182,7 @@ private:
 //Clipboard stuff
     bool m_ClipWorldTransform;
     QPoint m_ClipOffsetPoint;
+    QPoint m_ClipScale;
     double m_ClipScaleFactor;
     int m_ClipRotateAngle;
     QPixmap m_ClipboardPixmap;

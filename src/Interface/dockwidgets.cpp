@@ -1038,7 +1038,7 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     compositionMode->addItem("Normal");
     compositionMode->addItem("Multiply");
 
-    layerManager = new QListWidget(this);
+    layerManager = new QTreeWidget(this);
 
     QHBoxLayout* compLayout = new QHBoxLayout;
     compLayout->addWidget(compositionMode);
@@ -1495,7 +1495,7 @@ ToolsPanel::ToolsPanel(QWidget* parent) : QDockWidget(parent){
     panelSpace = new QStackedWidget();
     panelSpace->addWidget(defTools);
     panelSpace->addWidget(transTools);
-    //panelSpace->setCurrentIndex(0);
+    panelSpace->setCurrentIndex(1);
     QVBoxLayout* centralLayout = new QVBoxLayout;
     centralLayout->addWidget(panelSpace);
     centralLayout->addSpacerItem(new QSpacerItem(100, 10, QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -1612,6 +1612,7 @@ TransformTools::TransformTools(QWidget *parent) : QWidget(parent){
     QHBoxLayout* scalYLayout = new QHBoxLayout;
     scalYLayout->addWidget(m_ScalYLbl);
     scalYLayout->addWidget(m_ScalYSB);
+    m_CommitButton = new QPushButton("&Commit", this);
 
     //Hide other things
     m_ScalXLbl->hide();
@@ -1649,6 +1650,7 @@ TransformTools::TransformTools(QWidget *parent) : QWidget(parent){
     grpBox->setLayout(centralLayout);
     QVBoxLayout* finalLayout = new QVBoxLayout;
     finalLayout->addWidget(grpBox);
+    finalLayout->addWidget(m_CommitButton);
 
     setLayout(finalLayout);
 

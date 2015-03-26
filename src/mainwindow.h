@@ -133,6 +133,7 @@ private:
     QSlider* zoomSlider;
     QAction* zoomInAct;
     QAction* zoomOutAct;
+    QAction* resetZoomAct;
 
     QString projectPath;
 };

@@ -47,6 +47,8 @@ public:
     void fillRecurs(QPoint pos, QImage& img, QRgb oldColor, QRgb newColor);
     bool isVisible(){return visible;}
 
+    void scale(double s);
+
     void combineLayer(BitmapImage img){
         QPixmap temp(m_pixmap.size());
         QPainter p(&temp);
@@ -68,7 +70,7 @@ public:
     }
 
     QImage *getImage(){return m_Image;}
-    QPixmap getPixmap(){return m_pixmap;}
+    QPixmap getPixmap(){return m_pixmap.scaled(m_ScaleFactor * boundaries.size(), Qt::KeepAspectRatio, Qt::FastTransformation);}
     QPixmap getCompositeImage();
 
     QPoint getTopLeft(){return boundaries.topLeft();}
@@ -89,11 +91,10 @@ private:
     QRect boundaries;
     QRect modifiedRect;
     QColor m_Color;
+    double m_ScaleFactor;
 
     //handle history
     int m_MaxSizeOfHistory;
-
-    QRect usageBoundary;
 };
 
 #endif // BITMAPIMAGE_H

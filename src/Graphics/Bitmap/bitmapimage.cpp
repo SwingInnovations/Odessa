@@ -4,6 +4,7 @@ BitmapImage::BitmapImage()
 {
     m_Image = NULL;
     visible = true;
+    m_ScaleFactor = 1.0;
     qDebug() << "Image drawn!" << endl;
 }
 
@@ -12,6 +13,7 @@ BitmapImage::BitmapImage(const BitmapImage &image)
     m_pixmap = image.m_pixmap;
     boundaries = image.boundaries;
     m_Color = image.m_Color;
+    m_ScaleFactor = 1.0;
     visible = true;
 }
 
@@ -21,6 +23,7 @@ BitmapImage::BitmapImage(Object *parent, QRect boundaries, QColor color)
     this->boundaries = boundaries;
     m_Image = new QImage(boundaries.size(), QImage::Format_ARGB32_Premultiplied);
     m_Image->fill(color.rgba());
+    m_ScaleFactor = 1.0;
     visible = true;
 }
 
@@ -31,6 +34,7 @@ BitmapImage::BitmapImage(Object *parent, QRect boundaries, QImage image)
     m_Image = new QImage(image);
     if(m_Image->width() != boundaries.width() && m_Image->height() != boundaries.height()) qDebug() << "Error 0001: Failed to load Image" << endl;
     visible = true;
+    m_ScaleFactor = 1.0;
 }
 
 BitmapImage::BitmapImage(QRect boundaries, QColor color)
@@ -46,6 +50,7 @@ BitmapImage::BitmapImage(QRect boundaries, QColor color)
     painter.end();
     m_pixmap = temp;
     visible = true;
+    m_ScaleFactor = 1.0;
 }
 
 BitmapImage::BitmapImage(QRect boundaries, QPixmap pixMap)
@@ -53,6 +58,7 @@ BitmapImage::BitmapImage(QRect boundaries, QPixmap pixMap)
     this->boundaries = boundaries;
     m_pixmap = pixMap;
     visible = true;
+    m_ScaleFactor = 1.0;
 }
 
 void BitmapImage::paintImage(QPainter &painter)
@@ -152,6 +158,11 @@ void BitmapImage::fillImage(QPoint point, Brush brush){
     fillRecurs(point, img, oldColor, newColor);
 
     m_pixmap = QPixmap::fromImage(img);
+}
+
+void BitmapImage::scale(double s){
+    m_ScaleFactor = s;
+   // m_pixmap = m_pixmap.scaled(s * boundaries.size(), Qt::KeepAspectRatio, Qt::FastTransformation);
 }
 
 void BitmapImage::commitChanges(QPoint drawPoint, QPixmap pixmap){

@@ -125,10 +125,13 @@ MainWindow::MainWindow(QWidget *parent)
     redoAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Y));
     cutAct = new QAction(this);
     cutAct->setText("&Cut");
+    cutAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_X));
     copyAct = new QAction(this);
     copyAct->setText("&Copy");
+    copyAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_C));
     pasteAct = new QAction(this);
     pasteAct->setText("&Paste");
+    pasteAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_V));
 
     sendFeedbackAct = new QAction(this);
     sendFeedbackAct->setText("&Send Feedback");
@@ -158,7 +161,11 @@ MainWindow::MainWindow(QWidget *parent)
     showToolsDockAct->setCheckable(true);
     showToolsDockAct->setChecked(false);
     zoomInAct = new QAction("&Zoom In",this);
+    zoomInAct->setShortcut(QKeySequence(Qt::Key_Plus));
     zoomOutAct = new QAction("&Zoom Out", this);
+    zoomOutAct->setShortcut(QKeySequence(Qt::Key_Minus));
+    resetZoomAct = new QAction("&Reset Zoom", this);
+    resetZoomAct->setShortcut(QKeySequence(Qt::Key_Home));
 
     fileMenu = this->menuBar()->addMenu("&File");
     fileMenu->addAction(newAct);
@@ -193,6 +200,7 @@ MainWindow::MainWindow(QWidget *parent)
     viewMenu = this->menuBar()->addMenu("&View");
     viewMenu->addAction(zoomInAct);
     viewMenu->addAction(zoomOutAct);
+    viewMenu->addAction(resetZoomAct);
     viewMenu->addSeparator();
     dockWinMenu = viewMenu->addMenu("Dock Windows");
     dockWinMenu->addAction(showBrushDockWinAct);
@@ -237,6 +245,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(exportImgAct, SIGNAL(triggered()), SLOT(exportImage()));
     connect(zoomInAct, SIGNAL(triggered()), SLOT(zoomIn()));
     connect(zoomOutAct, SIGNAL(triggered()), SLOT(zoomOut()));
+    connect(resetZoomAct, SIGNAL(triggered()), m_Editor, SLOT(resetScale()));
     connect(showBrushDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowBrushDock(bool)));
     connect(showColorDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowColorDock(bool)));
     connect(showTimeDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowTimelineDock(bool)));
