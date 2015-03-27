@@ -1492,13 +1492,17 @@ ToolsPanel::ToolsPanel(QWidget* parent) : QDockWidget(parent){
     setWindowTitle("Tools");
     transTools = new TransformTools(this);
     defTools = new DefaultToolPanel(this);
+    textPanel = new TextPanel(this);
     panelSpace = new QStackedWidget();
     panelSpace->addWidget(defTools);
     panelSpace->addWidget(transTools);
-    panelSpace->setCurrentIndex(1);
+    panelSpace->addWidget(textPanel);
+    panelSpace->setCurrentIndex(2);
+
     QVBoxLayout* centralLayout = new QVBoxLayout;
     centralLayout->addWidget(panelSpace);
     centralLayout->addSpacerItem(new QSpacerItem(100, 10, QSizePolicy::Expanding, QSizePolicy::Expanding));
+
     QWidget *centralWidget = new QWidget(this);
     centralWidget->setLayout(centralLayout);
     setWidget(centralWidget);
@@ -1777,5 +1781,53 @@ void TransformTools::updateWorldTransformUse(bool v){
 }
 
 TransformTools::~TransformTools(){
+
+}
+
+TextPanel::TextPanel(QWidget *parent) : QWidget(parent){
+    m_FontComboBox = new QFontComboBox(this);
+    m_FontSizeSB = new QSpinBox(this);
+    m_FontSizeSB->setValue(7);
+
+    m_FontSize = 7;
+
+    QHBoxLayout* centralLayout = new QHBoxLayout;
+    centralLayout->addWidget(m_FontComboBox);
+    centralLayout->addWidget(m_FontSizeSB);
+
+    QGroupBox* grpBox = new QGroupBox(this);
+    grpBox->setTitle("&Text");
+    grpBox->setLayout(centralLayout);
+
+    m_CommitButton = new QPushButton("&Commit", this);
+
+    QVBoxLayout* finalLayout = new QVBoxLayout;
+    finalLayout->addWidget(grpBox);
+    finalLayout->addWidget(m_CommitButton);
+    finalLayout->addSpacerItem(new QSpacerItem(25, 25, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
+    setLayout(finalLayout);
+
+    connect(m_FontComboBox, SIGNAL(currentFontChanged(QFont)), SLOT(changeFont(QFont)));
+    connect(m_FontSizeSB, SIGNAL(valueChanged(int)), SLOT(changeFontSize(int)));
+    connect(m_CommitButton, SIGNAL(clicked()), SLOT(commitChanges()));
+}
+
+void TextPanel::changeFont(QFont font){
+    m_Font = font;
+    m_Font.setPointSize(m_FontSize);
+    emit fontChanged(m_Font);
+}
+
+void TextPanel::changeFontSize(int s){
+    m_FontSize = s;
+    m_Font.setPointSize(m_FontSize);
+    emit fontChanged(m_Font);
+}
+
+void TextPanel::commitChanges(){
+
+}
+
+TextPanel::~TextPanel(){
 
 }

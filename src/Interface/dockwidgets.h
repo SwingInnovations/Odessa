@@ -45,6 +45,7 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QButtonGroup>
+#include <QFontComboBox>
 
 #include "../src/Structure/brush.h"
 #include "../Overloads.h"
@@ -523,6 +524,25 @@ private:
     QPushButton* m_CommitButton;
 };
 
+class TextPanel : public QWidget{
+    Q_OBJECT
+public:
+    TextPanel(QWidget* parent = 0);
+    ~TextPanel();
+signals:
+    void fontChanged(QFont);
+private slots:
+    void changeFont(QFont);
+    void changeFontSize(int);
+    void commitChanges();
+private:
+    QFont m_Font;
+    int m_FontSize;
+    QFontComboBox* m_FontComboBox;
+    QSpinBox* m_FontSizeSB;
+    QPushButton* m_CommitButton;
+};
+
 /*-Tools Panel-*/
 class ToolsPanel : public QDockWidget{
     Q_OBJECT
@@ -545,6 +565,7 @@ public slots:
 private:
    TransformTools* transTools;
    DefaultToolPanel* defTools;
+   TextPanel* textPanel;
    QStackedWidget* panelSpace;
 };
 
