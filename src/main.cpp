@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
     a.setApplicationVersion("0.0.74");
     a.setOrganizationName("SwingInnovations");
     a.setOrganizationDomain("www.swinginnovations.com");
+    a.setWindowIcon(QIcon(":/icon/resource/icon.svg"));
     a.setStyle(QStyleFactory::create("fusion"));
     QPalette palette;
     palette.setColor(QPalette::Window, QColor(53,53,53));
