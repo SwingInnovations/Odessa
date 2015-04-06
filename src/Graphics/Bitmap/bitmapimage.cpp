@@ -94,6 +94,7 @@ void BitmapImage::paintImage(QPainterPath painterPath, Brush brush)
 void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
 {
     int brushWidth = brush.getSize() + (brush.getPressureVal() * brush.getTransferSize());
+    brushWidth *= m_ScaleFactor;
     /*-Prepare Stencil-*/
     QImage stencilBase = brush.getStencil().toImage();
     stencilBase.invertPixels(QImage::InvertRgb);
@@ -120,7 +121,7 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
     for(int i = 0; i < length; i++){
         drawPoint.setX(drawPoint.x() + (xInc * brush.getSpacing() ));
         drawPoint.setY(drawPoint.y() + (yInc * brush.getSpacing() ));
-        painter.drawPixmap(QPoint(drawPoint.x() - stencil.width() / 2, drawPoint.y() - stencil.height()/2), stencil);
+        painter.drawPixmap(QPoint(drawPoint.x() - (stencil.width() / 2), drawPoint.y() - (stencil.height()/2)) / m_ScaleFactor, stencil);
     }
 }
 
