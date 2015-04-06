@@ -85,6 +85,9 @@ signals:
     void clipRotateChanged(int);
     void clipScaleChanged(int, int);
 
+    void toolChanged(int);
+    void toolChanged(ToolType);
+
 protected:
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
@@ -132,6 +135,9 @@ public slots:
     void setClipRotate(int);
     void setClipScale(int, int);
 
+    void setFont(QFont);
+    void setFontSize(int);
+
     void setClipOffsetX(int);
     void setClipOffsetY(int);
     void useWorldTransform(bool);
@@ -152,7 +158,6 @@ private:
     QPainter::CompositionMode m_CompMode;
 
     QPoint m_DrawPoint;
-    QPoint m_DrawPath[3];
     QVector<QPointF> m_MousePath;
     QPainterPath* m_PainterPath;
     QRect m_SelectRect;
@@ -180,6 +185,8 @@ private:
     int m_BackupIndex;
 
 //Clipboard stuff
+    QFont m_Font;
+    int m_FontSize;
     bool m_ClipWorldTransform;
     QPoint m_ClipOffsetPoint;
     QPoint m_ClipScale;

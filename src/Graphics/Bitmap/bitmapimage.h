@@ -93,6 +93,7 @@ private:
     QRect modifiedRect;
     QColor m_Color;
     double m_ScaleFactor;
+    double m_ScaleFactorInv;
 
     //handle history
     int m_MaxSizeOfHistory;

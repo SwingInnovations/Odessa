@@ -1497,7 +1497,7 @@ ToolsPanel::ToolsPanel(QWidget* parent) : QDockWidget(parent){
     panelSpace->addWidget(defTools);
     panelSpace->addWidget(transTools);
     panelSpace->addWidget(textPanel);
-    panelSpace->setCurrentIndex(2);
+    panelSpace->setCurrentIndex(0);
 
     QVBoxLayout* centralLayout = new QVBoxLayout;
     centralLayout->addWidget(panelSpace);
@@ -1518,7 +1518,28 @@ ToolsPanel::~ToolsPanel(){
 }
 
 void ToolsPanel::setMode(int o){
-    panelSpace->setCurrentIndex(o);
+    switch(o){
+    case 0:
+    case 1:
+        panelSpace->setCurrentIndex(0);
+        break;
+    case 2:
+        panelSpace->setCurrentIndex(2);
+        break;
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+        panelSpace->setCurrentIndex(0);
+        break;
+    case 7:
+    case 8:
+    case 9:
+        panelSpace->setCurrentIndex(1);
+        break;
+    default:
+        panelSpace->setCurrentIndex(0);
+    }
 }
 
 void ToolsPanel::updateTranslate(int x, int y){
@@ -1539,6 +1560,14 @@ void ToolsPanel::updateTransformMode(int v){
 
 void ToolsPanel::updateWorldTransform(bool v){
     emit useWorldTransform(v);
+}
+
+void ToolsPanel::updateFont(QFont font){
+    emit updateFont(font);
+}
+
+void ToolsPanel::updateFontSize(int fontSize){
+    emit updateFontSize(fontSize);
 }
 
 DefaultToolPanel::DefaultToolPanel(QWidget *parent) : QWidget(parent){
@@ -1825,7 +1854,7 @@ void TextPanel::changeFontSize(int s){
 }
 
 void TextPanel::commitChanges(){
-
+    emit actionCommited();
 }
 
 TextPanel::~TextPanel(){

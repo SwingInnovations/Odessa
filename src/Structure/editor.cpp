@@ -34,6 +34,8 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_HistorySteps = 24;
 
     m_SelectRect = QRect(0, 0, 0, 0);
+    m_Font = QFont();
+    m_FontSize = 7;
 
     m_ClipScaleFactor = 1.0;
     m_ClipRotateAngle = 0.0;
@@ -135,8 +137,6 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
 
                 m_CurrentTool.setPressureVal(m_Pressure);
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
-                //setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().scaled(m_ScaleFactor * getPixmapSize(), Qt::KeepAspectRatio, Qt::FastTransformation));
-                setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
             }
             break;
         case ERASER_TOOL:
@@ -147,8 +147,6 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                     m_MousePath.removeFirst();
                 }
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
-                //setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().scaled(m_ScaleFactor * getPixmapSize(), Qt::KeepAspectRatio, Qt::FastTransformation));
-                setPixmap(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
             }
             break;
         case RECT_SELECT_TOOL:
@@ -335,6 +333,7 @@ void Editor::setBrush(ToolType type)
     default:
         break;
     }
+    emit toolChanged(m_ToolType);
 }
 
 void Editor::setBrushStencil(QPixmap pixmap){
@@ -444,6 +443,14 @@ void Editor::setSizeTransfer(int val)
     default:
         break;
     }
+}
+
+void Editor::setFont(QFont font){
+    m_Font = font;
+}
+
+void Editor::setFontSize(int font){
+    m_FontSize = font;
 }
 
 void Editor::backup()

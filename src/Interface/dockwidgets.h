@@ -474,6 +474,7 @@ signals:
     void scaleChanged(int, int);
     void transformModeChanged(int);
     void useWorldTransform(bool);
+    void actionCommitted();
 private slots:
     void activateLink(bool);
     void setTransformMode(int);
@@ -531,6 +532,7 @@ public:
     ~TextPanel();
 signals:
     void fontChanged(QFont);
+    void actionCommited();
 private slots:
     void changeFont(QFont);
     void changeFontSize(int);
@@ -555,6 +557,9 @@ signals:
    void scaleChanged(int, int);
    void transformModeChanged(int);
    void useWorldTransform(bool);
+   void fontChanged(QFont);
+   void fontSizeChanged(int);
+   void actionCommitted();
 public slots:
    void setMode(int);
    void updateTranslate(int, int);
@@ -562,6 +567,8 @@ public slots:
    void updateScale(int, int);
    void updateTransformMode(int);
    void updateWorldTransform(bool);
+   void updateFont(QFont);
+   void updateFontSize(int);
 private:
    TransformTools* transTools;
    DefaultToolPanel* defTools;

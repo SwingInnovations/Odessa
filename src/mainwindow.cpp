@@ -85,7 +85,6 @@ MainWindow::MainWindow(QWidget *parent)
     * Temporarily disable
     *
     */
-    textTool->setEnabled(false);
     primitiveTool->setEnabled(false);
 
     toolBar->addAction(eyeDropperTool);
@@ -233,6 +232,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(preferenceAct, SIGNAL(triggered()),SLOT(showPrefWin()));
     connect(undoAct, SIGNAL(triggered()), m_Editor, SLOT(undo()));
     connect(redoAct, SIGNAL(triggered()), m_Editor, SLOT(redo()));
+    connect(copyAct, SIGNAL(triggered()), m_Editor, SLOT(copy()));
+    connect(cutAct, SIGNAL(triggered()), m_Editor, SLOT(cut()));
+    connect(pasteAct, SIGNAL(triggered()), m_Editor, SLOT(paste()));
     connect(selectRegionAct, SIGNAL(triggered()), SLOT(assignRectSelectTool()));
     connect(deselectAct, SIGNAL(triggered()), SLOT(assignDeselectTool()));
     connect(brushTool, SIGNAL(triggered()), SLOT(assignBrushTool()));
@@ -260,11 +262,18 @@ MainWindow::MainWindow(QWidget *parent)
     connect(colorDockWidget, SIGNAL(greenChanged(int)), m_Editor, SLOT(setGreenValue(int)));
     connect(colorDockWidget, SIGNAL(blueChanged(int)), m_Editor, SLOT(setBlueValue(int)));
     connect(toolPanelWidget, SIGNAL(useWorldTransform(bool)), m_Editor, SLOT(useWorldTransform(bool)));
+    connect(toolPanelWidget, SIGNAL(translateChanged(int,int)), m_Editor, SLOT(setClipTranslate(int,int)));
+    connect(toolPanelWidget, SIGNAL(rotateChanged(int)), m_Editor, SLOT(setClipRotate(int)));
+    connect(toolPanelWidget, SIGNAL(scaleChanged(int,int)), m_Editor, SLOT(setClipScale(int,int)));
     connect(m_Editor, SIGNAL(brushSizeChanged(int)), brushDockWidget, SLOT(updateSize(int)));
     connect(m_Editor, SIGNAL(brushOpacityChanged(int)), brushDockWidget, SLOT(updateOpacity(int)));
     connect(m_Editor, SIGNAL(redChanged(int)), colorDockWidget, SLOT(updateRed(int)));
     connect(m_Editor, SIGNAL(greenChanged(int)), colorDockWidget, SLOT(updateGreen(int)));
     connect(m_Editor, SIGNAL(blueChanged(int)), colorDockWidget, SLOT(updateBlue(int)));
+    connect(m_Editor, SIGNAL(clipTranslateChanged(int,int)), toolPanelWidget, SLOT(updateTranslate(int,int)));
+    connect(m_Editor, SIGNAL(clipRotateChanged(int)), toolPanelWidget, SLOT(updateRotate(int)));
+    connect(m_Editor, SIGNAL(clipScaleChanged(int,int)), toolPanelWidget, SLOT(updateScale(int,int)));
+    connect(m_Editor, SIGNAL(toolChanged(int)), toolPanelWidget, SLOT(setMode(int)));
     connect(eyeDropperTool, SIGNAL(triggered()), SLOT(assignEyeDropperTool()));
     connect(eyeDropper, SIGNAL(activated()), SLOT(assignEyeDropperTool()));
     connect(fillTool, SIGNAL(triggered()), SLOT(assignFillTool()));
