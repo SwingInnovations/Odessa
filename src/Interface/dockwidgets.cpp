@@ -1834,7 +1834,7 @@ TextPanel::TextPanel(QWidget *parent) : QWidget(parent){
     QVBoxLayout* finalLayout = new QVBoxLayout;
     finalLayout->addWidget(grpBox);
     finalLayout->addWidget(m_CommitButton);
-    finalLayout->addSpacerItem(new QSpacerItem(25, 25, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding));
+    finalLayout->addSpacerItem(new QSpacerItem(25, 25, QSizePolicy::Expanding, QSizePolicy::Expanding));
     setLayout(finalLayout);
 
     connect(m_FontComboBox, SIGNAL(currentFontChanged(QFont)), SLOT(changeFont(QFont)));

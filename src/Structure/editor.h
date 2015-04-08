@@ -137,6 +137,8 @@ public slots:
     void setFont(QFont);
     void setFontSize(int);
 
+    void commitChanges();
+
     void setClipOffsetX(int);
     void setClipOffsetY(int);
     void useWorldTransform(bool);
@@ -192,7 +194,8 @@ private:
     double m_ClipScaleFactor;
     int m_ClipRotateAngle;
     QPixmap m_ClipboardPixmap;
-    boolean m_ClipboardPresent;
+    bool m_ClipboardPresent;
+    bool m_AlternatePattern;
 
     ProjectInfo m_Info;
 };

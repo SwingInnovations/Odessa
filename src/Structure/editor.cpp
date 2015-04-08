@@ -6,6 +6,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_TabletInUse = false;
     m_Modified = false;
     m_SelectActive = false;
+    m_AlternatePattern = false;
 
     m_CurrentIndex = 0;
     m_CurrentFrame = 0;
@@ -245,7 +246,7 @@ void Editor::paintEvent(QPaintEvent *event)
 
     qDebug() << "Painting the selection rect." << endl;
     if(m_SelectActive){
-        painter.setPen(Qt::DashDotLine);
+        if(m_AlternatePattern){ painter.setPen(Qt::DotLine); m_AlternatePattern = false; }else{  painter.setPen(Qt::DashDotLine); m_AlternatePattern = true; }
         painter.setBrush(Qt::transparent);
         painter.drawRect(m_SelectRect);
         painter.end();
@@ -332,6 +333,9 @@ void Editor::setBrush(ToolType type)
         emit toolChanged(2);
         break;
     case EYEDROPPER_TOOL:
+        break;
+    case TRANSFORM_TRANSLATE:
+        emit toolChanged(7);
         break;
     default:
         emit toolChanged(0);
@@ -531,10 +535,17 @@ void Editor::copy(){
 
 void Editor::paste(){
     QClipboard* clip = QApplication::clipboard();
-    if(!m_ClipboardPresent) m_ClipboardPresent = true;
-    m_ClipboardPixmap = clip->pixmap();
-    m_ClipOffsetPoint = QPoint( (this->pixmap()->width()/2 - m_ClipboardPixmap.width()/2), (this->pixmap()->height()/2 - m_ClipboardPixmap.height()/2) );
+    const QMimeData* mimeData = clip->mimeData();
 
+    if(!m_ClipboardPresent) m_ClipboardPresent = true;
+    if(mimeData->hasText()){
+        //deal with the text
+        setBrush(ToolType::TEXT_TOOL);
+    }else if(mimeData->hasImage()){
+        m_ClipboardPixmap = clip->pixmap();
+        m_ClipOffsetPoint = QPoint( (this->pixmap()->width()/2 - m_ClipboardPixmap.width()/2), (this->pixmap()->height()/2 - m_ClipboardPixmap.height()/2) );
+        setBrush(ToolType::TRANSFORM_TRANSLATE);
+    }
     backup();
 }
 
@@ -560,4 +571,10 @@ void Editor::setClipOffsetY(int y){
 
 void Editor::useWorldTransform(bool val){
     m_ClipWorldTransform = val;
+}
+
+void Editor::commitChanges(){
+    if(!m_ClipboardPixmap.isNull()){
+        m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->commitChanges(m_ClipOffsetPoint, m_ClipboardPixmap);
+    }
 }

@@ -249,6 +249,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(brushTool, SIGNAL(triggered()), SLOT(assignBrushTool()));
     connect(eraserTool, SIGNAL(triggered()), SLOT(assignEraserTool()));
     connect(textTool, SIGNAL(triggered()), SLOT(assignTextTool()));
+    connect(translateAct, SIGNAL(triggered()), SLOT(assignTransformTool()));
+    connect(rotateAct, SIGNAL(triggered()), SLOT(assignTransformTool()));
+    connect(scaleAct, SIGNAL(triggered()), SLOT(assignTransformTool()));
     connect(primitiveTool, SIGNAL(triggered()), SLOT(assignPrimitiveTool()));
     connect(newDialogWin, SIGNAL(newProject(ProjectInfo&)), m_Editor, SLOT(newProject(ProjectInfo&)));
     connect(prefDialog, SIGNAL(projectPathChanged(QString)), SLOT(setProjectPath(QString)));
@@ -274,6 +277,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(toolPanelWidget, SIGNAL(translateChanged(int,int)), m_Editor, SLOT(setClipTranslate(int,int)));
     connect(toolPanelWidget, SIGNAL(rotateChanged(int)), m_Editor, SLOT(setClipRotate(int)));
     connect(toolPanelWidget, SIGNAL(scaleChanged(int,int)), m_Editor, SLOT(setClipScale(int,int)));
+    connect(toolPanelWidget, SIGNAL(actionCommitted()), m_Editor, SLOT(commitChanges()));
     connect(m_Editor, SIGNAL(brushSizeChanged(int)), brushDockWidget, SLOT(updateSize(int)));
     connect(m_Editor, SIGNAL(brushOpacityChanged(int)), brushDockWidget, SLOT(updateOpacity(int)));
     connect(m_Editor, SIGNAL(redChanged(int)), colorDockWidget, SLOT(updateRed(int)));
