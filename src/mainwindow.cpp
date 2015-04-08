@@ -166,6 +166,10 @@ MainWindow::MainWindow(QWidget *parent)
     resetZoomAct = new QAction("&Reset Zoom", this);
     resetZoomAct->setShortcut(QKeySequence(Qt::Key_Home));
 
+    translateAct = new QAction("&Translate", this);
+    rotateAct = new QAction("&Rotate", this);
+    scaleAct = new QAction("&Scale", this);
+
     fileMenu = this->menuBar()->addMenu("&File");
     fileMenu->addAction(newAct);
     fileMenu->addAction(openAct);
@@ -189,6 +193,11 @@ MainWindow::MainWindow(QWidget *parent)
     editMenu->addAction(cutAct);
     editMenu->addAction(copyAct);
     editMenu->addAction(pasteAct);
+    editMenu->addSeparator();
+    QMenu* transform = editMenu->addMenu("&Transform");
+    transform->addAction(translateAct);
+    transform->addAction(rotateAct);
+    transform->addAction(scaleAct);
 
     //select Menu
     selectMenu = this->menuBar()->addMenu("&Select");
@@ -377,6 +386,10 @@ void MainWindow::assignFillTool(){
 
 void MainWindow::assignDeselectTool(){
 
+}
+
+void MainWindow::assignTransformTool(){
+    m_Editor->setBrush(Editor::TRANSFORM_TRANSLATE);
 }
 
 void MainWindow::assignRectSelectTool(){

@@ -1518,6 +1518,7 @@ ToolsPanel::~ToolsPanel(){
 }
 
 void ToolsPanel::setMode(int o){
+    qDebug() << "Changing mode: " << o << endl;
     switch(o){
     case 0:
     case 1:

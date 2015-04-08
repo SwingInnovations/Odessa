@@ -22,9 +22,8 @@ int main(int argc, char *argv[])
     palette.setColor(QPalette::Button, QColor(53,53,53));
     palette.setColor(QPalette::ButtonText, Qt::white);
     palette.setColor(QPalette::BrightText, Qt::red);
-
     palette.setColor(QPalette::Highlight, QColor(144,216,255).darker());
-    palette.setColor(QPalette::HighlightedText, Qt::black);
+    palette.setColor(QPalette::HighlightedText, Qt::white);
     a.setPalette(palette);
     a.setStyleSheet("QSeperator { foreground-color: white }");
     MainWindow w;

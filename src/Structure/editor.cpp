@@ -135,7 +135,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                     m_MousePath.removeFirst();
                 }
 
-                m_CurrentTool.setPressureVal(m_Pressure);
+                if(m_TabletInUse) m_CurrentTool.setPressureVal(m_Pressure); else{ m_CurrentTool.setPressureVal(0.0); }
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
             }
             break;
@@ -322,18 +322,21 @@ void Editor::setBrush(ToolType type)
         m_CurrentTool = m_Brush;
         m_CurrentTool.setColor(m_PrimaryColor);
         emit brushSizeChanged(m_Brush.getSize());
+        emit toolChanged(0);
         break;
     case ERASER_TOOL:
         m_CurrentTool = m_Eraser;
         emit brushSizeChanged(m_Eraser.getSize());
+        emit toolChanged(1);
     case TEXT_TOOL:
+        emit toolChanged(2);
         break;
     case EYEDROPPER_TOOL:
         break;
     default:
+        emit toolChanged(0);
         break;
     }
-    emit toolChanged(m_ToolType);
 }
 
 void Editor::setBrushStencil(QPixmap pixmap){

@@ -96,7 +96,7 @@ public:
     int getSHeight()const{return sHeight;}
     int getSpacing()const{return mSpacing;}
     int getSize()const{return mSize;}
-    int getTransferSize()const{return mTSize;}
+    int getTransferSize()const{return mSize + mTSize;}
     int getTransferOpacity()const{return mTOpacity;}
     int getOpacity()const{return mOpacity;}
     QPixmap getStencil()const{return mStencil;}

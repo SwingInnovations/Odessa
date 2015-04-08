@@ -39,6 +39,7 @@ private slots:
     void assignDeselectTool();
     void assignRectSelectTool();
     void assignFillTool();
+    void assignTransformTool();
     void showNewDocWin();
     void showPrefWin();
     void toggleShowBrushDock(bool);
@@ -101,6 +102,11 @@ private:
     QAction *showLayersDockAct;
     QAction *showToolsDockAct;
     QAction *preferenceAct;
+
+    //Transform stuff
+    QAction *translateAct;
+    QAction *rotateAct;
+    QAction *scaleAct;
 
     //basic Tools
     QAction *brushTool;
