@@ -132,6 +132,12 @@ MainWindow::MainWindow(QWidget *parent)
     pasteAct->setText("&Paste");
     pasteAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_V));
 
+    //Temporarily disable
+    //Not fully tested yet.
+    cutAct->setEnabled(false);
+    copyAct->setEnabled(false);
+    pasteAct->setEnabled(false);
+
     sendFeedbackAct = new QAction(this);
     sendFeedbackAct->setText("&Send Feedback");
 
@@ -394,6 +400,7 @@ void MainWindow::assignDeselectTool(){
 
 void MainWindow::assignTransformTool(){
     m_Editor->setBrush(Editor::TRANSFORM_TRANSLATE);
+    if(toolPanelWidget->isHidden()) toolPanelWidget->show();
 }
 
 void MainWindow::assignRectSelectTool(){
