@@ -293,11 +293,23 @@ class LayerDockWidget : public QDockWidget
 public:
     LayerDockWidget(QWidget* parent = 0);
     virtual ~LayerDockWidget();
+signals:
+    void layerAdded();
+    void layerChanged(QTreeWidgetItem*,int);
+    void compositionModeChanged(int);
+public slots:
+    void setCompositionMode(int);
+private slots:
+    void updateLayer(QTreeWidgetItem*, int);
+    void updateCompositonMode(int);
 private:
     QComboBox* compositionMode;
     QTreeWidget* layerManager;
     QToolButton* layerOptionsButton;
     QMenu* layerOptionsMenu;
+    QAction* addLayerAct;
+    QAction* duplicateLayerAct;
+    QAction* deleteLayerAct;
 };
 
 class GeneralBrushWidget : public QWidget

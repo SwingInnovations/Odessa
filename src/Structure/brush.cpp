@@ -13,7 +13,7 @@ Brush::Brush() : mHardness(0),
     myBrush = QBrush();
     myPen = QPen();
     myPen.setCapStyle(Qt::RoundCap);
-    mName = "";
+    m_Name = "";
     mStencil = QPixmap();
 }
 

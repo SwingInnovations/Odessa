@@ -433,7 +433,17 @@ void Editor::setOpacity(int val)
 
 void Editor::setOpacityTransfer(int val)
 {
-
+    m_CurrentTool.setTransferOpacity(val);
+    switch(m_ToolType){
+    case BRUSH_TOOL:
+        m_Brush.setTransferOpacity(val);
+        break;
+    case ERASER_TOOL:
+        m_Eraser.setTransferOpacity(val);
+        break;
+    default:
+        break;
+    }
 }
 
 void Editor::setSizeTransfer(int val)

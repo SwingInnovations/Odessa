@@ -13,6 +13,7 @@
 #include <QMimeData>
 #include <QClipboard>
 #include <QApplication>
+#include <QTextEdit>
 
 #include "../Interface/dialogwindows.h"
 #include "layer.h"

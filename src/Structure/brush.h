@@ -29,7 +29,7 @@ public:
         mSize = val;
         myPen.setWidth(mSize); }
     void SetName(QString name){
-        mName = name;
+        m_Name = name;
     }
 
     void generatePixmap();
@@ -76,7 +76,7 @@ public:
 
     qreal getPressureVal(){return m_PressureVal;}
 
-    void setPressure(bool val){ mPressure = val; }
+    void setPressure(bool val){ m_Pressure = val; }
     void setHardness(int val){ mHardness = val; }
 
     void setBrushShape(BrushShape shape){ brushShape = shape; }
@@ -90,27 +90,27 @@ public:
     QBrush getBrush()const{ return myBrush; }
     QColor getColor()const{ return myColor; }
 
-    QString getName()const{return mName;}
+    QString getName()const{return m_Name;}
 
     int getSWidth()const{return sWidth;}
     int getSHeight()const{return sHeight;}
     int getSpacing()const{return mSpacing;}
     int getSize()const{return mSize;}
     int getTransferSize()const{return mSize + mTSize;}
-    int getTransferOpacity()const{return mTOpacity;}
+    int getTransferOpacity()const{return mOpacity + mTOpacity;}
     int getOpacity()const{return mOpacity;}
     QPixmap getStencil()const{return mStencil;}
 
     /*-Variables-*/
 
     BrushShape brushShape;
-    QString mName;
+    QString m_Name;
 
     QPen myPen;
     QBrush myBrush;
     QColor myColor;
 
-    bool mPressure;
+    bool m_Pressure;
     int mHardness;
     unsigned int mSize;
     int mOpacity;//responsible for Opacity

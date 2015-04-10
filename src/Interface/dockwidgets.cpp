@@ -1033,12 +1033,24 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
 
     layerOptionsButton = new QToolButton(this);
     layerOptionsButton->setText("Options");
+    addLayerAct = new QAction("&Add Layer", this);
+    duplicateLayerAct = new QAction("&Duplicate Layer", this);
+    deleteLayerAct = new QAction("&Delete Layer", this);
+    layerOptionsMenu = new QMenu(this);
+
+    layerOptionsMenu->addAction(addLayerAct);
+    layerOptionsMenu->addAction(duplicateLayerAct);
+    layerOptionsMenu->addAction(deleteLayerAct);
+    layerOptionsMenu->addSeparator();
+
+    layerOptionsButton->setMenu(layerOptionsMenu);
 
     compositionMode = new QComboBox(this);
     compositionMode->addItem("Normal");
     compositionMode->addItem("Multiply");
 
     layerManager = new QTreeWidget(this);
+    layerManager->addTopLevelItem(new QTreeWidgetItem());
 
     QHBoxLayout* compLayout = new QHBoxLayout;
     compLayout->addWidget(compositionMode);
@@ -1051,6 +1063,21 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     QWidget *layerDisplay = new QWidget(this);
     layerDisplay->setLayout(layerLayout);
     setWidget(layerDisplay);
+
+    connect(layerManager, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(updateLayer(QTreeWidgetItem*,int)));
+    connect(compositionMode, SIGNAL(currentIndexChanged(int)), SLOT(updateCompositonMode(int)));
+}
+
+void LayerDockWidget::setCompositionMode(int i){
+    compositionMode->setCurrentIndex(i);
+}
+
+void LayerDockWidget::updateLayer(QTreeWidgetItem *itm, int i){
+    emit layerChanged(itm, i);
+}
+
+void LayerDockWidget::updateCompositonMode(int i){
+    emit compositionModeChanged(i);
 }
 
 LayerDockWidget::~LayerDockWidget()
@@ -1120,7 +1147,7 @@ void GeneralBrushWidget::addBrush(int iD, Brush brush){
 }
 
 void GeneralBrushWidget::addBrush(Brush brush){
-    QListWidgetItem* itm = new QListWidgetItem(brush.mName);
+    QListWidgetItem* itm = new QListWidgetItem(brush.m_Name);
     itm->setFlags(itm->flags() | Qt::ItemIsEditable);
     mBrushIndex->addItem(itm);
 }

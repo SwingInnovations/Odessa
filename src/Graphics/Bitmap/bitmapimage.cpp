@@ -172,10 +172,6 @@ void BitmapImage::fillImage(QPoint point, Brush brush){
 
 void BitmapImage::scale(double s){
     m_ScaleFactor = s;
-//    m_pixmap = m_pixmap.scaled(m_ScaleFactorInv * boundaries.size(), Qt::KeepAspectRatio, Qt::FastTransformation);
-//    m_pixmap = m_pixmap.scaled(m_ScaleFactor * boundaries.size(), Qt::KeepAspectRatio, Qt::FastTransformation);
-//    boundaries = m_pixmap.rect();
-//    m_ScaleFactorInv = 1.0/m_ScaleFactor;
 }
 
 void BitmapImage::commitChanges(QPoint drawPoint, QPixmap pixmap){
