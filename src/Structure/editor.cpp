@@ -40,6 +40,9 @@ Editor::Editor(QWidget *parent):QLabel(parent)
 
     m_ClipScaleFactor = 1.0;
     m_ClipRotateAngle = 0.0;
+
+    m_Text = "";
+    m_acceptTextInput = false;
 }
 
 void Editor::setHistoyStep(int h){
@@ -587,4 +590,16 @@ void Editor::commitChanges(){
     if(!m_ClipboardPixmap.isNull()){
         m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->commitChanges(m_ClipOffsetPoint, m_ClipboardPixmap);
     }
+}
+
+void Editor::clearText(){
+    if(m_acceptTextInput) m_Text = "";
+}
+
+void Editor::append_a(){
+    if(m_acceptTextInput) m_Text += 'a';
+}
+
+void Editor::append_A(){
+    if(m_acceptTextInput) m_Text += 'A';
 }

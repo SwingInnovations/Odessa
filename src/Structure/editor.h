@@ -138,6 +138,11 @@ public slots:
     void setFont(QFont);
     void setFontSize(int);
 
+    /*String based input slots*/
+    void clearText();
+    void append_a();
+    void append_A();
+
     void commitChanges();
 
     void setClipOffsetX(int);
@@ -187,6 +192,8 @@ private:
     int m_BackupIndex;
 
 //Clipboard stuff
+    QString m_Text;
+    bool m_acceptTextInput;
     QFont m_Font;
     int m_FontSize;
     bool m_ClipWorldTransform;
