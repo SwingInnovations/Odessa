@@ -186,6 +186,7 @@ private:
     QAction* key_z;
 
     QAction* key_space;
+    QAction* key_shift;
 };
 
 #endif // MAINWINDOW_H

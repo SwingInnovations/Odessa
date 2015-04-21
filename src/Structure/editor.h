@@ -139,9 +139,46 @@ public slots:
     void setFontSize(int);
 
     /*String based input slots*/
+    void enableShift();
     void clearText();
+
+    void append_1();
+    void append_2();
+    void append_3();
+    void append_4();
+    void append_5();
+    void append_6();
+    void append_7();
+    void append_8();
+    void append_9();
+    void append_0();
+
     void append_a();
-    void append_A();
+    void append_b();
+    void append_c();
+    void append_d();
+    void append_e();
+    void append_f();
+    void append_g();
+    void append_h();
+    void append_i();
+    void append_j();
+    void append_k();
+    void append_l();
+    void append_m();
+    void append_n();
+    void append_o();
+    void append_p();
+    void append_q();
+    void append_r();
+    void append_s();
+    void append_t();
+    void append_u();
+    void append_v();
+    void append_w();
+    void append_x();
+    void append_y();
+    void append_z();
 
     void commitChanges();
 
@@ -194,8 +231,10 @@ private:
 //Clipboard stuff
     QString m_Text;
     bool m_acceptTextInput;
+    bool m_ShiftEnabled;
     QFont m_Font;
     int m_FontSize;
+
     bool m_ClipWorldTransform;
     QPoint m_ClipOffsetPoint;
     QPoint m_ClipScale;

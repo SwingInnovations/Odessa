@@ -7,6 +7,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_Modified = false;
     m_SelectActive = false;
     m_AlternatePattern = false;
+    m_ShiftEnabled = false;
 
     m_CurrentIndex = 0;
     m_CurrentFrame = 0;
@@ -592,14 +593,332 @@ void Editor::commitChanges(){
     }
 }
 
+void Editor::enableShift(){
+    m_ShiftEnabled =! m_ShiftEnabled;
+    if(m_ShiftEnabled){ m_ShiftEnabled = false; }
+}
+
 void Editor::clearText(){
     if(m_acceptTextInput) m_Text = "";
 }
 
-void Editor::append_a(){
-    if(m_acceptTextInput) m_Text += 'a';
+void Editor::append_0(){
+    if(m_acceptTextInput){
+        m_Text += '0';
+    }
 }
 
-void Editor::append_A(){
-    if(m_acceptTextInput) m_Text += 'A';
+void Editor::append_1(){
+    if(m_acceptTextInput){
+        m_Text += '1';
+    }
+}
+
+void Editor::append_2(){
+    if(m_acceptTextInput){
+        m_Text += '2';
+    }
+}
+
+void Editor::append_3(){
+    if(m_acceptTextInput){
+        m_Text += '3';
+    }
+}
+
+void Editor::append_4(){
+    if(m_acceptTextInput){
+        m_Text += '4';
+    }
+}
+
+void Editor::append_5(){
+    if(m_acceptTextInput){
+        m_Text += '5';
+    }
+}
+
+void Editor::append_6(){
+    if(m_acceptTextInput){
+        m_Text += '6';
+    }
+}
+
+void Editor::append_7(){
+    if(m_acceptTextInput){
+        m_Text += '7';
+    }
+}
+
+void Editor::append_8(){
+    if(m_acceptTextInput){
+        m_Text += '8';
+    }
+}
+
+void Editor::append_9(){
+    if(m_acceptTextInput){
+        m_Text += '9';
+    }
+}
+
+void Editor::append_a(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'A';
+        }else{
+            m_Text += 'a';
+        }
+    }
+}
+
+void Editor::append_b(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'B';
+        }else{
+            m_Text += 'b';
+        }
+    }
+}
+
+void Editor::append_c(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'C';
+        }else{
+            m_Text += 'c';
+        }
+    }
+}
+
+void Editor::append_d(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'D';
+        }else{
+            m_Text += 'd';
+        }
+    }
+}
+
+void Editor::append_e(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'E';
+        }else{
+            m_Text += 'e';
+        }
+    }
+}
+
+void Editor::append_f(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'F';
+        }else{
+            m_Text += 'f';
+        }
+    }
+}
+
+void Editor::append_g(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'G';
+        }else{
+            m_Text += 'g';
+        }
+    }
+}
+
+void Editor::append_h(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'H';
+        }else{
+            m_Text += 'h';
+        }
+    }
+}
+
+
+void Editor::append_i(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'I';
+        }else{
+            m_Text += 'i';
+        }
+    }
+}
+
+void Editor::append_j(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'J';
+        }else{
+            m_Text += 'j';
+        }
+    }
+}
+
+void Editor::append_k(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'K';
+        }else{
+            m_Text += 'k';
+        }
+    }
+}
+
+void Editor::append_l(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'L';
+        }else{
+            m_Text += 'l';
+        }
+    }
+}
+
+void Editor::append_m(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'M';
+        }else{
+            m_Text += 'm';
+        }
+    }
+}
+
+void Editor::append_n(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'N';
+        }else{
+            m_Text += 'n';
+        }
+    }
+}
+
+void Editor::append_o(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'O';
+        }else{
+            m_Text += 'o';
+        }
+    }
+}
+
+void Editor::append_p(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'P';
+        }else{
+            m_Text += 'p';
+        }
+    }
+}
+
+void Editor::append_q(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'Q';
+        }else{
+            m_Text += 'q';
+        }
+    }
+}
+
+void Editor::append_r(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'R';
+        }else{
+            m_Text += 'r';
+        }
+    }
+}
+
+void Editor::append_s(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'S';
+        }else{
+            m_Text += 's';
+        }
+    }
+}
+
+void Editor::append_t(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'T';
+        }else{
+            m_Text += 't';
+        }
+    }
+}
+
+void Editor::append_u(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'U';
+        }else{
+            m_Text += 'u';
+        }
+    }
+}
+
+void Editor::append_v(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'V';
+        }else{
+            m_Text += 'v';
+        }
+    }
+}
+
+void Editor::append_w(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'W';
+        }else{
+            m_Text += 'w';
+        }
+    }
+}
+
+void Editor::append_x(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'X';
+        }else{
+            m_Text += 'x';
+        }
+    }
+}
+
+void Editor::append_y(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'Y';
+        }else{
+            m_Text += 'y';
+        }
+    }
+}
+
+void Editor::append_z(){
+    if(m_acceptTextInput){
+        if(m_ShiftEnabled){
+            m_Text += 'Z';
+        }else{
+            m_Text += 'z';
+        }
+    }
 }
