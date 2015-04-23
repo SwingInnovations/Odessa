@@ -142,51 +142,6 @@ private:
     QAction* resetZoomAct;
 
     QString projectPath;
-
-    /*Key Input*/
-    QAction* key_accent;
-    QAction* key_1;
-    QAction* key_2;
-    QAction* key_3;
-    QAction* key_4;
-    QAction* key_5;
-    QAction* key_6;
-    QAction* key_7;
-    QAction* key_8;
-    QAction* key_9;
-    QAction* key_0;
-    QAction* key_minus;
-    QAction* key_equals;
-
-    QAction* key_a;
-    QAction* key_b;
-    QAction* key_c;
-    QAction* key_d;
-    QAction* key_e;
-    QAction* key_f;
-    QAction* key_g;
-    QAction* key_h;
-    QAction* key_i;
-    QAction* key_j;
-    QAction* key_k;
-    QAction* key_l;
-    QAction* key_m;
-    QAction* key_n;
-    QAction* key_o;
-    QAction* key_p;
-    QAction* key_q;
-    QAction* key_r;
-    QAction* key_s;
-    QAction* key_t;
-    QAction* key_u;
-    QAction* key_v;
-    QAction* key_w;
-    QAction* key_x;
-    QAction* key_y;
-    QAction* key_z;
-
-    QAction* key_space;
-    QAction* key_shift;
 };
 
 #endif // MAINWINDOW_H

@@ -38,6 +38,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_SelectRect = QRect(0, 0, 0, 0);
     m_Font = QFont();
     m_FontSize = 7;
+    m_textCursorPos = 0;
 
     m_ClipScaleFactor = 1.0;
     m_ClipRotateAngle = 0.0;
@@ -279,6 +280,174 @@ void Editor::paintEvent(QPaintEvent *event)
     }
 }
 
+QString Editor::addText(int i, QChar c){
+    if(i >= m_Text.length()){
+        m_Text += c;
+    }else{
+        m_Text.insert(i, c);
+    }
+    return m_Text;
+}
+
+void Editor::keyPressEvent(QKeyEvent *e){
+    if(m_acceptTextInput){
+        switch(e->key()){
+        case Qt::Key_Shift + Qt::Key_A:
+            m_Text = addText(m_textCursorPos, 'A');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_B:
+            m_Text = addText(m_textCursorPos, 'B');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_C:
+            m_Text = addText(m_textCursorPos, 'C');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_D:
+            m_Text = addText(m_textCursorPos, 'D');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_E:
+            m_Text = addText(m_textCursorPos, 'E');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_F:
+            m_Text = addText(m_textCursorPos, 'F');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_G:
+            m_Text = addText(m_textCursorPos, 'G');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_H:
+            m_Text = addText(m_textCursorPos, 'H');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_I:
+            m_Text = addText(m_textCursorPos, 'I');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_J:
+            m_Text = addText(m_textCursorPos, 'J');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_K:
+            m_Text = addText(m_textCursorPos, 'K');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_L:
+            m_Text = addText(m_textCursorPos, 'L');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_M:
+            m_Text = addText(m_textCursorPos, 'M');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_N:
+            m_Text = addText(m_textCursorPos, 'N');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_O:
+            m_Text = addText(m_textCursorPos, 'O');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_P:
+            m_Text = addText(m_textCursorPos, 'P');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_Q:
+            m_Text = addText(m_textCursorPos, 'Q');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_R:
+            m_Text = addText(m_textCursorPos, 'R');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_S:
+            m_Text = addText(m_textCursorPos, 'S');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_T:
+            m_Text = addText(m_textCursorPos, 'T');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_U:
+            m_Text = addText(m_textCursorPos, 'U');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_V:
+            m_Text = addText(m_textCursorPos, 'V');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_W:
+            m_Text = addText(m_textCursorPos, 'W');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_X:
+            m_Text = addText(m_textCursorPos, 'X');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_Y:
+            m_Text = addText(m_textCursorPos, 'Y');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Shift + Qt::Key_Z:
+            m_Text = addText(m_textCursorPos, 'Z');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_0:
+            m_Text = addText(m_textCursorPos, '0');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_1:
+            m_Text = addText(m_textCursorPos, '1');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_2:
+            m_Text = addText(m_textCursorPos, '2');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_3:
+            m_Text = addText(m_textCursorPos, '3');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_4:
+            m_Text = addText(m_textCursorPos, '4');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_5:
+            m_Text = addText(m_textCursorPos, '5');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_6:
+            m_Text = addText(m_textCursorPos, '6');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_7:
+            m_Text = addText(m_textCursorPos, '7');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_8:
+            m_Text = addText(m_textCursorPos, '8');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_9:
+            m_Text = addText(m_textCursorPos, '9');
+            m_textCursorPos++;
+            break;
+        default:
+            ;
+        }
+    }
+}
+
+void Editor::keyReleaseEvent(QKeyEvent *e){
+    if(e->key() == Qt::Key_Shift){
+        m_ShiftEnabled = false;
+    }
+}
+
 void Editor::newProject(ProjectInfo &info){
     m_Info = info;
     if(!m_Layers.isEmpty()){
@@ -315,7 +484,9 @@ void Editor::addLayer()
 
 void Editor::addFrame()
 {
-
+    for(int i = 0; i < m_Layers.size(); i++){
+        m_Layers.at(i)->createFrame();
+    }
 }
 
 void Editor::setBrush(ToolType type)
@@ -590,335 +761,5 @@ void Editor::useWorldTransform(bool val){
 void Editor::commitChanges(){
     if(!m_ClipboardPixmap.isNull()){
         m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->commitChanges(m_ClipOffsetPoint, m_ClipboardPixmap);
-    }
-}
-
-void Editor::enableShift(){
-    m_ShiftEnabled =! m_ShiftEnabled;
-    if(m_ShiftEnabled){ m_ShiftEnabled = false; }
-}
-
-void Editor::clearText(){
-    if(m_acceptTextInput) m_Text = "";
-}
-
-void Editor::append_0(){
-    if(m_acceptTextInput){
-        m_Text += '0';
-    }
-}
-
-void Editor::append_1(){
-    if(m_acceptTextInput){
-        m_Text += '1';
-    }
-}
-
-void Editor::append_2(){
-    if(m_acceptTextInput){
-        m_Text += '2';
-    }
-}
-
-void Editor::append_3(){
-    if(m_acceptTextInput){
-        m_Text += '3';
-    }
-}
-
-void Editor::append_4(){
-    if(m_acceptTextInput){
-        m_Text += '4';
-    }
-}
-
-void Editor::append_5(){
-    if(m_acceptTextInput){
-        m_Text += '5';
-    }
-}
-
-void Editor::append_6(){
-    if(m_acceptTextInput){
-        m_Text += '6';
-    }
-}
-
-void Editor::append_7(){
-    if(m_acceptTextInput){
-        m_Text += '7';
-    }
-}
-
-void Editor::append_8(){
-    if(m_acceptTextInput){
-        m_Text += '8';
-    }
-}
-
-void Editor::append_9(){
-    if(m_acceptTextInput){
-        m_Text += '9';
-    }
-}
-
-void Editor::append_a(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'A';
-        }else{
-            m_Text += 'a';
-        }
-    }
-}
-
-void Editor::append_b(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'B';
-        }else{
-            m_Text += 'b';
-        }
-    }
-}
-
-void Editor::append_c(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'C';
-        }else{
-            m_Text += 'c';
-        }
-    }
-}
-
-void Editor::append_d(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'D';
-        }else{
-            m_Text += 'd';
-        }
-    }
-}
-
-void Editor::append_e(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'E';
-        }else{
-            m_Text += 'e';
-        }
-    }
-}
-
-void Editor::append_f(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'F';
-        }else{
-            m_Text += 'f';
-        }
-    }
-}
-
-void Editor::append_g(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'G';
-        }else{
-            m_Text += 'g';
-        }
-    }
-}
-
-void Editor::append_h(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'H';
-        }else{
-            m_Text += 'h';
-        }
-    }
-}
-
-
-void Editor::append_i(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'I';
-        }else{
-            m_Text += 'i';
-        }
-    }
-}
-
-void Editor::append_j(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'J';
-        }else{
-            m_Text += 'j';
-        }
-    }
-}
-
-void Editor::append_k(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'K';
-        }else{
-            m_Text += 'k';
-        }
-    }
-}
-
-void Editor::append_l(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'L';
-        }else{
-            m_Text += 'l';
-        }
-    }
-}
-
-void Editor::append_m(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'M';
-        }else{
-            m_Text += 'm';
-        }
-    }
-}
-
-void Editor::append_n(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'N';
-        }else{
-            m_Text += 'n';
-        }
-    }
-}
-
-void Editor::append_o(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'O';
-        }else{
-            m_Text += 'o';
-        }
-    }
-}
-
-void Editor::append_p(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'P';
-        }else{
-            m_Text += 'p';
-        }
-    }
-}
-
-void Editor::append_q(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'Q';
-        }else{
-            m_Text += 'q';
-        }
-    }
-}
-
-void Editor::append_r(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'R';
-        }else{
-            m_Text += 'r';
-        }
-    }
-}
-
-void Editor::append_s(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'S';
-        }else{
-            m_Text += 's';
-        }
-    }
-}
-
-void Editor::append_t(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'T';
-        }else{
-            m_Text += 't';
-        }
-    }
-}
-
-void Editor::append_u(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'U';
-        }else{
-            m_Text += 'u';
-        }
-    }
-}
-
-void Editor::append_v(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'V';
-        }else{
-            m_Text += 'v';
-        }
-    }
-}
-
-void Editor::append_w(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'W';
-        }else{
-            m_Text += 'w';
-        }
-    }
-}
-
-void Editor::append_x(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'X';
-        }else{
-            m_Text += 'x';
-        }
-    }
-}
-
-void Editor::append_y(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'Y';
-        }else{
-            m_Text += 'y';
-        }
-    }
-}
-
-void Editor::append_z(){
-    if(m_acceptTextInput){
-        if(m_ShiftEnabled){
-            m_Text += 'Z';
-        }else{
-            m_Text += 'z';
-        }
     }
 }
