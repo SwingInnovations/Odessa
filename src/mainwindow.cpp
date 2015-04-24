@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_Editor = new Editor(this);
     m_Editor->setAlignment(Qt::AlignCenter);
     m_Editor->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    m_Editor->setFocusPolicy(Qt::ClickFocus);
     m_Editor->setScaledContents(true);
 
     imageArea = new QScrollArea(this);

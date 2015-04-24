@@ -258,6 +258,9 @@ void Editor::paintEvent(QPaintEvent *event)
     }
 
     if(m_ClipboardPresent){
+        if(m_ToolType == TEXT_TOOL){
+            m_ClipboardPixmap = generateTextPixmap();
+        }
         painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
         painter.drawPixmap(m_ClipOffsetPoint, m_ClipboardPixmap);
         painter.end();
@@ -282,7 +285,7 @@ void Editor::paintEvent(QPaintEvent *event)
 
 QString Editor::addText(int i, QChar c){
     if(i >= m_Text.length()){
-        m_Text += c;
+        m_Text.append(c);
     }else{
         m_Text.insert(i, c);
     }
@@ -290,8 +293,17 @@ QString Editor::addText(int i, QChar c){
 }
 
 void Editor::keyPressEvent(QKeyEvent *e){
+    qDebug() << "Key: " << e->key() << endl;
     if(m_acceptTextInput){
         switch(e->key()){
+        case Qt::Key_Space:
+            addText(m_textCursorPos, ' ');
+            m_textCursorPos++;
+            break;
+        case Qt::Key_Enter:
+            addText(m_textCursorPos, '\n');
+            m_textCursorPos++;
+            break;
         case Qt::Key_Backspace:
             m_Text.remove(m_textCursorPos, 1);
             m_textCursorPos--;
@@ -302,14 +314,14 @@ void Editor::keyPressEvent(QKeyEvent *e){
         case Qt::Key_Forward:
             if(m_textCursorPos < m_Text.length()) m_textCursorPos++;
             break;
-        case Qt::Key_Shift + Qt::Key_A:
-            addText(m_textCursorPos, 'A');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_B:
-            addText(m_textCursorPos, 'B');
-            m_textCursorPos++;
-            break;
+//        case Qt::Key_Shift + Qt::Key_A:
+//            addText(m_textCursorPos, 'A');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_B:
+//            addText(m_textCursorPos, 'B');
+//            m_textCursorPos++;
+//            break;
         case Qt::Key_Shift + Qt::Key_C:
             addText(m_textCursorPos, 'C');
             m_textCursorPos++;
@@ -554,12 +566,11 @@ void Editor::keyPressEvent(QKeyEvent *e){
             ;
         }
     }
+    update();
 }
 
 void Editor::keyReleaseEvent(QKeyEvent *e){
-    if(e->key() == Qt::Key_Shift){
-        m_ShiftEnabled = false;
-    }
+
 }
 
 void Editor::newProject(ProjectInfo &info){
@@ -611,19 +622,24 @@ void Editor::setBrush(ToolType type)
     case BRUSH_TOOL:
         m_CurrentTool = m_Brush;
         m_CurrentTool.setColor(m_PrimaryColor);
+        m_acceptTextInput = false;
         emit brushSizeChanged(m_Brush.getSize());
         emit toolChanged(0);
         break;
     case ERASER_TOOL:
         m_CurrentTool = m_Eraser;
+        m_acceptTextInput = false;
         emit brushSizeChanged(m_Eraser.getSize());
         emit toolChanged(1);
     case TEXT_TOOL:
+        m_acceptTextInput = true;
         emit toolChanged(2);
         break;
     case EYEDROPPER_TOOL:
+        m_acceptTextInput = false;
         break;
     case TRANSFORM_TRANSLATE:
+        m_acceptTextInput = false;
         emit toolChanged(7);
         break;
     default:
@@ -880,15 +896,18 @@ void Editor::commitChanges(){
 
 QPixmap Editor::generateTextPixmap(){
     QFontMetrics fm(m_Font);
-    QPixmap ret(fm.size(Qt::TextExpandTabs, m_Text));
+    QPixmap ret(fm.size(Qt::TextJustificationForced, m_Text));
     ret.fill(Qt::transparent);
+
+    qDebug() << "textPixmapSize: " << ret.size() << endl;
 
     QPainter p(&ret);
     p.setFont(m_Font);
     p.setPen(Qt::black);
     p.setBrush(Qt::black);
-    p.drawText(5, 5, m_Text);
-    p.end();
+    p.drawText(0, 0, m_Text);
+
+    update();
 
     return ret;
 }
