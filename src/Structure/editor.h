@@ -195,6 +195,7 @@ private:
     QFont m_Font;
     int m_FontSize;
     int m_textCursorPos;
+    QPixmap generateTextPixmap();
 
     bool m_ClipWorldTransform;
     QPoint m_ClipOffsetPoint;
