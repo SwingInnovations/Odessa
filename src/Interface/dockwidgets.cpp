@@ -699,6 +699,13 @@ void ColorDockWidget::updateBlue(QString val){
 }
 
 void ColorDockWidget::updateHue(int val){
+    QColor col = mColorWheel->getColor();
+    mHSpinBox->setValue(val);
+    int h = val;
+    int s = col.saturation();
+    int v = col.value();
+    col.setHsv(h, s, v);
+    mColorWheel->setActualColor(col);
 
 }
 
@@ -767,6 +774,17 @@ QColor ColorWheel::getColorFromPoint(QPoint point){
     QPixmap pic = QWidget::grab();
     QImage img = pic.toImage();
     return QColor(img.pixel(point));
+}
+
+void ColorWheel::setActualColor(QColor col){
+    actualRed = col.red();
+    actualGreen = col.green();
+    actualBlue = col.blue();
+}
+
+QColor ColorWheel::getColor(){
+    QColor ret(actualRed, actualGreen, actualBlue);
+    return ret;
 }
 
 void ColorWheel::setRed(int r){
@@ -1546,7 +1564,6 @@ ToolsPanel::~ToolsPanel(){
 }
 
 void ToolsPanel::setMode(int o){
-    qDebug() << "Changing mode: " << o << endl;
     switch(o){
     case 0:
     case 1:
@@ -1572,6 +1589,7 @@ void ToolsPanel::setMode(int o){
 }
 
 void ToolsPanel::updateTranslate(int x, int y){
+    qDebug() << "Intended Point: " << x << " " << y << endl;
     emit translateChanged(x, y);
 }
 
@@ -1820,18 +1838,22 @@ void TransformTools::updateScale(){
 
 void TransformTools::syncTransX(int v){
     if(m_Link4Trans){ m_TransXSB->setValue(v); }
+    updateTranslate();
 }
 
 void TransformTools::syncTransY(int v){
     if(m_Link4Trans){ m_TransYSB->setValue(v); }
+    updateTranslate();
 }
 
 void TransformTools::syncScalX(int v){
     if(m_Link4Scal){ m_ScalXSB->setValue(v); }
+    updateScale();
 }
 
 void TransformTools::syncScalY(int v){
     if(m_Link4Scal){ m_ScalYSB->setValue(v); }
+    updateScale();
 }
 
 void TransformTools::updateWorldTransformUse(bool v){

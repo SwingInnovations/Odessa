@@ -227,6 +227,7 @@ void Editor::tabletEvent(QTabletEvent *event)
 
 void Editor::paintEvent(QPaintEvent *event)
 {
+    qDebug() << "TextCursor Position: " << m_textCursorPos << endl;
     QPainter painter(this);
 
     if(!m_Layers.isEmpty())
@@ -237,7 +238,6 @@ void Editor::paintEvent(QPaintEvent *event)
         for(int i = 0; i < m_Layers.size(); i++){
            if(m_Layers.at(i)->getFrame(m_CurrentFrame-1)->isVisible()){
                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(painter);
-               //QPixmap tPixmap = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap().scaled(m_ScaleFactor * imageSize, Qt::KeepAspectRatio, Qt::FastTransformation);
                QPixmap tPixmap = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap();
                p.setCompositionMode(QPainter::CompositionMode_SourceOver);
                p.drawPixmap(0, 0, tPixmap);
@@ -249,7 +249,6 @@ void Editor::paintEvent(QPaintEvent *event)
         this->resize(imageSize);
     }
 
-    qDebug() << "Painting the selection rect." << endl;
     if(m_SelectActive){
         if(m_AlternatePattern){ painter.setPen(Qt::DotLine); m_AlternatePattern = false; }else{  painter.setPen(Qt::DashDotLine); m_AlternatePattern = true; }
         painter.setBrush(Qt::transparent);
@@ -284,6 +283,7 @@ void Editor::paintEvent(QPaintEvent *event)
 }
 
 QString Editor::addText(int i, QChar c){
+
     if(i >= m_Text.length()){
         m_Text.append(c);
     }else{
@@ -302,7 +302,6 @@ QString Editor::addText(int i, QString s){
 }
 
 void Editor::keyPressEvent(QKeyEvent *e){
-    qDebug() << "Key: " << e->key() << endl;
     if(m_acceptTextInput){
         switch(e->key()){
         case Qt::Key_Space:
@@ -910,14 +909,13 @@ QPixmap Editor::generateTextPixmap(){
     QPixmap ret(fm.width(m_Text), fm.height());
     ret.fill(Qt::transparent);
 
-    qDebug() << "textPixmapSize: " << ret.size() << endl;
-
     QPainter p(&ret);
     p.setFont(m_Font);
     p.setPen(Qt::black);
     p.setBrush(Qt::transparent);
     p.drawRect(ret.rect());
     p.drawText(ret.rect(), Qt::AlignLeft, m_Text);
+    p.end();
 
     update();
 

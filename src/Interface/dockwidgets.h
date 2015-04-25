@@ -224,6 +224,8 @@ public:
     void setRed(int);
     void setGreen(int);
     void setBlue(int);
+    void setActualColor(QColor);
+    QColor getColor();
     void setHue(int);
     void setSaturation(int);
     void setValue(int);
