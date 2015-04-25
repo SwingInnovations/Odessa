@@ -154,6 +154,7 @@ private:
     bool m_SelectActive;
 
     QString addText(int, QChar);
+    QString addText(int, QString);
 
     Brush m_CurrentTool;
     Brush m_Brush;

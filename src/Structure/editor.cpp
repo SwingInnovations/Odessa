@@ -292,6 +292,15 @@ QString Editor::addText(int i, QChar c){
     return m_Text;
 }
 
+QString Editor::addText(int i, QString s){
+    if(i >= m_Text.length()){
+        m_Text.append(s);
+    }else{
+        m_Text.insert(i, s);
+    }
+    return m_Text;
+}
+
 void Editor::keyPressEvent(QKeyEvent *e){
     qDebug() << "Key: " << e->key() << endl;
     if(m_acceptTextInput){
@@ -305,8 +314,10 @@ void Editor::keyPressEvent(QKeyEvent *e){
             m_textCursorPos++;
             break;
         case Qt::Key_Backspace:
-            m_Text.remove(m_textCursorPos, 1);
-            m_textCursorPos--;
+            if(m_textCursorPos > -1){
+                m_Text.remove(m_textCursorPos, 1);
+                m_textCursorPos--;
+            }
             break;
         case Qt::Key_Back:
             if(m_textCursorPos > 0) m_textCursorPos--;
@@ -896,7 +907,7 @@ void Editor::commitChanges(){
 
 QPixmap Editor::generateTextPixmap(){
     QFontMetrics fm(m_Font);
-    QPixmap ret(fm.size(Qt::TextJustificationForced, m_Text));
+    QPixmap ret(fm.width(m_Text), fm.height());
     ret.fill(Qt::transparent);
 
     qDebug() << "textPixmapSize: " << ret.size() << endl;
@@ -904,8 +915,9 @@ QPixmap Editor::generateTextPixmap(){
     QPainter p(&ret);
     p.setFont(m_Font);
     p.setPen(Qt::black);
-    p.setBrush(Qt::black);
-    p.drawText(0, 0, m_Text);
+    p.setBrush(Qt::transparent);
+    p.drawRect(ret.rect());
+    p.drawText(ret.rect(), Qt::AlignLeft, m_Text);
 
     update();
 

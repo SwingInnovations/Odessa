@@ -1538,6 +1538,7 @@ ToolsPanel::ToolsPanel(QWidget* parent) : QDockWidget(parent){
     connect(transTools, SIGNAL(scaleChanged(int,int)), SLOT(updateScale(int,int)));
     connect(transTools, SIGNAL(transformModeChanged(int)), SLOT(updateTransformMode(int)));
     connect(transTools, SIGNAL(useWorldTransform(bool)), SLOT(updateWorldTransform(bool)));
+    connect(textPanel, SIGNAL(fontChanged(QFont)), SLOT(updateFont(QFont)));
 }
 
 ToolsPanel::~ToolsPanel(){
