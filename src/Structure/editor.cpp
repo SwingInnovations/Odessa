@@ -303,278 +303,288 @@ QString Editor::addText(int i, QString s){
 
 void Editor::keyPressEvent(QKeyEvent *e){
     if(m_acceptTextInput){
-        switch(e->key()){
-        case Qt::Key_Space:
-            addText(m_textCursorPos, ' ');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Enter:
-            addText(m_textCursorPos, '\n');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Backspace:
-            if(m_textCursorPos > -1){
-                m_Text.remove(m_textCursorPos, 1);
-                m_textCursorPos--;
-            }
-            break;
-        case Qt::Key_Back:
-            if(m_textCursorPos > 0) m_textCursorPos--;
-            break;
-        case Qt::Key_Forward:
-            if(m_textCursorPos < m_Text.length()) m_textCursorPos++;
-            break;
-//        case Qt::Key_Shift + Qt::Key_A:
-//            addText(m_textCursorPos, 'A');
+        addText(m_textCursorPos, e->text());
+        m_textCursorPos++;
+//        switch(e->key()){
+//        case Qt::Key_Space:
+//            addText(m_textCursorPos, ' ');
 //            m_textCursorPos++;
 //            break;
-//        case Qt::Key_Shift + Qt::Key_B:
-//            addText(m_textCursorPos, 'B');
+//        case Qt::Key_Enter:
+//            addText(m_textCursorPos, '\n');
 //            m_textCursorPos++;
 //            break;
-        case Qt::Key_Shift + Qt::Key_C:
-            addText(m_textCursorPos, 'C');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_D:
-            addText(m_textCursorPos, 'D');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_E:
-            addText(m_textCursorPos, 'E');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_F:
-            addText(m_textCursorPos, 'F');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_G:
-            addText(m_textCursorPos, 'G');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_H:
-            addText(m_textCursorPos, 'H');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_I:
-            addText(m_textCursorPos, 'I');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_J:
-            addText(m_textCursorPos, 'J');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_K:
-            addText(m_textCursorPos, 'K');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_L:
-            addText(m_textCursorPos, 'L');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_M:
-            addText(m_textCursorPos, 'M');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_N:
-            addText(m_textCursorPos, 'N');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_O:
-            addText(m_textCursorPos, 'O');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_P:
-            addText(m_textCursorPos, 'P');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_Q:
-            addText(m_textCursorPos, 'Q');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_R:
-            addText(m_textCursorPos, 'R');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_S:
-            addText(m_textCursorPos, 'S');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_T:
-            addText(m_textCursorPos, 'T');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_U:
-            addText(m_textCursorPos, 'U');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_V:
-            addText(m_textCursorPos, 'V');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_W:
-            addText(m_textCursorPos, 'W');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_X:
-            addText(m_textCursorPos, 'X');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_Y:
-            addText(m_textCursorPos, 'Y');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Shift + Qt::Key_Z:
-            addText(m_textCursorPos, 'Z');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_0:
-            addText(m_textCursorPos, '0');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_1:
-            addText(m_textCursorPos, '1');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_2:
-            addText(m_textCursorPos, '2');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_3:
-            addText(m_textCursorPos, '3');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_4:
-            addText(m_textCursorPos, '4');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_5:
-            addText(m_textCursorPos, '5');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_6:
-            addText(m_textCursorPos, '6');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_7:
-            addText(m_textCursorPos, '7');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_8:
-            addText(m_textCursorPos, '8');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_9:
-            addText(m_textCursorPos, '9');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_A:
-            addText(m_textCursorPos, 'a');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_B:
-            addText(m_textCursorPos, 'b');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_C:
-            addText(m_textCursorPos, 'c');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_D:
-            addText(m_textCursorPos, 'd');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_E:
-            addText(m_textCursorPos, 'e');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_F:
-            addText(m_textCursorPos, 'f');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_G:
-            addText(m_textCursorPos, 'g');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_H:
-            addText(m_textCursorPos, 'h');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_I:
-            addText(m_textCursorPos, 'i');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_J:
-            addText(m_textCursorPos, 'j');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_K:
-            addText(m_textCursorPos, 'k');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_L:
-            addText(m_textCursorPos, 'l');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_M:
-            addText(m_textCursorPos, 'm');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_N:
-            addText(m_textCursorPos, 'n');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_O:
-            addText(m_textCursorPos, 'o');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_P:
-            addText(m_textCursorPos, 'p');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Q:
-            addText(m_textCursorPos, 'q');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_R:
-            addText(m_textCursorPos, 'r');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_S:
-            addText(m_textCursorPos, 's');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_T:
-            addText(m_textCursorPos, 't');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_U:
-            addText(m_textCursorPos, 'u');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_V:
-            addText(m_textCursorPos, 'v');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_W:
-            addText(m_textCursorPos, 'w');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_X:
-            addText(m_textCursorPos, 'x');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Y:
-            addText(m_textCursorPos, 'y');
-            m_textCursorPos++;
-            break;
-        case Qt::Key_Z:
-            addText(m_textCursorPos, 'z');
-            m_textCursorPos++;
-            break;
-        default:
-            ;
-        }
+//        case Qt::Key_Period:
+//            addText(m_textCursorPos, '.');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Apostrophe:
+//            addText(m_textCursorPos, '\'');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Backspace:
+//            if(m_textCursorPos > -1){
+//                m_Text.remove(m_textCursorPos, 1);
+//                m_textCursorPos--;
+//            }
+//            break;
+//        case Qt::Key_Back:
+//            if(m_textCursorPos > 0) m_textCursorPos--;
+//            break;
+//        case Qt::Key_Forward:
+//            if(m_textCursorPos < m_Text.length()) m_textCursorPos++;
+//            break;
+////        case Qt::Key_Shift + Qt::Key_A:
+////            addText(m_textCursorPos, 'A');
+////            m_textCursorPos++;
+////            break;
+////        case Qt::Key_Shift + Qt::Key_B:
+////            addText(m_textCursorPos, 'B');
+////            m_textCursorPos++;
+////            break;
+//        case Qt::Key_Shift + Qt::Key_C:
+//            addText(m_textCursorPos, 'C');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_D:
+//            addText(m_textCursorPos, 'D');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_E:
+//            addText(m_textCursorPos, 'E');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_F:
+//            addText(m_textCursorPos, 'F');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_G:
+//            addText(m_textCursorPos, 'G');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_H:
+//            addText(m_textCursorPos, 'H');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_I:
+//            addText(m_textCursorPos, 'I');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_J:
+//            addText(m_textCursorPos, 'J');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_K:
+//            addText(m_textCursorPos, 'K');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_L:
+//            addText(m_textCursorPos, 'L');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_M:
+//            addText(m_textCursorPos, 'M');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_N:
+//            addText(m_textCursorPos, 'N');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_O:
+//            addText(m_textCursorPos, 'O');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_P:
+//            addText(m_textCursorPos, 'P');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_Q:
+//            addText(m_textCursorPos, 'Q');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_R:
+//            addText(m_textCursorPos, 'R');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_S:
+//            addText(m_textCursorPos, 'S');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_T:
+//            addText(m_textCursorPos, 'T');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_U:
+//            addText(m_textCursorPos, 'U');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_V:
+//            addText(m_textCursorPos, 'V');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_W:
+//            addText(m_textCursorPos, 'W');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_X:
+//            addText(m_textCursorPos, 'X');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_Y:
+//            addText(m_textCursorPos, 'Y');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_Z:
+//            addText(m_textCursorPos, 'Z');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_0:
+//            addText(m_textCursorPos, '0');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_1:
+//            addText(m_textCursorPos, '1');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_2:
+//            addText(m_textCursorPos, '2');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_3:
+//            addText(m_textCursorPos, '3');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_4:
+//            addText(m_textCursorPos, '4');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_5:
+//            addText(m_textCursorPos, '5');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_6:
+//            addText(m_textCursorPos, '6');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_7:
+//            addText(m_textCursorPos, '7');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_8:
+//            addText(m_textCursorPos, '8');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_9:
+//            addText(m_textCursorPos, '9');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_A:
+//            addText(m_textCursorPos, 'a');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_B:
+//            addText(m_textCursorPos, 'b');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_C:
+//            addText(m_textCursorPos, 'c');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_D:
+//            addText(m_textCursorPos, 'd');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_E:
+//            addText(m_textCursorPos, 'e');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_F:
+//            addText(m_textCursorPos, 'f');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_G:
+//            addText(m_textCursorPos, 'g');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_H:
+//            addText(m_textCursorPos, 'h');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_I:
+//            addText(m_textCursorPos, 'i');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_J:
+//            addText(m_textCursorPos, 'j');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_K:
+//            addText(m_textCursorPos, 'k');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_L:
+//            addText(m_textCursorPos, 'l');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_M:
+//            addText(m_textCursorPos, 'm');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_N:
+//            addText(m_textCursorPos, 'n');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_O:
+//            addText(m_textCursorPos, 'o');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_P:
+//            addText(m_textCursorPos, 'p');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Q:
+//            addText(m_textCursorPos, 'q');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_R:
+//            addText(m_textCursorPos, 'r');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_S:
+//            addText(m_textCursorPos, 's');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_T:
+//            addText(m_textCursorPos, 't');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_U:
+//            addText(m_textCursorPos, 'u');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_V:
+//            addText(m_textCursorPos, 'v');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_W:
+//            addText(m_textCursorPos, 'w');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_X:
+//            addText(m_textCursorPos, 'x');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Y:
+//            addText(m_textCursorPos, 'y');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Z:
+//            addText(m_textCursorPos, 'z');
+//            m_textCursorPos++;
+//            break;
+//        default:
+//            ;
+//        }
     }
     update();
 }
