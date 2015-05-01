@@ -303,8 +303,21 @@ QString Editor::addText(int i, QString s){
 
 void Editor::keyPressEvent(QKeyEvent *e){
     if(m_acceptTextInput){
-        addText(m_textCursorPos, e->text());
-        m_textCursorPos++;
+        if(e->key() == Qt::Key_Backspace){
+            m_Text.remove(m_textCursorPos, 1);
+            m_textCursorPos--;
+        }else if(e->key() == Qt::Key_Left){
+            if(m_textCursorPos >= 0){
+                m_textCursorPos--;
+            }
+        }else if(e->key() == Qt::Key_Right){
+            if(m_textCursorPos < m_Text.length()){
+                m_textCursorPos++;
+            }
+        }else{
+            addText(m_textCursorPos, e->text());
+            m_textCursorPos++;
+        }
 //        switch(e->key()){
 //        case Qt::Key_Space:
 //            addText(m_textCursorPos, ' ');
@@ -334,14 +347,14 @@ void Editor::keyPressEvent(QKeyEvent *e){
 //        case Qt::Key_Forward:
 //            if(m_textCursorPos < m_Text.length()) m_textCursorPos++;
 //            break;
-////        case Qt::Key_Shift + Qt::Key_A:
-////            addText(m_textCursorPos, 'A');
-////            m_textCursorPos++;
-////            break;
-////        case Qt::Key_Shift + Qt::Key_B:
-////            addText(m_textCursorPos, 'B');
-////            m_textCursorPos++;
-////            break;
+//        case Qt::Key_Shift + Qt::Key_A:
+//            addText(m_textCursorPos, 'A');
+//            m_textCursorPos++;
+//            break;
+//        case Qt::Key_Shift + Qt::Key_B:
+//            addText(m_textCursorPos, 'B');
+//            m_textCursorPos++;
+//            break;
 //        case Qt::Key_Shift + Qt::Key_C:
 //            addText(m_textCursorPos, 'C');
 //            m_textCursorPos++;

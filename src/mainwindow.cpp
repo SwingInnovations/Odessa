@@ -167,9 +167,9 @@ MainWindow::MainWindow(QWidget *parent)
     showToolsDockAct->setCheckable(true);
     showToolsDockAct->setChecked(false);
     zoomInAct = new QAction("&Zoom In",this);
-    zoomInAct->setShortcut(QKeySequence(Qt::Key_Plus));
+    zoomInAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus));
     zoomOutAct = new QAction("&Zoom Out", this);
-    zoomOutAct->setShortcut(QKeySequence(Qt::Key_Minus));
+    zoomOutAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus));
     resetZoomAct = new QAction("&Reset Zoom", this);
     resetZoomAct->setShortcut(QKeySequence(Qt::Key_Home));
 
