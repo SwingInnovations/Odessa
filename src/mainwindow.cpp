@@ -448,10 +448,6 @@ void MainWindow::scaleImage(double val)
 {
     Q_ASSERT(m_Editor->pixmap());
     m_Editor->scale(scaleFactor);
-    //    QPixmap pix = *m_Editor->pixmap();
-    //    pix = pix.scaled(scaleFactor * m_Editor->pixmap()->size(), Qt::KeepAspectRatio, Qt::FastTransformation);
-    //    m_Editor->setPixmap(pix);
-    //m_Editor->resize(m_Editor->pixmap()->size());
     adjustScrollBar(imageArea->horizontalScrollBar(), val);
     adjustScrollBar(imageArea->verticalScrollBar(), val);
 

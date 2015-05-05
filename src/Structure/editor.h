@@ -14,6 +14,8 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QFontMetrics>
+#include <QTextCursor>
+#include <QTextDocument>
 
 #include "../Interface/dialogwindows.h"
 #include "layer.h"
@@ -197,6 +199,10 @@ private:
     int m_FontSize;
     int m_textCursorPos;
     QPixmap generateTextPixmap();
+
+    //New TextEditor tools
+    QTextDocument m_textDocument;
+    QTextCursor m_textCursor;
 
     bool m_ClipWorldTransform;
     QPoint m_ClipOffsetPoint;
