@@ -348,10 +348,6 @@ void BrushDockWidget::setCurrentIndex(int val){
     mStencilWidget->updateBrushHardness(mActualBrushList.at(mCurrentBrushIndex).getHardness());
     mStencilWidget->updateStencilRotate(mActualBrushList.at(mCurrentBrushIndex).getRotate());
     mStencilWidget->updateStencil(mActualBrushList.at(mCurrentBrushIndex).getStencil());
-    qDebug() << "Stencil Width: " << mActualBrushList.at(mCurrentBrushIndex).getSWidth() << endl;
-    qDebug() << "Stencil Height: " << mActualBrushList.at(mCurrentBrushIndex).getSHeight() << endl;
-    qDebug() << "Hardness: " << mActualBrushList.at(mCurrentBrushIndex).getHardness() << endl;
-    qDebug() << "Rotate: " << mActualBrushList.at(mCurrentBrushIndex).getRotate() << endl;
     emit stencilWidthChanged(mActualBrushList.at(mCurrentBrushIndex).getSWidth());
     emit stencilHeightChanged(mActualBrushList.at(mCurrentBrushIndex).getSHeight());
     emit brushHardnessChanged(mActualBrushList.at(mCurrentBrushIndex).getHardness());
@@ -656,13 +652,19 @@ ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(mColorWheel, SIGNAL(redChanged(int)), SLOT(updateRed(int)));
     connect(mColorWheel, SIGNAL(blueChanged(int)), SLOT(updateBlue(int)));
     connect(mColorWheel, SIGNAL(greenChanged(int)), SLOT(updateGreen(int)));
+    connect(mColorWheel, SIGNAL(colorChanged(QColor)), SLOT(updateColor(QColor)));
     connect(mRSlider, SIGNAL(valueChanged(int)), SLOT(updateRed(int)));
     connect(mGSlider, SIGNAL(valueChanged(int)), SLOT(updateGreen(int)));
     connect(mBSlider, SIGNAL(valueChanged(int)), SLOT(updateBlue(int)));
     connect(mRSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateRed(QString)));
     connect(mGSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateGreen(QString)));
     connect(mBSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateBlue(QString)));
-
+    connect(mHSlider, SIGNAL(valueChanged(int)), SLOT(updateHue(int)));
+    connect(mSSlider, SIGNAL(valueChanged(int)), SLOT(updateSat(int)));
+    connect(mVSlider, SIGNAL(valueChanged(int)), SLOT(updateVal(int)));
+    connect(mHSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateHue(QString)));
+    connect(mSSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateSat(QString)));
+    connect(mVSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateVal(QString)));
 }
 
 void ColorDockWidget::updateRed(int val){
@@ -706,27 +708,89 @@ void ColorDockWidget::updateHue(int val){
     int v = col.value();
     col.setHsv(h, s, v);
     mColorWheel->setActualColor(col);
-
+    emit redChanged(col.red());
+    emit greenChanged(col.green());
+    emit blueChanged(col.blue());
 }
 
 void ColorDockWidget::updateHue(QString val){
-
+    QColor col = mColorWheel->getColor();
+    mHSlider->setValue(val.toInt());
+    int h = val.toInt();
+    int s = col.saturation();
+    int v = col.value();
+    col.setHsv(h, s, v);
+    mColorWheel->setActualColor(col);
 }
 
 void ColorDockWidget::updateSat(int val){
-
+    QColor col = mColorWheel->getColor();
+    mSSpinBox->setValue(val);
+    int h = col.hue();
+    int s = val;
+    int v = col.value();
+    col.setHsv(h, s, v);
+    mColorWheel->setActualColor(col);
+    emit redChanged(col.red());
+    emit greenChanged(col.green());
+    emit blueChanged(col.blue());
 }
 
 void ColorDockWidget::updateSat(QString val){
-
+    QColor col = mColorWheel->getColor();
+    mSSlider->setValue(val.toInt());
+    int h = col.hue();
+    int s = val.toInt();
+    int v = col.value();
+    col.setHsv(h, s, v);
+    mColorWheel->setActualColor(col);
 }
 
 void ColorDockWidget::updateVal(int val){
-
+    QColor col = mColorWheel->getColor();
+    mVSpinBox->setValue(val);
+    int h = col.hue();
+    int s = col.saturation();
+    int v = val;
+    col.setHsv(h, s, v);
+    mColorWheel->setActualColor(col);
+    emit redChanged(col.red());
+    emit greenChanged(col.green());
+    emit blueChanged(col.blue());
 }
 
 void ColorDockWidget::updateVal(QString val){
+    QColor col = mColorWheel->getColor();
+    mVSlider->setValue(val.toInt());
+    int h = col.hue();
+    int s = col.saturation();
+    int v = val.toInt();
+    col.setHsv(h, s, v);
+    mColorWheel->setActualColor(col);
+}
 
+void ColorDockWidget::updateColor(QColor col){
+    int r = col.red();
+    int g = col.green();
+    int b = col.blue();
+
+    int h = col.hue();
+    int s = col.saturation();
+    int v = col.value();
+
+    mRSlider->setValue(r);
+    mRSpinBox->setValue(r);
+    mGSlider->setValue(g);
+    mGSpinBox->setValue(g);
+    mBSlider->setValue(b);
+    mBSlider->setValue(b);
+
+    mHSlider->setValue(h);
+    mHSpinBox->setValue(h);
+    mSSlider->setValue(s);
+    mSSpinBox->setValue(s);
+    mVSlider->setValue(v);
+    mVSpinBox->setValue(v);
 }
 
 /*- Color wheel -*/
@@ -780,6 +844,7 @@ void ColorWheel::setActualColor(QColor col){
     actualRed = col.red();
     actualGreen = col.green();
     actualBlue = col.blue();
+    update();
 }
 
 QColor ColorWheel::getColor(){
@@ -820,6 +885,7 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev){
             emit redChanged(actualRed);
             emit greenChanged(actualGreen);
             emit blueChanged(actualBlue);
+            emit colorChanged(QColor(actualRed, actualGreen, actualBlue));
         }
         if(altColorRect.contains(ev->pos())){
             emit redChanged(altRed);
@@ -836,6 +902,7 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev){
             emit redChanged(actualRed);
             emit greenChanged(actualGreen);
             emit blueChanged(actualBlue);
+            emit colorChanged(QColor(actualRed, actualGreen, actualBlue));
         }
         if(!mouseDown && !colorRangeTri.contains(ev->pos())) mouseDown = true;
         if(mouseDown){
@@ -860,6 +927,7 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev){
         emit redChanged(actualRed);
         emit greenChanged(actualGreen);
         emit blueChanged(actualBlue);
+        emit colorChanged(QColor(actualRed, actualGreen, actualBlue));
     }
     if(ev->button() == Qt::MidButton){
         toggleAlt =! toggleAlt;

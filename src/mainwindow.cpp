@@ -154,6 +154,7 @@ MainWindow::MainWindow(QWidget *parent)
     deselectAct->setText("&Deselect");
 
     preferenceAct = new QAction("Preferences", this);
+    preferenceAct->setIcon(QIcon(":/icon/resource/settings_lite.svg"));
     showBrushDockWinAct = new QAction("Show BrushDock", this);
     showBrushDockWinAct->setCheckable(true);
     showBrushDockWinAct->setChecked(true);
@@ -168,8 +169,10 @@ MainWindow::MainWindow(QWidget *parent)
     showToolsDockAct->setChecked(false);
     zoomInAct = new QAction("&Zoom In",this);
     zoomInAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus));
+    zoomInAct->setIcon(QIcon(":/icon/resource/zoom_In_lite.svg"));
     zoomOutAct = new QAction("&Zoom Out", this);
     zoomOutAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus));
+    zoomOutAct->setIcon(QIcon(":/icon/resource/zoom_Out_lite.svg"));
     resetZoomAct = new QAction("&Reset Zoom", this);
     resetZoomAct->setShortcut(QKeySequence(Qt::Key_Home));
 
@@ -462,11 +465,13 @@ void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
 void MainWindow::readSettings(){
     QSettings settings("SwingInnovations", "Odessa");
     projectPath = settings.value("projectPath").toString();
+    setGeometry(settings.value("windowGeom").toRect());
 }
 
 void MainWindow::writeSettings(){
     QSettings settings("SwingInnovations", "Odessa");
     qDebug()<<"Project Path" << projectPath+"/Brush/" << endl;
     settings.setValue("projectPath", projectPath);
+    settings.setValue("windowGeom", this->geometry());
 }
 

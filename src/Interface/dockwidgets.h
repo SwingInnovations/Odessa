@@ -169,6 +169,7 @@ class ColorDockWidget : public QDockWidget
 public:
     ColorDockWidget(QWidget *parent = 0);
 public slots:
+    void updateColor(QColor);
     void updateRed(int);
     void updateRed(QString);
     void updateGreen(int);

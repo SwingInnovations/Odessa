@@ -146,6 +146,11 @@ public slots:
     void setClipOffsetY(int);
     void useWorldTransform(bool);
 private:
+    /*-Control mode, for use with either full view of sprite sheet or normal use
+     *  0 - Normal mode
+     *  1 - Spritesheet overview mode
+     * -*/
+    int m_ControlMode = 0;
 
     void shiftLayerForward();
     void shiftLayerBack();

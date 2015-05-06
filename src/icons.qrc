@@ -3,5 +3,10 @@
         <file>resource/temp_New.svg</file>
         <file>resource/temp_Open.svg</file>
         <file>resource/icon.svg</file>
+        <file>resource/zoom_In.svg</file>
+        <file>resource/zoom_Out.svg</file>
+        <file>resource/zoom_In_lite.svg</file>
+        <file>resource/zoom_Out_lite.svg</file>
+        <file>resource/settings_lite.svg</file>
     </qresource>
 </RCC>
