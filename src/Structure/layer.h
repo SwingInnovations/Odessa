@@ -17,6 +17,8 @@ public:
     Layer(LayerType type, int width, int height);
     Layer(LayerType type, int index, int width, int height);
     int getIndex(){ return m_currentIndex; }
+    int getOpacity()const{ return m_Opacity;}
+    int getCompositionMode()const{ return m_CompositionMode; }
     int getFrameIndeX(){ return mFrameIndex; }
     int getFrameListSize(){return frame.size();}
     BitmapImage *getFrame(int frameIndex){return frame.at(frameIndex);}
@@ -24,6 +26,9 @@ public:
 
     void setIndex(int indexVal){ m_currentIndex = indexVal; }
     void setFocus(bool val){ isFocus = val; }
+
+    void setOpacity(int);
+    void setCompositionMode(int);
 
     void createFrame();
     void createFrameB();
@@ -39,6 +44,8 @@ private:
     int m_currentIndex;
     int mFrameIndex;
     int mWidth, mHeight;
+    int m_Opacity;
+    int m_CompositionMode;
 
     QVector<BitmapImage*> frame;
 };

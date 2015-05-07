@@ -228,7 +228,7 @@ void Editor::tabletEvent(QTabletEvent *event)
 
 void Editor::paintEvent(QPaintEvent *event)
 {
-    qDebug() << "TextCursor Position: " << m_textCursorPos << endl;
+    qDebug() << "Layer Size: " << m_Layers.size() << endl;
     QPainter painter(this);
 
     if(!m_Layers.isEmpty())
@@ -360,6 +360,7 @@ void Editor::addLayer()
         m_CurrentIndex += 1;
         m_Layers.push_back(new Layer(Layer::Bitmap_Blank, width, height));
     }
+    qDebug() << "Layer size: " << m_Layers.size() << endl;
 }
 
 void Editor::addFrame()

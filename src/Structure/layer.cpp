@@ -38,12 +38,17 @@ Layer::Layer(LayerType type, int width, int height)
     if(m_LayerType == Bitmap)
     {
         QRect size(0, 0, width, height);
-        QColor color(Qt::white);
+        QColor color;
+        if(frame.size() == 0){
+            color = QColor(Qt::white);
+        }else{
+            color = QColor(Qt::transparent);
+        }
         frame.push_back(new BitmapImage(size, color));
     }else if(m_LayerType == Bitmap_Blank){
         QRect size(0, 0, width, height);
         QColor color(Qt::transparent);
-        m_Image = new BitmapImage(size, color);
+        frame.push_back(new BitmapImage(size, color));
     }else{
         qDebug() << "Invalid Type!";
     }
@@ -52,8 +57,20 @@ Layer::Layer(LayerType type, int width, int height)
 void Layer::createFrame()
 {
     QRect size(0, 0, mWidth, mHeight);
-    QColor color(Qt::white);
-    m_Image = new BitmapImage(size, color);
-    frame.push_back(m_Image);
+    QColor color;
+    if(frame.size() == 0){
+        color = QColor(Qt::white);
+    }else{
+        color = QColor(Qt::transparent);
+    }
+    frame.push_back(new BitmapImage(size, color));
     qDebug() << "Status of Image" << frame.at(0) << endl;
+}
+
+void Layer::setOpacity(int o){
+    m_Opacity = o;
+}
+
+void Layer::setCompositionMode(int comp){
+    m_CompositionMode = comp;
 }

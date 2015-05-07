@@ -430,20 +430,16 @@ void BrushDockWidget::saveBrushAct(){
         file.flush();
         file.close();
 
-        qDebug() << "Wrote Brush to Disk" << endl;
-
         mActualBrushList.push_back(mTempBrushList.at(mCurrentBrushIndex));
         mGenBrushWidget->addBrush(mTempBrushList.at(mCurrentBrushIndex));
         mTempBrushList = mActualBrushList;
         break;
     }
-    qDebug() << "Saving Brush" << endl;
 }
 
 void BrushDockWidget::saveBrushSetAct(){
     QString filePath = QFileDialog::getSaveFileName(this, "Save brush library", mProjectPath, ".blib");
     saveBrushLib(filePath);
-    qDebug() << "Saving Brush set" << endl;
 }
 
 QVector<Brush> BrushDockWidget::loadBrushLib(QString filePath){
@@ -1112,38 +1108,71 @@ void BrushShapeWidget::mousePressEvent(QMouseEvent *event)
     Q_UNUSED(event);
 }
 
+
 LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
 {
     //initialize
     setWindowTitle("Layer");
 
+    layerCount = 0;
+
     layerOptionsButton = new QToolButton(this);
-    layerOptionsButton->setText("Options");
+    layerOptionsButton->setText("Menu");
     addLayerAct = new QAction("&Add Layer", this);
     duplicateLayerAct = new QAction("&Duplicate Layer", this);
     deleteLayerAct = new QAction("&Delete Layer", this);
+    groupAct = new QAction("&Group", this);
+    ungroupAct = new QAction("&Ungroup", this);
     layerOptionsMenu = new QMenu(this);
 
     layerOptionsMenu->addAction(addLayerAct);
     layerOptionsMenu->addAction(duplicateLayerAct);
     layerOptionsMenu->addAction(deleteLayerAct);
     layerOptionsMenu->addSeparator();
+    layerOptionsMenu->addAction(groupAct);
+    layerOptionsMenu->addAction(ungroupAct);
 
     layerOptionsButton->setMenu(layerOptionsMenu);
+
+    opacityLabel = new QLabel("&Opacity", this);
+    opacitySlider = new QSlider(this);
+    opacitySlider->setOrientation(Qt::Horizontal);
+    opacitySlider->setRange(0, 100);
+    opacitySlider->setValue(100);
+    opacitySpinbox = new QSpinBox(this);
+    opacitySpinbox->setRange(0, 100);
+    opacitySpinbox->setValue(100);
 
     compositionMode = new QComboBox(this);
     compositionMode->addItem("Normal");
     compositionMode->addItem("Multiply");
 
     layerManager = new QTreeWidget(this);
-    layerManager->addTopLevelItem(new QTreeWidgetItem());
+    layerManager->setSelectionMode(QTreeWidget::MultiSelection);
+    layerManager->header()->setSortIndicator(0, Qt::AscendingOrder);
+    QTreeWidgetItem* itm = new QTreeWidgetItem();
+    itm->setText(0, "Background");
+    itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable);
+    itm->setSelected(false);
+    itm->setData(0, Qt::UserRole + 1, QVariant(layerCount));
+    itm->setData(0, Qt::UserRole + 2, QVariant(0));
+    itm->setData(0, Qt::UserRole + 3, QVariant(100));
+    itm->setData(0, Qt::UserRole + 4, QVariant(0));
+    itm->setCheckState(0, Qt::Checked);
+    layerManager->addTopLevelItem(itm);
 
     QHBoxLayout* compLayout = new QHBoxLayout;
     compLayout->addWidget(compositionMode);
     compLayout->addWidget(layerOptionsButton);
 
+    QHBoxLayout* opacityLayout = new QHBoxLayout;
+    opacityLayout->addWidget(opacityLabel);
+    opacityLayout->addWidget(opacitySlider);
+    opacityLayout->addWidget(opacitySpinbox);
+
     QVBoxLayout *layerLayout = new QVBoxLayout;
     layerLayout->addLayout(compLayout);
+    layerLayout->addLayout(opacityLayout);
     layerLayout->addWidget(layerManager);
 
     QWidget *layerDisplay = new QWidget(this);
@@ -1152,6 +1181,69 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
 
     connect(layerManager, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(updateLayer(QTreeWidgetItem*,int)));
     connect(compositionMode, SIGNAL(currentIndexChanged(int)), SLOT(updateCompositonMode(int)));
+    connect(addLayerAct, SIGNAL(triggered()), SLOT(addLayer()));
+    connect(duplicateLayerAct, SIGNAL(triggered()), SLOT(dupliateLayer()));
+    connect(opacitySlider, SIGNAL(valueChanged(int)), SLOT(updateOpacity(int)));
+    connect(opacitySpinbox, SIGNAL(valueChanged(QString)), SLOT(updateOpacity(QString)));
+}
+
+void LayerDockWidget::duplicateLayer(){
+    layerCount++;
+    QTreeWidgetItem* item = layerManager->currentItem()->clone();
+    item->setText(0, item->text(0) + "Copy" );
+    emit layerAdded();
+}
+
+void LayerDockWidget::addLayer(){
+    layerCount++;
+    QTreeWidgetItem* itm = new QTreeWidgetItem(layerCount);
+    itm->setText(0, "Layer" + QString::number(layerCount));
+    itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable);
+    itm->setCheckState(0, Qt::Checked);
+    itm->setData(0, Qt::UserRole + 1, QVariant(layerCount));
+    itm->setData(0, Qt::UserRole + 2, QVariant(0));
+    itm->setData(0, Qt::UserRole + 3, QVariant(100));
+    itm->setData(0, Qt::UserRole + 4, QVariant(0));
+    layerManager->addTopLevelItem(itm);
+    emit layerAdded();
+}
+
+void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent){
+    QTreeWidgetItem* itm = new QTreeWidgetItem();
+    itm->setText(0, "childLayer");
+    itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable);
+    itm->setCheckState(0, Qt::Checked);
+    itm->setData(0, Qt::UserRole + 1, QVariant(layerCount));
+    itm->setData(0, Qt::UserRole + 2, QVariant(0));
+    itm->setData(0, Qt::UserRole + 3, QVariant(100));
+    itm->setData(0, Qt::UserRole + 4, QVariant(0));
+    parent->addChild(itm);
+}
+
+void LayerDockWidget::groupLayers(){
+    QTreeWidgetItem* grpFolder = new QTreeWidgetItem(layerManager);
+    for(int i = 0; i < layerManager->topLevelItemCount(); i++){
+        QTreeWidgetItem* itm = layerManager->topLevelItem(i);
+        if(itm->isSelected()){ grpFolder->addChild(itm); }
+    }
+    grpFolder->setText(0, "Group");
+    layerManager->addTopLevelItem(grpFolder);
+}
+
+void LayerDockWidget::ungroupLayers(){
+
+}
+/*- Potentially breaks -*/
+void LayerDockWidget::updateOpacity(int o){
+    opacitySpinbox->setValue(o);
+    QTreeWidgetItem* item = layerManager->currentItem();
+    item->setData(0, Qt::UserRole + 3, QVariant(o));
+    emit opacityChanged(o);
+}
+
+void LayerDockWidget::updateOpacity(QString o){
+    opacitySlider->setValue(o.toInt());
+    emit opacityChanged(o.toInt());
 }
 
 void LayerDockWidget::setCompositionMode(int i){
@@ -1159,10 +1251,19 @@ void LayerDockWidget::setCompositionMode(int i){
 }
 
 void LayerDockWidget::updateLayer(QTreeWidgetItem *itm, int i){
-    emit layerChanged(itm, i);
+
+    compositionMode->setCurrentIndex(itm->data(0, Qt::UserRole + 4).toInt());
+    opacitySlider->setValue(itm->data(0, Qt::UserRole + 3).toInt());
+    opacitySpinbox->setValue(itm->data(0, Qt::UserRole + 3).toInt());
+
+    emit compositionModeChanged(itm->data(0, Qt::UserRole + 4).toInt());
+    emit opacityChanged(itm->data(0, Qt::UserRole + 4).toInt());
+    emit layerChanged(itm, itm->data(0, Qt::UserRole + 1).toInt());
 }
 
 void LayerDockWidget::updateCompositonMode(int i){
+    QTreeWidgetItem* item = layerManager->currentItem();
+    item->setData(0, Qt::UserRole + 4, QVariant(i));
     emit compositionModeChanged(i);
 }
 

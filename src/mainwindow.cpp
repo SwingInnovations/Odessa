@@ -168,10 +168,10 @@ MainWindow::MainWindow(QWidget *parent)
     showToolsDockAct->setCheckable(true);
     showToolsDockAct->setChecked(false);
     zoomInAct = new QAction("&Zoom In",this);
-    zoomInAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Plus));
+    zoomInAct->setShortcut(QKeySequence::ZoomIn);
     zoomInAct->setIcon(QIcon(":/icon/resource/zoom_In_lite.svg"));
     zoomOutAct = new QAction("&Zoom Out", this);
-    zoomOutAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Minus));
+    zoomOutAct->setShortcut(QKeySequence(QKeySequence::ZoomOut));
     zoomOutAct->setIcon(QIcon(":/icon/resource/zoom_Out_lite.svg"));
     resetZoomAct = new QAction("&Reset Zoom", this);
     resetZoomAct->setShortcut(QKeySequence(Qt::Key_Home));
@@ -283,6 +283,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(colorDockWidget, SIGNAL(redChanged(int)), m_Editor, SLOT(setRedValue(int)));
     connect(colorDockWidget, SIGNAL(greenChanged(int)), m_Editor, SLOT(setGreenValue(int)));
     connect(colorDockWidget, SIGNAL(blueChanged(int)), m_Editor, SLOT(setBlueValue(int)));
+    connect(layerDockWidget, SIGNAL(layerAdded()), m_Editor, SLOT(addLayer()));
     connect(toolPanelWidget, SIGNAL(useWorldTransform(bool)), m_Editor, SLOT(useWorldTransform(bool)));
     connect(toolPanelWidget, SIGNAL(translateChanged(int,int)), m_Editor, SLOT(setClipTranslate(int,int)));
     connect(toolPanelWidget, SIGNAL(rotateChanged(int)), m_Editor, SLOT(setClipRotate(int)));

@@ -46,6 +46,7 @@
 #include <QTreeWidgetItem>
 #include <QButtonGroup>
 #include <QFontComboBox>
+#include <QHeaderView>
 
 #include "../src/Structure/brush.h"
 #include "../src/Structure/editor.h"
@@ -289,7 +290,6 @@ private:
     QPixmap brushPreviewPixmap;
 };
 
-
 class LayerDockWidget : public QDockWidget
 {
     Q_OBJECT
@@ -300,19 +300,34 @@ signals:
     void layerAdded();
     void layerChanged(QTreeWidgetItem*,int);
     void compositionModeChanged(int);
+    void opacityChanged(int);
 public slots:
     void setCompositionMode(int);
+    void addLayer();
+    void duplicateLayer();
+    void groupLayers();
+    void ungroupLayers();
+    void updateOpacity(int);
+    void updateOpacity(QString);
+    void addChildLayer(QTreeWidgetItem* parent);
 private slots:
     void updateLayer(QTreeWidgetItem*, int);
     void updateCompositonMode(int);
 private:
+    int layerCount;
     QComboBox* compositionMode;
     QTreeWidget* layerManager;
     QToolButton* layerOptionsButton;
+    QLabel* opacityLabel;
+    QSlider* opacitySlider;
+    QSpinBox* opacitySpinbox;
+
     QMenu* layerOptionsMenu;
     QAction* addLayerAct;
     QAction* duplicateLayerAct;
     QAction* deleteLayerAct;
+    QAction* groupAct;
+    QAction* ungroupAct;
 };
 
 class GeneralBrushWidget : public QWidget
