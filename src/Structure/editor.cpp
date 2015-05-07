@@ -117,11 +117,9 @@ void Editor::mouseReleaseEvent(QMouseEvent *event)
 
     if(!m_Layers.empty())
     {
-//        m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->optimizeImage(m_CurrentTool);
-            if(m_SelectActive){
-                m_SelectRect.setBottomRight(event->pos());
-                //setBrush(TRANSFORM_TRANSLATE);
-            }
+        if(m_SelectActive){
+            m_SelectRect.setBottomRight(event->pos());
+        }
     }
     update();
 }
@@ -165,7 +163,6 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
             break;
         }
     }
-    qDebug() << " SelectActive: " << m_SelectActive << endl;
     update();
 }
 
@@ -228,7 +225,7 @@ void Editor::tabletEvent(QTabletEvent *event)
 
 void Editor::paintEvent(QPaintEvent *event)
 {
-    qDebug() << "Layer Size: " << m_Layers.size() << endl;
+    qDebug() << "Working layer" << m_CurrentIndex-1 << endl;
     QPainter painter(this);
 
     if(!m_Layers.isEmpty())
@@ -365,7 +362,7 @@ void Editor::addLayer()
 }
 
 void Editor::setLayerIndex(int i){
-    if(i < m_Layers.size()){ m_CurrentIndex = i; }else{ m_CurrentIndex = i - 1; }
+    if(m_CurrentIndex > 0){ m_CurrentIndex = i-1; }
     update();
 }
 

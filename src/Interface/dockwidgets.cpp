@@ -1134,7 +1134,7 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
 
     layerOptionsButton->setMenu(layerOptionsMenu);
 
-    opacityLabel = new QLabel("&Opacity", this);
+    opacityLabel = new QLabel("Opacity", this);
     opacitySlider = new QSlider(this);
     opacitySlider->setOrientation(Qt::Horizontal);
     opacitySlider->setRange(0, 100);
@@ -1148,7 +1148,7 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     compositionMode->addItem("Multiply");
 
     layerManager = new QTreeWidget(this);
-    layerManager->setSelectionMode(QTreeWidget::MultiSelection);
+    layerManager->setSelectionMode(QTreeWidget::ExtendedSelection);
     layerManager->header()->setSortIndicator(0, Qt::AscendingOrder);
     QTreeWidgetItem* itm = new QTreeWidgetItem();
     itm->setText(0, "Background");
@@ -1183,6 +1183,7 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(layerManager, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(updateLayer(QTreeWidgetItem*,int)));
     connect(compositionMode, SIGNAL(currentIndexChanged(int)), SLOT(updateCompositonMode(int)));
     connect(addLayerAct, SIGNAL(triggered()), SLOT(addLayer()));
+    connect(groupAct, SIGNAL(triggered()), SLOT(groupLayers()));
     connect(duplicateLayerAct, SIGNAL(triggered()), SLOT(dupliateLayer()));
     connect(opacitySlider, SIGNAL(valueChanged(int)), SLOT(updateOpacity(int)));
     connect(opacitySpinbox, SIGNAL(valueChanged(QString)), SLOT(updateOpacity(QString)));
@@ -1196,9 +1197,7 @@ void LayerDockWidget::duplicateLayer(){
 }
 
 void LayerDockWidget::reset(){
-    for(int i = 0; i < layerManager->topLevelItemCount(); i++){
-        layerManager->clear();
-    }
+    layerManager->clear();
     layerCount = 0;
     QTreeWidgetItem* itm = new QTreeWidgetItem(layerManager);
     itm->setText(0, "Background");
@@ -1215,7 +1214,7 @@ void LayerDockWidget::addLayer(){
     layerCount++;
     QTreeWidgetItem* itm = new QTreeWidgetItem(layerManager);
     itm->setText(0, "Layer" + QString::number(layerCount));
-    itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable);
+    itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled);
     itm->setCheckState(0, Qt::Checked);
     itm->setData(0, Qt::UserRole + 1, QVariant(layerCount));
     itm->setData(0, Qt::UserRole + 2, QVariant(0));
@@ -1228,7 +1227,7 @@ void LayerDockWidget::addLayer(){
 void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent){
     QTreeWidgetItem* itm = new QTreeWidgetItem();
     itm->setText(0, "childLayer");
-    itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable);
+    itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled);
     itm->setCheckState(0, Qt::Checked);
     itm->setData(0, Qt::UserRole + 1, QVariant(layerCount));
     itm->setData(0, Qt::UserRole + 2, QVariant(0));
@@ -1241,9 +1240,14 @@ void LayerDockWidget::groupLayers(){
     QTreeWidgetItem* grpFolder = new QTreeWidgetItem(layerManager);
     for(int i = 0; i < layerManager->topLevelItemCount(); i++){
         QTreeWidgetItem* itm = layerManager->topLevelItem(i);
-        if(itm->isSelected()){ grpFolder->addChild(itm); }
+        if(itm->isSelected()){
+            grpFolder->addChild(itm);
+            layerManager->removeItemWidget(itm, 0);
+        }
     }
     grpFolder->setText(0, "Group");
+    grpFolder->setFlags(grpFolder->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable);
+    grpFolder->setExpanded(true);
     layerManager->addTopLevelItem(grpFolder);
 }
 
@@ -1272,15 +1276,14 @@ void LayerDockWidget::setCompositionMode(int i){
 }
 
 void LayerDockWidget::updateLayer(QTreeWidgetItem *itm, int i){
-
+    Q_UNUSED(i);
     compositionMode->setCurrentIndex(itm->data(0, Qt::UserRole + 4).toInt());
     opacitySlider->setValue(itm->data(0, Qt::UserRole + 3).toInt());
     opacitySpinbox->setValue(itm->data(0, Qt::UserRole + 3).toInt());
 
     emit compositionModeChanged(itm->data(0, Qt::UserRole + 4).toInt());
     emit opacityChanged(itm->data(0, Qt::UserRole + 4).toInt());
-    emit layerChanged(itm, itm->data(0, Qt::UserRole + 1).toInt());
-    emit layerChanged(itm, itm->data(0, Qt::UserRole + 1).toInt());
+    emit layerChanged(itm->data(0, Qt::UserRole + 1).toInt());
 }
 
 void LayerDockWidget::updateCompositonMode(int i){
