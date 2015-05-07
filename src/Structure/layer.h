@@ -21,6 +21,7 @@ public:
     int getCompositionMode()const{ return m_CompositionMode; }
     int getFrameIndeX(){ return mFrameIndex; }
     int getFrameListSize(){return frame.size();}
+    bool isVisible(){ return m_Visible; }
     BitmapImage *getFrame(int frameIndex){return frame.at(frameIndex);}
     bool getFocusStatus()const{ return isFocus; }
 
@@ -29,6 +30,7 @@ public:
 
     void setOpacity(int);
     void setCompositionMode(int);
+    void setVisible(bool val){ m_Visible = val; }
 
     void createFrame();
     void createFrameB();
@@ -46,6 +48,7 @@ private:
     int mWidth, mHeight;
     int m_Opacity;
     int m_CompositionMode;
+    bool m_Visible;
 
     QVector<BitmapImage*> frame;
 };

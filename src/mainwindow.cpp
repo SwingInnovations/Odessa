@@ -264,6 +264,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(scaleAct, SIGNAL(triggered()), SLOT(assignTransformTool()));
     connect(primitiveTool, SIGNAL(triggered()), SLOT(assignPrimitiveTool()));
     connect(newDialogWin, SIGNAL(newProject(ProjectInfo&)), m_Editor, SLOT(newProject(ProjectInfo&)));
+    connect(newDialogWin, SIGNAL(newProject(ProjectInfo&)), SLOT(newProject(ProjectInfo&)));
     connect(prefDialog, SIGNAL(projectPathChanged(QString)), SLOT(setProjectPath(QString)));
     connect(prefDialog, SIGNAL(historyStepsChanged(int)), m_Editor, SLOT(setHistoyStep(int)));
     connect(exportImgAct, SIGNAL(triggered()), SLOT(exportImage()));
@@ -284,6 +285,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(colorDockWidget, SIGNAL(greenChanged(int)), m_Editor, SLOT(setGreenValue(int)));
     connect(colorDockWidget, SIGNAL(blueChanged(int)), m_Editor, SLOT(setBlueValue(int)));
     connect(layerDockWidget, SIGNAL(layerAdded()), m_Editor, SLOT(addLayer()));
+    connect(layerDockWidget, SIGNAL(layerChanged(int)), m_Editor, SLOT(setLayerIndex(int)));
+    connect(layerDockWidget, SIGNAL(opacityChanged(int)), m_Editor, SLOT(setLayerOpacity(int)));
     connect(toolPanelWidget, SIGNAL(useWorldTransform(bool)), m_Editor, SLOT(useWorldTransform(bool)));
     connect(toolPanelWidget, SIGNAL(translateChanged(int,int)), m_Editor, SLOT(setClipTranslate(int,int)));
     connect(toolPanelWidget, SIGNAL(rotateChanged(int)), m_Editor, SLOT(setClipRotate(int)));
@@ -317,7 +320,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     isModified = false;
     resize(1024,768);
-    m_Editor->setGeometry(this->centralWidget()->rect());
 }
 
 MainWindow::~MainWindow()
@@ -343,6 +345,14 @@ void MainWindow::about()
     msgbox.exec();
 }
 
+void MainWindow::newProject(ProjectInfo &info){
+    layerDockWidget->reset();
+    if(info.getType() != 2){
+        showTimeDockWinAct->setChecked(false);
+        timelineDockWidget->close();
+    }
+}
+
 void MainWindow::toggleShowBrushDock(bool val)
 {
     if(val)
@@ -357,9 +367,9 @@ void MainWindow::toggleShowColorDock(bool val)
 {
     if(val)
     {
-
+        colorDockWidget->show();
     }else{
-
+        colorDockWidget->close();
     }
 }
 

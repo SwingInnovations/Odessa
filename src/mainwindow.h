@@ -47,6 +47,7 @@ private slots:
     void toggleShowTimelineDock(bool);
     void toggleShowToolsDock(bool);
     void exportImage();
+    void newProject(ProjectInfo&);
     void setProjectPath(QString);
     void zoomIn();
     void zoomOut();

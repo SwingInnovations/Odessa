@@ -299,9 +299,11 @@ public:
 signals:
     void layerAdded();
     void layerChanged(QTreeWidgetItem*,int);
+    void layerChanged(int);
     void compositionModeChanged(int);
     void opacityChanged(int);
 public slots:
+    void reset();
     void setCompositionMode(int);
     void addLayer();
     void duplicateLayer();

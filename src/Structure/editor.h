@@ -102,6 +102,10 @@ public slots:
     void newProject(ProjectInfo&);
 
     void addLayer();
+    void setLayerIndex(int);
+    void setLayerOpacity(int);
+    void setLayerCompositionMode(int);
+    void setLayerVisible(bool);
     void addFrame();
 
     void backup();

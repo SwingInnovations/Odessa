@@ -1158,6 +1158,7 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     itm->setData(0, Qt::UserRole + 2, QVariant(0));
     itm->setData(0, Qt::UserRole + 3, QVariant(100));
     itm->setData(0, Qt::UserRole + 4, QVariant(0));
+    itm->setSelected(true);
     itm->setCheckState(0, Qt::Checked);
     layerManager->addTopLevelItem(itm);
 
@@ -1194,9 +1195,25 @@ void LayerDockWidget::duplicateLayer(){
     emit layerAdded();
 }
 
+void LayerDockWidget::reset(){
+    for(int i = 0; i < layerManager->topLevelItemCount(); i++){
+        layerManager->clear();
+    }
+    layerCount = 0;
+    QTreeWidgetItem* itm = new QTreeWidgetItem(layerManager);
+    itm->setText(0, "Background");
+    itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable);
+    itm->setCheckState(0, Qt::Checked);
+    itm->setData(0, Qt::UserRole + 1, QVariant(layerCount));
+    itm->setData(0, Qt::UserRole + 2, QVariant(0));
+    itm->setData(0, Qt::UserRole + 3, QVariant(100));
+    itm->setData(0, Qt::UserRole + 4, QVariant(0));
+    layerManager->addTopLevelItem(itm);
+}
+
 void LayerDockWidget::addLayer(){
     layerCount++;
-    QTreeWidgetItem* itm = new QTreeWidgetItem(layerCount);
+    QTreeWidgetItem* itm = new QTreeWidgetItem(layerManager);
     itm->setText(0, "Layer" + QString::number(layerCount));
     itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable);
     itm->setCheckState(0, Qt::Checked);
@@ -1237,6 +1254,10 @@ void LayerDockWidget::ungroupLayers(){
 void LayerDockWidget::updateOpacity(int o){
     opacitySpinbox->setValue(o);
     QTreeWidgetItem* item = layerManager->currentItem();
+    if(!item){
+        item = layerManager->topLevelItem(0);
+    }
+
     item->setData(0, Qt::UserRole + 3, QVariant(o));
     emit opacityChanged(o);
 }
@@ -1258,6 +1279,7 @@ void LayerDockWidget::updateLayer(QTreeWidgetItem *itm, int i){
 
     emit compositionModeChanged(itm->data(0, Qt::UserRole + 4).toInt());
     emit opacityChanged(itm->data(0, Qt::UserRole + 4).toInt());
+    emit layerChanged(itm, itm->data(0, Qt::UserRole + 1).toInt());
     emit layerChanged(itm, itm->data(0, Qt::UserRole + 1).toInt());
 }
 

@@ -241,7 +241,8 @@ void Editor::paintEvent(QPaintEvent *event)
                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(painter);
                QPixmap tPixmap = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap();
                p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-               p.drawPixmap(0, 0, tPixmap);
+               p.setOpacity(m_Layers.at(i)->getOpacity());
+               p.drawImage(0, 0, tPixmap.toImage());
            }
         }
         p.end();
@@ -361,6 +362,25 @@ void Editor::addLayer()
         m_Layers.push_back(new Layer(Layer::Bitmap_Blank, width, height));
     }
     qDebug() << "Layer size: " << m_Layers.size() << endl;
+}
+
+void Editor::setLayerIndex(int i){
+    if(i < m_Layers.size()){ m_CurrentIndex = i; }else{ m_CurrentIndex = i - 1; }
+    update();
+}
+
+void Editor::setLayerOpacity(int o){
+    qDebug() << "Changing Opacity at: " << o << endl;
+    if(!m_Layers.empty()){m_Layers.at(m_CurrentIndex-1)->setOpacity(o);}
+    update();
+}
+
+void Editor::setLayerCompositionMode(int c){
+    if(!m_Layers.empty()){ m_Layers.at(m_CurrentIndex)->setCompositionMode(c); }
+}
+
+void Editor::setLayerVisible(bool val){
+    if(!m_Layers.empty()){ m_Layers.at(m_CurrentIndex-1)->setVisible(val); }
 }
 
 void Editor::addFrame()
@@ -658,16 +678,6 @@ QPixmap Editor::generateTextPixmap(){
     ret.fill(Qt::transparent);
 
     m_textDocument.setTextWidth(m_FontSize);
-
-    QPainter p(&ret);
-    m_textDocument.drawContents(&p, ret.rect());
-//    QPainter p(&ret);
-//    p.setFont(m_Font);
-//    p.setPen(Qt::black);
-//    p.setBrush(Qt::transparent);
-//    p.drawRect(ret.rect());
-//    p.drawText(ret.rect(), Qt::AlignLeft, m_Text);
-//    p.end();
 
     update();
 
