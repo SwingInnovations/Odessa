@@ -576,6 +576,9 @@ private:
     QFontComboBox* m_FontComboBox;
     QSpinBox* m_FontSizeSB;
     QPushButton* m_CommitButton;
+    QPushButton* m_BoldBtn;
+    QPushButton* m_ItalicBtn;
+    QPushButton* m_UnderlineBtn;
 };
 
 /*-Tools Panel-*/

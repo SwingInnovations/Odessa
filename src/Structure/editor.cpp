@@ -542,6 +542,7 @@ void Editor::setSizeTransfer(int val)
 
 void Editor::setFont(QFont font){
     m_Font = font;
+
 }
 
 void Editor::setFontSize(int font){

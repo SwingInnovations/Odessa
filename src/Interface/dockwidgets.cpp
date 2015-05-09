@@ -2065,13 +2065,29 @@ TextPanel::TextPanel(QWidget *parent) : QWidget(parent){
 
     m_FontSize = 7;
 
+    m_BoldBtn = new QPushButton("B",this);
+    m_BoldBtn->setCheckable(true);
+    m_ItalicBtn = new QPushButton("I", this);
+    m_ItalicBtn->setCheckable(true);
+    m_UnderlineBtn = new QPushButton("U", this);
+    m_UnderlineBtn->setCheckable(true);
+
     QHBoxLayout* centralLayout = new QHBoxLayout;
     centralLayout->addWidget(m_FontComboBox);
     centralLayout->addWidget(m_FontSizeSB);
 
+    QHBoxLayout* btnLayout = new QHBoxLayout;
+    btnLayout->addWidget(m_BoldBtn);
+    btnLayout->addWidget(m_ItalicBtn);
+    btnLayout->addWidget(m_UnderlineBtn);
+
+    QVBoxLayout* textLayout = new QVBoxLayout;
+    textLayout->addLayout(centralLayout);
+    textLayout->addLayout(btnLayout);
+
     QGroupBox* grpBox = new QGroupBox(this);
     grpBox->setTitle("&Text");
-    grpBox->setLayout(centralLayout);
+    grpBox->setLayout(textLayout);
 
     m_CommitButton = new QPushButton("&Commit", this);
 
