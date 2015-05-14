@@ -294,6 +294,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(toolPanelWidget, SIGNAL(actionCommitted()), m_Editor, SLOT(commitChanges()));
     connect(toolPanelWidget, SIGNAL(fontChanged(QFont)), m_Editor, SLOT(setFont(QFont)));
     connect(toolPanelWidget, SIGNAL(fontSizeChanged(int)), m_Editor, SLOT(setFontSize(int)));
+    connect(toolPanelWidget, SIGNAL(fontBoldChanged(bool)), m_Editor, SLOT(setBold(bool)));
+    connect(toolPanelWidget, SIGNAL(fontItalicChanged(bool)), m_Editor, SLOT(setItalic(bool)));
+    connect(toolPanelWidget, SIGNAL(fontUnderlineChanged(bool)), m_Editor, SLOT(setUnderline(bool)));
     connect(m_Editor, SIGNAL(brushSizeChanged(int)), brushDockWidget, SLOT(updateSize(int)));
     connect(m_Editor, SIGNAL(brushOpacityChanged(int)), brushDockWidget, SLOT(updateOpacity(int)));
     connect(m_Editor, SIGNAL(redChanged(int)), colorDockWidget, SLOT(updateRed(int)));

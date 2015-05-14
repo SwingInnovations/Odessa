@@ -45,7 +45,12 @@ Editor::Editor(QWidget *parent):QLabel(parent)
 
     m_Text = "";
     m_acceptTextInput = false;
-    m_textCursor = QTextCursor(&m_textDocument);
+    m_textDocument = new QTextDocument();
+    m_textCursor = QTextCursor(m_textDocument);
+    m_textCursor.setPosition(QTextCursor::Start);
+    m_fmt = QTextCharFormat(m_textCursor.charFormat());
+    m_fmt.setFont(m_Font);
+    m_fmt.setForeground(QBrush(Qt::black));
 }
 
 void Editor::setHistoyStep(int h){
@@ -303,20 +308,15 @@ QString Editor::addText(int i, QString s){
 void Editor::keyPressEvent(QKeyEvent *e){
     if(m_acceptTextInput){
         if(e->key() == Qt::Key_Backspace){
-            m_Text.remove(m_textCursorPos, 1);
-            m_textCursorPos--;
+            m_textCursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor);
+            m_textCursor.deleteChar();
         }else if(e->key() == Qt::Key_Left){
-            if(m_textCursorPos >= 0){
-                m_textCursorPos--;
-            }
+            m_textCursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor);
         }else if(e->key() == Qt::Key_Right){
-            if(m_textCursorPos < m_Text.length()){
-                m_textCursorPos++;
-            }
+            m_textCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
         }else{
-            m_textCursor.insertText(e->text());
-//            addText(m_textCursorPos, e->text());
-//            m_textCursorPos++;
+            m_textCursor.insertText(e->text(), m_fmt);
+            m_textCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
         }
     }
     update();
@@ -542,7 +542,7 @@ void Editor::setSizeTransfer(int val)
 
 void Editor::setFont(QFont font){
     m_Font = font;
-
+    m_fmt.setFont(m_Font);
 }
 
 void Editor::setFontSize(int font){
@@ -555,6 +555,18 @@ void Editor::backup()
     {
         backup(m_CurrentIndex-1, m_CurrentFrame-1);
     }
+}
+
+void Editor::setBold(bool v){
+    if(v) m_fmt.setFontWeight(QFont::Bold); else m_fmt.setFontWeight(QFont::Normal);
+}
+
+void Editor::setItalic(bool v){
+    m_fmt.setFontItalic(v);
+}
+
+void Editor::setUnderline(bool v){
+    m_fmt.setFontUnderline(v);
 }
 
 void Editor::scale(double scaleVal)
@@ -671,13 +683,19 @@ void Editor::commitChanges(){
 //
 
 QPixmap Editor::generateTextPixmap(){
-    QFontMetrics fm(m_Font);
-    QPixmap ret(fm.width(m_Text), fm.height());
+    QTextCharFormat fmt(m_textCursor.charFormat());
+    fmt.setFont(m_Font);
+    fmt.setForeground(QBrush(Qt::black));
+
+    QPixmap ret(m_textDocument->size().toSize());
     ret.fill(Qt::transparent);
 
-    m_textDocument.setTextWidth(m_FontSize);
+    QPainter p(&ret);
+    p.setPen(Qt::black);
+    p.setBrush(Qt::black);
+    m_textDocument->drawContents(&p, ret.rect());
+    p.end();
 
     update();
-
     return ret;
 }

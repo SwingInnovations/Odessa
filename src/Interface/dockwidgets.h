@@ -565,10 +565,16 @@ public:
     ~TextPanel();
 signals:
     void fontChanged(QFont);
+    void fontBoldChanged(bool);
+    void fontItalicChanged(bool);
+    void fontUnderlineChanged(bool);
     void actionCommited();
 private slots:
     void changeFont(QFont);
     void changeFontSize(int);
+    void updateFontBold(bool);
+    void updateFontItalic(bool);
+    void updateFontUnderline(bool);
     void commitChanges();
 private:
     QFont m_Font;
@@ -595,6 +601,9 @@ signals:
    void useWorldTransform(bool);
    void fontChanged(QFont);
    void fontSizeChanged(int);
+   void fontBoldChanged(bool);
+   void fontItalicChanged(bool);
+   void fontUnderlineChanged(bool);
    void actionCommitted();
 public slots:
    void setMode(int);
@@ -605,6 +614,9 @@ public slots:
    void updateWorldTransform(bool);
    void updateFont(QFont);
    void updateFontSize(int);
+   void updateFontBold(bool);
+   void updateFontItalic(bool);
+   void updateFontUnderline(bool);
 private:
    TransformTools* transTools;
    DefaultToolPanel* defTools;

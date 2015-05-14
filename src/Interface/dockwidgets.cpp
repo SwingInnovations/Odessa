@@ -1751,6 +1751,9 @@ ToolsPanel::ToolsPanel(QWidget* parent) : QDockWidget(parent){
     connect(transTools, SIGNAL(transformModeChanged(int)), SLOT(updateTransformMode(int)));
     connect(transTools, SIGNAL(useWorldTransform(bool)), SLOT(updateWorldTransform(bool)));
     connect(textPanel, SIGNAL(fontChanged(QFont)), SLOT(updateFont(QFont)));
+    connect(textPanel, SIGNAL(fontBoldChanged(bool)), SLOT(updateFontBold(bool)));
+    connect(textPanel, SIGNAL(fontItalicChanged(bool)), SLOT(updateFontItalic(bool)));
+    connect(textPanel, SIGNAL(fontUnderlineChanged(bool)), SLOT(updateFontUnderline(bool)));
 }
 
 ToolsPanel::~ToolsPanel(){
@@ -1811,6 +1814,18 @@ void ToolsPanel::updateFontSize(int fontSize){
     emit updateFontSize(fontSize);
 }
 
+void ToolsPanel::updateFontBold(bool v){
+    emit fontBoldChanged(v);
+}
+
+void ToolsPanel::updateFontItalic(bool v){
+    emit fontItalicChanged(v);
+}
+
+void ToolsPanel::updateFontUnderline(bool v){
+    emit fontUnderlineChanged(v);
+}
+
 DefaultToolPanel::DefaultToolPanel(QWidget *parent) : QWidget(parent){
     QGroupBox* grpBox = new QGroupBox(this);
     grpBox->setTitle("Info");
@@ -1855,18 +1870,21 @@ TransformTools::TransformTools(QWidget *parent) : QWidget(parent){
     //Translate
     m_TransXLbl = new QLabel("Translate X: ", this);
     m_TransXSB = new QSpinBox(this);
+    m_TransXSB->setRange(-100, 10000);
     QHBoxLayout* transXLayout = new QHBoxLayout;
     transXLayout->addWidget(m_TransXLbl);
     transXLayout->addWidget(m_TransXSB);
 
     m_TransYLbl = new QLabel("Translate Y: ", this);
     m_TransYSB = new QSpinBox(this);
+    m_TransYSB->setRange(-100, 10000);
     QHBoxLayout* transYLayout = new QHBoxLayout;
     transYLayout->addWidget(m_TransYLbl);
     transYLayout->addWidget(m_TransYSB);
 
     m_RotLbl = new QLabel("Rotate: ", this);
     m_RotSB = new QSpinBox(this);
+    m_RotSB->setRange(0, 359);
     QHBoxLayout* rotXLayout = new QHBoxLayout;
     rotXLayout->addWidget(m_RotLbl);
     rotXLayout->addWidget(m_RotSB);
@@ -1877,12 +1895,14 @@ TransformTools::TransformTools(QWidget *parent) : QWidget(parent){
 
     m_ScalXLbl = new QLabel("Scale X: ", this);
     m_ScalXSB = new QSpinBox(this);
+    m_ScalXSB->setRange(-100, 10000);
     QHBoxLayout* scalXLayout = new QHBoxLayout;
     scalXLayout->addWidget(m_ScalXLbl);
     scalXLayout->addWidget(m_ScalXSB);
 
     m_ScalYLbl = new QLabel("Scale Y: ", this);
     m_ScalYSB = new QSpinBox(this);
+    m_ScalYSB->setRange(-100, 100000);
     QHBoxLayout* scalYLayout = new QHBoxLayout;
     scalYLayout->addWidget(m_ScalYLbl);
     scalYLayout->addWidget(m_ScalYSB);
@@ -2065,6 +2085,8 @@ TextPanel::TextPanel(QWidget *parent) : QWidget(parent){
 
     m_FontSize = 7;
 
+    m_Font = QFont("MS Shell DLG 2", 7);
+
     m_BoldBtn = new QPushButton("B",this);
     m_BoldBtn->setCheckable(true);
     m_ItalicBtn = new QPushButton("I", this);
@@ -2099,6 +2121,9 @@ TextPanel::TextPanel(QWidget *parent) : QWidget(parent){
 
     connect(m_FontComboBox, SIGNAL(currentFontChanged(QFont)), SLOT(changeFont(QFont)));
     connect(m_FontSizeSB, SIGNAL(valueChanged(int)), SLOT(changeFontSize(int)));
+    connect(m_BoldBtn, SIGNAL(clicked(bool)), SLOT(updateFontBold(bool)));
+    connect(m_ItalicBtn, SIGNAL(clicked(bool)), SLOT(updateFontItalic(bool)));
+    connect(m_UnderlineBtn, SIGNAL(clicked()), SLOT(updateFontUnderline(bool)));
     connect(m_CommitButton, SIGNAL(clicked()), SLOT(commitChanges()));
 }
 
@@ -2112,6 +2137,18 @@ void TextPanel::changeFontSize(int s){
     m_FontSize = s;
     m_Font.setPointSize(m_FontSize);
     emit fontChanged(m_Font);
+}
+
+void TextPanel::updateFontBold(bool v){
+    emit fontBoldChanged(v);
+}
+
+void TextPanel::updateFontItalic(bool v){
+    emit fontItalicChanged(v);
+}
+
+void TextPanel::updateFontUnderline(bool v){
+    emit fontUnderlineChanged(v);
 }
 
 void TextPanel::commitChanges(){

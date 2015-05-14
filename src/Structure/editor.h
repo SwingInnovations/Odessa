@@ -144,6 +144,9 @@ public slots:
 
     void setFont(QFont);
     void setFontSize(int);
+    void setBold(bool);
+    void setItalic(bool);
+    void setUnderline(bool);
     void commitChanges();
 
     void setClipOffsetX(int);
@@ -202,6 +205,9 @@ private:
 
 //Clipboard stuff
     QString m_Text;
+    bool m_isBold;
+    bool m_isItalic;
+    bool m_isUnderline;
     bool m_acceptTextInput;
     bool m_ShiftEnabled;
     QFont m_Font;
@@ -210,8 +216,9 @@ private:
     QPixmap generateTextPixmap();
 
     //New TextEditor tools
-    QTextDocument m_textDocument;
+    QTextDocument *m_textDocument;
     QTextCursor m_textCursor;
+    QTextCharFormat m_fmt;
 
     bool m_ClipWorldTransform;
     QPoint m_ClipOffsetPoint;
