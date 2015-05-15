@@ -1751,6 +1751,7 @@ ToolsPanel::ToolsPanel(QWidget* parent) : QDockWidget(parent){
     connect(transTools, SIGNAL(transformModeChanged(int)), SLOT(updateTransformMode(int)));
     connect(transTools, SIGNAL(useWorldTransform(bool)), SLOT(updateWorldTransform(bool)));
     connect(textPanel, SIGNAL(fontChanged(QFont)), SLOT(updateFont(QFont)));
+    connect(textPanel, SIGNAL(fontSizeChanged(int)), SLOT(updateFontSize(int)));
     connect(textPanel, SIGNAL(fontBoldChanged(bool)), SLOT(updateFontBold(bool)));
     connect(textPanel, SIGNAL(fontItalicChanged(bool)), SLOT(updateFontItalic(bool)));
     connect(textPanel, SIGNAL(fontUnderlineChanged(bool)), SLOT(updateFontUnderline(bool)));
@@ -1786,7 +1787,6 @@ void ToolsPanel::setMode(int o){
 }
 
 void ToolsPanel::updateTranslate(int x, int y){
-    qDebug() << "Intended Point: " << x << " " << y << endl;
     emit translateChanged(x, y);
 }
 
@@ -1807,11 +1807,12 @@ void ToolsPanel::updateWorldTransform(bool v){
 }
 
 void ToolsPanel::updateFont(QFont font){
-    emit updateFont(font);
+    qDebug() << "Changing font to: " << font << endl;
+    emit fontChanged(font);
 }
 
 void ToolsPanel::updateFontSize(int fontSize){
-    emit updateFontSize(fontSize);
+    emit fontSizeChanged(fontSize);
 }
 
 void ToolsPanel::updateFontBold(bool v){
@@ -2128,15 +2129,12 @@ TextPanel::TextPanel(QWidget *parent) : QWidget(parent){
 }
 
 void TextPanel::changeFont(QFont font){
-    m_Font = font;
-    m_Font.setPointSize(m_FontSize);
-    emit fontChanged(m_Font);
+    qDebug() << "Attempting to change font to " << font << endl;
+    emit fontChanged(font);
 }
 
 void TextPanel::changeFontSize(int s){
-    m_FontSize = s;
-    m_Font.setPointSize(m_FontSize);
-    emit fontChanged(m_Font);
+    emit fontSizeChanged(s);
 }
 
 void TextPanel::updateFontBold(bool v){

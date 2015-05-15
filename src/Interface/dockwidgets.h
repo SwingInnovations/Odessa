@@ -565,6 +565,7 @@ public:
     ~TextPanel();
 signals:
     void fontChanged(QFont);
+    void fontSizeChanged(int);
     void fontBoldChanged(bool);
     void fontItalicChanged(bool);
     void fontUnderlineChanged(bool);

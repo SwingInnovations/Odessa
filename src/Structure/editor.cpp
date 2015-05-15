@@ -547,6 +547,7 @@ void Editor::setFont(QFont font){
 
 void Editor::setFontSize(int font){
     m_FontSize = font;
+    m_fmt.setFontPointSize(m_FontSize);
 }
 
 void Editor::backup()
