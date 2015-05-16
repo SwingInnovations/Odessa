@@ -16,6 +16,7 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QSpinBox>
+#include <QComboBox>
 
 //handle the dialog windows
 class GeneralPrefPage;
@@ -126,6 +127,7 @@ public:
 signals:
     void projectPathChanged(QString);
     void historyStepsChanged(int);
+    void uiScaleChanged(double);
 public slots:
     void updateProjectPath(QString);
 private:
@@ -146,10 +148,11 @@ public:
 signals:
     void projectPathChanged(QString);
     void historyStepsChanged(int);
-
+    void uiScaleChanged(double);
 public slots:
     void changeProjectPath();
     void changeHistorySteps(int);
+    void updateUIScale(QString);
 private:
     /*-Project Path-*/
     QLabel* mProjectPathLbl;
@@ -159,6 +162,10 @@ private:
     /*-History stack settings-*/
     QLabel* mHistoryLbl;
     QSpinBox* mStepsBox;
+
+    /*-UI Scaling option-*/
+    QLabel* m_ScaleLbl;
+    QComboBox* m_ScaleComboBox;
 };
 
 #endif // DIALOGWINDOWS_H

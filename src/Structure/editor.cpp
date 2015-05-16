@@ -260,7 +260,6 @@ void Editor::paintEvent(QPaintEvent *event)
     }
 
     if(m_ClipboardPresent){
-        qDebug() << "Pixmap null status: " << m_ClipboardPixmap.isNull() << endl;
         if(m_ToolType == TEXT_TOOL){
             m_ClipboardPixmap = generateTextPixmap();
         }
@@ -347,6 +346,8 @@ void Editor::newProject(ProjectInfo &info){
             break;
         }
     }
+    m_ClipboardPixmap = QPixmap();
+    m_ClipOffsetPoint = QPoint(0, 0);
     backup();
     update();
 }
@@ -498,7 +499,6 @@ void Editor::setBlueValue(int val)
 void Editor::setOpacity(int val)
 {
     m_OpacityVal = val;
-    //m_PrimaryColor.setAlpha(m_OpacityVal);
     m_PrimaryColor.setAlpha(val);
     m_CurrentTool.setOpacity(val);
     switch(m_ToolType){
@@ -640,20 +640,19 @@ void Editor::copy(){
 }
 
 void Editor::paste(){
-    QClipboard* clip = QApplication::clipboard();
+    const QClipboard* clip = QApplication::clipboard();
     const QMimeData* mimeData = clip->mimeData();
-
     if(!m_ClipboardPresent) m_ClipboardPresent = true;
-    if(mimeData->hasText()){
-        //deal with the text
-        setBrush(ToolType::TEXT_TOOL);
-        m_textCursor.insertText(clip->text());
-    }else if(mimeData->hasImage()){
-        m_ClipboardPixmap = QPixmap::fromImage(clip->image());
-        qDebug() << "Pixmap info: " << m_ClipboardPixmap << endl;
+    if(mimeData->hasImage()){
+        m_ClipboardPixmap = QPixmap::fromImage(qvariant_cast<QImage>(mimeData->imageData()));
         m_ClipOffsetPoint = QPoint( (this->pixmap()->width()/2 - m_ClipboardPixmap.width()/2), (this->pixmap()->height()/2 - m_ClipboardPixmap.height()/2) );
         m_SelectRect = m_ClipboardPixmap.rect();
         setBrush(ToolType::TRANSFORM_TRANSLATE);
+    }else if(mimeData->hasText()){
+        setBrush(ToolType::TEXT_TOOL);
+        m_textCursor.insertText(clip->text(), m_fmt);
+    }else{
+        qDebug() << "Invalid Paste Option!" << endl;
     }
     backup();
 }
@@ -698,9 +697,6 @@ void Editor::commitChanges(){
 }
 
 QPixmap Editor::generateTextPixmap(){
-    QTextCharFormat fmt(m_textCursor.charFormat());
-    fmt.setFont(m_Font);
-    fmt.setForeground(QBrush(Qt::black));
 
     QPixmap ret(m_textDocument->size().toSize());
     ret.fill(Qt::transparent);

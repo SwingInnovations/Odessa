@@ -301,14 +301,24 @@ GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
     historyGrp->addWidget(mHistoryLbl);
     historyGrp->addWidget(mStepsBox);
 
+    m_ScaleLbl = new QLabel("Scale: ", this);
+    m_ScaleComboBox = new QComboBox(this);
+    m_ScaleComboBox->addItem("100%");
+    m_ScaleComboBox->addItem("125%");
+    m_ScaleComboBox->addItem("150%");
+    QHBoxLayout* scaleLayout = new QHBoxLayout;
+    scaleLayout->addWidget(m_ScaleLbl);
+    scaleLayout->addWidget(m_ScaleComboBox);
+
     QVBoxLayout* masterLayout = new QVBoxLayout;
     masterLayout->addLayout(projectPathGrp);
     masterLayout->addLayout(historyGrp);
+    masterLayout->addLayout(scaleLayout);
 
     setLayout(masterLayout);
 
     connect(mChangeProjectPathBtn, SIGNAL(clicked()), SLOT(changeProjectPath()));
-
+    connect(m_ScaleComboBox, SIGNAL(currentIndexChanged(QString)), SLOT(updateUIScale(QString)));
 }
 
 void GeneralPrefPage::changeProjectPath(){
@@ -319,6 +329,12 @@ void GeneralPrefPage::changeProjectPath(){
 
 void GeneralPrefPage::changeHistorySteps(int val){
     mStepsBox->setValue(val);
+}
+
+void GeneralPrefPage::updateUIScale(QString num){
+    num = num.remove('%');
+    double scale = num.toDouble()/100.0;
+    emit uiScaleChanged(scale);
 }
 
 GeneralPrefPage::~GeneralPrefPage()

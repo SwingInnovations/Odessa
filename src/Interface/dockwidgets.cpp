@@ -1254,6 +1254,7 @@ void LayerDockWidget::groupLayers(){
 void LayerDockWidget::ungroupLayers(){
 
 }
+
 /*- Potentially breaks -*/
 void LayerDockWidget::updateOpacity(int o){
     opacitySpinbox->setValue(o);
