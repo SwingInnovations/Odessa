@@ -16,6 +16,7 @@
 #include <QFontMetrics>
 #include <QTextCursor>
 #include <QTextDocument>
+#include <QTimer>
 
 #include "../Interface/dialogwindows.h"
 #include "layer.h"

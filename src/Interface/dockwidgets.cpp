@@ -1755,6 +1755,7 @@ ToolsPanel::ToolsPanel(QWidget* parent) : QDockWidget(parent){
     connect(textPanel, SIGNAL(fontBoldChanged(bool)), SLOT(updateFontBold(bool)));
     connect(textPanel, SIGNAL(fontItalicChanged(bool)), SLOT(updateFontItalic(bool)));
     connect(textPanel, SIGNAL(fontUnderlineChanged(bool)), SLOT(updateFontUnderline(bool)));
+    connect(textPanel, SIGNAL(actionCommited()), SLOT(updateActionCommit()));
 }
 
 ToolsPanel::~ToolsPanel(){
@@ -1807,7 +1808,6 @@ void ToolsPanel::updateWorldTransform(bool v){
 }
 
 void ToolsPanel::updateFont(QFont font){
-    qDebug() << "Changing font to: " << font << endl;
     emit fontChanged(font);
 }
 
@@ -1825,6 +1825,10 @@ void ToolsPanel::updateFontItalic(bool v){
 
 void ToolsPanel::updateFontUnderline(bool v){
     emit fontUnderlineChanged(v);
+}
+
+void ToolsPanel::updateActionCommit(){
+    emit actionCommitted();
 }
 
 DefaultToolPanel::DefaultToolPanel(QWidget *parent) : QWidget(parent){
@@ -1869,23 +1873,26 @@ TransformTools::TransformTools(QWidget *parent) : QWidget(parent){
     optionLayout->addWidget(m_ScaleBtn);
 
     //Translate
-    m_TransXLbl = new QLabel("Translate X: ", this);
+    m_TransXLbl = new QLabel("Translate X:", this);
     m_TransXSB = new QSpinBox(this);
     m_TransXSB->setRange(-100, 10000);
+    m_TransXSB->setMinimumWidth(48);
     QHBoxLayout* transXLayout = new QHBoxLayout;
     transXLayout->addWidget(m_TransXLbl);
     transXLayout->addWidget(m_TransXSB);
 
-    m_TransYLbl = new QLabel("Translate Y: ", this);
+    m_TransYLbl = new QLabel("Translate Y:", this);
     m_TransYSB = new QSpinBox(this);
     m_TransYSB->setRange(-100, 10000);
+    m_TransYSB->setMinimumWidth(48);
     QHBoxLayout* transYLayout = new QHBoxLayout;
     transYLayout->addWidget(m_TransYLbl);
     transYLayout->addWidget(m_TransYSB);
 
-    m_RotLbl = new QLabel("Rotate: ", this);
+    m_RotLbl = new QLabel("Rotate:", this);
     m_RotSB = new QSpinBox(this);
     m_RotSB->setRange(0, 359);
+    m_RotSB->setMinimumWidth(48);
     QHBoxLayout* rotXLayout = new QHBoxLayout;
     rotXLayout->addWidget(m_RotLbl);
     rotXLayout->addWidget(m_RotSB);
@@ -1894,16 +1901,18 @@ TransformTools::TransformTools(QWidget *parent) : QWidget(parent){
     m_RotLbl->hide();
     m_RotSB->hide();
 
-    m_ScalXLbl = new QLabel("Scale X: ", this);
+    m_ScalXLbl = new QLabel("Scale X:", this);
     m_ScalXSB = new QSpinBox(this);
     m_ScalXSB->setRange(-100, 10000);
+    m_ScalXSB->setMinimumWidth(48);
     QHBoxLayout* scalXLayout = new QHBoxLayout;
     scalXLayout->addWidget(m_ScalXLbl);
     scalXLayout->addWidget(m_ScalXSB);
 
-    m_ScalYLbl = new QLabel("Scale Y: ", this);
+    m_ScalYLbl = new QLabel("Scale Y:", this);
     m_ScalYSB = new QSpinBox(this);
     m_ScalYSB->setRange(-100, 100000);
+    m_ScalYSB->setMinimumWidth(48);
     QHBoxLayout* scalYLayout = new QHBoxLayout;
     scalYLayout->addWidget(m_ScalYLbl);
     scalYLayout->addWidget(m_ScalYSB);
@@ -2124,17 +2133,19 @@ TextPanel::TextPanel(QWidget *parent) : QWidget(parent){
     connect(m_FontSizeSB, SIGNAL(valueChanged(int)), SLOT(changeFontSize(int)));
     connect(m_BoldBtn, SIGNAL(clicked(bool)), SLOT(updateFontBold(bool)));
     connect(m_ItalicBtn, SIGNAL(clicked(bool)), SLOT(updateFontItalic(bool)));
-    connect(m_UnderlineBtn, SIGNAL(clicked()), SLOT(updateFontUnderline(bool)));
+    connect(m_UnderlineBtn, SIGNAL(clicked(bool)), SLOT(updateFontUnderline(bool)));
     connect(m_CommitButton, SIGNAL(clicked()), SLOT(commitChanges()));
 }
 
 void TextPanel::changeFont(QFont font){
-    qDebug() << "Attempting to change font to " << font << endl;
-    emit fontChanged(font);
+    m_Font = font;
+    m_Font.setPointSize(m_FontSize);
+    emit fontChanged(m_Font);
 }
 
 void TextPanel::changeFontSize(int s){
-    emit fontSizeChanged(s);
+    m_FontSize = s;
+    emit fontSizeChanged(m_FontSize);
 }
 
 void TextPanel::updateFontBold(bool v){

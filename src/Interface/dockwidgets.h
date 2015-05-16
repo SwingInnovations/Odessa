@@ -618,6 +618,7 @@ public slots:
    void updateFontBold(bool);
    void updateFontItalic(bool);
    void updateFontUnderline(bool);
+   void updateActionCommit();
 private:
    TransformTools* transTools;
    DefaultToolPanel* defTools;

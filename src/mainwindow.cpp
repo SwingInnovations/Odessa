@@ -3,8 +3,6 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-//    resize(1024, 768);
-
     readSettings();
     if(projectPath.isEmpty()){
         QMessageBox projectMsgBx;
@@ -132,12 +130,6 @@ MainWindow::MainWindow(QWidget *parent)
     pasteAct = new QAction(this);
     pasteAct->setText("&Paste");
     pasteAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_V));
-
-    //Temporarily disable
-    //Not fully tested yet.
-    cutAct->setEnabled(false);
-    copyAct->setEnabled(false);
-    pasteAct->setEnabled(false);
 
     sendFeedbackAct = new QAction(this);
     sendFeedbackAct->setText("&Send Feedback");

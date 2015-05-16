@@ -103,7 +103,7 @@ void Editor::mousePressEvent(QMouseEvent *event)
             backup();
         }
             break;
-       defualt:
+       default:
             break;
         }
     }
@@ -230,7 +230,6 @@ void Editor::tabletEvent(QTabletEvent *event)
 
 void Editor::paintEvent(QPaintEvent *event)
 {
-    qDebug() << "Working layer" << m_CurrentIndex-1 << endl;
     QPainter painter(this);
 
     if(!m_Layers.isEmpty())
@@ -242,8 +241,8 @@ void Editor::paintEvent(QPaintEvent *event)
            if(m_Layers.at(i)->getFrame(m_CurrentFrame-1)->isVisible()){
                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(painter);
                QPixmap tPixmap = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap();
-               p.setCompositionMode(QPainter::CompositionMode_SourceOver);
                p.setOpacity(m_Layers.at(i)->getOpacity());
+               p.setCompositionMode(QPainter::CompositionMode_SourceOver);
                p.drawImage(0, 0, tPixmap.toImage());
            }
         }
@@ -261,10 +260,13 @@ void Editor::paintEvent(QPaintEvent *event)
     }
 
     if(m_ClipboardPresent){
+        qDebug() << "Pixmap null status: " << m_ClipboardPixmap.isNull() << endl;
         if(m_ToolType == TEXT_TOOL){
             m_ClipboardPixmap = generateTextPixmap();
         }
         painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+        if(m_AlternatePattern){ painter.setPen(Qt::DotLine); m_AlternatePattern = false; }else{  painter.setPen(Qt::DashDotLine); m_AlternatePattern = true; }
+        painter.drawRect(m_ClipOffsetPoint.x(), m_ClipOffsetPoint.y(), m_ClipboardPixmap.rect().width(), m_ClipboardPixmap.rect().height());
         painter.drawPixmap(m_ClipOffsetPoint, m_ClipboardPixmap);
         painter.end();
     }
@@ -358,7 +360,6 @@ void Editor::addLayer()
         m_CurrentIndex += 1;
         m_Layers.push_back(new Layer(Layer::Bitmap_Blank, width, height));
     }
-    qDebug() << "Layer size: " << m_Layers.size() << endl;
 }
 
 void Editor::setLayerIndex(int i){
@@ -367,7 +368,6 @@ void Editor::setLayerIndex(int i){
 }
 
 void Editor::setLayerOpacity(int o){
-    qDebug() << "Changing Opacity at: " << o << endl;
     if(!m_Layers.empty()){m_Layers.at(m_CurrentIndex-1)->setOpacity(o);}
     update();
 }
@@ -406,6 +406,7 @@ void Editor::setBrush(ToolType type)
         emit toolChanged(1);
     case TEXT_TOOL:
         m_acceptTextInput = true;
+        m_ClipboardPresent = true;
         emit toolChanged(2);
         break;
     case EYEDROPPER_TOOL:
@@ -475,6 +476,7 @@ void Editor::setRedValue(int val)
     m_RedVal = val;
     m_PrimaryColor.setRed(m_RedVal);
     m_CurrentTool.setColor(m_PrimaryColor);
+    m_fmt.setForeground(QBrush(m_PrimaryColor));
 }
 
 void Editor::setGreenValue(int val)
@@ -482,6 +484,7 @@ void Editor::setGreenValue(int val)
     m_GreenVal = val;
     m_PrimaryColor.setGreen(m_GreenVal);
     m_CurrentTool.setColor(m_PrimaryColor);
+    m_fmt.setForeground(QBrush(m_PrimaryColor));
 }
 
 void Editor::setBlueValue(int val)
@@ -489,6 +492,7 @@ void Editor::setBlueValue(int val)
     m_BlueVal = val;
     m_PrimaryColor.setBlue(m_BlueVal);
     m_CurrentTool.setColor(m_PrimaryColor);
+    m_fmt.setForeground(QBrush(m_PrimaryColor));
 }
 
 void Editor::setOpacity(int val)
@@ -643,9 +647,12 @@ void Editor::paste(){
     if(mimeData->hasText()){
         //deal with the text
         setBrush(ToolType::TEXT_TOOL);
+        m_textCursor.insertText(clip->text());
     }else if(mimeData->hasImage()){
-        m_ClipboardPixmap = clip->pixmap();
+        m_ClipboardPixmap = QPixmap::fromImage(clip->image());
+        qDebug() << "Pixmap info: " << m_ClipboardPixmap << endl;
         m_ClipOffsetPoint = QPoint( (this->pixmap()->width()/2 - m_ClipboardPixmap.width()/2), (this->pixmap()->height()/2 - m_ClipboardPixmap.height()/2) );
+        m_SelectRect = m_ClipboardPixmap.rect();
         setBrush(ToolType::TRANSFORM_TRANSLATE);
     }
     backup();
@@ -679,9 +686,16 @@ void Editor::commitChanges(){
     if(!m_ClipboardPixmap.isNull()){
         m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->commitChanges(m_ClipOffsetPoint, m_ClipboardPixmap);
     }
+    if(m_acceptTextInput) m_acceptTextInput = false;
+    if(m_ClipboardPresent) m_ClipboardPresent = false;
+    m_textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    m_textCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    m_textCursor.removeSelectedText();
+    m_textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    m_ClipboardPixmap = QPixmap();
+    m_ClipOffsetPoint = QPoint(0, 0);
+    backup();
 }
-
-//
 
 QPixmap Editor::generateTextPixmap(){
     QTextCharFormat fmt(m_textCursor.charFormat());
