@@ -231,6 +231,19 @@ void BitmapImage::fillRecurs(QPoint pos, QImage& img, QRgb oldColor, QRgb newCol
     }
 }
 
+void BitmapImage::cutImgOp(QRect rect, BitmapImage &img){
+    QPainter p(&m_pixmap);
+
+}
+
+void BitmapImage::cutImgOp(QRect rect, QColor col){
+    QPainter p(&m_pixmap);
+    p.setBrush(QBrush(col));
+    p.setPen(QPen(col));
+    p.fillRect(rect, col);
+    p.end();
+}
+
 QPixmap BitmapImage::getCompositeImage()
 {
     QPixmap temp = m_pixmap;

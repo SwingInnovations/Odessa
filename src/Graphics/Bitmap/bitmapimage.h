@@ -42,6 +42,9 @@ public:
     void paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt);//Keep
     void setColor(const QColor color){ m_Color = color; m_Image->fill(m_Color);}
 
+    void cutImgOp(QRect rect, QColor col);
+    void cutImgOp(QRect rect, BitmapImage& img);
+
     void commitChanges(QPoint drawPoint, QPixmap pixmap);
 
     void fillImage(QPoint point, Brush brush);

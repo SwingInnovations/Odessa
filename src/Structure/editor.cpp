@@ -625,36 +625,54 @@ void Editor::redo()
 }
 
 void Editor::cut(){
-    QClipboard* clip = QApplication::clipboard();
-    QPixmap cutPix = m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->copy(m_SelectRect).getPixmap();
-    clip->setPixmap(cutPix);
-    //Do something to clear the old Image;
+    if(!m_Layers.isEmpty()){
+        copy();
+        if(!m_acceptTextInput){
+            if(m_Layers.size() > 2){
+                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->cutImgOp(m_SelectRect, QColor(Qt::transparent));
+            }else{
+                //just fill the selection rect with white
+                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->cutImgOp(m_SelectRect, QColor(Qt::white));
+            }
+        }else{
+            m_textCursor.removeSelectedText();
+        }
+    }
     backup();
 }
 
 void Editor::copy(){
-    QClipboard* clip = QApplication::clipboard();
-    QPixmap copyPix = m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->copy(m_SelectRect).getPixmap();
-    clip->setPixmap(copyPix);
+    if(!m_Layers.isEmpty()){
+        QClipboard* clip = QApplication::clipboard();
+        if(m_acceptTextInput){
+            clip->setText(m_textCursor.selection().toPlainText());
+        }else{
+            QPixmap copyPix = m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->copy(m_SelectRect).getPixmap();
+            clip->setPixmap(copyPix);
+        }
+    }
+
     backup();
 }
 
 void Editor::paste(){
-    const QClipboard* clip = QApplication::clipboard();
-    const QMimeData* mimeData = clip->mimeData();
-    if(!m_ClipboardPresent) m_ClipboardPresent = true;
-    if(mimeData->hasImage()){
-        m_ClipboardPixmap = QPixmap::fromImage(qvariant_cast<QImage>(mimeData->imageData()));
-        m_ClipOffsetPoint = QPoint( (this->pixmap()->width()/2 - m_ClipboardPixmap.width()/2), (this->pixmap()->height()/2 - m_ClipboardPixmap.height()/2) );
-        m_SelectRect = m_ClipboardPixmap.rect();
-        setBrush(ToolType::TRANSFORM_TRANSLATE);
-    }else if(mimeData->hasText()){
-        setBrush(ToolType::TEXT_TOOL);
-        m_textCursor.insertText(clip->text(), m_fmt);
-    }else{
-        qDebug() << "Invalid Paste Option!" << endl;
+    if(!m_Layers.isEmpty()){
+        const QClipboard* clip = QApplication::clipboard();
+        const QMimeData* mimeData = clip->mimeData();
+        if(!m_ClipboardPresent) m_ClipboardPresent = true;
+        if(mimeData->hasImage()){
+            m_ClipboardPixmap = QPixmap::fromImage(qvariant_cast<QImage>(mimeData->imageData()));
+            m_ClipOffsetPoint = QPoint( (this->pixmap()->width()/2 - m_ClipboardPixmap.width()/2), (this->pixmap()->height()/2 - m_ClipboardPixmap.height()/2) );
+            m_SelectRect = m_ClipboardPixmap.rect();
+            setBrush(ToolType::TRANSFORM_TRANSLATE);
+        }else if(mimeData->hasText()){
+            setBrush(ToolType::TEXT_TOOL);
+            m_textCursor.insertText(clip->text(), m_fmt);
+        }else{
+            qDebug() << "Invalid Paste Option!" << endl;
+        }
+        backup();
     }
-    backup();
 }
 
 void Editor::setClipTranslate(int x, int y){
@@ -682,22 +700,23 @@ void Editor::useWorldTransform(bool val){
 }
 
 void Editor::commitChanges(){
-    if(!m_ClipboardPixmap.isNull()){
-        m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->commitChanges(m_ClipOffsetPoint, m_ClipboardPixmap);
+    if(!m_Layers.isEmpty()){
+        if(!m_ClipboardPixmap.isNull()){
+            m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->commitChanges(m_ClipOffsetPoint, m_ClipboardPixmap);
+        }
+        if(m_acceptTextInput) m_acceptTextInput = false;
+        if(m_ClipboardPresent) m_ClipboardPresent = false;
+        m_textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+        m_textCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        m_textCursor.removeSelectedText();
+        m_textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+        m_ClipboardPixmap = QPixmap();
+        m_ClipOffsetPoint = QPoint(0, 0);
+        backup();
     }
-    if(m_acceptTextInput) m_acceptTextInput = false;
-    if(m_ClipboardPresent) m_ClipboardPresent = false;
-    m_textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-    m_textCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    m_textCursor.removeSelectedText();
-    m_textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-    m_ClipboardPixmap = QPixmap();
-    m_ClipOffsetPoint = QPoint(0, 0);
-    backup();
 }
 
 QPixmap Editor::generateTextPixmap(){
-
     QPixmap ret(m_textDocument->size().toSize());
     ret.fill(Qt::transparent);
 
