@@ -57,6 +57,18 @@ void Editor::setHistoyStep(int h){
     m_HistorySteps = h;
 }
 
+QPixmap Editor::getSelectionPixmap(){
+    if(!m_Layers.empty()){
+        if(m_SelectRect.width() > 0 && m_SelectRect.height() > 0){
+            return m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->copy(m_SelectRect).getPixmap();
+        }else{
+            return QPixmap();
+        }
+    }else{
+        return QPixmap();
+    }
+}
+
 void Editor::mousePressEvent(QMouseEvent *event)
 {
     if(!m_Layers.isEmpty() && event->button() == Qt::LeftButton)

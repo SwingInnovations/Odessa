@@ -66,6 +66,7 @@ public:
     void setBrush(ToolType type);
     int getHistoryStep()const{ return m_HistorySteps; }
     ProjectInfo getProjectInfo()const{ return m_Info; }
+    QPixmap getSelectionPixmap();
     QSize getPixmapSize(){
         if(!m_Layers.isEmpty())
         {

@@ -1733,10 +1733,12 @@ ToolsPanel::ToolsPanel(QWidget* parent) : QDockWidget(parent){
     transTools = new TransformTools(this);
     defTools = new DefaultToolPanel(this);
     textPanel = new TextPanel(this);
+    primPanel = new PrimitivePanel(this);
     panelSpace = new QStackedWidget();
     panelSpace->addWidget(defTools);
     panelSpace->addWidget(transTools);
     panelSpace->addWidget(textPanel);
+    panelSpace->addWidget(primPanel);
     panelSpace->setCurrentIndex(0);
 
     QVBoxLayout* centralLayout = new QVBoxLayout;
@@ -2168,3 +2170,97 @@ void TextPanel::commitChanges(){
 TextPanel::~TextPanel(){
 
 }
+
+PrimitivePanel::PrimitivePanel(QWidget *parent) : QWidget(parent){
+    m_isConcaveBtn = new QRadioButton("&Concave", this);
+    m_isConcaveBtn->setChecked(true);
+    m_isConvexBtn = new QRadioButton("&Convex", this);
+    m_concaveGrp = new QButtonGroup(this);
+    m_concaveGrp->addButton(m_isConcaveBtn);
+    m_concaveGrp->addButton(m_isConvexBtn);
+
+    QHBoxLayout* radioBtnLayout = new QHBoxLayout;
+    radioBtnLayout->addWidget(m_isConcaveBtn);
+    radioBtnLayout->addWidget(m_isConvexBtn);
+
+    m_PointCountLbl = new QLabel("Vertices: ", this);
+    m_PointSB = new QSpinBox(this);
+    m_PointSB->setRange(0, 100);
+
+    QHBoxLayout* pointLayout = new QHBoxLayout;
+    pointLayout->addWidget(m_PointCountLbl);
+    pointLayout->addWidget(m_PointSB);
+
+    m_PenWidthLbl = new QLabel("Pen Width: ", this);
+    m_PenWidthSB = new QSpinBox(this);
+    m_PenWidthSB->setRange(0, 100);
+
+    QHBoxLayout* penLayout = new QHBoxLayout;
+    penLayout->addWidget(m_PenWidthLbl);
+    penLayout->addSpacing(5);
+    penLayout->addWidget(m_PenWidthSB);
+
+    m_WidthLbl = new QLabel("&Width: ", this);
+    m_WidthSlider = new QSlider(this);
+    m_WidthSlider->setRange(0, 100);
+    m_WidthSB = new QSpinBox(this);
+    m_WidthSB->setRange(0, 100);
+
+    QHBoxLayout* widthLayout = new QHBoxLayout;
+    widthLayout->addWidget(m_WidthLbl);
+    widthLayout->addWidget(m_WidthSlider);
+    widthLayout->addWidget(m_WidthSB);
+
+    m_HeightLbl = new QLabel("&Height: ", this);
+    m_HeightSlider = new QSlider(this);
+    m_HeightSlider->setRange(0, 100);
+    m_HeightSB = new QSpinBox(this);
+    m_HeightSB->setRange(0, 100);
+
+    QHBoxLayout* heightLayout = new QHBoxLayout;
+    heightLayout->addWidget(m_HeightLbl);
+    heightLayout->addWidget(m_HeightSlider);
+    heightLayout->addWidget(m_HeightSB);
+
+    QVBoxLayout* overallLayout = new QVBoxLayout;
+    overallLayout->addLayout(pointLayout);
+    overallLayout->addLayout(penLayout);
+    overallLayout->addLayout(widthLayout);
+    overallLayout->addLayout(heightLayout);
+
+    QGroupBox* grpBox = new QGroupBox(this);
+    grpBox->setTitle("Primitives");
+    grpBox->setLayout(overallLayout);
+
+    QVBoxLayout* displayLayout = new QVBoxLayout;
+    displayLayout->addWidget(grpBox);
+    setLayout(displayLayout);
+
+    connect(m_PointSB, SIGNAL(valueChanged(int)), SLOT(updatePointCount(int)));
+    connect(m_PenWidthSB, SIGNAL(valueChanged(int)), SLOT(updatePenWidth(int)));
+    connect(m_WidthSB, SIGNAL(valueChanged(int)), SLOT(updateWidth(int)));
+    connect(m_HeightSB, SIGNAL(valueChanged(int)), SLOT(updateHeight(int)));
+
+}
+
+void PrimitivePanel::updateWidth(int width){
+    emit widthChanged(width);
+}
+
+void PrimitivePanel::updateHeight(int height){
+    emit heightChanged(height);
+}
+
+void PrimitivePanel::updatePenWidth(int penWidth){
+    emit penWidthChanged(penWidth);
+}
+
+void PrimitivePanel::updatePointCount(int sideCount){
+    emit pointCountChanged(sideCount);
+}
+
+PrimitivePanel::~PrimitivePanel(){
+
+}
+
+

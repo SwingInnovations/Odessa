@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     Interface/dialogwindows.cpp \
     Interface/dockwidgets.cpp \
     Structure/brush.cpp \
-    Interface/odessa_ui.cpp
+    Interface/odessa_ui.cpp \
+    Structure/primitive.cpp
 
 HEADERS  += mainwindow.h \
     Graphics/Bitmap/bitmapimage.h \
@@ -37,7 +38,8 @@ HEADERS  += mainwindow.h \
     Interface/dockwidgets.h \
     Structure/brush.h \
     Overloads.h \
-    Interface/odessa_ui.h
+    Interface/odessa_ui.h \
+    Structure/primitive.h
 
 
 RESOURCES += \

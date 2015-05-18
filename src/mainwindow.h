@@ -47,6 +47,7 @@ private slots:
     void toggleShowTimelineDock(bool);
     void toggleShowToolsDock(bool);
     void exportImage();
+    void exportSelection();
     void newProject(ProjectInfo&);
     void setProjectPath(QString);
     void zoomIn();
@@ -78,6 +79,7 @@ private:
     QAction *saveAct;
     QAction *saveAsAct;
     QMenu *exportMenu;
+    QAction *exportSelectionAct;
     QAction *exportImgAct;
     QAction *exportSpriteSheetAct;
     QAction *exportImgSeqAct;

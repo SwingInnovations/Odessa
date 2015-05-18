@@ -107,6 +107,7 @@ MainWindow::MainWindow(QWidget *parent)
     saveAsAct = new QAction("&Save As...", this);
     saveAsAct->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
     exportImgAct = new QAction("&Image", this);
+    exportSelectionAct = new QAction("&Selection", this);
     exportSpriteSheetAct = new QAction("&Sprite Sheet", this);
     exportImgSeqAct = new QAction("&Sequence", this);
     exportAnimAct = new QAction("&Animation", this);
@@ -180,6 +181,7 @@ MainWindow::MainWindow(QWidget *parent)
     fileMenu->addSeparator();
     exportMenu = new QMenu("&Export", this);
     exportMenu->addAction(exportImgAct);
+    exportMenu->addAction(exportSelectionAct);
     exportMenu->addAction(exportSpriteSheetAct);
     exportMenu->addAction(exportImgSeqAct);
     exportMenu->addAction(exportAnimAct);
@@ -260,6 +262,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(prefDialog, SIGNAL(projectPathChanged(QString)), SLOT(setProjectPath(QString)));
     connect(prefDialog, SIGNAL(historyStepsChanged(int)), m_Editor, SLOT(setHistoyStep(int)));
     connect(exportImgAct, SIGNAL(triggered()), SLOT(exportImage()));
+    connect(exportSelectionAct, SIGNAL(triggered()), SLOT(exportSelection()));
     connect(zoomInAct, SIGNAL(triggered()), SLOT(zoomIn()));
     connect(zoomOutAct, SIGNAL(triggered()), SLOT(zoomOut()));
     connect(resetZoomAct, SIGNAL(triggered()), m_Editor, SLOT(resetScale()));
@@ -447,6 +450,14 @@ void MainWindow::exportImage(){
     pix.setDotsPerMeterX(m_Editor->getProjectInfo().getDPI());
     pix.setDotsPerMeterY(m_Editor->getProjectInfo().getDPI());
     pix.save(saveName);
+}
+
+void MainWindow::exportSelection(){
+    QString saveName = QFileDialog::getSaveFileName(this, "Save File.", QDir::currentPath(), ".png");
+    QImage img = m_Editor->getSelectionPixmap().toImage();
+    img.setDotsPerMeterX(m_Editor->getProjectInfo().getDPI());
+    img.setDotsPerMeterY(m_Editor->getProjectInfo().getDPI());
+    img.save(saveName);
 }
 
 void MainWindow::sendFeedBack(){

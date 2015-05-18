@@ -588,6 +588,52 @@ private:
     QPushButton* m_UnderlineBtn;
 };
 
+/*Manage the primitive panel*/
+class PrimitivePanel : public QWidget{
+    Q_OBJECT
+public:
+    PrimitivePanel(QWidget* parent = 0);
+    ~PrimitivePanel();
+signals:
+    void widthChanged(int);
+    void heightChanged(int);
+    void penWidthChanged(int);
+    void pointCountChanged(int);
+private slots:
+    void updateWidth(int);
+    void updateHeight(int);
+    void updatePenWidth(int);
+    void updatePointCount(int);
+private:
+    QRadioButton* m_isConcaveBtn;
+    QRadioButton* m_isConvexBtn;
+    QButtonGroup* m_concaveGrp;
+
+    QLabel* m_PointCountLbl;
+    QSpinBox* m_PointSB;
+
+    QLabel* m_PenWidthLbl;
+    QSpinBox* m_PenWidthSB;
+
+    QLabel* m_WidthLbl;
+    QSlider* m_WidthSlider;
+    QSpinBox* m_WidthSB;
+
+    QLabel* m_HeightLbl;
+    QSlider* m_HeightSlider;
+    QSpinBox* m_HeightSB;
+};
+
+/*Brush related additional options*/
+class BrushPanel : public QWidget{
+    Q_OBJECT
+public:
+    BrushPanel(QWidget* parent = 0);
+    ~BrushPanel();
+private:
+    QCheckBox* m_SteadyStrokeChbx;
+};
+
 /*-Tools Panel-*/
 class ToolsPanel : public QDockWidget{
     Q_OBJECT
@@ -623,6 +669,7 @@ private:
    TransformTools* transTools;
    DefaultToolPanel* defTools;
    TextPanel* textPanel;
+   PrimitivePanel* primPanel;
    QStackedWidget* panelSpace;
 };
 
