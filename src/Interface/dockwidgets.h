@@ -605,6 +605,7 @@ private slots:
     void updatePenWidth(int);
     void updatePointCount(int);
 private:
+    QRadioButton* m_isLineBtn;
     QRadioButton* m_isConcaveBtn;
     QRadioButton* m_isConvexBtn;
     QButtonGroup* m_concaveGrp;

@@ -1149,7 +1149,8 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
 
     layerManager = new QTreeWidget(this);
     layerManager->setSelectionMode(QTreeWidget::ExtendedSelection);
-    layerManager->header()->setSortIndicator(0, Qt::AscendingOrder);
+    layerManager->sortItems(0, Qt::DescendingOrder);
+    layerManager->setDragEnabled(true);
     QTreeWidgetItem* itm = new QTreeWidgetItem();
     itm->setText(0, "Background");
     itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable);
@@ -1212,7 +1213,7 @@ void LayerDockWidget::reset(){
 
 void LayerDockWidget::addLayer(){
     layerCount++;
-    QTreeWidgetItem* itm = new QTreeWidgetItem(layerManager);
+    QTreeWidgetItem* itm = new QTreeWidgetItem();
     itm->setText(0, "Layer" + QString::number(layerCount));
     itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled);
     itm->setCheckState(0, Qt::Checked);
@@ -1221,11 +1222,12 @@ void LayerDockWidget::addLayer(){
     itm->setData(0, Qt::UserRole + 3, QVariant(100));
     itm->setData(0, Qt::UserRole + 4, QVariant(0));
     layerManager->addTopLevelItem(itm);
+    layerManager->sortItems(0, Qt::DescendingOrder);
     emit layerAdded();
 }
 
 void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent){
-    QTreeWidgetItem* itm = new QTreeWidgetItem();
+    QTreeWidgetItem* itm = new QTreeWidgetItem;
     itm->setText(0, "childLayer");
     itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled);
     itm->setCheckState(0, Qt::Checked);
@@ -1234,6 +1236,7 @@ void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent){
     itm->setData(0, Qt::UserRole + 3, QVariant(100));
     itm->setData(0, Qt::UserRole + 4, QVariant(0));
     parent->addChild(itm);
+    parent->sortChildren(0, Qt::DescendingOrder);
 }
 
 void LayerDockWidget::groupLayers(){
@@ -1249,6 +1252,7 @@ void LayerDockWidget::groupLayers(){
     grpFolder->setFlags(grpFolder->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable);
     grpFolder->setExpanded(true);
     layerManager->addTopLevelItem(grpFolder);
+    layerManager->sortItems(Qt::DescendingOrder);
 }
 
 void LayerDockWidget::ungroupLayers(){
@@ -2172,10 +2176,12 @@ TextPanel::~TextPanel(){
 }
 
 PrimitivePanel::PrimitivePanel(QWidget *parent) : QWidget(parent){
+    m_isLineBtn = new QRadioButton("&Line", this);
+    m_isLineBtn->setChecked(true);
     m_isConcaveBtn = new QRadioButton("&Concave", this);
-    m_isConcaveBtn->setChecked(true);
     m_isConvexBtn = new QRadioButton("&Convex", this);
     m_concaveGrp = new QButtonGroup(this);
+    m_concaveGrp->addButton(m_isLineBtn);
     m_concaveGrp->addButton(m_isConcaveBtn);
     m_concaveGrp->addButton(m_isConvexBtn);
 

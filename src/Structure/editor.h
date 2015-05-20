@@ -21,6 +21,7 @@
 #include "../Interface/dialogwindows.h"
 #include "layer.h"
 #include "brush.h"
+#include "primitive.h"
 
 class Editor;
 class ProjectInfo;
@@ -164,6 +165,8 @@ private:
     void shiftLayerForward();
     void shiftLayerBack();
 
+    QPixmap generateShapePixmap(Primitive);
+
     bool m_DeviceDown;
     bool m_TabletInUse;
     bool m_Modified;
@@ -175,6 +178,7 @@ private:
     Brush m_CurrentTool;
     Brush m_Brush;
     Brush m_Eraser;
+    Brush m_Primitive;
 
     QPainter::CompositionMode m_CompMode;
 

@@ -9,6 +9,32 @@
 
 #include "brush.h"
 
+class SWPoint{
+public:
+    SWPoint(){
+        _id = 0;
+        _x = 0;
+        _y = 0;
+    }
+    SWPoint(int i, int x, int y){
+        _id = i;
+        _x = x;
+        _y = y;
+    }
+
+    QPoint toQPoint()const{ return QPoint(_x, _y); }
+    int getID()const {return _id;}
+    int getX()const{ return _x; }
+    int getY()const{ return _y; }
+    void setID(int id){ _id = id; }
+    void setX(int x){ _x = x; }
+    void setY(int y){ _y = y; }
+private:
+    int _id;
+    int _x;
+    int _y;
+};
+
 class Primitive : public Brush
 {
 public:
@@ -24,12 +50,21 @@ public:
     void setColor(QColor);
 
     int getPointCount()const{ return m_pointCount; }
-    void isConcave(){ return m_isConcave; }
+    bool isConcave(){ return m_isConcave; }
+    int getWidth()const{ return m_Width; }
+    int getHeight()const{ return m_Height; }
     QPen getPen()const{ return m_Pen; }
     QBrush getBrush()const{ return m_Brush; }
+    QPainterPath getShapePath()const{ return m_Path; }
 private:
+
+    void generateShapePoints();
+
+    QVector<SWPoint> points;
     QPoint m_CenterP;
     int m_pointCount;
+    int m_Width;
+    int m_Height;
     bool m_isConcave;
     QPainterPath m_Path;
     QColor m_fillColor;

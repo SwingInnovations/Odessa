@@ -40,6 +40,14 @@ void Primitive::setColor(QColor c){
     m_fillColor = c;
 }
 
+void Primitive::generateShapePoints(){
+    if(m_isConcave){
+
+    }else{
+
+    }
+}
+
 Primitive::~Primitive()
 {
 

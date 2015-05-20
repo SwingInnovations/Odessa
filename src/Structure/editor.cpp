@@ -741,3 +741,12 @@ QPixmap Editor::generateTextPixmap(){
     update();
     return ret;
 }
+
+QPixmap Editor::generateShapePixmap(Primitive prim){
+    QPixmap ret(prim.getWidth(), prim.getHeight());
+    QPainter p(&ret);
+    p.setPen(prim.getPen());
+    p.setBrush(prim.getBrush());
+    p.drawPath(prim.getShapePath());
+    return ret;
+}
