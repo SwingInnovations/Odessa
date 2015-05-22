@@ -1252,7 +1252,7 @@ void LayerDockWidget::groupLayers(){
     grpFolder->setFlags(grpFolder->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable);
     grpFolder->setExpanded(true);
     layerManager->addTopLevelItem(grpFolder);
-    layerManager->sortItems(Qt::DescendingOrder);
+    layerManager->sortItems(0, Qt::DescendingOrder);
 }
 
 void LayerDockWidget::ungroupLayers(){

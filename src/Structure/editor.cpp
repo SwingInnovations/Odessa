@@ -253,7 +253,7 @@ void Editor::paintEvent(QPaintEvent *event)
            if(m_Layers.at(i)->getFrame(m_CurrentFrame-1)->isVisible()){
                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(painter);
                QPixmap tPixmap = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap();
-               p.setOpacity(m_Layers.at(i)->getOpacity());
+               p.setOpacity(m_Layers.at(i)->getOpacity()/100.0);
                p.setCompositionMode(QPainter::CompositionMode_SourceOver);
                p.drawImage(0, 0, tPixmap.toImage());
            }
