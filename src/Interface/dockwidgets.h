@@ -282,12 +282,20 @@ class BrushShapeWidget : public QLabel
 public:
     BrushShapeWidget(QWidget *parent = 0);
     virtual ~BrushShapeWidget();
+    void toggleStroke(bool);
+    void setMaxSize(qreal);
+    void setMinSize(qreal);
+    void setBrush(Brush);
 protected:
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
 private:
     QPixmap brushPreviewPixmap;
+    bool m_ShowStroke;
+    qreal m_MaxPressure;
+    qreal m_MinSize;
+    Brush m_brush;
 };
 
 class LayerDockWidget : public QDockWidget

@@ -49,7 +49,7 @@ class Editor : public QLabel
 {
     Q_OBJECT
 public:
-
+    //TODO Add Cursor Tool
     enum ToolType{BRUSH_TOOL,
                   ERASER_TOOL,
                   TEXT_TOOL,

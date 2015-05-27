@@ -1084,6 +1084,25 @@ BrushShapeWidget::BrushShapeWidget(QWidget *parent) : QLabel(parent)
     brushPreviewPixmap.fill(Qt::transparent);
     this->setPixmap(brushPreviewPixmap);
     this->resize(brushPreviewPixmap.size());
+    m_ShowStroke = false;
+}
+
+void BrushShapeWidget::toggleStroke(bool v)
+{
+    m_ShowStroke = v;
+}
+
+void BrushShapeWidget::setMaxSize(qreal v)
+{
+    m_MaxPressure = v;
+}
+
+void BrushShapeWidget::setMinSize(qreal v){
+    m_MinSize = v;
+}
+
+void BrushShapeWidget::setBrush(Brush b){
+    m_brush = b;
 }
 
 BrushShapeWidget::~BrushShapeWidget()
