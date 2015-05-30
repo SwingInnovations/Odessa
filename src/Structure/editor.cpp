@@ -29,7 +29,9 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_Eraser = Brush();
     m_Eraser.setWidth(5);
     m_Eraser.setColor(Qt::white);
-    m_Eraser.setBrush(QBrush(Qt::SolidLine));
+    m_Eraser.setBrush(QBrush(Qt::SolidPattern));
+    m_Eraser.setOpacity(m_OpacityVal);
+    m_Eraser.setSpacing(1);
 
     m_BackupIndex = 0;
     m_ScaleFactor = 1.0;
@@ -88,6 +90,10 @@ void Editor::mousePressEvent(QMouseEvent *event)
         case ERASER_TOOL:
             m_DeviceDown = true;
             if(m_SelectActive) m_SelectActive = false;
+            if(!m_MousePath.isEmpty()){
+                m_MousePath.clear();
+                m_MousePath.append(event->pos());
+            }
             backup();
             break;
         case EYEDROPPER_TOOL:
@@ -168,6 +174,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                 if(m_MousePath.size() > 2){
                     m_MousePath.removeFirst();
                 }
+                if(m_TabletInUse) m_CurrentTool.setPressureVal(m_Pressure); else{ m_CurrentTool.setPressureVal(0.0); }
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
             }
             break;
@@ -190,13 +197,17 @@ void Editor::deselect(){
 }
 
 void Editor::setBrush(Brush b){
-    m_CurrentTool.SetStencil(b.getStencil());
+    m_Brush.setSWidth(b.getSWidth());
+    m_Brush.setSHeight(b.getSHeight());
+    m_Brush.SetStencil(b.getStencil());
+
+    m_Eraser.setSWidth(b.getSWidth());
+    m_Eraser.setSHeight(b.getSHeight());
+    m_Eraser.SetStencil(b.getStencil());
     if(m_ToolType == BRUSH_TOOL){
-        m_Brush.setSWidth(b.getSWidth());
-        m_Brush.setSHeight(b.getSHeight());
-        m_Brush.SetStencil(b.getStencil());
+        m_CurrentTool = m_Brush;
     }else if(m_ToolType == ERASER_TOOL){
-        m_Eraser = b;
+        m_CurrentTool = m_Eraser;
     }else{
 
     }
