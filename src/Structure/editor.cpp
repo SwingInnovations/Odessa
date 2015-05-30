@@ -24,7 +24,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_Brush.setOpacity(m_OpacityVal);
     m_Brush.setSpacing(1);
     m_CurrentTool = m_Brush;
-    m_ToolType = BRUSH_TOOL;
+    m_ToolType = CURSOR_TOOL;
 
     m_Eraser = Brush();
     m_Eraser.setWidth(5);
@@ -306,6 +306,8 @@ void Editor::paintEvent(QPaintEvent *event)
         painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize()-3, m_CurrentTool.getSize()-3);
         painter.end();
     }else if(m_ToolType == EYEDROPPER_TOOL){
+        setCursor(QCursor(Qt::ArrowCursor));
+    }else if(m_ToolType == CURSOR_TOOL){
         setCursor(QCursor(Qt::ArrowCursor));
     }
 }

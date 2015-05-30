@@ -59,7 +59,8 @@ public:
                   FILL_TOOL,
                   TRANSFORM_TRANSLATE,
                   TRANSFORM_ROTATE,
-                  TRANSFORM_SCALE };
+                  TRANSFORM_SCALE,
+                  CURSOR_TOOL};
 
     Editor(QWidget *parent = 0);
 

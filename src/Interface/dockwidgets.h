@@ -164,6 +164,29 @@ private:
 
 };
 
+class BrushShapeWidget : public QLabel
+{
+  Q_OBJECT
+public:
+    BrushShapeWidget(QWidget *parent = 0);
+    virtual ~BrushShapeWidget();
+    void toggleStroke(bool);
+    void setMaxSize(qreal);
+    void setMinSize(qreal);
+    void setBrush(Brush);
+protected:
+    void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+private:
+    QPixmap brushPreviewPixmap;
+    bool m_ShowStroke;
+    qreal m_MaxPressure;
+    qreal m_MinSize;
+    Brush m_brush;
+};
+
+
 class ColorDockWidget : public QDockWidget
 {
     Q_OBJECT
@@ -218,127 +241,6 @@ private:
     QSpinBox *mVSpinBox;
 };
 
-class ColorWheel : public QLabel
-{
-    Q_OBJECT
-public:
-    ColorWheel(QWidget* parent = 0);
-    void setRed(int);
-    void setGreen(int);
-    void setBlue(int);
-    void setActualColor(QColor);
-    QColor getColor();
-    void setHue(int);
-    void setSaturation(int);
-    void setValue(int);
-signals:
-    void redChanged(int);
-    void blueChanged(int);
-    void greenChanged(int);
-    void colorChanged(QColor);
-protected:
-    void paintEvent(QPaintEvent *e);
-    void mouseMoveEvent(QMouseEvent* e);
-    void mousePressEvent(QMouseEvent *ev);
-    void mouseReleaseEvent(QMouseEvent *ev);
-private:
-    void processHSV(QColor col);
-    QColor getColorFromPoint(QPoint);
-    void processBaseMovePoint();
-    QPixmap mPixmap;
-    int mHue;
-    int mSaturation;
-    int mValue;
-    int actualRed;
-    int actualGreen;
-    int actualBlue;
-    int primaryRed;
-    int primaryBlue;
-    int primaryGreen;
-    int altRed;
-    int altGreen;
-    int altBlue;
-    QRect primaryColorRect, altColorRect;
-    QPoint preciseColor;
-    QPoint primaryBasePoint, altBasePoint, centerRectPoint;
-    QVector<QPoint>points;
-    QPainterPath colorRangeTri;
-    double rotationAngle;
-    bool mouseDown;
-    bool toggleAlt;
-};
-
-class TimelineDockWidget : public QDockWidget
-{
-    Q_OBJECT
-public:
-    TimelineDockWidget(QWidget *parent = 0);
-    virtual ~TimelineDockWidget();
-};
-
-class BrushShapeWidget : public QLabel
-{
-  Q_OBJECT
-public:
-    BrushShapeWidget(QWidget *parent = 0);
-    virtual ~BrushShapeWidget();
-    void toggleStroke(bool);
-    void setMaxSize(qreal);
-    void setMinSize(qreal);
-    void setBrush(Brush);
-protected:
-    void paintEvent(QPaintEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-private:
-    QPixmap brushPreviewPixmap;
-    bool m_ShowStroke;
-    qreal m_MaxPressure;
-    qreal m_MinSize;
-    Brush m_brush;
-};
-
-class LayerDockWidget : public QDockWidget
-{
-    Q_OBJECT
-public:
-    LayerDockWidget(QWidget* parent = 0);
-    virtual ~LayerDockWidget();
-signals:
-    void layerAdded();
-    void layerChanged(QTreeWidgetItem*,int);
-    void layerChanged(int);
-    void compositionModeChanged(int);
-    void opacityChanged(int);
-public slots:
-    void reset();
-    void setCompositionMode(int);
-    void addLayer();
-    void duplicateLayer();
-    void groupLayers();
-    void ungroupLayers();
-    void updateOpacity(int);
-    void updateOpacity(QString);
-    void addChildLayer(QTreeWidgetItem* parent);
-private slots:
-    void updateLayer(QTreeWidgetItem*, int);
-    void updateCompositonMode(int);
-private:
-    int layerCount;
-    QComboBox* compositionMode;
-    QTreeWidget* layerManager;
-    QToolButton* layerOptionsButton;
-    QLabel* opacityLabel;
-    QSlider* opacitySlider;
-    QSpinBox* opacitySpinbox;
-
-    QMenu* layerOptionsMenu;
-    QAction* addLayerAct;
-    QAction* duplicateLayerAct;
-    QAction* deleteLayerAct;
-    QAction* groupAct;
-    QAction* ungroupAct;
-};
 
 class GeneralBrushWidget : public QWidget
 {
@@ -352,6 +254,7 @@ public:
     void setDir(QString dir){this->mDir = dir;}
     int getBrushIndex(){return this->mCurrentBrushIndex;}
     QString getDir(){return this->mDir;}
+    void setStencilPixmap(QPixmap);
 signals:
     void loadStencilTriggered();
     void loadBrushTriggered();
@@ -373,11 +276,16 @@ public slots:
     void updateBrushLibIndex(int val){mCurrentBrushIndex = val; emit brushLibIndexChanged(val);}
     void updateStencil(QPixmap);
     void updateName(QListWidgetItem* item);
+    void showStencil(bool);
+    void showStroke(bool);
 private:
     unsigned int mCurrentBrushIndex;
     QString mDir;
-    QPixmap mStrokePreview;
-    QLabel* mStrokePreviewLabel;
+    QPixmap m_StrokePreview;
+    QPixmap m_StencilPreview;
+    QPushButton* m_showStencilBtn;
+    QPushButton* m_showStrokeBtn;
+    QLabel* m_PreviewLabel;
     QListWidget* mBrushIndex;
     QToolButton* mToolBtn;
     QMenu* mToolMenu;
@@ -492,6 +400,107 @@ private:
     QAction* mDeleteBrushAct;
     /*-File Stuff-*/
     QTemporaryFile tempFile;
+};
+
+
+class ColorWheel : public QLabel
+{
+    Q_OBJECT
+public:
+    ColorWheel(QWidget* parent = 0);
+    void setRed(int);
+    void setGreen(int);
+    void setBlue(int);
+    void setActualColor(QColor);
+    QColor getColor();
+    void setHue(int);
+    void setSaturation(int);
+    void setValue(int);
+signals:
+    void redChanged(int);
+    void blueChanged(int);
+    void greenChanged(int);
+    void colorChanged(QColor);
+protected:
+    void paintEvent(QPaintEvent *e);
+    void mouseMoveEvent(QMouseEvent* e);
+    void mousePressEvent(QMouseEvent *ev);
+    void mouseReleaseEvent(QMouseEvent *ev);
+private:
+    void processHSV(QColor col);
+    QColor getColorFromPoint(QPoint);
+    void processBaseMovePoint();
+    QPixmap mPixmap;
+    int mHue;
+    int mSaturation;
+    int mValue;
+    int actualRed;
+    int actualGreen;
+    int actualBlue;
+    int primaryRed;
+    int primaryBlue;
+    int primaryGreen;
+    int altRed;
+    int altGreen;
+    int altBlue;
+    QRect primaryColorRect, altColorRect;
+    QPoint preciseColor;
+    QPoint primaryBasePoint, altBasePoint, centerRectPoint;
+    QVector<QPoint>points;
+    QPainterPath colorRangeTri;
+    double rotationAngle;
+    bool mouseDown;
+    bool toggleAlt;
+};
+
+class TimelineDockWidget : public QDockWidget
+{
+    Q_OBJECT
+public:
+    TimelineDockWidget(QWidget *parent = 0);
+    virtual ~TimelineDockWidget();
+};
+
+class LayerDockWidget : public QDockWidget
+{
+    Q_OBJECT
+public:
+    LayerDockWidget(QWidget* parent = 0);
+    virtual ~LayerDockWidget();
+signals:
+    void layerAdded();
+    void layerChanged(QTreeWidgetItem*,int);
+    void layerChanged(int);
+    void compositionModeChanged(int);
+    void opacityChanged(int);
+public slots:
+    void reset();
+    void setCompositionMode(int);
+    void addLayer();
+    void duplicateLayer();
+    void groupLayers();
+    void ungroupLayers();
+    void updateOpacity(int);
+    void updateOpacity(QString);
+    void addChildLayer(QTreeWidgetItem* parent);
+private slots:
+    void updateLayer(QTreeWidgetItem*, int);
+    void updateCompositonMode(int);
+private:
+    int layerCount;
+    QComboBox* compositionMode;
+    QTreeWidget* layerManager;
+    QToolButton* layerOptionsButton;
+    QLabel* opacityLabel;
+    QSlider* opacitySlider;
+    QSpinBox* opacitySpinbox;
+
+    QMenu* layerOptionsMenu;
+    QAction* addLayerAct;
+    QAction* duplicateLayerAct;
+    QAction* deleteLayerAct;
+    QAction* groupAct;
+    QAction* ungroupAct;
 };
 
 class DefaultToolPanel : public QWidget{

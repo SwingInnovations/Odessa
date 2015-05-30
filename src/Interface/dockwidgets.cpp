@@ -474,6 +474,7 @@ void BrushDockWidget::saveBrushLib(QString filePath){
 }
 
 Brush BrushDockWidget::getStartBrush(){
+    mGenBrushWidget->setStencilPixmap(mActualBrushList[0].getStencil());
     return mActualBrushList[0];
 }
 
@@ -518,6 +519,529 @@ BrushDockWidget::~BrushDockWidget()
 {
     saveBrushLib(mBrushLib);
     writeSettings();
+}
+
+
+/*
+
+  BRUSH SHAPE WIDGET = Handles Adjusting the Brush Shape
+
+*/
+
+BrushShapeWidget::BrushShapeWidget(QWidget *parent) : QLabel(parent)
+{
+    brushPreviewPixmap = QPixmap(200, 200);
+    brushPreviewPixmap.fill(Qt::transparent);
+    this->setPixmap(brushPreviewPixmap);
+    this->resize(brushPreviewPixmap.size());
+    m_ShowStroke = false;
+}
+
+void BrushShapeWidget::toggleStroke(bool v)
+{
+    m_ShowStroke = v;
+}
+
+void BrushShapeWidget::setMaxSize(qreal v)
+{
+    m_MaxPressure = v;
+}
+
+void BrushShapeWidget::setMinSize(qreal v){
+    m_MinSize = v;
+}
+
+void BrushShapeWidget::setBrush(Brush b){
+    m_brush = b;
+}
+
+BrushShapeWidget::~BrushShapeWidget()
+{
+
+}
+
+void BrushShapeWidget::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+    QPainter painter(&brushPreviewPixmap);
+    painter.drawEllipse(0, 0, 20, 20);
+}
+
+void BrushShapeWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+}
+
+void BrushShapeWidget::mousePressEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+}
+
+
+GeneralBrushWidget::GeneralBrushWidget(){
+    mToolBtn = new QToolButton(this);
+    mToolBtn->setText("Tool");
+    mToolBtn->setFixedWidth(48);
+    mToolBtn->setFixedHeight(48);
+    mToolMenu = new QMenu(this);
+    mLoadStencilAct = new QAction("&Load Stencil", this);
+    mLoadBrushAct = new QAction("&Load Brush", this);
+    mLoadBrushSetAct = new QAction("&Load Brush Set", this);
+    mSaveStencilAct = new QAction("&Save Stencil", this);
+    mSaveBrushAct = new QAction("&Save Brush", this);
+    mSaveBrushSetAct = new QAction("&Save Brush Set", this);
+    mDeleteBrushAct = new QAction("Delete Brush", this);
+    mToolMenu->addAction(mLoadStencilAct);
+    mToolMenu->addAction(mLoadBrushAct);
+    mToolMenu->addAction(mLoadBrushSetAct);
+    mToolMenu->addSeparator();
+    mToolMenu->addAction(mSaveStencilAct);
+    mToolMenu->addAction(mSaveBrushAct);
+    mToolMenu->addAction(mSaveBrushSetAct);
+    mToolMenu->addSeparator();
+    mToolMenu->addAction(mDeleteBrushAct);
+    mToolBtn->setMenu(mToolMenu);
+
+    mBrushIndex = new QListWidget(this);
+    mBrushIndex->setMinimumWidth(130);
+    mBrushIndex->setBaseSize(130, 130);
+    m_StrokePreview = QPixmap(175, 100);
+    m_StrokePreview.fill(Qt::gray);
+    m_PreviewLabel = new QLabel(this);
+    m_PreviewLabel->setPixmap(m_StrokePreview);
+
+    m_showStencilBtn = new QPushButton("[Stencil]", this);
+    m_showStencilBtn->setCheckable(true);
+    m_showStencilBtn->setChecked(true);
+    m_showStrokeBtn = new QPushButton("[Stroke]", this);
+    m_showStrokeBtn->setCheckable(true);
+
+    QHBoxLayout* toggleStrokeLayout = new QHBoxLayout;
+    toggleStrokeLayout->addWidget(m_showStencilBtn);
+    toggleStrokeLayout->addWidget(m_showStrokeBtn);
+
+    QVBoxLayout* vert1 = new QVBoxLayout;
+    vert1->addWidget(mToolBtn);
+    vert1->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
+    QHBoxLayout* horiz1 = new QHBoxLayout;
+    horiz1->addWidget(mBrushIndex);
+    horiz1->addLayout(vert1);
+    QVBoxLayout* generalBrushLayout = new QVBoxLayout;
+    generalBrushLayout->addLayout(horiz1);
+    generalBrushLayout->addWidget(m_PreviewLabel);
+    generalBrushLayout->addLayout(toggleStrokeLayout);
+
+    setLayout(generalBrushLayout);
+    connect(mLoadStencilAct, SIGNAL(triggered()), SLOT(updateLoadStencil()));
+    connect(mLoadBrushAct, SIGNAL(triggered()), SLOT(updateLoadBrush()));
+    connect(mLoadBrushSetAct, SIGNAL(triggered()), SLOT(updateLoadBrushSet()));
+    connect(mSaveStencilAct, SIGNAL(triggered()), SLOT(updateSaveStencil()));
+    connect(mSaveBrushAct, SIGNAL(triggered()), SLOT(updateSaveBrush()));
+    connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(updateSaveBrushSet()));
+    connect(mDeleteBrushAct, SIGNAL(triggered()), SLOT(updateDeleteBrush()));
+    connect(mBrushIndex, SIGNAL(currentRowChanged(int)), SLOT(updateBrushLibIndex(int)));
+    connect(mBrushIndex, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(updateName(QListWidgetItem*)));
+    connect(m_showStencilBtn, SIGNAL(toggled(bool)), SLOT(showStencil(bool)));
+    connect(m_showStrokeBtn, SIGNAL(toggled(bool)), SLOT(showStroke(bool)));
+}
+
+void GeneralBrushWidget::updateName(QListWidgetItem *item){
+    emit brushNameChanged(item->text());
+}
+
+void GeneralBrushWidget::addBrush(int iD, Brush brush){
+    int temp = iD;
+    Brush b = brush;
+}
+
+void GeneralBrushWidget::addBrush(Brush brush){
+    QListWidgetItem* itm = new QListWidgetItem(brush.m_Name);
+    itm->setFlags(itm->flags() | Qt::ItemIsEditable);
+    mBrushIndex->addItem(itm);
+}
+
+void GeneralBrushWidget::updateStencil(QPixmap pixmap){
+    int targetWidth = m_StrokePreview.width();
+    int targetHeight = m_StrokePreview.height();
+    int sourceWidth = pixmap.width();
+    int sourceHeight = pixmap.height();
+    if(sourceWidth > targetWidth, sourceHeight > targetHeight){
+        pixmap = pixmap.scaled(m_StrokePreview.size(), Qt::IgnoreAspectRatio, Qt::FastTransformation);
+        m_StrokePreview = pixmap;
+    }else{
+        qDebug() << "Unable to load Pixmap" << endl;
+    }
+}
+
+void GeneralBrushWidget::setStencilPixmap(QPixmap pix){
+    m_StencilPreview = pix;
+}
+
+void GeneralBrushWidget::showStencil(bool v){
+    m_showStrokeBtn->setChecked(!v);
+    m_PreviewLabel->setPixmap(m_StrokePreview);
+    update();
+}
+
+void GeneralBrushWidget::showStroke(bool v){
+    m_showStencilBtn->setChecked(!v);
+    /*-TODO - Show Stroke-*/
+    update();
+}
+
+GeneralBrushWidget::~GeneralBrushWidget(){
+
+}
+
+CustomBrushWidget::CustomBrushWidget(){
+
+    mBrushShape = CIRCLE_SHAPE;
+    hasTexture = false;
+
+    mStencilPreview = QPixmap(160, 160);
+    mStencilPreview.fill(Qt::transparent);
+    mStencilLabel = new QLabel(this);
+    mStencilLabel->setPixmap(mStencilPreview);
+
+    mToolBtn = new QToolButton(this);
+    mToolBtn->setText("Tool");
+    mToolBtn->setFixedWidth(48);
+    mToolBtn->setFixedHeight(48);
+    mToolMenu = new QMenu(this);
+    mLoadStencilAct = new QAction("&Load Stencil", this);
+    mLoadBrushAct = new QAction("&Load Brush", this);
+    mLoadBrushSetAct = new QAction("&Load Brush Set", this);
+    mSaveStencilAct = new QAction("&Save Stencil", this);
+    mSaveBrushAct = new QAction("&Save Brush", this);
+    mSaveBrushSetAct = new QAction("&Save Brush Set", this);
+    mDeleteBrushAct = new QAction("Delete Brush", this);
+    mToolMenu->addAction(mLoadStencilAct);
+    mToolMenu->addAction(mLoadBrushAct);
+    mToolMenu->addAction(mLoadBrushSetAct);
+    mToolMenu->addSeparator();
+    mToolMenu->addAction(mSaveStencilAct);
+    mToolMenu->addAction(mSaveBrushAct);
+    mToolMenu->addAction(mSaveBrushSetAct);
+    mToolMenu->addSeparator();
+    mToolMenu->addAction(mDeleteBrushAct);
+    mToolBtn->setMenu(mToolMenu);
+
+    QVBoxLayout* v1Layout = new QVBoxLayout;
+    v1Layout->addWidget(mToolBtn);
+    v1Layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
+
+    QHBoxLayout* StencilPreviewLayout = new QHBoxLayout;
+    StencilPreviewLayout->addWidget(mStencilLabel);
+    StencilPreviewLayout->setAlignment(mStencilLabel, Qt::AlignCenter);
+    StencilPreviewLayout->addLayout(v1Layout);
+
+    mWidthLabel = new QLabel("Width:", this);
+    mWidthSlider = new QSlider(Qt::Horizontal, this);
+    mWidthSlider->setRange(0, 10);
+    mWidthSlider->setValue(10);
+    mWidthLE = new QLineEdit(this);
+    mWidthLE->setFixedWidth(32);
+    mWidthLE->setText(QString::number(10));
+    QHBoxLayout* widthLayout = new QHBoxLayout;
+    widthLayout->addWidget(mWidthLabel);
+    widthLayout->addWidget(mWidthSlider);
+    widthLayout->addWidget(mWidthLE);
+
+    mHeightLabel = new QLabel("Height:", this);
+    mHeightSlider = new QSlider(Qt::Horizontal, this);
+    mHeightSlider->setRange(0, 10);
+    mHeightSlider->setValue(10);
+    mHeightLE = new QLineEdit(this);
+    mHeightLE->setFixedWidth(32);
+    mHeightLE->setText(QString::number(10));
+    QHBoxLayout* heightLayout = new QHBoxLayout;
+    heightLayout->addWidget(mHeightLabel);
+    heightLayout->addWidget(mHeightSlider);
+    heightLayout->addWidget(mHeightLE);
+
+    mHardnessLabel = new QLabel("Hardness:", this);
+    mHardnessSlider = new QSlider(Qt::Horizontal, this);
+    mHardnessSlider->setRange(0, 100);
+    mHardnessSlider->setValue(100);
+    mHardnessLE = new QLineEdit(this);
+    mHardnessLE->setFixedWidth(32);
+    mHardnessLE->setText(QString::number(100));
+    QHBoxLayout* hardnessLayout = new QHBoxLayout;
+    hardnessLayout->addWidget(mHardnessLabel);
+    hardnessLayout->addWidget(mHardnessSlider);
+    hardnessLayout->addWidget(mHardnessLE);
+
+    mRotateLabel = new QLabel("Rotate:", this);
+    mRotateSlider = new QSlider(Qt::Horizontal, this);
+    mRotateSlider->setRange(0, 361);
+    mRotateSlider->setValue(0);
+    mRotateLE = new QLineEdit(this);
+    mRotateLE->setFixedWidth(32);
+    mRotateLE->setText(QString::number(0));
+    QHBoxLayout* rotateLayout = new QHBoxLayout;
+    rotateLayout->addWidget(mRotateLabel);
+    rotateLayout->addWidget(mRotateSlider);
+    rotateLayout->addWidget(mRotateLE);
+
+    mCircleButton = new QPushButton("Circle", this);
+    mSquareButton = new QPushButton("Square", this);
+    mCustomButton = new QPushButton("Custom", this);
+    QHBoxLayout* stencilShapeLayout = new QHBoxLayout;
+    stencilShapeLayout->addWidget(mCircleButton);
+    stencilShapeLayout->addWidget(mSquareButton);
+    stencilShapeLayout->addWidget(mCustomButton);
+
+    mTextureLabel = new QLabel("Texture: ", this);
+    mTextureFileLE = new QLineEdit(this);
+    mTextureBtn = new QPushButton("...",this);
+    QHBoxLayout* textureLayout = new QHBoxLayout;
+    textureLayout->addWidget(mTextureLabel);
+    textureLayout->addWidget(mTextureFileLE);
+    textureLayout->addWidget(mTextureBtn);
+
+    QVBoxLayout* advancedLayout = new QVBoxLayout;
+    advancedLayout->addLayout(widthLayout);
+    advancedLayout->addLayout(heightLayout);
+    advancedLayout->addLayout(hardnessLayout);
+    advancedLayout->addLayout(rotateLayout);
+    advancedLayout->addLayout(stencilShapeLayout);
+    advancedLayout->addLayout(textureLayout);
+
+    QVBoxLayout* AdvancedPanel = new QVBoxLayout;
+    AdvancedPanel->addLayout(StencilPreviewLayout);
+    AdvancedPanel->addLayout(advancedLayout);
+    setLayout(AdvancedPanel);
+
+    connect(mLoadStencilAct, SIGNAL(triggered()), SLOT(updateLoadStencil()));
+    connect(mLoadBrushAct, SIGNAL(triggered()), SLOT(updateLoadBrush()));
+    connect(mLoadBrushSetAct, SIGNAL(triggered()), SLOT(updateLoadBrushSet()));
+    connect(mSaveStencilAct, SIGNAL(triggered()), SLOT(updateSaveStencil()));
+    connect(mSaveBrushAct, SIGNAL(triggered()), SLOT(updateSaveBrush()));
+    connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(updateSaveBrushSet()));
+    connect(mDeleteBrushAct, SIGNAL(triggered()), SLOT(updateDeleteBrush()));
+    connect(mWidthLE, SIGNAL(textChanged(QString)), SLOT(updateStencilWidth(QString)));
+    connect(mWidthSlider, SIGNAL(valueChanged(int)), SLOT(updateStencilWidth(int)));
+    connect(mHeightLE, SIGNAL(textChanged(QString)), SLOT(updateStencilHeight(QString)));
+    connect(mHeightSlider, SIGNAL(valueChanged(int)), SLOT(updateStencilHeight(int)));
+    connect(mHeightLE, SIGNAL(textChanged(QString)), SLOT(updateStencilHeight(QString)));
+    connect(mHardnessSlider, SIGNAL(valueChanged(int)), SLOT(updateBrushHardness(int)));
+    connect(mHardnessLE, SIGNAL(textChanged(QString)), SLOT(updateBrushHardness(QString)));
+    connect(mRotateSlider, SIGNAL(valueChanged(int)), SLOT(updateStencilRotate(int)));
+    connect(mRotateLE, SIGNAL(textChanged(QString)), SLOT(updateStencilRotate(QString)));
+    connect(this, SIGNAL(stencilChanged(QPixmap)), SLOT(updateStencil(QPixmap)));
+    connect(mCircleButton, SIGNAL(clicked()), SLOT(updateBrushShape_Circle()));
+    connect(mSquareButton, SIGNAL(clicked()), SLOT(updateBrushShape_Square()));
+    connect(mCustomButton, SIGNAL(clicked()), SLOT(updateBrushShape_Polygon()));
+    connect(mTextureBtn, SIGNAL(clicked()), SLOT(updateStencilTexture()));
+    connect(mTextureFileLE, SIGNAL(textChanged(QString)), SLOT(updateStencilTextureLE(QString)));
+}
+
+void CustomBrushWidget::TempSave(QPixmap pixmap){
+    QImage image = pixmap.toImage();
+    image.convertToFormat(QImage::Format_RGB888, Qt::AutoColor);
+    if(tempFile.open()){
+        image.save(tempFile.fileName());
+    }
+    tempFile.close();
+    emit stencilPathChanged(tempFile.fileName());
+}
+
+void CustomBrushWidget::updateStencil(QPixmap pixmap){
+    TempSave(pixmap);
+}
+
+void CustomBrushWidget::updateStencilTexture(){
+    hasTexture = true;
+    QString fileName = QFileDialog::getOpenFileName(this, "Load Texture", QDir::currentPath());
+    mStencilTexture.load(fileName);
+    QImage image = mStencilTexture.toImage();
+    QRgb col;
+    int gray;
+    int width = mStencilTexture.width();
+    int height = mStencilTexture.height();
+    for(int i = 0; i < width; i++){
+        for(int j = 0; j < height; j++){
+            col = image.pixel(i, j);
+            gray = qGray(col);
+            image.setPixel(i, j, qRgb(gray, gray, gray));
+        }
+    }
+    mStencilTexture = mStencilTexture.fromImage(image);
+    mStencilTexture = mStencilTexture.scaled(mStencilPreview.width(), mStencilPreview.height(), Qt::IgnoreAspectRatio, Qt::FastTransformation);
+    mTextureFileLE->setText(fileName);
+}
+
+void CustomBrushWidget::updateStencilWidth(int val){
+   mWidthLE->setText(QString::number(val));
+   emit StencilWidthChanged(val);
+   emit stencilChanged(mStencilPreview);
+}
+
+void CustomBrushWidget::updateStencilWidth(QString val){
+    mWidthSlider->setValue(val.toInt());
+    emit StencilWidthChanged(val.toInt());
+}
+
+void CustomBrushWidget::updateStencilHeight(int val){
+    mHeightLE->setText(QString::number(val));
+    emit stencilHeightChanged(val);
+    emit stencilChanged(mStencilPreview);
+}
+
+void CustomBrushWidget::updateStencilHeight(QString val){
+    mHeightSlider->setValue(val.toInt());
+    emit stencilHeightChanged(val.toInt());
+}
+
+void CustomBrushWidget::updateBrushHardness(int val){
+    mHardnessLE->setText(QString::number(val));
+    emit brushHardnessChanged(val);
+    emit stencilChanged(mStencilPreview);
+}
+
+void CustomBrushWidget::updateBrushHardness(QString val){
+    mHardnessSlider->setValue(val.toInt());
+    emit brushHardnessChanged(val.toInt());
+}
+
+void CustomBrushWidget::updateStencilRotate(int val){
+    if(val > 360){
+        val = 0;
+        mRotateSlider->setValue(0);
+    }
+    mRotateLE->setText(QString::number(val));
+    emit rotateChanged(val);
+    emit stencilChanged(mStencilPreview);
+}
+
+void CustomBrushWidget::updateStencilRotate(QString val){
+    if(val.toInt() > 360){
+        mRotateSlider->setValue(0);
+        emit rotateChanged(0);
+    }else{
+        mRotateSlider->setValue(val.toInt());
+        emit rotateChanged(val.toInt());
+    }
+}
+
+void CustomBrushWidget::updateStencilTextureLE(QString val){
+    if(val.isEmpty()){
+        hasTexture = false;
+    }else{
+        hasTexture = true;
+    }
+}
+
+QPixmap CustomBrushWidget::GeneratePixmap(){
+    int stencilWidth = (mStencilPreview.width() * mWidthSlider->value()/10)/2;
+    int stencilHeight = (mStencilPreview.height()* mHeightSlider->value()/10)/2;
+    qreal hardness = 78 * ((qreal)mHardnessSlider->value()/100);
+    QPoint midPoint(mStencilPreview.width()/2, mStencilPreview.height()/2);
+    mStencilPreview.fill(Qt::transparent);
+    QRadialGradient radGrad(midPoint, mStencilPreview.width()/2);
+    radGrad.setColorAt(midPoint.x(), Qt::black);
+    radGrad.setFocalRadius(hardness);
+    QPainter p;
+    p.begin(&mStencilPreview);
+    p.setPen(Qt::NoPen);
+    switch(mBrushShape){
+    case CIRCLE_SHAPE:
+        if(hasTexture){
+            QBrush brush;
+            brush.setTexture(mStencilTexture);
+            p.setBrush(brush);
+        }else{
+            p.setBrush(radGrad);
+        }
+        p.drawEllipse(midPoint, stencilWidth, stencilHeight);
+        p.end();
+        break;
+    case SQUARE_SHAPE:
+        int originX =  midPoint.x() - stencilWidth;
+        int originY = midPoint.y() - stencilHeight;
+        int dimX = stencilWidth*2;
+        int dimY = stencilHeight*2;
+
+        if(hasTexture){
+            QBrush brush;
+            brush.setTexture(mStencilTexture);
+            p.setBrush(brush);
+        }else{
+            p.setBrush(Qt::black);
+        }
+
+        p.drawRect(originX, originY, dimX, dimY);
+        break;
+    }
+    qDebug() << "Generated pixmap "<< endl;
+    return mStencilPreview;
+}
+
+void CustomBrushWidget::paintEvent(QPaintEvent *event){
+    Q_UNUSED(event);
+    int stencilWidth = (mStencilPreview.width() * mWidthSlider->value()/10)/2;
+    int stencilHeight = (mStencilPreview.height()* mHeightSlider->value()/10)/2;
+    qreal hardness = 78 * ((qreal)mHardnessSlider->value()/100);
+    QPoint midPoint(mStencilPreview.width()/2, mStencilPreview.height()/2);
+    mStencilPreview.fill(Qt::transparent);
+    QRadialGradient radGrad(midPoint, mStencilPreview.width()/2);
+    radGrad.setColorAt(midPoint.x(), Qt::black);
+    radGrad.setFocalRadius(hardness);
+    QPainter painter(&mStencilPreview);
+    painter.setPen(Qt::NoPen);
+    switch(mBrushShape){
+        case CIRCLE_SHAPE:
+            if(hasTexture){
+                QBrush brush;
+                brush.setTexture(mStencilTexture);
+                painter.setBrush(brush);
+            }else{
+                painter.setBrush(radGrad);
+            }
+            painter.translate(midPoint);
+            painter.rotate(mRotateSlider->value());
+            painter.translate(-midPoint);
+            painter.drawEllipse(midPoint, stencilWidth, stencilHeight);
+            break;
+        case SQUARE_SHAPE:
+            int originX =  midPoint.x() - stencilWidth;
+            int originY = midPoint.y() - stencilHeight;
+            int dimX = stencilWidth*2;
+            int dimY = stencilHeight*2;
+
+            if(hasTexture){
+                QBrush brush;
+                brush.setTexture(mStencilTexture);
+                painter.setBrush(brush);
+            }else{
+                painter.setBrush(Qt::black);
+            }
+            painter.translate(midPoint);
+            painter.rotate(mRotateSlider->value());
+            painter.translate(-midPoint);
+            painter.drawRect(originX, originY, dimX, dimY);
+            break;
+    }
+    mStencilLabel->setPixmap(mStencilPreview);
+}
+
+void CustomBrushWidget::updateBrushShape_Circle(){
+    mBrushShape = CIRCLE_SHAPE;
+    emit stencilChanged(this->GeneratePixmap());
+}
+
+void CustomBrushWidget::updateBrushShape_Square(){
+    mBrushShape = SQUARE_SHAPE;
+    emit stencilChanged(this->GeneratePixmap());
+}
+
+void CustomBrushWidget::updateBrushShape_Polygon(){
+    mBrushShape = CUSTOM;
+    emit stencilChanged(this->GeneratePixmap());
+}
+
+CustomBrushWidget::~CustomBrushWidget(){
+
 }
 
 /*- Color Widget -*/
@@ -1072,62 +1596,6 @@ TimelineDockWidget::~TimelineDockWidget()
 
 }
 
-/*
-
-  BRUSH SHAPE WIDGET = Handles Adjusting the Brush Shape
-
-*/
-
-BrushShapeWidget::BrushShapeWidget(QWidget *parent) : QLabel(parent)
-{
-    brushPreviewPixmap = QPixmap(200, 200);
-    brushPreviewPixmap.fill(Qt::transparent);
-    this->setPixmap(brushPreviewPixmap);
-    this->resize(brushPreviewPixmap.size());
-    m_ShowStroke = false;
-}
-
-void BrushShapeWidget::toggleStroke(bool v)
-{
-    m_ShowStroke = v;
-}
-
-void BrushShapeWidget::setMaxSize(qreal v)
-{
-    m_MaxPressure = v;
-}
-
-void BrushShapeWidget::setMinSize(qreal v){
-    m_MinSize = v;
-}
-
-void BrushShapeWidget::setBrush(Brush b){
-    m_brush = b;
-}
-
-BrushShapeWidget::~BrushShapeWidget()
-{
-
-}
-
-void BrushShapeWidget::paintEvent(QPaintEvent *event)
-{
-    Q_UNUSED(event);
-    QPainter painter(&brushPreviewPixmap);
-    painter.drawEllipse(0, 0, 20, 20);
-}
-
-void BrushShapeWidget::mouseMoveEvent(QMouseEvent *event)
-{
-    Q_UNUSED(event);
-}
-
-void BrushShapeWidget::mousePressEvent(QMouseEvent *event)
-{
-    Q_UNUSED(event);
-}
-
-
 LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
 {
     //initialize
@@ -1278,7 +1746,6 @@ void LayerDockWidget::ungroupLayers(){
 
 }
 
-/*- Potentially breaks -*/
 void LayerDockWidget::updateOpacity(int o){
     opacitySpinbox->setValue(o);
     QTreeWidgetItem* item = layerManager->currentItem();
@@ -1318,436 +1785,6 @@ void LayerDockWidget::updateCompositonMode(int i){
 
 LayerDockWidget::~LayerDockWidget()
 {
-
-}
-
-GeneralBrushWidget::GeneralBrushWidget(){
-    mToolBtn = new QToolButton(this);
-    mToolBtn->setText("Tool");
-    mToolBtn->setFixedWidth(48);
-    mToolBtn->setFixedHeight(48);
-    mToolMenu = new QMenu(this);
-    mLoadStencilAct = new QAction("&Load Stencil", this);
-    mLoadBrushAct = new QAction("&Load Brush", this);
-    mLoadBrushSetAct = new QAction("&Load Brush Set", this);
-    mSaveStencilAct = new QAction("&Save Stencil", this);
-    mSaveBrushAct = new QAction("&Save Brush", this);
-    mSaveBrushSetAct = new QAction("&Save Brush Set", this);
-    mDeleteBrushAct = new QAction("Delete Brush", this);
-    mToolMenu->addAction(mLoadStencilAct);
-    mToolMenu->addAction(mLoadBrushAct);
-    mToolMenu->addAction(mLoadBrushSetAct);
-    mToolMenu->addSeparator();
-    mToolMenu->addAction(mSaveStencilAct);
-    mToolMenu->addAction(mSaveBrushAct);
-    mToolMenu->addAction(mSaveBrushSetAct);
-    mToolMenu->addSeparator();
-    mToolMenu->addAction(mDeleteBrushAct);
-    mToolBtn->setMenu(mToolMenu);
-
-    mBrushIndex = new QListWidget(this);
-    mBrushIndex->setMinimumWidth(130);
-    mBrushIndex->setBaseSize(130, 130);
-    mStrokePreview = QPixmap(175, 100);
-    mStrokePreview.fill(Qt::gray);
-    mStrokePreviewLabel = new QLabel(this);
-    mStrokePreviewLabel->setPixmap(mStrokePreview);
-    QVBoxLayout* vert1 = new QVBoxLayout;
-    vert1->addWidget(mToolBtn);
-    QHBoxLayout* horiz1 = new QHBoxLayout;
-    horiz1->addWidget(mBrushIndex);
-    horiz1->addLayout(vert1);
-    QVBoxLayout* generalBrushLayout = new QVBoxLayout;
-    generalBrushLayout->addLayout(horiz1);
-    generalBrushLayout->addWidget(mStrokePreviewLabel);
-
-    setLayout(generalBrushLayout);
-    connect(mLoadStencilAct, SIGNAL(triggered()), SLOT(updateLoadStencil()));
-    connect(mLoadBrushAct, SIGNAL(triggered()), SLOT(updateLoadBrush()));
-    connect(mLoadBrushSetAct, SIGNAL(triggered()), SLOT(updateLoadBrushSet()));
-    connect(mSaveStencilAct, SIGNAL(triggered()), SLOT(updateSaveStencil()));
-    connect(mSaveBrushAct, SIGNAL(triggered()), SLOT(updateSaveBrush()));
-    connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(updateSaveBrushSet()));
-    connect(mDeleteBrushAct, SIGNAL(triggered()), SLOT(updateDeleteBrush()));
-    connect(mBrushIndex, SIGNAL(currentRowChanged(int)), SLOT(updateBrushLibIndex(int)));
-    connect(mBrushIndex, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(updateName(QListWidgetItem*)));
-}
-
-void GeneralBrushWidget::updateName(QListWidgetItem *item){
-    emit brushNameChanged(item->text());
-}
-
-void GeneralBrushWidget::addBrush(int iD, Brush brush){
-    int temp = iD;
-    Brush b = brush;
-}
-
-void GeneralBrushWidget::addBrush(Brush brush){
-    QListWidgetItem* itm = new QListWidgetItem(brush.m_Name);
-    itm->setFlags(itm->flags() | Qt::ItemIsEditable);
-    mBrushIndex->addItem(itm);
-}
-
-void GeneralBrushWidget::updateStencil(QPixmap pixmap){
-    int targetWidth = mStrokePreview.width();
-    int targetHeight = mStrokePreview.height();
-    int sourceWidth = pixmap.width();
-    int sourceHeight = pixmap.height();
-    if(sourceWidth > targetWidth, sourceHeight > targetHeight){
-        pixmap = pixmap.scaled(mStrokePreview.size(), Qt::IgnoreAspectRatio, Qt::FastTransformation);
-        mStrokePreview = pixmap;
-    }else{
-        qDebug() << "Unable to load Pixmap" << endl;
-    }
-}
-
-GeneralBrushWidget::~GeneralBrushWidget(){
-
-}
-
-CustomBrushWidget::CustomBrushWidget(){
-
-    mBrushShape = CIRCLE_SHAPE;
-    hasTexture = false;
-
-    mStencilPreview = QPixmap(160, 160);
-    mStencilPreview.fill(Qt::transparent);
-    mStencilLabel = new QLabel(this);
-    mStencilLabel->setPixmap(mStencilPreview);
-
-    mToolBtn = new QToolButton(this);
-    mToolBtn->setText("Tool");
-    mToolBtn->setFixedWidth(48);
-    mToolBtn->setFixedHeight(48);
-    mToolMenu = new QMenu(this);
-    mLoadStencilAct = new QAction("&Load Stencil", this);
-    mLoadBrushAct = new QAction("&Load Brush", this);
-    mLoadBrushSetAct = new QAction("&Load Brush Set", this);
-    mSaveStencilAct = new QAction("&Save Stencil", this);
-    mSaveBrushAct = new QAction("&Save Brush", this);
-    mSaveBrushSetAct = new QAction("&Save Brush Set", this);
-    mDeleteBrushAct = new QAction("Delete Brush", this);
-    mToolMenu->addAction(mLoadStencilAct);
-    mToolMenu->addAction(mLoadBrushAct);
-    mToolMenu->addAction(mLoadBrushSetAct);
-    mToolMenu->addSeparator();
-    mToolMenu->addAction(mSaveStencilAct);
-    mToolMenu->addAction(mSaveBrushAct);
-    mToolMenu->addAction(mSaveBrushSetAct);
-    mToolMenu->addSeparator();
-    mToolMenu->addAction(mDeleteBrushAct);
-    mToolBtn->setMenu(mToolMenu);
-
-    QHBoxLayout* StencilPreviewLayout = new QHBoxLayout;
-    StencilPreviewLayout->addWidget(mStencilLabel);
-    StencilPreviewLayout->addWidget(mToolBtn);
-
-    mWidthLabel = new QLabel("Width:", this);
-    mWidthSlider = new QSlider(Qt::Horizontal, this);
-    mWidthSlider->setRange(0, 10);
-    mWidthSlider->setValue(10);
-    mWidthLE = new QLineEdit(this);
-    mWidthLE->setFixedWidth(32);
-    mWidthLE->setText(QString::number(10));
-    QHBoxLayout* widthLayout = new QHBoxLayout;
-    widthLayout->addWidget(mWidthLabel);
-    widthLayout->addWidget(mWidthSlider);
-    widthLayout->addWidget(mWidthLE);
-
-    mHeightLabel = new QLabel("Height:", this);
-    mHeightSlider = new QSlider(Qt::Horizontal, this);
-    mHeightSlider->setRange(0, 10);
-    mHeightSlider->setValue(10);
-    mHeightLE = new QLineEdit(this);
-    mHeightLE->setFixedWidth(32);
-    mHeightLE->setText(QString::number(10));
-    QHBoxLayout* heightLayout = new QHBoxLayout;
-    heightLayout->addWidget(mHeightLabel);
-    heightLayout->addWidget(mHeightSlider);
-    heightLayout->addWidget(mHeightLE);
-
-    mHardnessLabel = new QLabel("Hardness:", this);
-    mHardnessSlider = new QSlider(Qt::Horizontal, this);
-    mHardnessSlider->setRange(0, 100);
-    mHardnessSlider->setValue(100);
-    mHardnessLE = new QLineEdit(this);
-    mHardnessLE->setFixedWidth(32);
-    mHardnessLE->setText(QString::number(100));
-    QHBoxLayout* hardnessLayout = new QHBoxLayout;
-    hardnessLayout->addWidget(mHardnessLabel);
-    hardnessLayout->addWidget(mHardnessSlider);
-    hardnessLayout->addWidget(mHardnessLE);
-
-    mRotateLabel = new QLabel("Rotate:", this);
-    mRotateSlider = new QSlider(Qt::Horizontal, this);
-    mRotateSlider->setRange(0, 361);
-    mRotateSlider->setValue(0);
-    mRotateLE = new QLineEdit(this);
-    mRotateLE->setFixedWidth(32);
-    mRotateLE->setText(QString::number(0));
-    QHBoxLayout* rotateLayout = new QHBoxLayout;
-    rotateLayout->addWidget(mRotateLabel);
-    rotateLayout->addWidget(mRotateSlider);
-    rotateLayout->addWidget(mRotateLE);
-
-    mCircleButton = new QPushButton("Circle", this);
-    mSquareButton = new QPushButton("Square", this);
-    mCustomButton = new QPushButton("Custom", this);
-    QHBoxLayout* stencilShapeLayout = new QHBoxLayout;
-    stencilShapeLayout->addWidget(mCircleButton);
-    stencilShapeLayout->addWidget(mSquareButton);
-    stencilShapeLayout->addWidget(mCustomButton);
-
-    mTextureLabel = new QLabel("Texture: ", this);
-    mTextureFileLE = new QLineEdit(this);
-    mTextureBtn = new QPushButton("...",this);
-    QHBoxLayout* textureLayout = new QHBoxLayout;
-    textureLayout->addWidget(mTextureLabel);
-    textureLayout->addWidget(mTextureFileLE);
-    textureLayout->addWidget(mTextureBtn);
-
-    QVBoxLayout* advancedLayout = new QVBoxLayout;
-    advancedLayout->addLayout(widthLayout);
-    advancedLayout->addLayout(heightLayout);
-    advancedLayout->addLayout(hardnessLayout);
-    advancedLayout->addLayout(rotateLayout);
-    advancedLayout->addLayout(stencilShapeLayout);
-    advancedLayout->addLayout(textureLayout);
-
-    QVBoxLayout* AdvancedPanel = new QVBoxLayout;
-    AdvancedPanel->addLayout(StencilPreviewLayout);
-    AdvancedPanel->addLayout(advancedLayout);
-    setLayout(AdvancedPanel);
-
-    connect(mLoadStencilAct, SIGNAL(triggered()), SLOT(updateLoadStencil()));
-    connect(mLoadBrushAct, SIGNAL(triggered()), SLOT(updateLoadBrush()));
-    connect(mLoadBrushSetAct, SIGNAL(triggered()), SLOT(updateLoadBrushSet()));
-    connect(mSaveStencilAct, SIGNAL(triggered()), SLOT(updateSaveStencil()));
-    connect(mSaveBrushAct, SIGNAL(triggered()), SLOT(updateSaveBrush()));
-    connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(updateSaveBrushSet()));
-    connect(mDeleteBrushAct, SIGNAL(triggered()), SLOT(updateDeleteBrush()));
-    connect(mWidthLE, SIGNAL(textChanged(QString)), SLOT(updateStencilWidth(QString)));
-    connect(mWidthSlider, SIGNAL(valueChanged(int)), SLOT(updateStencilWidth(int)));
-    connect(mHeightLE, SIGNAL(textChanged(QString)), SLOT(updateStencilHeight(QString)));
-    connect(mHeightSlider, SIGNAL(valueChanged(int)), SLOT(updateStencilHeight(int)));
-    connect(mHeightLE, SIGNAL(textChanged(QString)), SLOT(updateStencilHeight(QString)));
-    connect(mHardnessSlider, SIGNAL(valueChanged(int)), SLOT(updateBrushHardness(int)));
-    connect(mHardnessLE, SIGNAL(textChanged(QString)), SLOT(updateBrushHardness(QString)));
-    connect(mRotateSlider, SIGNAL(valueChanged(int)), SLOT(updateStencilRotate(int)));
-    connect(mRotateLE, SIGNAL(textChanged(QString)), SLOT(updateStencilRotate(QString)));
-    connect(this, SIGNAL(stencilChanged(QPixmap)), SLOT(updateStencil(QPixmap)));
-    connect(mCircleButton, SIGNAL(clicked()), SLOT(updateBrushShape_Circle()));
-    connect(mSquareButton, SIGNAL(clicked()), SLOT(updateBrushShape_Square()));
-    connect(mCustomButton, SIGNAL(clicked()), SLOT(updateBrushShape_Polygon()));
-    connect(mTextureBtn, SIGNAL(clicked()), SLOT(updateStencilTexture()));
-    connect(mTextureFileLE, SIGNAL(textChanged(QString)), SLOT(updateStencilTextureLE(QString)));
-}
-
-void CustomBrushWidget::TempSave(QPixmap pixmap){
-    QImage image = pixmap.toImage();
-    image.convertToFormat(QImage::Format_RGB888, Qt::AutoColor);
-    if(tempFile.open()){
-        image.save(tempFile.fileName());
-    }
-    tempFile.close();
-    emit stencilPathChanged(tempFile.fileName());
-}
-
-void CustomBrushWidget::updateStencil(QPixmap pixmap){
-    TempSave(pixmap);
-}
-
-void CustomBrushWidget::updateStencilTexture(){
-    hasTexture = true;
-    QString fileName = QFileDialog::getOpenFileName(this, "Load Texture", QDir::currentPath());
-    mStencilTexture.load(fileName);
-    QImage image = mStencilTexture.toImage();
-    QRgb col;
-    int gray;
-    int width = mStencilTexture.width();
-    int height = mStencilTexture.height();
-    for(int i = 0; i < width; i++){
-        for(int j = 0; j < height; j++){
-            col = image.pixel(i, j);
-            gray = qGray(col);
-            image.setPixel(i, j, qRgb(gray, gray, gray));
-        }
-    }
-    mStencilTexture = mStencilTexture.fromImage(image);
-    mStencilTexture = mStencilTexture.scaled(mStencilPreview.width(), mStencilPreview.height(), Qt::IgnoreAspectRatio, Qt::FastTransformation);
-    mTextureFileLE->setText(fileName);
-}
-
-void CustomBrushWidget::updateStencilWidth(int val){
-   mWidthLE->setText(QString::number(val));
-   emit StencilWidthChanged(val);
-   emit stencilChanged(mStencilPreview);
-}
-
-void CustomBrushWidget::updateStencilWidth(QString val){
-    mWidthSlider->setValue(val.toInt());
-    emit StencilWidthChanged(val.toInt());
-}
-
-void CustomBrushWidget::updateStencilHeight(int val){
-    mHeightLE->setText(QString::number(val));
-    emit stencilHeightChanged(val);
-    emit stencilChanged(mStencilPreview);
-}
-
-void CustomBrushWidget::updateStencilHeight(QString val){
-    mHeightSlider->setValue(val.toInt());
-    emit stencilHeightChanged(val.toInt());
-}
-
-void CustomBrushWidget::updateBrushHardness(int val){
-    mHardnessLE->setText(QString::number(val));
-    emit brushHardnessChanged(val);
-    emit stencilChanged(mStencilPreview);
-}
-
-void CustomBrushWidget::updateBrushHardness(QString val){
-    mHardnessSlider->setValue(val.toInt());
-    emit brushHardnessChanged(val.toInt());
-}
-
-void CustomBrushWidget::updateStencilRotate(int val){
-    if(val > 360){
-        val = 0;
-        mRotateSlider->setValue(0);
-    }
-    mRotateLE->setText(QString::number(val));
-    emit rotateChanged(val);
-    emit stencilChanged(mStencilPreview);
-}
-
-void CustomBrushWidget::updateStencilRotate(QString val){
-    if(val.toInt() > 360){
-        mRotateSlider->setValue(0);
-        emit rotateChanged(0);
-    }else{
-        mRotateSlider->setValue(val.toInt());
-        emit rotateChanged(val.toInt());
-    }
-}
-
-void CustomBrushWidget::updateStencilTextureLE(QString val){
-    if(val.isEmpty()){
-        hasTexture = false;
-    }else{
-        hasTexture = true;
-    }
-}
-
-QPixmap CustomBrushWidget::GeneratePixmap(){
-    int stencilWidth = (mStencilPreview.width() * mWidthSlider->value()/10)/2;
-    int stencilHeight = (mStencilPreview.height()* mHeightSlider->value()/10)/2;
-    qreal hardness = 78 * ((qreal)mHardnessSlider->value()/100);
-    QPoint midPoint(mStencilPreview.width()/2, mStencilPreview.height()/2);
-    mStencilPreview.fill(Qt::transparent);
-    QRadialGradient radGrad(midPoint, mStencilPreview.width()/2);
-    radGrad.setColorAt(midPoint.x(), Qt::black);
-    radGrad.setFocalRadius(hardness);
-    QPainter p;
-    p.begin(&mStencilPreview);
-    p.setPen(Qt::NoPen);
-    switch(mBrushShape){
-    case CIRCLE_SHAPE:
-        if(hasTexture){
-            QBrush brush;
-            brush.setTexture(mStencilTexture);
-            p.setBrush(brush);
-        }else{
-            p.setBrush(radGrad);
-        }
-        p.drawEllipse(midPoint, stencilWidth, stencilHeight);
-        p.end();
-        break;
-    case SQUARE_SHAPE:
-        int originX =  midPoint.x() - stencilWidth;
-        int originY = midPoint.y() - stencilHeight;
-        int dimX = stencilWidth*2;
-        int dimY = stencilHeight*2;
-
-        if(hasTexture){
-            QBrush brush;
-            brush.setTexture(mStencilTexture);
-            p.setBrush(brush);
-        }else{
-            p.setBrush(Qt::black);
-        }
-
-        p.drawRect(originX, originY, dimX, dimY);
-        break;
-    }
-    qDebug() << "Generated pixmap "<< endl;
-    return mStencilPreview;
-}
-
-void CustomBrushWidget::paintEvent(QPaintEvent *event){
-    Q_UNUSED(event);
-    int stencilWidth = (mStencilPreview.width() * mWidthSlider->value()/10)/2;
-    int stencilHeight = (mStencilPreview.height()* mHeightSlider->value()/10)/2;
-    qreal hardness = 78 * ((qreal)mHardnessSlider->value()/100);
-    QPoint midPoint(mStencilPreview.width()/2, mStencilPreview.height()/2);
-    mStencilPreview.fill(Qt::transparent);
-    QRadialGradient radGrad(midPoint, mStencilPreview.width()/2);
-    radGrad.setColorAt(midPoint.x(), Qt::black);
-    radGrad.setFocalRadius(hardness);
-    QPainter painter(&mStencilPreview);
-    painter.setPen(Qt::NoPen);
-    switch(mBrushShape){
-        case CIRCLE_SHAPE:
-            if(hasTexture){
-                QBrush brush;
-                brush.setTexture(mStencilTexture);
-                painter.setBrush(brush);
-            }else{
-                painter.setBrush(radGrad);
-            }
-            painter.translate(midPoint);
-            painter.rotate(mRotateSlider->value());
-            painter.translate(-midPoint);
-            painter.drawEllipse(midPoint, stencilWidth, stencilHeight);
-            break;
-        case SQUARE_SHAPE:
-            int originX =  midPoint.x() - stencilWidth;
-            int originY = midPoint.y() - stencilHeight;
-            int dimX = stencilWidth*2;
-            int dimY = stencilHeight*2;
-
-            if(hasTexture){
-                QBrush brush;
-                brush.setTexture(mStencilTexture);
-                painter.setBrush(brush);
-            }else{
-                painter.setBrush(Qt::black);
-            }
-            painter.translate(midPoint);
-            painter.rotate(mRotateSlider->value());
-            painter.translate(-midPoint);
-            painter.drawRect(originX, originY, dimX, dimY);
-            break;
-    }
-    mStencilLabel->setPixmap(mStencilPreview);
-}
-
-void CustomBrushWidget::updateBrushShape_Circle(){
-    mBrushShape = CIRCLE_SHAPE;
-    emit stencilChanged(this->GeneratePixmap());
-}
-
-void CustomBrushWidget::updateBrushShape_Square(){
-    mBrushShape = SQUARE_SHAPE;
-    emit stencilChanged(this->GeneratePixmap());
-}
-
-void CustomBrushWidget::updateBrushShape_Polygon(){
-    mBrushShape = CUSTOM;
-    emit stencilChanged(this->GeneratePixmap());
-}
-
-CustomBrushWidget::~CustomBrushWidget(){
 
 }
 
