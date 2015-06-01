@@ -2318,6 +2318,7 @@ PrimitivePanel::PrimitivePanel(QWidget *parent) : QWidget(parent){
 
     QHBoxLayout* pointLayout = new QHBoxLayout;
     pointLayout->addWidget(m_PointCountLbl);
+    pointLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
     pointLayout->addWidget(m_PointSB);
 
     m_PenWidthLbl = new QLabel("Pen Width: ", this);
@@ -2326,10 +2327,10 @@ PrimitivePanel::PrimitivePanel(QWidget *parent) : QWidget(parent){
 
     QHBoxLayout* penLayout = new QHBoxLayout;
     penLayout->addWidget(m_PenWidthLbl);
-    penLayout->addSpacing(5);
+    penLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
     penLayout->addWidget(m_PenWidthSB);
 
-    m_WidthLbl = new QLabel("&Width: ", this);
+    m_WidthLbl = new QLabel("Width: ", this);
     m_WidthSlider = new QSlider(this);
     m_WidthSlider->setRange(0, 100);
     m_WidthSlider->setOrientation(Qt::Horizontal);
@@ -2341,7 +2342,7 @@ PrimitivePanel::PrimitivePanel(QWidget *parent) : QWidget(parent){
     widthLayout->addWidget(m_WidthSlider);
     widthLayout->addWidget(m_WidthSB);
 
-    m_HeightLbl = new QLabel("&Height: ", this);
+    m_HeightLbl = new QLabel("Height: ", this);
     m_HeightSlider = new QSlider(this);
     m_HeightSlider->setRange(0, 100);
     m_HeightSlider->setOrientation(Qt::Horizontal);

@@ -181,7 +181,6 @@ void BitmapImage::fillImage(QPoint point, Brush brush){
     QImage img = m_pixmap.toImage();
     QRgb oldColor = img.pixel(point);
     QRgb newColor = brush.getColor().rgb();
-    qDebug() << "Filling" << endl;
     fillRecurs(point, img, oldColor, newColor);
 
     m_pixmap = QPixmap::fromImage(img);
