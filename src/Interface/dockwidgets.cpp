@@ -329,6 +329,7 @@ void BrushDockWidget::updateStencilRotate(int val){
 
 void BrushDockWidget::updateStencil(QPixmap pixmap){
     mTempBrushList[mCurrentBrushIndex].SetStencil(pixmap);
+    mGenBrushWidget->setStencilPixmap(pixmap);
     emit brushStencilChanged(pixmap);
 }
 
@@ -348,6 +349,7 @@ void BrushDockWidget::setCurrentIndex(int val){
     mStencilWidget->updateBrushHardness(mActualBrushList.at(mCurrentBrushIndex).getHardness());
     mStencilWidget->updateStencilRotate(mActualBrushList.at(mCurrentBrushIndex).getRotate());
     mStencilWidget->updateStencil(mActualBrushList.at(mCurrentBrushIndex).getStencil());
+    mGenBrushWidget->setStencilPixmap(mActualBrushList.at(mCurrentBrushIndex).getStencil());
     emit stencilWidthChanged(mActualBrushList.at(mCurrentBrushIndex).getSWidth());
     emit stencilHeightChanged(mActualBrushList.at(mCurrentBrushIndex).getSHeight());
     emit brushHardnessChanged(mActualBrushList.at(mCurrentBrushIndex).getHardness());
@@ -579,6 +581,7 @@ void BrushShapeWidget::mousePressEvent(QMouseEvent *event)
 
 
 GeneralBrushWidget::GeneralBrushWidget(){
+    m_usePressureWidth = false;
     mToolBtn = new QToolButton(this);
     mToolBtn->setText("Tool");
     mToolBtn->setFixedWidth(48);
@@ -605,10 +608,10 @@ GeneralBrushWidget::GeneralBrushWidget(){
     mBrushIndex = new QListWidget(this);
     mBrushIndex->setMinimumWidth(130);
     mBrushIndex->setBaseSize(130, 130);
-    m_StrokePreview = QPixmap(175, 100);
-    m_StrokePreview.fill(Qt::gray);
+    m_StencilPreview = QPixmap(175, 100);
+    m_StencilPreview.fill(Qt::gray);
     m_PreviewLabel = new QLabel(this);
-    m_PreviewLabel->setPixmap(m_StrokePreview);
+    m_PreviewLabel->setPixmap(m_StencilPreview);
 
     m_showStencilBtn = new QPushButton("[Stencil]", this);
     m_showStencilBtn->setCheckable(true);
@@ -629,6 +632,7 @@ GeneralBrushWidget::GeneralBrushWidget(){
     QVBoxLayout* generalBrushLayout = new QVBoxLayout;
     generalBrushLayout->addLayout(horiz1);
     generalBrushLayout->addWidget(m_PreviewLabel);
+    generalBrushLayout->setAlignment(m_PreviewLabel, Qt::AlignCenter);
     generalBrushLayout->addLayout(toggleStrokeLayout);
 
     setLayout(generalBrushLayout);
@@ -661,13 +665,13 @@ void GeneralBrushWidget::addBrush(Brush brush){
 }
 
 void GeneralBrushWidget::updateStencil(QPixmap pixmap){
-    int targetWidth = m_StrokePreview.width();
-    int targetHeight = m_StrokePreview.height();
+    int targetWidth = m_StencilPreview.width();
+    int targetHeight = m_StencilPreview.height();
     int sourceWidth = pixmap.width();
     int sourceHeight = pixmap.height();
     if(sourceWidth > targetWidth, sourceHeight > targetHeight){
-        pixmap = pixmap.scaled(m_StrokePreview.size(), Qt::IgnoreAspectRatio, Qt::FastTransformation);
-        m_StrokePreview = pixmap;
+        pixmap = pixmap.scaled(m_StencilPreview.size(), Qt::IgnoreAspectRatio, Qt::FastTransformation);
+        m_StencilPreview = pixmap;
     }else{
         qDebug() << "Unable to load Pixmap" << endl;
     }
@@ -675,17 +679,64 @@ void GeneralBrushWidget::updateStencil(QPixmap pixmap){
 
 void GeneralBrushWidget::setStencilPixmap(QPixmap pix){
     m_StencilPreview = pix;
+    if(m_showStencilBtn->isChecked()){
+        m_PreviewLabel->setPixmap(m_StencilPreview);
+    }
 }
 
 void GeneralBrushWidget::showStencil(bool v){
     m_showStrokeBtn->setChecked(!v);
-    m_PreviewLabel->setPixmap(m_StrokePreview);
+    m_PreviewLabel->setPixmap(m_StencilPreview);
     update();
 }
 
 void GeneralBrushWidget::showStroke(bool v){
     m_showStencilBtn->setChecked(!v);
+    generateStrokePreview();
+    m_PreviewLabel->setPixmap(m_StrokePreview);
     /*-TODO - Show Stroke-*/
+    update();
+}
+
+void GeneralBrushWidget::generateStrokePreview(){
+    m_StrokePreview = QPixmap(this->width() - 40, m_StencilPreview.height() * 0.5);
+    m_StrokePreview.fill(Qt::gray);
+    QPainterPath path;
+    path.moveTo(20, 20);
+    path.cubicTo(QPointF(1.0/3.0 * (double)m_StrokePreview.width(), m_StrokePreview.height()), QPointF(1.0/3.0 * (double)m_StrokePreview.width(), m_StrokePreview.height()), QPointF(m_StrokePreview.width()/2, m_StrokePreview.height()/2));
+    path.cubicTo(QPointF(2.0/3.0 * (double)m_StrokePreview.width(), 0), QPointF(2.0/3.0 * (double)m_StrokePreview.width(), 0), QPointF(m_StrokePreview.width()-20, m_StrokePreview.height() - 20));
+
+    qreal minWidth = 5.0;
+    qreal maxWidth = 10.0;
+
+    QImage stenBase = m_StencilPreview.toImage();
+    stenBase.invertPixels(QImage::InvertRgb);
+    stenBase.createAlphaMask();
+    stenBase.convertToFormat(QImage::Format_ARGB32, Qt::AutoColor);
+    QImage stencil(stenBase);
+    stencil.fill(Qt::black);
+    stencil.setAlphaChannel(stenBase);
+    QPixmap fSten = QPixmap::fromImage(stencil.scaled(minWidth, minWidth));
+
+    QPainter p(&m_StrokePreview);
+    p.setPen(Qt::black);
+    p.setBrush(Qt::transparent);
+    for(double i = 0.0; i < 1.0; i+= 0.0001){
+        QPoint drawPoint = path.pointAtPercent(i).toPoint();
+        if(m_usePressureWidth){
+
+        }else{
+             p.drawPixmap(QPoint(drawPoint.x() - fSten.width()/2.0, drawPoint.y() - fSten.height()/2), fSten);
+        }
+    }
+}
+
+void GeneralBrushWidget::resizeEvent(QResizeEvent *e){
+    Q_UNUSED(e);
+    if(m_showStrokeBtn->isChecked()){
+        generateStrokePreview();
+        m_PreviewLabel->setPixmap(m_StrokePreview);
+    }
     update();
 }
 

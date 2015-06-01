@@ -164,84 +164,6 @@ private:
 
 };
 
-class BrushShapeWidget : public QLabel
-{
-  Q_OBJECT
-public:
-    BrushShapeWidget(QWidget *parent = 0);
-    virtual ~BrushShapeWidget();
-    void toggleStroke(bool);
-    void setMaxSize(qreal);
-    void setMinSize(qreal);
-    void setBrush(Brush);
-protected:
-    void paintEvent(QPaintEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-private:
-    QPixmap brushPreviewPixmap;
-    bool m_ShowStroke;
-    qreal m_MaxPressure;
-    qreal m_MinSize;
-    Brush m_brush;
-};
-
-
-class ColorDockWidget : public QDockWidget
-{
-    Q_OBJECT
-public:
-    ColorDockWidget(QWidget *parent = 0);
-public slots:
-    void updateColor(QColor);
-    void updateRed(int);
-    void updateRed(QString);
-    void updateGreen(int);
-    void updateGreen(QString);
-    void updateBlue(int);
-    void updateBlue(QString);
-    void updateHue(int);
-    void updateHue(QString);
-    void updateSat(int);
-    void updateSat(QString);
-    void updateVal(int);
-    void updateVal(QString);
-signals:
-    void redChanged(int);
-    void greenChanged(int);
-    void blueChanged(int);
-private:
-    ColorWheel* mColorWheel;
-    QTabWidget* mColorTabs;
-
-    /*-RGB Parameters-*/
-    QLabel *mRLabel;
-    QSlider *mRSlider;
-    QSpinBox *mRSpinBox;
-
-    QLabel *mGLabel;
-    QSlider *mGSlider;
-    QSpinBox *mGSpinBox;
-
-    QLabel *mBLabel;
-    QSlider *mBSlider;
-    QSpinBox *mBSpinBox;
-
-    /*-HSV Parameters-*/
-    QLabel *mHLabel;
-    QSlider *mHSlider;
-    QSpinBox *mHSpinBox;
-
-    QLabel *mSLabel;
-    QSlider *mSSlider;
-    QSpinBox *mSSpinBox;
-
-    QLabel * mVLabel;
-    QSlider *mVSlider;
-    QSpinBox *mVSpinBox;
-};
-
-
 class GeneralBrushWidget : public QWidget
 {
     Q_OBJECT
@@ -278,11 +200,17 @@ public slots:
     void updateName(QListWidgetItem* item);
     void showStencil(bool);
     void showStroke(bool);
+protected:
+    void resizeEvent(QResizeEvent *);
 private:
+    void generateStrokePreview();
+    bool m_usePressureWidth;
     unsigned int mCurrentBrushIndex;
     QString mDir;
     QPixmap m_StrokePreview;
     QPixmap m_StencilPreview;
+    qreal m_minSize;
+    qreal m_maxSize;
     QPushButton* m_showStencilBtn;
     QPushButton* m_showStrokeBtn;
     QLabel* m_PreviewLabel;
@@ -401,6 +329,84 @@ private:
     /*-File Stuff-*/
     QTemporaryFile tempFile;
 };
+
+class BrushShapeWidget : public QLabel
+{
+  Q_OBJECT
+public:
+    BrushShapeWidget(QWidget *parent = 0);
+    virtual ~BrushShapeWidget();
+    void toggleStroke(bool);
+    void setMaxSize(qreal);
+    void setMinSize(qreal);
+    void setBrush(Brush);
+protected:
+    void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+private:
+    QPixmap brushPreviewPixmap;
+    bool m_ShowStroke;
+    qreal m_MaxPressure;
+    qreal m_MinSize;
+    Brush m_brush;
+};
+
+
+class ColorDockWidget : public QDockWidget
+{
+    Q_OBJECT
+public:
+    ColorDockWidget(QWidget *parent = 0);
+public slots:
+    void updateColor(QColor);
+    void updateRed(int);
+    void updateRed(QString);
+    void updateGreen(int);
+    void updateGreen(QString);
+    void updateBlue(int);
+    void updateBlue(QString);
+    void updateHue(int);
+    void updateHue(QString);
+    void updateSat(int);
+    void updateSat(QString);
+    void updateVal(int);
+    void updateVal(QString);
+signals:
+    void redChanged(int);
+    void greenChanged(int);
+    void blueChanged(int);
+private:
+    ColorWheel* mColorWheel;
+    QTabWidget* mColorTabs;
+
+    /*-RGB Parameters-*/
+    QLabel *mRLabel;
+    QSlider *mRSlider;
+    QSpinBox *mRSpinBox;
+
+    QLabel *mGLabel;
+    QSlider *mGSlider;
+    QSpinBox *mGSpinBox;
+
+    QLabel *mBLabel;
+    QSlider *mBSlider;
+    QSpinBox *mBSpinBox;
+
+    /*-HSV Parameters-*/
+    QLabel *mHLabel;
+    QSlider *mHSlider;
+    QSpinBox *mHSpinBox;
+
+    QLabel *mSLabel;
+    QSlider *mSSlider;
+    QSpinBox *mSSpinBox;
+
+    QLabel * mVLabel;
+    QSlider *mVSlider;
+    QSpinBox *mVSpinBox;
+};
+
 
 
 class ColorWheel : public QLabel

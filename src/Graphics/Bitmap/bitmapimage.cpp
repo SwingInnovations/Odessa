@@ -99,7 +99,7 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
     QImage stencilBase = brush.getStencil().toImage();
     stencilBase.invertPixels(QImage::InvertRgb);
     stencilBase.createAlphaMask();
-    stencilBase.convertToFormat(QImage::Format_RGB32, Qt::AutoColor);
+    stencilBase.convertToFormat(QImage::Format_ARGB32, Qt::AutoColor);
     QImage stencilImage = QImage(stencilBase);
     QColor color = brush.getColor();
     color.setAlpha(brush.getOpacity() + (brush.getPressureVal() * brush.getTransferOpacity()));
