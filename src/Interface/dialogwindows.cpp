@@ -269,10 +269,22 @@ OdessaPrefDialog::OdessaPrefDialog()
     setLayout(mainLayout);
 
     connect(genPref, SIGNAL(projectPathChanged(QString)), SLOT(updateProjectPath(QString)));
+    connect(m_OkButton, SIGNAL(clicked()), SLOT(okChanges()));
+    connect(m_ApplyButton, SIGNAL(clicked()), SLOT(applyChanges()));
+    connect(m_CancelButton, SIGNAL(clicked()), SLOT(close()));
 }
 
 void OdessaPrefDialog::updateProjectPath(QString val){
     emit projectPathChanged(val);
+}
+
+void OdessaPrefDialog::applyChanges(){
+    genPref->applyChanges();
+}
+
+void OdessaPrefDialog::okChanges(){
+    applyChanges();
+    this->close();
 }
 
 OdessaPrefDialog::~OdessaPrefDialog()
@@ -284,6 +296,15 @@ GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
 {
     QSettings settings("SwingInnovations", "Odessa");
     QString filePath = settings.value("projectPath").toString();
+
+    m_ThemeLbl = new QLabel("Theme: ", this);
+    m_ThemeCombobox = new QComboBox(this);
+    m_ThemeCombobox->addItem("Dark");
+    m_ThemeCombobox->addItem("Light");
+    QHBoxLayout* themeGrp = new QHBoxLayout;
+    themeGrp->addWidget(m_ThemeLbl);
+    themeGrp->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+    themeGrp->addWidget(m_ThemeCombobox);
 
     mProjectPathLbl = new QLabel("Project path:", this);
     mProjectPathLE = new QLineEdit(this);
@@ -299,6 +320,7 @@ GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
     mStepsBox->setValue(24);
     QHBoxLayout* historyGrp = new QHBoxLayout;
     historyGrp->addWidget(mHistoryLbl);
+    historyGrp->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
     historyGrp->addWidget(mStepsBox);
 
     m_ScaleLbl = new QLabel("Scale: ", this);
@@ -308,12 +330,15 @@ GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
     m_ScaleComboBox->addItem("150%");
     QHBoxLayout* scaleLayout = new QHBoxLayout;
     scaleLayout->addWidget(m_ScaleLbl);
+    scaleLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
     scaleLayout->addWidget(m_ScaleComboBox);
 
     QVBoxLayout* masterLayout = new QVBoxLayout;
+    masterLayout->addLayout(themeGrp);
     masterLayout->addLayout(projectPathGrp);
     masterLayout->addLayout(historyGrp);
     masterLayout->addLayout(scaleLayout);
+    masterLayout->addSpacerItem(new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     setLayout(masterLayout);
 
@@ -334,7 +359,14 @@ void GeneralPrefPage::changeHistorySteps(int val){
 void GeneralPrefPage::updateUIScale(QString num){
     num = num.remove('%');
     double scale = num.toDouble()/100.0;
+    ui_scale = scale;
     emit uiScaleChanged(scale);
+}
+
+void GeneralPrefPage::applyChanges(){
+    QSettings settings("SwingInnovations", "Odessa");
+    settings.setValue("theme", m_ThemeCombobox->currentText());
+    settings.setValue("ui_scale", ui_scale);
 }
 
 GeneralPrefPage::~GeneralPrefPage()

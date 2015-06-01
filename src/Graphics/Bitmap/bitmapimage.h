@@ -39,7 +39,8 @@ public:
 
     void paintImage(QPainter &painter);
     void paintImage(QPainterPath painterPath, Brush brush); //works
-    void paintImage(QVector<QPointF> pointInfo, Brush brush);//Keep
+    void paintImage(QPoint point, Brush brush);//Keep
+    void paintImage(QVector<QPointF> pointInfo, Brush brush);
     void paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt);//Keep
     void setColor(const QColor color){ m_Color = color; m_Image->fill(m_Color);}
 

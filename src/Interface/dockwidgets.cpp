@@ -275,6 +275,7 @@ void BrushDockWidget::toggleTransferSize(bool val)
 {
     mTransferSizeSlider->setEnabled(val);
     mTransferSizeLE->setEnabled(val);
+    mGenBrushWidget->activateUsePressureWidth(val);
     if(!val){
         emit brushTransferSizeChanged(0);
     }else{
@@ -698,6 +699,11 @@ void GeneralBrushWidget::showStroke(bool v){
     update();
 }
 
+void GeneralBrushWidget::activateUsePressureWidth(bool v){
+    m_usePressureWidth = v;
+    update();
+}
+
 void GeneralBrushWidget::generateStrokePreview(){
     m_StrokePreview = QPixmap(this->width() - 40, m_StencilPreview.height() * 0.5);
     m_StrokePreview.fill(Qt::gray);
@@ -721,10 +727,17 @@ void GeneralBrushWidget::generateStrokePreview(){
     QPainter p(&m_StrokePreview);
     p.setPen(Qt::black);
     p.setBrush(Qt::transparent);
+    qreal bigger = 0.0;
     for(double i = 0.0; i < 1.0; i+= 0.0001){
         QPoint drawPoint = path.pointAtPercent(i).toPoint();
         if(m_usePressureWidth){
-
+            if(i <= 0.5){
+                bigger = i;
+            }else{
+                bigger = -i;
+            }
+            fSten = fSten.scaled(minWidth + bigger, minWidth + bigger);
+             p.drawPixmap(QPoint(drawPoint.x() - fSten.width()/2.0, drawPoint.y() - fSten.height()/2), fSten);
         }else{
              p.drawPixmap(QPoint(drawPoint.x() - fSten.width()/2.0, drawPoint.y() - fSten.height()/2), fSten);
         }
@@ -1886,6 +1899,8 @@ void ToolsPanel::setMode(int o){
         panelSpace->setCurrentIndex(2);
         break;
     case 3:
+        panelSpace->setCurrentIndex(3);
+        break;
     case 4:
     case 5:
     case 6:
@@ -2293,6 +2308,7 @@ PrimitivePanel::PrimitivePanel(QWidget *parent) : QWidget(parent){
     m_concaveGrp->addButton(m_isConvexBtn);
 
     QHBoxLayout* radioBtnLayout = new QHBoxLayout;
+    radioBtnLayout->addWidget(m_isLineBtn);
     radioBtnLayout->addWidget(m_isConcaveBtn);
     radioBtnLayout->addWidget(m_isConvexBtn);
 
@@ -2316,6 +2332,7 @@ PrimitivePanel::PrimitivePanel(QWidget *parent) : QWidget(parent){
     m_WidthLbl = new QLabel("&Width: ", this);
     m_WidthSlider = new QSlider(this);
     m_WidthSlider->setRange(0, 100);
+    m_WidthSlider->setOrientation(Qt::Horizontal);
     m_WidthSB = new QSpinBox(this);
     m_WidthSB->setRange(0, 100);
 
@@ -2327,6 +2344,7 @@ PrimitivePanel::PrimitivePanel(QWidget *parent) : QWidget(parent){
     m_HeightLbl = new QLabel("&Height: ", this);
     m_HeightSlider = new QSlider(this);
     m_HeightSlider->setRange(0, 100);
+    m_HeightSlider->setOrientation(Qt::Horizontal);
     m_HeightSB = new QSpinBox(this);
     m_HeightSB->setRange(0, 100);
 
@@ -2336,6 +2354,7 @@ PrimitivePanel::PrimitivePanel(QWidget *parent) : QWidget(parent){
     heightLayout->addWidget(m_HeightSB);
 
     QVBoxLayout* overallLayout = new QVBoxLayout;
+    overallLayout->addLayout(radioBtnLayout);
     overallLayout->addLayout(pointLayout);
     overallLayout->addLayout(penLayout);
     overallLayout->addLayout(widthLayout);

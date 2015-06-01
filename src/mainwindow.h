@@ -40,8 +40,10 @@ private slots:
     void assignRectSelectTool();
     void assignFillTool();
     void assignTransformTool();
+    void assignCursorTool();
     void showNewDocWin();
     void showPrefWin();
+    void changeStatusMessage(QString);
     void toggleShowBrushDock(bool);
     void toggleShowColorDock(bool);
     void toggleShowTimelineDock(bool);
@@ -112,6 +114,7 @@ private:
     QAction *scaleAct;
 
     //basic Tools
+    QAction *cursorTool;
     QAction *brushTool;
     QAction *eraserTool;
     QAction *textTool;

@@ -91,6 +91,23 @@ void BitmapImage::paintImage(QPainterPath painterPath, Brush brush)
     painter.drawPath(painterPath);
 }
 
+void BitmapImage::paintImage(QPoint point, Brush brush){
+    int brushWidth = brush.getSize() + (brush.getPressureVal() * brush.getTransferSize());
+    brushWidth += m_ScaleFactor;
+    QImage stencilBase = brush.getStencil().toImage();
+    stencilBase.invertPixels(QImage::InvertRgb);
+    stencilBase.createAlphaMask();
+    stencilBase.convertToFormat(QImage::Format_ARGB32, Qt::AutoColor);
+    QImage stencilImage = QImage(stencilBase);
+    QColor color = brush.getColor();
+    color.setAlpha(brush.getOpacity() + (brush.getPressureVal() * brush.getTransferOpacity()));
+    stencilImage.fill(color);
+    QPixmap stencil = QPixmap::fromImage(stencilImage.scaled(brushWidth, brushWidth, Qt::IgnoreAspectRatio, Qt::FastTransformation));
+    QPainter p(&m_pixmap);
+    p.setRenderHint(QPainter::Antialiasing);
+    p.drawPixmap(QPoint(point.x() - stencil.width()/2, point.y() - stencil.height()/2), stencil);
+}
+
 void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
 {
     int brushWidth = brush.getSize() + (brush.getPressureVal() * brush.getTransferSize());

@@ -84,6 +84,7 @@ void Editor::mousePressEvent(QMouseEvent *event)
             {
                 m_MousePath.clear();
                 m_MousePath.append(event->pos());
+                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
             }
             backup();
             break;
@@ -93,6 +94,7 @@ void Editor::mousePressEvent(QMouseEvent *event)
             if(!m_MousePath.isEmpty()){
                 m_MousePath.clear();
                 m_MousePath.append(event->pos());
+                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
             }
             backup();
             break;
@@ -434,6 +436,9 @@ void Editor::setBrush(ToolType type)
         m_acceptTextInput = true;
         m_ClipboardPresent = true;
         emit toolChanged(2);
+        break;
+    case PRIMITIVE_TOOL:
+        emit toolChanged(3);
         break;
     case EYEDROPPER_TOOL:
         m_acceptTextInput = false;

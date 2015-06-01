@@ -19,7 +19,6 @@ MainWindow::MainWindow(QWidget *parent)
             break;
         }
     }else{
-        qDebug() << projectPath << endl;
         QDir dir(projectPath);
         dir.mkpath("Brush");
     }
@@ -60,6 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     timelineDockWidget = new TimelineDockWidget(this);
     timelineDockWidget->setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+    timelineDockWidget->setVisible(false);
 
     layerDockWidget = new LayerDockWidget(this);
     layerDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -67,6 +67,8 @@ MainWindow::MainWindow(QWidget *parent)
     toolPanelWidget = new ToolsPanel(this);
     toolPanelWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     toolPanelWidget->setVisible(false);
+    cursorTool = new QAction("Cursor", this);
+    cursorTool->setShortcut(QKeySequence(Qt::Key_Escape));
     brushTool = new QAction(this);
     brushTool->setText("Brush");
     eraserTool = new QAction(this);
@@ -78,13 +80,6 @@ MainWindow::MainWindow(QWidget *parent)
     eyeDropperTool = new QAction(this);
     eyeDropperTool->setText("EyeDropper");
     fillTool = new QAction("Fill", this);
-
-    /*
-    *
-    * Temporarily disable
-    *
-    */
-    primitiveTool->setEnabled(false);
 
     toolBar->addAction(eyeDropperTool);
     toolBar->addAction(brushTool);
@@ -156,7 +151,6 @@ MainWindow::MainWindow(QWidget *parent)
     showColorDockWinAct->setChecked(true);
     showTimeDockWinAct = new QAction("Timeline", this);
     showTimeDockWinAct->setCheckable(true);
-    showTimeDockWinAct->setChecked(true);
     showToolsDockAct = new QAction("Tools", this);
     showToolsDockAct->setCheckable(true);
     showToolsDockAct->setChecked(false);
@@ -250,6 +244,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(pasteAct, SIGNAL(triggered()), m_Editor, SLOT(paste()));
     connect(selectRegionAct, SIGNAL(triggered()), SLOT(assignRectSelectTool()));
     connect(deselectAct, SIGNAL(triggered()), SLOT(assignDeselectTool()));
+    connect(cursorTool, SIGNAL(triggered()), SLOT(assignCursorTool()));
     connect(brushTool, SIGNAL(triggered()), SLOT(assignBrushTool()));
     connect(eraserTool, SIGNAL(triggered()), SLOT(assignEraserTool()));
     connect(textTool, SIGNAL(triggered()), SLOT(assignTextTool()));
@@ -351,6 +346,10 @@ void MainWindow::newProject(ProjectInfo &info){
     }
 }
 
+void MainWindow::changeStatusMessage(QString message){
+   activeToolLabel->setText(message);
+}
+
 void MainWindow::toggleShowBrushDock(bool val)
 {
     if(val)
@@ -388,25 +387,30 @@ void MainWindow::toggleShowToolsDock(bool s){
 void MainWindow::assignBrushTool()
 {
     m_Editor->setBrush(Editor::BRUSH_TOOL);
+    changeStatusMessage("Current Tool: Brush");
 }
 
 void MainWindow::assignEraserTool()
 {
     m_Editor->setBrush(Editor::ERASER_TOOL);
+    changeStatusMessage("Current Tool: Eraser");
 }
 
 void MainWindow::assignTextTool()
 {
     m_Editor->setBrush(Editor::TEXT_TOOL);
+    changeStatusMessage("Current Tool: Text");
 }
 
 void MainWindow::assignPrimitiveTool()
 {
     m_Editor->setBrush(Editor::PRIMITIVE_TOOL);
+    changeStatusMessage("Current Tool: Prim");
 }
 
 void MainWindow::assignFillTool(){
     m_Editor->setBrush(Editor::FILL_TOOL);
+    changeStatusMessage("Current Tool: Fill");
 }
 
 void MainWindow::assignDeselectTool(){
@@ -415,17 +419,24 @@ void MainWindow::assignDeselectTool(){
 
 void MainWindow::assignTransformTool(){
     m_Editor->setBrush(Editor::TRANSFORM_TRANSLATE);
+    changeStatusMessage("Current Tool: Transform");
     if(toolPanelWidget->isHidden()) toolPanelWidget->show();
 }
 
 void MainWindow::assignRectSelectTool(){
+    changeStatusMessage("Current Tool: Select");
     m_Editor->setBrush(Editor::RECT_SELECT_TOOL);
 }
 
 void MainWindow::assignEyeDropperTool()
 {
+    changeStatusMessage("Current Tool: Eyedropper");
     m_Editor->setBrush(Editor::EYEDROPPER_TOOL);
-    qDebug() << "Zing";
+}
+
+void MainWindow::assignCursorTool(){
+    changeStatusMessage("Current Tool: Cursor");
+    m_Editor->setBrush(Editor::CURSOR_TOOL);
 }
 
 void MainWindow::setProjectPath(QString val){

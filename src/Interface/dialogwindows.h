@@ -17,6 +17,8 @@
 #include <QSettings>
 #include <QSpinBox>
 #include <QComboBox>
+#include <QSettings>
+
 
 //handle the dialog windows
 class GeneralPrefPage;
@@ -130,6 +132,8 @@ signals:
     void uiScaleChanged(double);
 public slots:
     void updateProjectPath(QString);
+    void applyChanges();
+    void okChanges();
 private:
     QListWidget* m_ContentWidget;
     QStackedWidget* pagesWidget;
@@ -144,6 +148,7 @@ class GeneralPrefPage : public QWidget
     Q_OBJECT
 public:
     GeneralPrefPage(QWidget* parent = 0);
+    void applyChanges();
     ~GeneralPrefPage();
 signals:
     void projectPathChanged(QString);
@@ -154,6 +159,10 @@ public slots:
     void changeHistorySteps(int);
     void updateUIScale(QString);
 private:
+    /*-Theme-*/
+    QLabel* m_ThemeLbl;
+    QComboBox* m_ThemeCombobox;
+
     /*-Project Path-*/
     QLabel* mProjectPathLbl;
     QLineEdit* mProjectPathLE;
@@ -166,6 +175,8 @@ private:
     /*-UI Scaling option-*/
     QLabel* m_ScaleLbl;
     QComboBox* m_ScaleComboBox;
+
+    double ui_scale = 1.0;
 };
 
 #endif // DIALOGWINDOWS_H

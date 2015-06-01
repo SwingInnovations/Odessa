@@ -177,6 +177,7 @@ public:
     int getBrushIndex(){return this->mCurrentBrushIndex;}
     QString getDir(){return this->mDir;}
     void setStencilPixmap(QPixmap);
+    void activateUsePressureWidth(bool);
 signals:
     void loadStencilTriggered();
     void loadBrushTriggered();
