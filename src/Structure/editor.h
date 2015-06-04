@@ -93,6 +93,7 @@ signals:
     void clipScaleChanged(int, int);
 
     void toolChanged(int);
+    void commitAction();
 
 protected:
     void paintEvent(QPaintEvent *event);

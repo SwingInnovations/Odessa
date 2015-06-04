@@ -334,6 +334,12 @@ QString Editor::addText(int i, QString s){
 }
 
 void Editor::keyPressEvent(QKeyEvent *e){
+    if(e->key() == Qt::Key_Escape){
+        setBrush(CURSOR_TOOL);
+    }else if(e->key() == Qt::CTRL + Qt::Key_Enter){
+        commitChanges();
+        emit commitAction();
+    }
     if(m_acceptTextInput){
         if(e->key() == Qt::Key_Backspace){
             m_textCursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor);
@@ -366,7 +372,7 @@ void Editor::newProject(ProjectInfo &info){
             case 0:
                 m_CurrentIndex = 1;
                 m_CurrentFrame = 1;
-                m_Layers.push_back(new Layer(Layer::Bitmap, info.getWidth(), info.getHeight()));
+                m_Layers.push_back(new Layer(Layer::Bitmap, info.getWidth(), info.getHeight(), info.getStartColor()));
                 this->resize(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().size());
                 break;
         default:

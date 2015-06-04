@@ -623,11 +623,30 @@ signals:
     void heightChanged(int);
     void penWidthChanged(int);
     void pointCountChanged(int);
+    int shapeModeChanged(int);
+public slots:
+    void changeWidth(int);
+    void changeHeight(int);
 private slots:
     void updateWidth(int);
+    void updateWidth(QString);
     void updateHeight(int);
+    void updateHeight(QString);
     void updatePenWidth(int);
     void updatePointCount(int);
+    /*
+    *
+    *   Note
+    *
+    * Shape diffrentiation is determined by the following codes
+    *  0 - Line Mode
+    *  1 - Concave Mode
+    *  2 - Convex Mode
+    *
+    */
+    void setLineMode(bool);
+    void setConcaveMode(bool);
+    void setConvexMode(bool);
 private:
     QRadioButton* m_isLineBtn;
     QRadioButton* m_isConcaveBtn;

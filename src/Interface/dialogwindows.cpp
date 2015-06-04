@@ -19,7 +19,6 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     m_CanvasSizeComboBox->addItem("1920 x 1080");
 
     m_WidthLabel = new QLabel("Width: ",this);
-    //m_WidthLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_WidthLE = new QLineEdit(this);
     m_WidthLE->setFixedWidth(48);
     m_WidthLE->setText("800");
@@ -28,7 +27,6 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     widthLayout->addWidget(m_WidthLE);
 
     m_HeightLabel = new QLabel("Height: ", this);
-    //m_HeightLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_HeightLE = new QLineEdit(this);
     m_HeightLE->setFixedWidth(48);
     m_HeightLE->setText("600");
@@ -37,7 +35,6 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     heightLayout->addWidget(m_HeightLE);
 
     m_DPILabel = new QLabel("DPI: ", this);
-    //m_DPILabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_DPILE = new QLineEdit(this);
     m_DPILE->setFixedWidth(48);
     QHBoxLayout* dpiLayout = new QHBoxLayout;
@@ -96,6 +93,18 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     infoLayout->addWidget(m_InformationGrpLbl);
     m_InformationGrpBox->setLayout(infoLayout);
 
+
+    m_ColorLabel = new QLabel("Background Color", this);
+    m_ColorBtn = new QPushButton(this);
+    QPixmap pixmap(10, 10);
+    m_backgroundColor = QColor(Qt::white);
+    pixmap.fill(m_backgroundColor);
+    m_ColorBtn->setIcon(QIcon(pixmap.scaled(m_ColorBtn->size())));
+    QHBoxLayout* colorLayout = new QHBoxLayout;
+    colorLayout->addWidget(m_ColorLabel);
+    colorLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    colorLayout->addWidget(m_ColorBtn);
+
     QVBoxLayout* parameterLayout = new QVBoxLayout;
     parameterLayout->addLayout(essentialLayout);
     parameterLayout->addLayout(m_SpriteLayout);
@@ -116,6 +125,7 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     QVBoxLayout* finalLayout = new QVBoxLayout;
     finalLayout->addWidget(m_TypeComboBox);
     finalLayout->addLayout(centralLayout);
+    finalLayout->addLayout(colorLayout);
     finalLayout->addLayout(buttonLayout);
 
     setLayout(finalLayout);
@@ -124,6 +134,7 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     connect(m_CloseBtn, SIGNAL(clicked()), SLOT(close()));
     connect(m_TypeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(setDocType(int)));
     connect(m_CanvasSizeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(setPresetSize(int)));
+    connect(m_ColorBtn, SIGNAL(clicked()), SLOT(setNewColor()));
 
     m_FpsLabel->hide();
     m_FpsLE->hide();
@@ -134,7 +145,7 @@ OdessaNewDocDialog::OdessaNewDocDialog()
     m_SpriteCount_ColLE->hide();
     m_SpriteCount_RowLabel->hide();
     m_SpriteCount_RowLE->hide();
-    setFixedSize(300, 183);
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 }
 
 OdessaNewDocDialog::~OdessaNewDocDialog()
@@ -161,6 +172,13 @@ void OdessaNewDocDialog::setPresetSize(int val){
     }
 }
 
+void OdessaNewDocDialog::setNewColor(){
+    m_backgroundColor = QColorDialog::getColor(m_backgroundColor, this, "Background Color");
+    QPixmap pixmap(10, 10);
+    pixmap.fill(m_backgroundColor);
+    m_ColorBtn->setIcon(QIcon(pixmap.scaled(m_ColorBtn->size())));
+}
+
 void OdessaNewDocDialog::setDocType(int val){
     info.setType(val);
     switch(val){
@@ -175,7 +193,6 @@ void OdessaNewDocDialog::setDocType(int val){
             m_SpriteCount_ColLE->hide();
             m_SpriteCount_RowLabel->hide();
             m_SpriteCount_RowLE->hide();
-            setFixedSize(300, 183);
             break;
         case 1:
             parameterInfo = "Creates a Sprite Sheet. <br> Width - Image's width in pixels.<br> Height - Image's height in pixels. <br> DPI - The image's DPI <br> Rows: Number of rows. <br> Col: Number of columns.";
@@ -188,7 +205,6 @@ void OdessaNewDocDialog::setDocType(int val){
             m_SpriteCount_ColLE->show();
             m_SpriteCount_RowLabel->show();
             m_SpriteCount_RowLE->show();
-            setFixedSize(300, 239);
             break;
         case 2:
             parameterInfo = "Creates a Animation Project. <br> Width - Image's width in pixels.<br> Height - Image's height in pixels. <br> DPI - The image's DPI <br> Frame Count: Number of frames. <br> FPS: Frames per second.";
@@ -201,7 +217,6 @@ void OdessaNewDocDialog::setDocType(int val){
             m_SpriteCount_ColLE->hide();
             m_SpriteCount_RowLabel->hide();
             m_SpriteCount_RowLE->hide();
-            setFixedSize(300, 239);
             break;
         default:
             break;
@@ -218,7 +233,7 @@ void OdessaNewDocDialog::newProjectSlot()
     if(m_SpriteCount_ColLE->text() != NULL){ info.setSpriteCount_Col(m_SpriteCount_ColLE->text().toInt()); }else{ info.setSpriteCount_Col(0); }
     if(m_FrameCountLE->text() != NULL){ info.setFrameCount(m_FrameCountLE->text().toInt()); }else{ info.setFrameCount(0); }
     if(m_FpsLE->text() != NULL){ info.setFPS(m_FpsLE->text().toInt()); }else{ info.setFPS(0); }
-
+    info.setStartColor(m_backgroundColor);
     emit newProject(info);
     close();
 }

@@ -58,6 +58,8 @@ public:
     QPainterPath getShapePath()const{ return m_Path; }
 private:
 
+    int m_shapeType;
+
     void generateShapePoints();
 
     QVector<SWPoint> points;

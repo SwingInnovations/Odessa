@@ -18,6 +18,7 @@
 #include <QSpinBox>
 #include <QComboBox>
 #include <QSettings>
+#include <QColorDialog>
 
 
 //handle the dialog windows
@@ -83,6 +84,7 @@ private slots:
     void newProjectSlot();
     void setDocType(int);
     void setPresetSize(int);
+    void setNewColor();
 private:
     int width, height, dpi;
     ProjectInfo info;
@@ -114,6 +116,10 @@ private:
 
     QGroupBox* m_InformationGrpBox;
     QLabel* m_InformationGrpLbl;
+
+    QLabel* m_ColorLabel;
+    QPushButton* m_ColorBtn;
+    QColor m_backgroundColor;
 
     QPushButton* m_OkBtn;
     QPushButton* m_CloseBtn;

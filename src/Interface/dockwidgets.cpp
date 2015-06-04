@@ -1867,7 +1867,7 @@ ToolsPanel::ToolsPanel(QWidget* parent) : QDockWidget(parent){
 
     QVBoxLayout* centralLayout = new QVBoxLayout;
     centralLayout->addWidget(panelSpace);
-    centralLayout->addSpacerItem(new QSpacerItem(100, 10, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    centralLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     QWidget *centralWidget = new QWidget(this);
     centralWidget->setLayout(centralLayout);
@@ -1904,7 +1904,7 @@ void ToolsPanel::setMode(int o){
     case 4:
     case 5:
     case 6:
-        panelSpace->setCurrentIndex(0);
+        panelSpace->setCurrentIndex(2);
         break;
     case 7:
     case 8:
@@ -2054,6 +2054,7 @@ TransformTools::TransformTools(QWidget *parent) : QWidget(parent){
     m_ScalYSB->hide();
 
     m_LinkTransformBtn = new QPushButton("[&L]", this);
+    m_LinkTransformBtn->setMinimumWidth(18);
     m_LinkTransformBtn->setCheckable(true);
     m_LinkTransformBtn->setChecked(false);
 
@@ -2084,6 +2085,7 @@ TransformTools::TransformTools(QWidget *parent) : QWidget(parent){
     QVBoxLayout* finalLayout = new QVBoxLayout;
     finalLayout->addWidget(grpBox);
     finalLayout->addWidget(m_CommitButton);
+    finalLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     setLayout(finalLayout);
 
@@ -2369,19 +2371,39 @@ PrimitivePanel::PrimitivePanel(QWidget *parent) : QWidget(parent){
     displayLayout->addWidget(grpBox);
     setLayout(displayLayout);
 
+    m_PointSB->setEnabled(false);
+    m_WidthSlider->setEnabled(false);
+    m_WidthSB->setEnabled(false);
+    m_HeightSB->setEnabled(false);
+    m_HeightSlider->setEnabled(false);
+
+    connect(m_isLineBtn, SIGNAL(clicked(bool)), SLOT(setLineMode(bool)));
+    connect(m_isConcaveBtn, SIGNAL(clicked(bool)), SLOT(setConcaveMode(bool)));
+    connect(m_isConvexBtn, SIGNAL(clicked(bool)), SLOT(setConvexMode(bool)));
     connect(m_PointSB, SIGNAL(valueChanged(int)), SLOT(updatePointCount(int)));
     connect(m_PenWidthSB, SIGNAL(valueChanged(int)), SLOT(updatePenWidth(int)));
-    connect(m_WidthSB, SIGNAL(valueChanged(int)), SLOT(updateWidth(int)));
-    connect(m_HeightSB, SIGNAL(valueChanged(int)), SLOT(updateHeight(int)));
-
+    connect(m_WidthSlider, SIGNAL(valueChanged(int)), SLOT(updateWidth(int)));
+    connect(m_HeightSlider, SIGNAL(valueChanged(int)), SLOT(updateHeight(int)));
+    connect(m_WidthSB, SIGNAL(valueChanged(QString)), SLOT(updateWidth(QString)));
+    connect(m_HeightSB, SIGNAL(valueChanged(QString)), SLOT(updateHeight(QString)));
 }
 
 void PrimitivePanel::updateWidth(int width){
+    m_WidthSB->setValue(width);
     emit widthChanged(width);
 }
 
+void PrimitivePanel::updateWidth(QString width){
+    m_WidthSlider->setValue(width.toInt());
+}
+
 void PrimitivePanel::updateHeight(int height){
+    m_HeightSB->setValue(height);
     emit heightChanged(height);
+}
+
+void PrimitivePanel::updateHeight(QString height){
+    m_HeightSlider->setValue(height.toInt());
 }
 
 void PrimitivePanel::updatePenWidth(int penWidth){
@@ -2390,6 +2412,49 @@ void PrimitivePanel::updatePenWidth(int penWidth){
 
 void PrimitivePanel::updatePointCount(int sideCount){
     emit pointCountChanged(sideCount);
+}
+
+void PrimitivePanel::setLineMode(bool v){
+    if(v){
+        m_PointSB->setEnabled(false);
+        m_WidthSlider->setEnabled(false);
+        m_WidthSB->setEnabled(false);
+        m_HeightSB->setEnabled(false);
+        m_HeightSlider->setEnabled(false);
+        emit shapeModeChanged(0);
+    }
+}
+
+void PrimitivePanel::setConcaveMode(bool v){
+    if(v){
+        m_PointSB->setEnabled(true);
+        m_WidthSlider->setEnabled(true);
+        m_WidthSB->setEnabled(true);
+        m_HeightSB->setEnabled(true);
+        m_HeightSlider->setEnabled(true);
+        emit shapeModeChanged(1);
+    }
+}
+
+void PrimitivePanel::setConvexMode(bool v){
+    if(v){
+        m_PointSB->setEnabled(true);
+        m_WidthSlider->setEnabled(true);
+        m_WidthSB->setEnabled(true);
+        m_HeightSB->setEnabled(true);
+        m_HeightSlider->setEnabled(true);
+        emit shapeModeChanged(2);
+    }
+}
+
+void PrimitivePanel::changeWidth(int width){
+    m_WidthSB->setValue(width);
+    m_WidthSlider->setValue(width);
+}
+
+void PrimitivePanel::changeHeight(int height){
+    m_HeightSB->setValue(height);
+    m_HeightSlider->setValue(height);
 }
 
 PrimitivePanel::~PrimitivePanel(){
