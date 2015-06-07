@@ -623,7 +623,9 @@ signals:
     void heightChanged(int);
     void penWidthChanged(int);
     void pointCountChanged(int);
-    int shapeModeChanged(int);
+    void shapeModeChanged(int);
+    void lineColorChanged(QColor);
+    void fillColorChanged(QColor);
     void actionCommited();
 public slots:
     void changeWidth(int);
@@ -635,6 +637,8 @@ private slots:
     void updateHeight(QString);
     void updatePenWidth(int);
     void updatePointCount(int);
+    void updateLineColor();
+    void updateFillColor();
     void commitChanges();
     /*
     *
@@ -668,6 +672,14 @@ private:
     QLabel* m_HeightLbl;
     QSlider* m_HeightSlider;
     QSpinBox* m_HeightSB;
+
+    QLabel* m_lineColorLbl;
+    QPushButton* m_lineColorBtn;
+    QColor m_lineColor;
+
+    QLabel* m_fillColorLbl;
+    QPushButton* m_fillColorBtn;
+    QColor m_fillColor;
 
     QPushButton* m_CommitBtn;
 };

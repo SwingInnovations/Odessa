@@ -2303,6 +2303,10 @@ TextPanel::~TextPanel(){
 }
 
 PrimitivePanel::PrimitivePanel(QWidget *parent) : QWidget(parent){
+
+    m_lineColor = QColor(Qt::black);
+    m_fillColor = QColor(Qt::transparent);
+
     m_isLineBtn = new QRadioButton("&Line", this);
     m_isLineBtn->setChecked(true);
     m_isConcaveBtn = new QRadioButton("&Concave", this);
@@ -2360,12 +2364,34 @@ PrimitivePanel::PrimitivePanel(QWidget *parent) : QWidget(parent){
     heightLayout->addWidget(m_HeightSB);
     m_CommitBtn = new QPushButton("Commit", this);
 
+    m_lineColorLbl = new QLabel("Line Color: ", this);
+    m_lineColorBtn = new QPushButton(this);
+    QPixmap lineColorImg(m_lineColorBtn->size());
+    lineColorImg.fill(m_lineColor);
+    m_lineColorBtn->setIcon(QIcon(lineColorImg));
+    QHBoxLayout* lineColorLayout = new QHBoxLayout;
+    lineColorLayout->addWidget(m_lineColorLbl);
+    lineColorLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    lineColorLayout->addWidget(m_lineColorBtn);
+
+    m_fillColorLbl = new QLabel("Fill Color: ", this);
+    m_fillColorBtn = new QPushButton(this);
+    QPixmap fillColorImg(m_fillColorBtn->size());
+    fillColorImg.fill(m_fillColor);
+    m_fillColorBtn->setIcon(QIcon(fillColorImg));
+    QHBoxLayout* fillColorLayout = new QHBoxLayout;
+    fillColorLayout->addWidget(m_fillColorLbl);
+    fillColorLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    fillColorLayout->addWidget(m_fillColorBtn);
+
     QVBoxLayout* overallLayout = new QVBoxLayout;
     overallLayout->addLayout(radioBtnLayout);
     overallLayout->addLayout(pointLayout);
     overallLayout->addLayout(penLayout);
     overallLayout->addLayout(widthLayout);
     overallLayout->addLayout(heightLayout);
+    overallLayout->addLayout(lineColorLayout);
+    overallLayout->addLayout(fillColorLayout);
     overallLayout->addWidget(m_CommitBtn);
 
     QGroupBox* grpBox = new QGroupBox(this);
@@ -2391,6 +2417,8 @@ PrimitivePanel::PrimitivePanel(QWidget *parent) : QWidget(parent){
     connect(m_HeightSlider, SIGNAL(valueChanged(int)), SLOT(updateHeight(int)));
     connect(m_WidthSB, SIGNAL(valueChanged(QString)), SLOT(updateWidth(QString)));
     connect(m_HeightSB, SIGNAL(valueChanged(QString)), SLOT(updateHeight(QString)));
+    connect(m_lineColorBtn, SIGNAL(clicked()), SLOT(updateLineColor()));
+    connect(m_fillColorBtn, SIGNAL(clicked()), SLOT(updateFillColor()));
     connect(m_CommitBtn, SIGNAL(clicked()), SLOT(commitChanges()));
 }
 
@@ -2455,6 +2483,26 @@ void PrimitivePanel::setConvexMode(bool v){
         m_HeightSlider->setEnabled(true);
         emit shapeModeChanged(2);
     }
+}
+
+void PrimitivePanel::updateLineColor(){
+    m_lineColor = QColorDialog::getColor(m_lineColor, this, "Line Color");
+    QPixmap lineColorImg(m_lineColorBtn->size());
+    lineColorImg.fill(m_lineColor);
+    m_lineColorBtn->setIcon(QIcon(lineColorImg));
+
+    emit lineColorChanged(m_lineColor);
+    update();
+}
+
+void PrimitivePanel::updateFillColor(){
+    m_fillColor = QColorDialog::getColor(m_fillColor, this, "Fill Color");
+    QPixmap fillColorImg(m_fillColorBtn->size());
+    fillColorImg.fill(m_fillColor);
+    m_fillColorBtn->setIcon(QIcon(fillColorImg));
+
+    emit fillColorChanged(m_fillColor);
+    update();
 }
 
 void PrimitivePanel::changeWidth(int width){

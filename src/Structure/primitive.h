@@ -6,6 +6,7 @@
 #include <QPainterPath>
 #include <QVector>
 #include <QPoint>
+#include <QColor>
 
 #include "brush.h"
 
@@ -70,6 +71,7 @@ private:
     bool m_isConcave;
     QPainterPath m_Path;
     QColor m_fillColor;
+    QColor m_lineColor;
     QPen m_Pen;
     QBrush m_Brush;
 };

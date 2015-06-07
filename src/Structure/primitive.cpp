@@ -42,7 +42,16 @@ void Primitive::setColor(QColor c){
 
 void Primitive::generateShapePoints(){
     if(m_isConcave){
-
+        if(!points.empty()){
+            points.clear();
+        }
+        int cX = m_Width/2;
+        int cY = m_Height/2;
+        for(int i = 0; i < m_pointCount; i++){
+            int pX = cX + cX*cos(2.0 * 3.1415 * i/m_pointCount);
+            int pY = cY + cY*sin(2.0 * 3.1415 * i/m_pointCount);
+            points.push_back(SWPoint(i, pX, pY));
+        }
     }else{
 
     }
