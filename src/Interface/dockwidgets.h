@@ -494,20 +494,20 @@ private slots:
     void updateLayer(QTreeWidgetItem*, int);
     void updateCompositonMode(int);
 private:
-    int layerCount;
-    QComboBox* compositionMode;
-    QTreeWidget* layerManager;
-    QToolButton* layerOptionsButton;
-    QLabel* opacityLabel;
-    QSlider* opacitySlider;
-    QSpinBox* opacitySpinbox;
+    int m_layerCount;
+    QComboBox* m_compositionMode;
+    QTreeWidget* m_layerManager;
+    QToolButton* m_layerOptionsBtn;
+    QLabel* m_opacityLbl;
+    QSlider* m_opacitySlider;
+    QSpinBox* m_opacitySpinbox;
 
-    QMenu* layerOptionsMenu;
-    QAction* addLayerAct;
-    QAction* duplicateLayerAct;
-    QAction* deleteLayerAct;
-    QAction* groupAct;
-    QAction* ungroupAct;
+    QMenu* m_layerOptionsMenu;
+    QAction* m_addLayerAct;
+    QAction* m_duplicateLayerAct;
+    QAction* m_deleteLayerAct;
+    QAction* m_groupAct;
+    QAction* m_ungroupAct;
 };
 
 class DefaultToolPanel : public QWidget{
@@ -624,6 +624,7 @@ signals:
     void penWidthChanged(int);
     void pointCountChanged(int);
     int shapeModeChanged(int);
+    void actionCommited();
 public slots:
     void changeWidth(int);
     void changeHeight(int);
@@ -634,6 +635,7 @@ private slots:
     void updateHeight(QString);
     void updatePenWidth(int);
     void updatePointCount(int);
+    void commitChanges();
     /*
     *
     *   Note
@@ -666,6 +668,8 @@ private:
     QLabel* m_HeightLbl;
     QSlider* m_HeightSlider;
     QSpinBox* m_HeightSB;
+
+    QPushButton* m_CommitBtn;
 };
 
 /*Brush related additional options*/
