@@ -311,6 +311,11 @@ void Editor::paintEvent(QPaintEvent *event)
         setCursor(QCursor(Qt::ArrowCursor));
     }else if(m_ToolType == CURSOR_TOOL){
         setCursor(QCursor(Qt::ArrowCursor));
+    }else if(m_ToolType == PRIMITIVE_TOOL){
+        painter.setPen(QPen(((Primitive)m_CurrentTool).getLineColor()));
+        painter.setBrush(QBrush(((Primitive)m_CurrentTool).getFillColor()));
+        painter.drawPath(((Primitive)m_CurrentTool).getShapePath());
+        painter.end();
     }
 }
 

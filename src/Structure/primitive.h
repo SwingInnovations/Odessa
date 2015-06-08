@@ -40,6 +40,7 @@ class Primitive : public Brush
 {
 public:
     Primitive();
+    Primitive(Brush&);
     Primitive(int width, int height);
     ~Primitive();
 
@@ -57,6 +58,8 @@ public:
     QPen getPen()const{ return m_Pen; }
     QBrush getBrush()const{ return m_Brush; }
     QPainterPath getShapePath()const{ return m_Path; }
+    QColor getLineColor()const{ return m_lineColor; }
+    QColor getFillColor()const{ return m_fillColor; }
 private:
 
     int m_shapeType;

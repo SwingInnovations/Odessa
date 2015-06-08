@@ -8,6 +8,10 @@ Primitive::Primitive()
     m_isConcave = false;
 }
 
+Primitive::Primitive(Brush& brush){
+    mHardness = brush.getHardness();
+}
+
 Primitive::Primitive(int width, int height){
     m_CenterP = QPoint(width/2, height/2);
     m_Pen = QPen(Qt::black);

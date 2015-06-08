@@ -180,7 +180,7 @@ private:
     Brush m_CurrentTool;
     Brush m_Brush;
     Brush m_Eraser;
-    Brush m_Primitive;
+    Primitive m_Primitive;
 
     QPainter::CompositionMode m_CompMode;
 
