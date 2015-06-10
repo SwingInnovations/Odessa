@@ -66,3 +66,26 @@ Primitive::~Primitive()
 
 }
 
+ControlPoint::ControlPoint(int r, QPoint p){
+    radius = r;
+    m_point = p;
+    int cx = p.x();
+    int cy = p.y();
+    for(int i = 0; i < POINT_COUNT; i++){
+        int px = cx + radius*cos(2.0 * 3.1415 * i/POINT_COUNT);
+        int py = cy + radius*sin(2.0 * 3.1415 * i/POINT_COUNT);
+        m_circle.push_back(QPoint(px, py));
+    }
+}
+
+ControlPoint::ControlPoint(int r, int x, int y){
+    radius = r;
+    m_point = QPoint(x, y);
+    int cx = x;
+    int cy = y;
+    for(int i = 0; i < POINT_COUNT; i++){
+        int px = cx + radius*cos(2.0 * 3.1415 * i/POINT_COUNT);
+        int py = cy + radius*sin(2.0 * 3.1415 * i/POINT_COUNT);
+        m_circle.push_back(QPoint(px, py));
+    }
+}

@@ -36,6 +36,17 @@ private:
     int _y;
 };
 
+class ControlPoint{
+public:
+    ControlPoint(int, QPoint);
+    ControlPoint(int, int, int);
+private:
+    QPoint m_point;
+    int radius;
+    QPolygon m_circle;
+    int POINT_COUNT = 20;
+};
+
 class Primitive : public Brush
 {
 public:
