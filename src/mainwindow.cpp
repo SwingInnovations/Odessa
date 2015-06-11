@@ -334,7 +334,7 @@ void MainWindow::about()
 {
     QMessageBox msgbox(this);
     msgbox.setTextFormat(Qt::RichText);
-    msgbox.setText("Odessa Ver. 0.0.80<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright &copy; 2015 <br> Test Build || Use at your own risk!");
+    msgbox.setText("Odessa Ver. 0.0.90<br>Swing Innovations<br><a href=\"http://www.swinginnovations.com\">Swing Innovations Website</a>""<br>Copyright &copy; 2015 <br> Test Build || Use at your own risk!");
     msgbox.exec();
 }
 

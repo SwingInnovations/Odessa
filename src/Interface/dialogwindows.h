@@ -185,4 +185,8 @@ private:
     double ui_scale = 1.0;
 };
 
+class DebugWindow : public QDialog{
+
+};
+
 #endif // DIALOGWINDOWS_H

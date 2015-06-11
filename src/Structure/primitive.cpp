@@ -16,7 +16,8 @@ Primitive::Primitive(int width, int height){
     m_CenterP = QPoint(width/2, height/2);
     m_Pen = QPen(Qt::black);
     m_Brush = QBrush(Qt::black);
-
+    m_Width = width;
+    m_Height = height;
     m_isConcave = false;
 }
 
@@ -44,6 +45,23 @@ void Primitive::setColor(QColor c){
     m_fillColor = c;
 }
 
+void Primitive::setWidth(int width){
+    m_Width = width;
+}
+
+void Primitive::setHeight(int height){
+    m_Height = height;
+}
+
+void Primitive::movePoint(QPoint pos){
+    for(int i = 0; i < cPoints.size(); i++){
+        if(cPoints.at(i).getPolygon().contains(pos)){
+//            cPoints.at(i).setLineColor(QColor(Qt::red));
+//            cPoints.at(i).setPos(pos);
+        }
+    }
+}
+
 void Primitive::generateShapePoints(){
     if(m_isConcave){
         if(!points.empty()){
@@ -55,6 +73,7 @@ void Primitive::generateShapePoints(){
             int pX = cX + cX*cos(2.0 * 3.1415 * i/m_pointCount);
             int pY = cY + cY*sin(2.0 * 3.1415 * i/m_pointCount);
             points.push_back(SWPoint(i, pX, pY));
+            cPoints.push_back(ControlPoint(5, QPoint(pX, pY)));
         }
     }else{
 
@@ -64,6 +83,11 @@ void Primitive::generateShapePoints(){
 Primitive::~Primitive()
 {
 
+}
+
+ControlPoint::ControlPoint(){
+    radius = 5;
+    m_point = QPoint(0, 0);
 }
 
 ControlPoint::ControlPoint(int r, QPoint p){
@@ -76,6 +100,8 @@ ControlPoint::ControlPoint(int r, QPoint p){
         int py = cy + radius*sin(2.0 * 3.1415 * i/POINT_COUNT);
         m_circle.push_back(QPoint(px, py));
     }
+    m_fillColor = QColor(Qt::white);
+    m_lineColor = QColor(Qt::black);
 }
 
 ControlPoint::ControlPoint(int r, int x, int y){
@@ -88,4 +114,24 @@ ControlPoint::ControlPoint(int r, int x, int y){
         int py = cy + radius*sin(2.0 * 3.1415 * i/POINT_COUNT);
         m_circle.push_back(QPoint(px, py));
     }
+    m_fillColor = QColor(Qt::white);
+    m_lineColor = QColor(Qt::black);
+}
+
+void ControlPoint::setPos(QPoint& pos){
+    m_point = pos;
+    m_circle.clear();
+    for(int i = 0; i < POINT_COUNT; i++){
+        int px = pos.x() + radius*cos(2.0 * 3.1415 * i/POINT_COUNT);
+        int py = pos.y() + radius*sin(2.0 * 3.1415 * i/POINT_COUNT);
+        m_circle.push_back(QPoint(px, py));
+    }
+}
+
+void ControlPoint::setLineColor(QColor col){
+    m_lineColor = col;
+}
+
+void ControlPoint::setFillColor(QColor col){
+    m_fillColor = col;
 }

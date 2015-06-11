@@ -38,13 +38,24 @@ private:
 
 class ControlPoint{
 public:
+    ControlPoint();
     ControlPoint(int, QPoint);
     ControlPoint(int, int, int);
+
+    void setPos(QPoint&);
+    void setLineColor(QColor);
+    void setFillColor(QColor);
+
+    QPolygon getPolygon()const{ return m_circle; }
+    QColor getLineColor()const{ return m_lineColor; }
+    QColor getFillColor()const{ return m_fillColor; }
 private:
     QPoint m_point;
     int radius;
     QPolygon m_circle;
     int POINT_COUNT = 20;
+    QColor m_lineColor;
+    QColor m_fillColor;
 };
 
 class Primitive : public Brush
@@ -61,6 +72,9 @@ public:
     void setPenWidth(int);
     void setBrush(QBrush);
     void setColor(QColor);
+    void setWidth(int);
+    void setHeight(int);
+    void movePoint(QPoint);
 
     int getPointCount()const{ return m_pointCount; }
     bool isConcave(){ return m_isConcave; }
@@ -78,6 +92,7 @@ private:
     void generateShapePoints();
 
     QVector<SWPoint> points;
+    QVector<ControlPoint> cPoints;
     QPoint m_CenterP;
     int m_pointCount;
     int m_Width;
