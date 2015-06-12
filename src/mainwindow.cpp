@@ -64,6 +64,8 @@ MainWindow::MainWindow(QWidget *parent)
     layerDockWidget = new LayerDockWidget(this);
     layerDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
+    debugWin = new DebugWindow();
+
     toolPanelWidget = new ToolsPanel(this);
     toolPanelWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     toolPanelWidget->setVisible(false);
@@ -203,6 +205,8 @@ MainWindow::MainWindow(QWidget *parent)
     selectMenu->addAction(selectAllAct);
     selectMenu->addAction(deselectAct);
 
+    debugWinAct = new QAction("Debug", this);
+
     viewMenu = this->menuBar()->addMenu("&View");
     viewMenu->addAction(zoomInAct);
     viewMenu->addAction(zoomOutAct);
@@ -219,6 +223,7 @@ MainWindow::MainWindow(QWidget *parent)
     //Help Menu
     helpMenu = this->menuBar()->addMenu("&Help");
     helpMenu->addAction(sendFeedbackAct);
+    helpMenu->addAction(debugWinAct);
 #ifdef Q_OS_WIN32
     helpMenu->addAction(updateAct);
 #endif
@@ -298,6 +303,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_Editor, SIGNAL(toolChanged(int)), toolPanelWidget, SLOT(setMode(int)));
     connect(eyeDropperTool, SIGNAL(triggered()), SLOT(assignEyeDropperTool()));
     connect(eyeDropper, SIGNAL(activated()), SLOT(assignEyeDropperTool()));
+    connect(debugWinAct, SIGNAL(triggered()), SLOT(showDebugWin()));
     connect(fillTool, SIGNAL(triggered()), SLOT(assignFillTool()));
     connect(sendFeedbackAct, SIGNAL(triggered()), SLOT(sendFeedBack()));
     connect(aboutAct, SIGNAL(triggered()), SLOT(about()));
@@ -481,8 +487,10 @@ void MainWindow::scaleImage(double val)
     m_Editor->scale(scaleFactor);
     adjustScrollBar(imageArea->horizontalScrollBar(), val);
     adjustScrollBar(imageArea->verticalScrollBar(), val);
+}
 
-    qDebug() << "Image Size" << m_Editor->pixmap()->size() << endl;
+void MainWindow::showDebugWin(){
+    debugWin->exec();
 }
 
 void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)

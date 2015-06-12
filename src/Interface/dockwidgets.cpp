@@ -1736,7 +1736,7 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(m_compositionMode, SIGNAL(currentIndexChanged(int)), SLOT(updateCompositonMode(int)));
     connect(m_addLayerAct, SIGNAL(triggered()), SLOT(addLayer()));
     connect(m_groupAct, SIGNAL(triggered()), SLOT(groupLayers()));
-    connect(m_duplicateLayerAct, SIGNAL(triggered()), SLOT(dupliateLayer()));
+    connect(m_duplicateLayerAct, SIGNAL(triggered()), SLOT(duplicateLayer()));
     connect(m_opacitySlider, SIGNAL(valueChanged(int)), SLOT(updateOpacity(int)));
     connect(m_opacitySpinbox, SIGNAL(valueChanged(QString)), SLOT(updateOpacity(QString)));
 }

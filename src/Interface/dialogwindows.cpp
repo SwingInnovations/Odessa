@@ -177,6 +177,7 @@ void OdessaNewDocDialog::setNewColor(){
     QPixmap pixmap(10, 10);
     pixmap.fill(m_backgroundColor);
     m_ColorBtn->setIcon(QIcon(pixmap.scaled(m_ColorBtn->size())));
+    m_ColorBtn->setIconSize(QSize(m_ColorBtn->size().width()-10, m_ColorBtn->size().height()-10));
 }
 
 void OdessaNewDocDialog::setDocType(int val){
@@ -447,4 +448,12 @@ void ProjectInfo::setSpriteCount_Col(int col){
 
 void ProjectInfo::setStartColor(QColor col){
     startColor = col;
+}
+
+DebugWindow::DebugWindow(){
+
+}
+
+DebugWindow::~DebugWindow(){
+
 }

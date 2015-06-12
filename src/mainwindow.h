@@ -48,6 +48,7 @@ private slots:
     void toggleShowColorDock(bool);
     void toggleShowTimelineDock(bool);
     void toggleShowToolsDock(bool);
+    void showDebugWin();
     void exportImage();
     void exportSelection();
     void newProject(ProjectInfo&);
@@ -69,6 +70,7 @@ private:
     BrushDockWidget *brushDockWidget;
     ColorDockWidget *colorDockWidget;
     TimelineDockWidget *timelineDockWidget;
+    DebugWindow *debugWin;
     LayerDockWidget *layerDockWidget;
     ToolsPanel* toolPanelWidget;
 
@@ -146,6 +148,8 @@ private:
     QAction* zoomInAct;
     QAction* zoomOutAct;
     QAction* resetZoomAct;
+
+    QAction* debugWinAct;
 
     QString projectPath;
 };

@@ -186,6 +186,14 @@ private:
 };
 
 class DebugWindow : public QDialog{
+    Q_OBJECT
+
+public:
+    DebugWindow();
+    ~DebugWindow();
+public slots:
+
+private:
 
 };
 
