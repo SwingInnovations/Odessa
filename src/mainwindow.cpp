@@ -93,16 +93,16 @@ MainWindow::MainWindow(QWidget *parent)
     scaleFactor = 1.0;
 
     /*-File Menu Actions-*/
-    newAct = new QAction("&New", this);
-    newAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
-    newAct->setIcon(QIcon(":/icon/resource/temp_New.svg"));
-    openAct = new QAction("&Open", this);
-    openAct->setIcon(QIcon(":/icon/resource/temp_Open.svg"));
-    openAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
-    saveAct = new QAction("&Save", this);
-    saveAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
-    saveAsAct = new QAction("&Save As...", this);
-    saveAsAct->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
+    m_newAct = new QAction("&New", this);
+    m_newAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
+    m_newAct->setIcon(QIcon(":/icon/resource/temp_New.svg"));
+    m_openAct = new QAction("&Open", this);
+    m_openAct->setIcon(QIcon(":/icon/resource/temp_Open.svg"));
+    m_openAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
+    m_saveAct = new QAction("&Save", this);
+    m_saveAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
+    m_saveAsAct = new QAction("&Save As...", this);
+    m_saveAsAct->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
     exportImgAct = new QAction("&Image", this);
     exportSelectionAct = new QAction("&Selection", this);
     exportSpriteSheetAct = new QAction("&Sprite Sheet", this);
@@ -170,10 +170,10 @@ MainWindow::MainWindow(QWidget *parent)
     scaleAct = new QAction("&Scale", this);
 
     fileMenu = this->menuBar()->addMenu("&File");
-    fileMenu->addAction(newAct);
-    fileMenu->addAction(openAct);
-    fileMenu->addAction(saveAct);
-    fileMenu->addAction(saveAsAct);
+    fileMenu->addAction(m_newAct);
+    fileMenu->addAction(m_openAct);
+    fileMenu->addAction(m_saveAct);
+    fileMenu->addAction(m_saveAsAct);
     fileMenu->addSeparator();
     exportMenu = new QMenu("&Export", this);
     exportMenu->addAction(exportImgAct);
@@ -240,7 +240,7 @@ MainWindow::MainWindow(QWidget *parent)
     mStatBar->addAction(zoomInAct);
     mStatBar->addAction(zoomOutAct);
 
-    connect(newAct, SIGNAL(triggered()), SLOT(showNewDocWin()));
+    connect(m_newAct, SIGNAL(triggered()), SLOT(showNewDocWin()));
     connect(preferenceAct, SIGNAL(triggered()),SLOT(showPrefWin()));
     connect(undoAct, SIGNAL(triggered()), m_Editor, SLOT(undo()));
     connect(redoAct, SIGNAL(triggered()), m_Editor, SLOT(redo()));

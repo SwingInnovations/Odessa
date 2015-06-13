@@ -78,10 +78,10 @@ private:
 
     QAction *addLayerAct;
     /*-File Menu-*/
-    QAction *newAct;
-    QAction *openAct;
-    QAction *saveAct;
-    QAction *saveAsAct;
+    QAction *m_newAct;
+    QAction *m_openAct;
+    QAction *m_saveAct;
+    QAction *m_saveAsAct;
     QMenu *exportMenu;
     QAction *exportSelectionAct;
     QAction *exportImgAct;
