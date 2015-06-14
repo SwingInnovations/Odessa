@@ -19,7 +19,7 @@
 #include <QComboBox>
 #include <QSettings>
 #include <QColorDialog>
-
+#include <QCheckBox>
 
 //handle the dialog windows
 class GeneralPrefPage;
@@ -181,6 +181,9 @@ private:
     /*-UI Scaling option-*/
     QLabel* m_ScaleLbl;
     QComboBox* m_ScaleComboBox;
+
+    QLabel* m_HardwareAccLbl;
+    QCheckBox* m_HardwareAccChk;
 
     double ui_scale = 1.0;
 };

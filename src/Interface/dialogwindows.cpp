@@ -349,11 +349,19 @@ GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
     scaleLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
     scaleLayout->addWidget(m_ScaleComboBox);
 
+    m_HardwareAccLbl = new QLabel("Enable Hardware Acceleration: ", this);
+    m_HardwareAccChk = new QCheckBox(this);
+    QHBoxLayout* hardwareAccLayout = new QHBoxLayout;
+    hardwareAccLayout->addWidget(m_HardwareAccLbl);
+    hardwareAccLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+    hardwareAccLayout->addWidget(m_HardwareAccChk);
+
     QVBoxLayout* masterLayout = new QVBoxLayout;
     masterLayout->addLayout(themeGrp);
     masterLayout->addLayout(projectPathGrp);
     masterLayout->addLayout(historyGrp);
     masterLayout->addLayout(scaleLayout);
+    masterLayout->addLayout(hardwareAccLayout);
     masterLayout->addSpacerItem(new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     setLayout(masterLayout);
