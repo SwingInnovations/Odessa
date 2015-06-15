@@ -79,10 +79,14 @@ public:
     }
 
 signals:
+    void mousePositionChanged(QPoint);
+    void brushPressureChanged(qreal);
     void brushSizeChanged(int);
     void brushFeatherChanged(int);
     void brushOpacityChanged(int);
     void brushSpacingChanged(int);
+    void currentIndexChanged(int);
+    void currentFrameChanged(int);
 
     void redChanged(int);
     void greenChanged(int);
@@ -102,7 +106,6 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void tabletEvent(QTabletEvent *event);
     void keyPressEvent(QKeyEvent *e);
-    void keyReleaseEvent(QKeyEvent *e);
 public slots:
     void newProject(ProjectInfo&);
 

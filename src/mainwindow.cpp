@@ -65,6 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
     layerDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     debugWin = new DebugWindow();
+    debugWin->setModal(false);
 
     toolPanelWidget = new ToolsPanel(this);
     toolPanelWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -301,6 +302,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_Editor, SIGNAL(clipRotateChanged(int)), toolPanelWidget, SLOT(updateRotate(int)));
     connect(m_Editor, SIGNAL(clipScaleChanged(int,int)), toolPanelWidget, SLOT(updateScale(int,int)));
     connect(m_Editor, SIGNAL(toolChanged(int)), toolPanelWidget, SLOT(setMode(int)));
+    connect(m_Editor, SIGNAL(mousePositionChanged(QPoint)), debugWin, SLOT(updateMousePosition(QPoint)));
+    connect(m_Editor, SIGNAL(brushPressureChanged(qreal)), debugWin, SLOT(updateActualPressure(qreal)));
+    connect(m_Editor, SIGNAL(currentIndexChanged(int)), debugWin, SLOT(updateCurrentIndex(int)));
+    connect(m_Editor, SIGNAL(currentFrameChanged(int)), debugWin, SLOT(updateCurrentFrame(int)));
     connect(eyeDropperTool, SIGNAL(triggered()), SLOT(assignEyeDropperTool()));
     connect(eyeDropper, SIGNAL(activated()), SLOT(assignEyeDropperTool()));
     connect(debugWinAct, SIGNAL(triggered()), SLOT(showDebugWin()));
@@ -394,29 +399,36 @@ void MainWindow::assignBrushTool()
 {
     m_Editor->setBrush(Editor::BRUSH_TOOL);
     changeStatusMessage("Current Tool: Brush");
+    debugWin->updateCurrentTool("Brush");
 }
 
 void MainWindow::assignEraserTool()
 {
     m_Editor->setBrush(Editor::ERASER_TOOL);
     changeStatusMessage("Current Tool: Eraser");
+    debugWin->updateCurrentTool("Eraser");
 }
 
 void MainWindow::assignTextTool()
 {
     m_Editor->setBrush(Editor::TEXT_TOOL);
     changeStatusMessage("Current Tool: Text");
+    debugWin->updateCurrentTool("Text");
+    if(toolPanelWidget->isHidden()) toolPanelWidget->show();
 }
 
 void MainWindow::assignPrimitiveTool()
 {
     m_Editor->setBrush(Editor::PRIMITIVE_TOOL);
-    changeStatusMessage("Current Tool: Prim");
+    changeStatusMessage("Current Tool: Primitive");
+    debugWin->updateCurrentTool("Primitive");
+    if(toolPanelWidget->isHidden()) toolPanelWidget->show();
 }
 
 void MainWindow::assignFillTool(){
     m_Editor->setBrush(Editor::FILL_TOOL);
     changeStatusMessage("Current Tool: Fill");
+    debugWin->updateCurrentTool("Fill");
 }
 
 void MainWindow::assignDeselectTool(){
@@ -426,11 +438,13 @@ void MainWindow::assignDeselectTool(){
 void MainWindow::assignTransformTool(){
     m_Editor->setBrush(Editor::TRANSFORM_TRANSLATE);
     changeStatusMessage("Current Tool: Transform");
+    debugWin->updateCurrentTool("Transform");
     if(toolPanelWidget->isHidden()) toolPanelWidget->show();
 }
 
 void MainWindow::assignRectSelectTool(){
     changeStatusMessage("Current Tool: Select");
+    debugWin->updateCurrentTool("Select");
     m_Editor->setBrush(Editor::RECT_SELECT_TOOL);
 }
 
@@ -438,11 +452,13 @@ void MainWindow::assignEyeDropperTool()
 {
     changeStatusMessage("Current Tool: Eyedropper");
     m_Editor->setBrush(Editor::EYEDROPPER_TOOL);
+    debugWin->updateCurrentTool("Eye Dropper");
 }
 
 void MainWindow::assignCursorTool(){
     changeStatusMessage("Current Tool: Cursor");
     m_Editor->setBrush(Editor::CURSOR_TOOL);
+    debugWin->updateCurrentTool("Cursor");
 }
 
 void MainWindow::setProjectPath(QString val){
@@ -490,7 +506,7 @@ void MainWindow::scaleImage(double val)
 }
 
 void MainWindow::showDebugWin(){
-    debugWin->exec();
+    debugWin->show();
 }
 
 void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)

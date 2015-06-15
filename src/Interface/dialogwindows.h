@@ -20,6 +20,8 @@
 #include <QSettings>
 #include <QColorDialog>
 #include <QCheckBox>
+#include <QTableView>
+#include <QTableWidget>
 
 //handle the dialog windows
 class GeneralPrefPage;
@@ -195,9 +197,14 @@ public:
     DebugWindow();
     ~DebugWindow();
 public slots:
-
+    void updateMousePosition(QPoint);
+    void updateCurrentTool(QString);
+    void updateActualPressure(qreal);
+    void updateCurrentIndex(int);
+    void updateCurrentFrame(int);
 private:
-
+    QTableWidget* m_dataView;
+    QPushButton* m_closeBtn;
 };
 
 #endif // DIALOGWINDOWS_H

@@ -153,7 +153,6 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
 {
     if(!m_Layers.isEmpty())
     {
-
         switch(m_ToolType)
         {
         case BRUSH_TOOL:
@@ -188,6 +187,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
         default:
             break;
         }
+        emit mousePositionChanged(event->pos());
     }
     update();
 }
@@ -243,10 +243,13 @@ void Editor::tabletEvent(QTabletEvent *event)
          case QEvent::TabletRelease:
             if(m_DeviceDown)
             {
+                m_Pressure = 0;
+                m_CurrentTool.setPressureVal(m_Pressure);
                 m_DeviceDown = false;
             }
             break;
         }
+        emit brushPressureChanged(event->pressure());
    }
     update();
 }
@@ -361,10 +364,6 @@ void Editor::keyPressEvent(QKeyEvent *e){
     update();
 }
 
-void Editor::keyReleaseEvent(QKeyEvent *e){
-
-}
-
 void Editor::newProject(ProjectInfo &info){
     m_Info = info;
     if(!m_Layers.isEmpty()){
@@ -386,6 +385,8 @@ void Editor::newProject(ProjectInfo &info){
     }
     m_ClipboardPixmap = QPixmap();
     m_ClipOffsetPoint = QPoint(0, 0);
+    emit currentIndexChanged(m_CurrentIndex);
+    emit currentFrameChanged(m_CurrentFrame);
     backup();
     update();
 }
@@ -403,6 +404,7 @@ void Editor::addLayer()
 
 void Editor::setLayerIndex(int i){
     if(m_CurrentIndex > 0){ m_CurrentIndex = i-1; }
+    emit currentIndexChanged(m_CurrentIndex);
     update();
 }
 
