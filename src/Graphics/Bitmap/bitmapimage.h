@@ -12,8 +12,8 @@
 #include <QQueue>
 #include <vector>
 
-#include "../src/Structure/brush.h"
-#include "../src/Structure/primitive.h"
+#include "../../Structure/brush.h"
+#include "../../Structure/primitive.h"
 #include "../../Overloads.h"
 
 class BitmapImage

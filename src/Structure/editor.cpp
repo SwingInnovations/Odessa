@@ -163,11 +163,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                 {
                     m_MousePath.removeFirst();
                 }
-
-                if(m_TabletInUse){
-                    m_CurrentTool.setPressureVal(m_Pressure);
-                    emit curToolPressureChanged(m_CurrentTool.getPressureVal());
-                }else{ m_CurrentTool.setPressureVal(0.0); }
+                emit curToolPressureChanged(m_CurrentTool.getPressureVal());
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
             }
             break;
@@ -178,7 +174,6 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                 if(m_MousePath.size() > 2){
                     m_MousePath.removeFirst();
                 }
-                if(m_TabletInUse) m_CurrentTool.setPressureVal(m_Pressure); else{ m_CurrentTool.setPressureVal(0.0); }
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
             }
             break;
@@ -247,8 +242,8 @@ void Editor::tabletEvent(QTabletEvent *event)
             if(m_DeviceDown)
             {
                 m_DeviceDown = false;
+                if(m_TabletInUse) m_TabletInUse = false;
                 m_Pressure = 0.0;
-                m_CurrentTool.setPressureVal(m_Pressure);
             }
             break;
         }

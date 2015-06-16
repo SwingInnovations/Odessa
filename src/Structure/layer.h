@@ -3,7 +3,7 @@
 
 #include<QVector>
 #include "object.h"
-#include "../src/Graphics/Bitmap/bitmapimage.h"
+#include "../Graphics/Bitmap/bitmapimage.h"
 
 
 class Layer : public Object

@@ -48,8 +48,8 @@
 #include <QFontComboBox>
 #include <QHeaderView>
 
-#include "../src/Structure/brush.h"
-#include "../src/Structure/editor.h"
+#include "../Structure/brush.h"
+#include "../Structure/editor.h"
 #include "../Overloads.h"
 
 //handling the Brush System

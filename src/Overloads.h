@@ -48,12 +48,11 @@ inline QDataStream &operator >>(QDataStream &in, ProjectInfo &info){
 }
 
 inline QPoint &operator *(QPoint p, int scaleFactor){
-    QPoint pt = p;
     int _x = p.x() * scaleFactor;
     int _y = p.y() * scaleFactor;
     p.setX(_x);
     p.setY(_y);
-    return pt;
+    return p;
 }
 
 #endif // OVERLOADS_H
