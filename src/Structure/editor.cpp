@@ -246,9 +246,9 @@ void Editor::tabletEvent(QTabletEvent *event)
          case QEvent::TabletRelease:
             if(m_DeviceDown)
             {
-                m_Pressure = 0;
-                m_CurrentTool.setPressureVal(m_Pressure);
                 m_DeviceDown = false;
+                m_Pressure = 0.0;
+                m_CurrentTool.setPressureVal(m_Pressure);
             }
             break;
         }
@@ -400,13 +400,14 @@ void Editor::addLayer()
     {
         int width = m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().size().width();
         int height = m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().size().height();
-        m_CurrentIndex += 1;
+        m_CurrentIndex++;
         m_Layers.push_back(new Layer(Layer::Bitmap_Blank, width, height));
+        emit currentIndexChanged(m_CurrentIndex);
     }
 }
 
 void Editor::setLayerIndex(int i){
-    if(m_CurrentIndex > 0){ m_CurrentIndex = i-1; }
+    if(i > 0){ m_CurrentIndex = i-1; }
     emit currentIndexChanged(m_CurrentIndex);
     update();
 }
