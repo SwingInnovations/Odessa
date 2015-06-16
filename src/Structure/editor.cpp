@@ -270,7 +270,7 @@ void Editor::paintEvent(QPaintEvent *event)
         QPainter p(&drawnPixmap);
         for(int i = 0; i < m_Layers.size(); i++){
            if(m_Layers.at(i)->getFrame(m_CurrentFrame-1)->isVisible()){
-               m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(painter);
+               m_Layers.at(i)->getFrame(m_CurrentFrame-1)->paintImage(painter);
                QPixmap tPixmap = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap();
                p.setOpacity(m_Layers.at(i)->getOpacity()/100.0);
                p.setCompositionMode(QPainter::CompositionMode_SourceOver);
@@ -407,7 +407,7 @@ void Editor::addLayer()
 }
 
 void Editor::setLayerIndex(int i){
-    if(i > 0){ m_CurrentIndex = i-1; }
+    if(i > 2){ m_CurrentIndex = i; }else{ m_CurrentIndex = 1; }
     emit currentIndexChanged(m_CurrentIndex);
     update();
 }
