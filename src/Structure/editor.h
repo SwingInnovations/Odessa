@@ -81,6 +81,7 @@ public:
 signals:
     void mousePositionChanged(QPoint);
     void brushPressureChanged(qreal);
+    void curToolPressureChanged(qreal);
     void brushSizeChanged(int);
     void brushFeatherChanged(int);
     void brushOpacityChanged(int);

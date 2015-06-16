@@ -462,7 +462,7 @@ DebugWindow::DebugWindow(){
     m_dataView = new QTableWidget(this);
     m_dataView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_dataView->setColumnCount(2);
-    m_dataView->setRowCount(6);
+    m_dataView->setRowCount(7);
     m_dataView->setHorizontalHeaderLabels(QString("Item;Value").split(';'));
     m_dataView->setItem(0, 0, new QTableWidgetItem("Mouse X: "));
     m_dataView->setItem(0, 1, new QTableWidgetItem("0"));
@@ -476,6 +476,8 @@ DebugWindow::DebugWindow(){
     m_dataView->setItem(4, 1, new QTableWidgetItem("0"));
     m_dataView->setItem(5, 0, new QTableWidgetItem("Current Frame: "));
     m_dataView->setItem(5, 1, new QTableWidgetItem("0"));
+    m_dataView->setItem(6, 0, new QTableWidgetItem("Brush Reported Pressure: "));
+    m_dataView->setItem(6, 1, new QTableWidgetItem("0"));
     m_dataView->resizeColumnsToContents();
 
     m_dataView->item(0, 1)->setTextAlignment(Qt::AlignRight);
@@ -484,6 +486,7 @@ DebugWindow::DebugWindow(){
     m_dataView->item(3, 1)->setTextAlignment(Qt::AlignRight);
     m_dataView->item(4, 1)->setTextAlignment(Qt::AlignRight);
     m_dataView->item(5, 1)->setTextAlignment(Qt::AlignRight);
+    m_dataView->item(6, 1)->setTextAlignment(Qt::AlignRight);
 
     m_closeBtn = new QPushButton("&Close", this);
 
@@ -510,6 +513,11 @@ void DebugWindow::updateCurrentTool(QString str){
 void DebugWindow::updateActualPressure(qreal pressure){
     m_dataView->item(3, 1)->setText(QString::number(pressure));
     m_dataView->item(3, 1)->setTextAlignment(Qt::AlignRight);
+}
+
+void DebugWindow::updateToolPressure(qreal pressure){
+    m_dataView->item(6, 1)->setText(QString::number(pressure));
+    m_dataView->item(6, 1)->setTextAlignment(Qt::AlignRight);
 }
 
 void DebugWindow::updateCurrentIndex(int index){

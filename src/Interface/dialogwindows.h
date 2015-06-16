@@ -200,6 +200,7 @@ public slots:
     void updateMousePosition(QPoint);
     void updateCurrentTool(QString);
     void updateActualPressure(qreal);
+    void updateToolPressure(qreal);
     void updateCurrentIndex(int);
     void updateCurrentFrame(int);
 private:

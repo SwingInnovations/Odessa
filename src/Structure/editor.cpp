@@ -164,7 +164,10 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                     m_MousePath.removeFirst();
                 }
 
-                if(m_TabletInUse) m_CurrentTool.setPressureVal(m_Pressure); else{ m_CurrentTool.setPressureVal(0.0); }
+                if(m_TabletInUse){
+                    m_CurrentTool.setPressureVal(m_Pressure);
+                    emit curToolPressureChanged(m_CurrentTool.getPressureVal());
+                }else{ m_CurrentTool.setPressureVal(0.0); }
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
             }
             break;

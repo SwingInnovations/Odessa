@@ -137,8 +137,8 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
 
     for(int i = 0; i < length; i++){
         if(drawPoint != pointInfo.last() || drawPoint != pointInfo.first()){
-            drawPoint.setX(drawPoint.x() + (xInc * brush.getSpacing() ));
-            drawPoint.setY(drawPoint.y() + (yInc * brush.getSpacing() ));
+            drawPoint.setX(drawPoint.x() + (xInc / (double)brush.getSpacing() ));
+            drawPoint.setY(drawPoint.y() + (yInc / (double)brush.getSpacing() ));
             painter.drawPixmap(QPoint(drawPoint.x() - stencil.width() / 2, drawPoint.y() - stencil.height()/2) / m_ScaleFactor, stencil);
         }
     }
