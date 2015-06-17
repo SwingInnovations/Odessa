@@ -178,6 +178,7 @@ public:
     QString getDir(){return this->mDir;}
     void setStencilPixmap(QPixmap);
     void activateUsePressureWidth(bool);
+    void generateStrokePreview();
 signals:
     void loadStencilTriggered();
     void loadBrushTriggered();
@@ -204,7 +205,6 @@ public slots:
 protected:
     void resizeEvent(QResizeEvent *);
 private:
-    void generateStrokePreview();
     bool m_usePressureWidth;
     unsigned int mCurrentBrushIndex;
     QString mDir;

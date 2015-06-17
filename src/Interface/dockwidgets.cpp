@@ -250,6 +250,7 @@ void BrushDockWidget::updateSpacing(QString val){
 void BrushDockWidget::updateTransferSize(int val)
 {
     mTransferSizeLE->setValue(val);
+    mGenBrushWidget->generateStrokePreview();
     emit brushTransferSizeChanged(val);
 }
 
@@ -1764,11 +1765,12 @@ void LayerDockWidget::reset(){
 
 void LayerDockWidget::addLayer(){
     if(m_layerCount == 0){m_layerCount = 1;}else{ m_layerCount++; }
+    QVariant layerCount(m_layerCount);
     QTreeWidgetItem* itm = new QTreeWidgetItem();
     itm->setText(0, "Layer" + QString::number(m_layerCount));
     itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled);
     itm->setCheckState(0, Qt::Checked);
-    itm->setData(0, Qt::UserRole + 1, QVariant(m_layerCount));
+    itm->setData(0, Qt::UserRole + 1, layerCount);
     itm->setData(0, Qt::UserRole + 2, QVariant(0));
     itm->setData(0, Qt::UserRole + 3, QVariant(100));
     itm->setData(0, Qt::UserRole + 4, QVariant(0));
@@ -1778,6 +1780,7 @@ void LayerDockWidget::addLayer(){
 }
 
 void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent){
+    m_layerCount++;
     QTreeWidgetItem* itm = new QTreeWidgetItem;
     itm->setText(0, "childLayer");
     itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled);
@@ -1837,8 +1840,8 @@ void LayerDockWidget::updateLayer(QTreeWidgetItem *itm, int i){
     m_opacitySpinbox->setValue(itm->data(0, Qt::UserRole + 3).toInt());
 
     emit compositionModeChanged(itm->data(0, Qt::UserRole + 4).toInt());
-    emit opacityChanged(itm->data(0, Qt::UserRole + 4).toInt());
-    emit layerChanged(itm->data(0, Qt::UserRole + 1).toInt());
+    emit opacityChanged(itm->data(0, Qt::UserRole + 3).toInt());
+    emit layerChanged(itm->data(i, Qt::UserRole + 1).toInt());
 }
 
 void LayerDockWidget::updateCompositonMode(int i){
