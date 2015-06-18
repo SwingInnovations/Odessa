@@ -273,8 +273,8 @@ void Editor::paintEvent(QPaintEvent *event)
            }
         }
         p.end();
-        setPixmap(drawnPixmap);
         painter.drawPixmap(0, 0, drawnPixmap);
+        setPixmap(drawnPixmap);
         this->resize(imageSize);
     }
 
@@ -418,6 +418,16 @@ void Editor::setLayerCompositionMode(int c){
 
 void Editor::setLayerVisible(bool val){
     if(!m_Layers.empty()){ m_Layers.at(m_CurrentIndex-1)->setVisible(val); }
+}
+
+void Editor::setLayerVisible(int val){
+    if(!m_Layers.empty()){
+        if(val >= 1){
+            m_Layers.at(val+1)->setVisible(!m_Layers.at(val+1)->isVisible());
+        }else{
+            m_Layers.at(1)->setVisible(!m_Layers.at(val+1)->isVisible());
+        }
+    }
 }
 
 void Editor::addFrame()

@@ -283,6 +283,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(layerDockWidget, SIGNAL(layerAdded()), m_Editor, SLOT(addLayer()));
     connect(layerDockWidget, SIGNAL(layerChanged(int)), m_Editor, SLOT(setLayerIndex(int)));
     connect(layerDockWidget, SIGNAL(opacityChanged(int)), m_Editor, SLOT(setLayerOpacity(int)));
+    connect(layerDockWidget, SIGNAL(toggleLayerVisible(int)), m_Editor, SLOT(setLayerVisible(int)));
     connect(toolPanelWidget, SIGNAL(useWorldTransform(bool)), m_Editor, SLOT(useWorldTransform(bool)));
     connect(toolPanelWidget, SIGNAL(translateChanged(int,int)), m_Editor, SLOT(setClipTranslate(int,int)));
     connect(toolPanelWidget, SIGNAL(rotateChanged(int)), m_Editor, SLOT(setClipRotate(int)));

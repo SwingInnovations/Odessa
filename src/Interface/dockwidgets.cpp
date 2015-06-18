@@ -1661,6 +1661,8 @@ TimelineDockWidget::~TimelineDockWidget()
 
 }
 
+/*-Layer Widget-*/
+
 LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
 {
     //initialize
@@ -1842,6 +1844,12 @@ void LayerDockWidget::updateLayer(QTreeWidgetItem *itm, int i){
     emit compositionModeChanged(itm->data(0, Qt::UserRole + 4).toInt());
     emit opacityChanged(itm->data(0, Qt::UserRole + 3).toInt());
     emit layerChanged(itm->data(i, Qt::UserRole + 1).toInt());
+}
+
+void LayerDockWidget::updateLayerInfo(QTreeWidgetItem *itm, int i){
+    if(itm->checkState(i) == Qt::Unchecked || itm->checkState(i) == Qt::Checked){
+        emit toggleLayerVisible(itm->data(i, Qt::UserRole +1).toInt());
+    }
 }
 
 void LayerDockWidget::updateCompositonMode(int i){

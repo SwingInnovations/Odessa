@@ -114,6 +114,7 @@ public slots:
     void setLayerIndex(int);
     void setLayerOpacity(int);
     void setLayerCompositionMode(int);
+    void setLayerVisible(int);
     void setLayerVisible(bool);
     void addFrame();
 

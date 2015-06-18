@@ -478,6 +478,7 @@ signals:
     void layerAdded();
     void layerChanged(QTreeWidgetItem*,int);
     void layerChanged(int);
+    void toggleLayerVisible(int);
     void compositionModeChanged(int);
     void opacityChanged(int);
 public slots:
@@ -492,6 +493,7 @@ public slots:
     void addChildLayer(QTreeWidgetItem* parent);
 private slots:
     void updateLayer(QTreeWidgetItem*, int);
+    void updateLayerInfo(QTreeWidgetItem*, int);
     void updateCompositonMode(int);
 private:
     int m_layerCount;
