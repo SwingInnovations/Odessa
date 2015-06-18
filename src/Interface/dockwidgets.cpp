@@ -1764,13 +1764,13 @@ void LayerDockWidget::reset(){
 }
 
 void LayerDockWidget::addLayer(){
-    if(m_layerCount == 0){m_layerCount = 1;}else{ m_layerCount++; }
+    m_layerCount++;
     QVariant layerCount(m_layerCount);
     QTreeWidgetItem* itm = new QTreeWidgetItem();
     itm->setText(0, "Layer" + QString::number(m_layerCount));
     itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled);
     itm->setCheckState(0, Qt::Checked);
-    itm->setData(0, Qt::UserRole + 1, layerCount);
+    itm->setData(0, Qt::UserRole + 1, QVariant(m_layerCount));
     itm->setData(0, Qt::UserRole + 2, QVariant(0));
     itm->setData(0, Qt::UserRole + 3, QVariant(100));
     itm->setData(0, Qt::UserRole + 4, QVariant(0));

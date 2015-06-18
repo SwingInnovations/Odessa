@@ -402,7 +402,7 @@ void Editor::addLayer()
 }
 
 void Editor::setLayerIndex(int i){
-    if(i > 2){ m_CurrentIndex = i; }else{ m_CurrentIndex = 1; }
+    if(i >= 1){ m_CurrentIndex = i+1; }else{ m_CurrentIndex = 1; }
     emit currentIndexChanged(m_CurrentIndex);
     update();
 }
