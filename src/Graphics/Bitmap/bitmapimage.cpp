@@ -127,21 +127,31 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
     QPainter painter(&m_pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    QPointF point, drawPoint;
-    point = pointInfo.last() - pointInfo.first();
-    int length = point.manhattanLength();
-    double xInc, yInc;
-    xInc = point.x() / (double)length;
-    yInc = point.y() / (double)length;
-    drawPoint = pointInfo.first();
+    QPainterPath path;
+    path.moveTo(pointInfo.first());
+    path.lineTo(pointInfo.last());
 
-    for(int i = 0; i < length; i++){
-        if(drawPoint != pointInfo.last() || drawPoint != pointInfo.first()){
-            drawPoint.setX(drawPoint.x() + (xInc / (double)brush.getSpacing() ));
-            drawPoint.setY(drawPoint.y() + (yInc / (double)brush.getSpacing() ));
-            painter.drawPixmap(QPoint(drawPoint.x() - stencil.width() / 2, drawPoint.y() - stencil.height()/2) / m_ScaleFactor, stencil);
-        }
+    for(qreal i = 0; i < 1; i+= 0.01 * brush.getSpacing()){
+        painter.drawPixmap(QPoint(path.pointAtPercent(i).x() - stencil.width()/2, path.pointAtPercent(i).y() - stencil.width()/2), stencil);
     }
+
+    /*-Old Method-*/
+
+//    QPointF point, drawPoint;
+//    point = pointInfo.last() - pointInfo.first();
+//    int length = point.manhattanLength();
+//    double xInc, yInc;
+//    xInc = point.x() / (double)length;
+//    yInc = point.y() / (double)length;
+//    drawPoint = pointInfo.first();
+
+//    for(int i = 0; i < length; i++){
+//        if(drawPoint != pointInfo.last() || drawPoint != pointInfo.first()){
+//            drawPoint.setX(drawPoint.x() + (xInc / (double)brush.getSpacing() ));
+//            drawPoint.setY(drawPoint.y() + (yInc / (double)brush.getSpacing() ));
+//            painter.drawPixmap(QPoint(drawPoint.x() - stencil.width() / 2, drawPoint.y() - stencil.height()/2) / m_ScaleFactor, stencil);
+//        }
+//    }
 }
 
 void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt)
