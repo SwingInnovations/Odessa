@@ -127,11 +127,17 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
     QPainter painter(&m_pixmap);
     painter.setRenderHint(QPainter::Antialiasing);
 
+    /*Calculate incrementation value*/
+    qreal inc = 0.01;
+
     QPainterPath path;
     path.moveTo(pointInfo.first());
     path.lineTo(pointInfo.last());
 
-    for(qreal i = 0; i < 1; i+= 0.01 * brush.getSpacing()){
+    inc = getIncrement(pointInfo.first(), pointInfo.last());
+
+    /* Automatically adjust the incrementing value */
+    for(qreal i = 0; i < 1; i+= inc * brush.getSpacing()){
         painter.drawPixmap(QPoint(path.pointAtPercent(i).x() - stencil.width()/2, path.pointAtPercent(i).y() - stencil.width()/2), stencil);
     }
 
@@ -268,6 +274,21 @@ void BitmapImage::cutImgOp(QRect rect, QColor col){
     p.setPen(QPen(col));
     p.fillRect(rect, col);
     p.end();
+}
+
+qreal BitmapImage::getIncrement(QPointF p1, QPointF p2){
+    return calculateMidpoint(p1, p2, 1.0);
+}
+
+qreal BitmapImage::calculateMidpoint(QPointF p1, QPointF p2, qreal inc){
+    QPointF point = p2 + p1;
+    if(point.manhattanLength() > 1){
+        QPointF hP1(p1.x() / 2.0, p2.y() / 2.0);
+        QPointF hP2(p2.x() / 2.0, p2.y() / 2.0);
+        calculateMidpoint(hP1, hP2, inc / 2.0);
+    }else{
+        return inc;
+    }
 }
 
 QPixmap BitmapImage::getCompositeImage()

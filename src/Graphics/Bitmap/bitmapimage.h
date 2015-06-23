@@ -90,6 +90,8 @@ protected:
     Object *myParent;
 
 private:
+    qreal calculateMidpoint(QPointF, QPointF, qreal);
+    qreal getIncrement(QPointF, QPointF);
     QPoint offset;
     bool visible;
     QPixmap m_pixmap;
