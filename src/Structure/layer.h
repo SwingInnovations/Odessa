@@ -19,7 +19,7 @@ public:
     Layer(LayerType type, int index, int width, int height);
 
     int getIndex(){ return m_currentIndex; }
-    int getOpacity()const{ return m_Opacity;}
+    int getOpacity(){ return m_Opacity;}
     int getCompositionMode()const{ return m_CompositionMode; }
     int getFrameIndeX(){ return mFrameIndex; }
     int getFrameListSize(){return frame.size();}

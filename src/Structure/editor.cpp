@@ -258,18 +258,23 @@ void Editor::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
 
+    /*-Primarily draw the canvas-*/
+
     if(!m_Layers.isEmpty())
     {
         QPixmap drawnPixmap(m_Layers.at(0)->getFrame(0)->getPixmap().size());
-        QSize imageSize = m_Layers.at(0)->getFrame(0)->getPixmap().size();
+        QSize imageSize = drawnPixmap.size();
         QPainter p(&drawnPixmap);
         for(int i = 0; i < m_Layers.size(); i++){
            if(m_Layers.at(i)->getFrame(m_CurrentFrame-1)->isVisible()){
                m_Layers.at(i)->getFrame(m_CurrentFrame-1)->paintImage(painter);
-               QPixmap tPixmap = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap();
-               p.setOpacity((qreal)m_Layers.at(i)->getOpacity()/100.0);
-               p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-               p.drawImage(0, 0, tPixmap.toImage());
+               QImage drawnImage = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap().toImage();
+               drawnImage.convertToFormat(QImage::Format_ARGB32, Qt::AutoColor);
+               if(i > 0){
+                   p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+                   p.setOpacity((qreal)m_Layers.at(i)->getOpacity()/100.0);
+               }
+               p.drawImage(0, 0, drawnImage);
            }
         }
         p.end();
@@ -408,7 +413,9 @@ void Editor::setLayerIndex(int i){
 }
 
 void Editor::setLayerOpacity(int o){
-    if(!m_Layers.empty()){m_Layers.at(m_CurrentIndex-1)->setOpacity(o);}
+    if(!m_Layers.empty()){
+        m_Layers.at(m_CurrentIndex-1)->setOpacity(o);
+    }
     update();
 }
 
