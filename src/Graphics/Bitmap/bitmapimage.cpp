@@ -283,7 +283,7 @@ qreal BitmapImage::getIncrement(QPointF p1, QPointF p2){
 qreal BitmapImage::calculateMidpoint(QPointF p1, QPointF p2, qreal inc){
     QPointF point = p2 + p1;
     if(point.manhattanLength() > 1){
-        QPointF hP1(p1.x() / 2.0, p2.y() / 2.0);
+        QPointF hP1(p1.x() / 2.0, p1.y() / 2.0);
         QPointF hP2(p2.x() / 2.0, p2.y() / 2.0);
         calculateMidpoint(hP1, hP2, inc / 2.0);
     }else{
