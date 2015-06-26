@@ -302,19 +302,22 @@ void Editor::paintEvent(QPaintEvent *event)
     }
 
     if(m_ToolType == BRUSH_TOOL){
-        this->setCursor(QCursor(Qt::CrossCursor));
         painter.setPen(Qt::darkGray);
+        painter.setBrush(Qt::transparent);
         painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
-        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize()-3, m_CurrentTool.getSize()-3);
+        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize(), m_CurrentTool.getSize()-3);
+        painter.drawPixmap(QCursor::pos().x() - m_CurrentTool.getStencil().width()/2, QCursor::pos().y() - m_CurrentTool.getStencil().width()/2, m_CurrentTool.getStencil());
         painter.end();
+        setCursor(QCursor(Qt::CrossCursor));
     }else if(m_ToolType == ERASER_TOOL){
         this->setCursor(QCursor(Qt::CrossCursor));
         painter.setPen(Qt::darkGray);
+        painter.setBrush(Qt::transparent);
         painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
-        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize()-3, m_CurrentTool.getSize()-3);
+        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize(), m_CurrentTool.getSize()-3);
         painter.end();
     }else if(m_ToolType == EYEDROPPER_TOOL){
-        setCursor(QCursor(Qt::ArrowCursor));
+        setCursor(QCursor(QPixmap(":/icon/resource/eyeDropper.png"), 0, 0));
     }else if(m_ToolType == CURSOR_TOOL){
         setCursor(QCursor(Qt::ArrowCursor));
     }else if(m_ToolType == PRIMITIVE_TOOL){

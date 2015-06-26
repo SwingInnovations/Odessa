@@ -8,5 +8,7 @@
         <file>resource/zoom_In_lite.svg</file>
         <file>resource/zoom_Out_lite.svg</file>
         <file>resource/settings_lite.svg</file>
+        <file>resource/eyeDropper.svg</file>
+        <file>resource/eyeDropper.png</file>
     </qresource>
 </RCC>
