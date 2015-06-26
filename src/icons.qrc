@@ -10,5 +10,12 @@
         <file>resource/settings_lite.svg</file>
         <file>resource/eyeDropper.svg</file>
         <file>resource/eyeDropper.png</file>
+        <file>resource/brush_lite.svg</file>
+        <file>resource/eraser_lite.svg</file>
+        <file>resource/fill_lite.svg</file>
+        <file>resource/primitive_lite.svg</file>
+        <file>resource/Text_lite.svg</file>
+        <file>resource/undo_lite.svg</file>
+        <file>resource/redo_lite.svg</file>
     </qresource>
 </RCC>

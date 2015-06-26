@@ -39,13 +39,6 @@ MainWindow::MainWindow(QWidget *parent)
     toolBar = this->addToolBar("Tools");
     toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::TopToolBarArea);
 
-    mToolQuickSelect = new QComboBox(this);
-    mToolQuickSelect->addItem("Brush");
-    mToolQuickSelect->addItem("Eraser");
-    mToolQuickSelect->addItem("Fill");
-
-    toolBar->addWidget(mToolQuickSelect);
-
     newDialogWin = new OdessaNewDocDialog();
     prefDialog = new OdessaPrefDialog();
     brushDockWidget = new BrushDockWidget(this);
@@ -74,22 +67,21 @@ MainWindow::MainWindow(QWidget *parent)
     cursorTool->setShortcut(QKeySequence(Qt::Key_Escape));
     brushTool = new QAction(this);
     brushTool->setText("Brush");
+    brushTool->setIcon(QPixmap(":/icon/resource/brush_lite.svg"));
     eraserTool = new QAction(this);
     eraserTool->setText("Eraser");
+    eraserTool->setIcon(QPixmap(":/icon/resource/eraser_lite.svg"));
     textTool = new QAction(this);
     textTool->setText("Text");
+    textTool->setIcon(QPixmap(":icon/resource/Text_lite.svg"));
     primitiveTool = new QAction(this);
-    primitiveTool->setText("Prim");
+    primitiveTool->setText("Primitive");
+    primitiveTool->setIcon(QPixmap(":icon/resource/primitive_lite.svg"));
     eyeDropperTool = new QAction(this);
     eyeDropperTool->setText("EyeDropper");
+    eyeDropperTool->setIcon(QPixmap(":/icon/resource/eyeDropper.png"));
     fillTool = new QAction("Fill", this);
-
-    toolBar->addAction(eyeDropperTool);
-    toolBar->addAction(brushTool);
-    toolBar->addAction(eraserTool);
-    toolBar->addAction(textTool);
-    toolBar->addAction(primitiveTool);
-    toolBar->addAction(fillTool);
+    fillTool->setIcon(QPixmap(":/icon/resource/fill_lite.svg"));
 
     scaleFactor = 1.0;
 
@@ -117,9 +109,11 @@ MainWindow::MainWindow(QWidget *parent)
     undoAct = new QAction(this);
     undoAct->setText("&Undo");
     undoAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
+    undoAct->setIcon(QPixmap(":icon/resource/undo_lite.svg"));
     redoAct = new QAction(this);
     redoAct->setText("&Redo");
     redoAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Y));
+    redoAct->setIcon(QPixmap(":icon/resource/redo_lite.svg"));
     cutAct = new QAction(this);
     cutAct->setText("&Cut");
     cutAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_X));
@@ -232,6 +226,21 @@ MainWindow::MainWindow(QWidget *parent)
     helpMenu->addAction(aboutAct);
 
     eyeDropper = new QShortcut(QKeySequence(Qt::ALT), this);
+
+    toolBar->addAction(undoAct);
+    toolBar->addAction(redoAct);
+    toolBar->addSeparator();
+    toolBar->addAction(eyeDropperTool);
+    toolBar->addAction(brushTool);
+    toolBar->addAction(eraserTool);
+    toolBar->addAction(textTool);
+    toolBar->addAction(primitiveTool);
+    toolBar->addAction(fillTool);
+    toolBar->addSeparator();
+    toolBar->addAction(zoomInAct);
+    toolBar->addAction(zoomOutAct);
+    toolBar->addSeparator();
+    toolBar->addAction(preferenceAct);
 
     mStatBar = this->statusBar();
     this->setStatusBar(mStatBar);
