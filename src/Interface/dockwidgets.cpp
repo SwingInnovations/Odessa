@@ -1006,8 +1006,13 @@ QPixmap CustomBrushWidget::GeneratePixmap(){
     QRadialGradient radGrad(midPoint, mStencilPreview.width()/2);
     radGrad.setColorAt(midPoint.x(), Qt::black);
     radGrad.setFocalRadius(hardness);
+
+    QImage img = mStencilPreview.toImage();
+
     QPainter p;
-    p.begin(&mStencilPreview);
+    p.begin(&img);
+    p.setRenderHint(QPainter::Antialiasing);
+    p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
     p.setPen(Qt::NoPen);
     switch(mBrushShape){
     case CIRCLE_SHAPE:
@@ -1038,7 +1043,7 @@ QPixmap CustomBrushWidget::GeneratePixmap(){
         p.drawRect(originX, originY, dimX, dimY);
         break;
     }
-    qDebug() << "Generated pixmap "<< endl;
+    mStencilPreview = QPixmap::fromImage(img);
     return mStencilPreview;
 }
 
