@@ -1963,6 +1963,18 @@ void ToolsPanel::updateFontSize(int fontSize){
     emit fontSizeChanged(fontSize);
 }
 
+void ToolsPanel::toggleBold(){
+    textPanel->toggleBold();
+}
+
+void ToolsPanel::toggleItalic(){
+    textPanel->toggleItalic();
+}
+
+void ToolsPanel::toggleUnderline(){
+    textPanel->toggleUnderline();
+}
+
 void ToolsPanel::updateFontBold(bool v){
     emit fontBoldChanged(v);
 }
@@ -2285,6 +2297,18 @@ TextPanel::TextPanel(QWidget *parent) : QWidget(parent){
     connect(m_ItalicBtn, SIGNAL(clicked(bool)), SLOT(updateFontItalic(bool)));
     connect(m_UnderlineBtn, SIGNAL(clicked(bool)), SLOT(updateFontUnderline(bool)));
     connect(m_CommitButton, SIGNAL(clicked()), SLOT(commitChanges()));
+}
+
+void TextPanel::toggleBold(){
+    m_BoldBtn->setChecked(!m_BoldBtn->isChecked());
+}
+
+void TextPanel::toggleItalic(){
+    m_ItalicBtn->setChecked(!m_ItalicBtn->isChecked());
+}
+
+void TextPanel::toggleUnderline(){
+    m_UnderlineBtn->setChecked(!m_UnderlineBtn->isChecked());
 }
 
 void TextPanel::changeFont(QFont font){

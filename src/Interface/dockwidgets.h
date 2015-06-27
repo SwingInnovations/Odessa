@@ -596,6 +596,10 @@ signals:
     void fontItalicChanged(bool);
     void fontUnderlineChanged(bool);
     void actionCommited();
+public slots:
+    void toggleBold();
+    void toggleItalic();
+    void toggleUnderline();
 private slots:
     void changeFont(QFont);
     void changeFontSize(int);
@@ -723,6 +727,9 @@ public slots:
    void updateWorldTransform(bool);
    void updateFont(QFont);
    void updateFontSize(int);
+   void toggleBold();
+   void toggleItalic();
+   void toggleUnderline();
    void updateFontBold(bool);
    void updateFontItalic(bool);
    void updateFontUnderline(bool);

@@ -45,6 +45,10 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_ClipScaleFactor = 1.0;
     m_ClipRotateAngle = 0.0;
 
+    m_isBold = false;
+    m_isItalic = false;
+    m_isUnderline = false;
+
     m_Text = "";
     m_acceptTextInput = false;
     m_textDocument = new QTextDocument();
@@ -350,9 +354,25 @@ QString Editor::addText(int i, QString s){
 void Editor::keyPressEvent(QKeyEvent *e){
     if(e->key() == Qt::Key_Escape){
         setBrush(CURSOR_TOOL);
-    }else if(e->key() == Qt::CTRL + Qt::Key_Enter){
+    }else if(e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_Enter){
         commitChanges();
+        if(m_acceptTextInput) m_acceptTextInput = false;
         emit commitAction();
+    }else if(e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_B){
+        //toggle bold
+
+        setBold(!m_isBold);
+        emit boldToggled();
+    }else if(e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_I){
+        //toggle italic
+
+        setItalic(!m_isItalic);
+        emit italicToggled();
+    }else if(e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_U){
+        //toggle underline
+
+        setUnderline(!m_isUnderline);
+        emit underlineToggled();
     }
     if(m_acceptTextInput){
         if(e->key() == Qt::Key_Backspace){
@@ -362,7 +382,7 @@ void Editor::keyPressEvent(QKeyEvent *e){
             m_textCursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor);
         }else if(e->key() == Qt::Key_Right){
             m_textCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
-        }else{
+        }else if(e->modifiers() != Qt::ControlModifier){
             m_textCursor.insertText(e->text(), m_fmt);
             m_textCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
         }
@@ -609,11 +629,13 @@ void Editor::setSizeTransfer(int val)
 void Editor::setFont(QFont font){
     m_Font = font;
     m_fmt.setFont(m_Font);
+    setFocus();
 }
 
 void Editor::setFontSize(int font){
     m_FontSize = font;
     m_fmt.setFontPointSize(m_FontSize);
+    setFocus();
 }
 
 void Editor::backup()
@@ -625,15 +647,21 @@ void Editor::backup()
 }
 
 void Editor::setBold(bool v){
-    if(v) m_fmt.setFontWeight(QFont::Bold); else m_fmt.setFontWeight(QFont::Normal);
+    m_isBold = v;
+    if(m_isBold) m_fmt.setFontWeight(QFont::Bold); else m_fmt.setFontWeight(QFont::Normal);
+    setFocus();
 }
 
 void Editor::setItalic(bool v){
+    m_isItalic = v;
     m_fmt.setFontItalic(v);
+    setFocus();
 }
 
 void Editor::setUnderline(bool v){
+    m_isUnderline = v;
     m_fmt.setFontUnderline(v);
+    setFocus();
 }
 
 void Editor::scale(double scaleVal)

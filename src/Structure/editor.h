@@ -89,6 +89,10 @@ signals:
     void currentIndexChanged(int);
     void currentFrameChanged(int);
 
+    void boldToggled();
+    void italicToggled();
+    void underlineToggled();
+
     void redChanged(int);
     void greenChanged(int);
     void blueChanged(int);

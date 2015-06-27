@@ -312,6 +312,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_Editor, SIGNAL(clipRotateChanged(int)), toolPanelWidget, SLOT(updateRotate(int)));
     connect(m_Editor, SIGNAL(clipScaleChanged(int,int)), toolPanelWidget, SLOT(updateScale(int,int)));
     connect(m_Editor, SIGNAL(toolChanged(int)), toolPanelWidget, SLOT(setMode(int)));
+    connect(m_Editor, SIGNAL(boldToggled()), toolPanelWidget, SLOT(toggleBold()));
+    connect(m_Editor, SIGNAL(italicToggled()), toolPanelWidget, SLOT(toggleItalic()));
+    connect(m_Editor, SIGNAL(underlineToggled()), toolPanelWidget, SLOT(toggleUnderline()));
     connect(m_Editor, SIGNAL(mousePositionChanged(QPoint)), debugWin, SLOT(updateMousePosition(QPoint)));
     connect(m_Editor, SIGNAL(brushPressureChanged(qreal)), debugWin, SLOT(updateActualPressure(qreal)));
     connect(m_Editor, SIGNAL(currentIndexChanged(int)), debugWin, SLOT(updateCurrentIndex(int)));
