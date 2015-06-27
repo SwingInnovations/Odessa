@@ -67,30 +67,30 @@ MainWindow::MainWindow(QWidget *parent)
     cursorTool->setShortcut(QKeySequence(Qt::Key_Escape));
     brushTool = new QAction(this);
     brushTool->setText("Brush");
-    brushTool->setIcon(QPixmap(":/icon/resource/brush_lite.svg"));
+    brushTool->setIcon(QPixmap(":/icon/resource/brush_lite.png"));
     eraserTool = new QAction(this);
     eraserTool->setText("Eraser");
-    eraserTool->setIcon(QPixmap(":/icon/resource/eraser_lite.svg"));
+    eraserTool->setIcon(QPixmap(":/icon/resource/eraser_lite.png"));
     textTool = new QAction(this);
     textTool->setText("Text");
-    textTool->setIcon(QPixmap(":icon/resource/Text_lite.svg"));
+    textTool->setIcon(QPixmap(":icon/resource/Text_lite.png"));
     primitiveTool = new QAction(this);
     primitiveTool->setText("Primitive");
-    primitiveTool->setIcon(QPixmap(":icon/resource/primitive_lite.svg"));
+    primitiveTool->setIcon(QPixmap(":icon/resource/primitive_lite.png"));
     eyeDropperTool = new QAction(this);
     eyeDropperTool->setText("EyeDropper");
     eyeDropperTool->setIcon(QPixmap(":/icon/resource/eyeDropper.png"));
     fillTool = new QAction("Fill", this);
-    fillTool->setIcon(QPixmap(":/icon/resource/fill_lite.svg"));
+    fillTool->setIcon(QPixmap(":/icon/resource/fill_lite.png"));
 
     scaleFactor = 1.0;
 
     /*-File Menu Actions-*/
     m_newAct = new QAction("&New", this);
     m_newAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
-    m_newAct->setIcon(QIcon(":/icon/resource/temp_New.svg"));
+    m_newAct->setIcon(QIcon(":/icon/resource/temp_New.png"));
     m_openAct = new QAction("&Open", this);
-    m_openAct->setIcon(QIcon(":/icon/resource/temp_Open.svg"));
+    m_openAct->setIcon(QIcon(":/icon/resource/temp_Open.png"));
     m_openAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
     m_saveAct = new QAction("&Save", this);
     m_saveAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
@@ -109,11 +109,11 @@ MainWindow::MainWindow(QWidget *parent)
     undoAct = new QAction(this);
     undoAct->setText("&Undo");
     undoAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
-    undoAct->setIcon(QPixmap(":icon/resource/undo_lite.svg"));
+    undoAct->setIcon(QPixmap(":icon/resource/undo_lite.png"));
     redoAct = new QAction(this);
     redoAct->setText("&Redo");
     redoAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Y));
-    redoAct->setIcon(QPixmap(":icon/resource/redo_lite.svg"));
+    redoAct->setIcon(QPixmap(":icon/resource/redo_lite.png"));
     cutAct = new QAction(this);
     cutAct->setText("&Cut");
     cutAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_X));
@@ -139,7 +139,7 @@ MainWindow::MainWindow(QWidget *parent)
     deselectAct->setText("&Deselect");
 
     preferenceAct = new QAction("Preferences", this);
-    preferenceAct->setIcon(QIcon(":/icon/resource/settings_lite.svg"));
+    preferenceAct->setIcon(QIcon(":/icon/resource/settings_lite.png"));
     showBrushDockWinAct = new QAction("Show BrushDock", this);
     showBrushDockWinAct->setCheckable(true);
     showBrushDockWinAct->setChecked(true);
@@ -153,10 +153,10 @@ MainWindow::MainWindow(QWidget *parent)
     showToolsDockAct->setChecked(false);
     zoomInAct = new QAction("&Zoom In",this);
     zoomInAct->setShortcut(QKeySequence::ZoomIn);
-    zoomInAct->setIcon(QIcon(":/icon/resource/zoom_In_lite.svg"));
+    zoomInAct->setIcon(QIcon(":/icon/resource/zoom_In_lite.png"));
     zoomOutAct = new QAction("&Zoom Out", this);
     zoomOutAct->setShortcut(QKeySequence(QKeySequence::ZoomOut));
-    zoomOutAct->setIcon(QIcon(":/icon/resource/zoom_Out_lite.svg"));
+    zoomOutAct->setIcon(QIcon(":/icon/resource/zoom_Out_lite.png"));
     resetZoomAct = new QAction("&Reset Zoom", this);
     resetZoomAct->setShortcut(QKeySequence(Qt::Key_Home));
 

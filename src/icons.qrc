@@ -17,5 +17,17 @@
         <file>resource/Text_lite.svg</file>
         <file>resource/undo_lite.svg</file>
         <file>resource/redo_lite.svg</file>
+        <file>resource/brush_lite.png</file>
+        <file>resource/eraser_lite.png</file>
+        <file>resource/fill_lite.png</file>
+        <file>resource/primitive_lite.png</file>
+        <file>resource/redo_lite.png</file>
+        <file>resource/settings_lite.png</file>
+        <file>resource/Text_lite.png</file>
+        <file>resource/undo_lite.png</file>
+        <file>resource/zoom_In_lite.png</file>
+        <file>resource/zoom_Out_lite.png</file>
+        <file>resource/temp_New.png</file>
+        <file>resource/temp_Open.png</file>
     </qresource>
 </RCC>
