@@ -134,10 +134,12 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
     path.moveTo(pointInfo.first());
     path.lineTo(pointInfo.last());
 
-    inc = getIncrement(pointInfo.first(), pointInfo.last());
+    inc = (qreal)getIncrement(pointInfo.first(), pointInfo.last());
+    qDebug() << "Ready to Draw. Increment value: " << inc << endl;
 
     /* Automatically adjust the incrementing value */
     for(qreal i = 0; i < 1; i+= inc * brush.getSpacing()){
+        qDebug() << "Drawing" << endl;
         painter.drawPixmap(QPoint(path.pointAtPercent(i).x() - stencil.width()/2, path.pointAtPercent(i).y() - stencil.width()/2), stencil);
     }
 
@@ -282,13 +284,14 @@ qreal BitmapImage::getIncrement(QPointF p1, QPointF p2){
 
 qreal BitmapImage::calculateMidpoint(QPointF p1, QPointF p2, qreal inc){
     QPointF point = p2 + p1;
-    if(point.manhattanLength() > 1){
-        QPointF hP1(p1.x() / 2.0, p1.y() / 2.0);
-        QPointF hP2(p2.x() / 2.0, p2.y() / 2.0);
-        calculateMidpoint(hP1, hP2, inc / 2.0);
-    }else{
+    if(point.manhattanLength() <= 1.0){
+        qDebug() << "Done." << endl;
         return inc;
     }
+    QPointF hP1(p1.x() / 2.0, p1.y() / 2.0);
+    QPointF hP2(p2.x() / 2.0, p2.y() / 2.0);
+    calculateMidpoint(hP1, hP2, inc / 2.0);
+    qDebug() << "Calculating.... Increment: " << inc << endl;
 }
 
 QPixmap BitmapImage::getCompositeImage()

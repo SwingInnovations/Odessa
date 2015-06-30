@@ -1636,6 +1636,7 @@ void ColorWheel::mouseMoveEvent(QMouseEvent *e){
 }
 
 void ColorWheel::mouseReleaseEvent(QMouseEvent *ev){
+    Q_UNUSED(ev)
     if(mouseDown){
         mouseDown = false;
     }

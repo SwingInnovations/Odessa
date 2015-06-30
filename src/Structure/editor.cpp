@@ -309,8 +309,6 @@ void Editor::paintEvent(QPaintEvent *event)
         painter.setPen(Qt::darkGray);
         painter.setBrush(Qt::transparent);
         painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
-        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize(), m_CurrentTool.getSize()-3);
-        painter.drawPixmap(QCursor::pos().x() - m_CurrentTool.getStencil().width()/2, QCursor::pos().y() - m_CurrentTool.getStencil().width()/2, m_CurrentTool.getStencil());
         painter.end();
         setCursor(QCursor(Qt::CrossCursor));
     }else if(m_ToolType == ERASER_TOOL){
@@ -397,6 +395,7 @@ void Editor::newProject(ProjectInfo &info){
         m_CurrentIndex = 0;
         m_CurrentFrame = 0;
     }
+
     if(m_Layers.isEmpty()){
         switch(info.getType()){
             case 0:
