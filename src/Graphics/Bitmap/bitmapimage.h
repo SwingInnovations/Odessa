@@ -92,8 +92,12 @@ protected:
 private:
     qreal calculateMidpoint(QPointF, QPointF, qreal);
     qreal getIncrement(QPointF, QPointF);
+
+    QString calcMid(QPointF, QPointF, qreal);
+    QString getInc(QPointF, QPointF);
     QPoint offset;
     bool visible;
+    qreal m_inc;
     QPixmap m_pixmap;
     QImage *m_Image;
     QRect boundaries;

@@ -7,6 +7,7 @@ BitmapImage::BitmapImage()
     m_ScaleFactor = 1.0;
     qDebug() << "Image drawn!" << endl;
     m_ScaleFactorInv = 1.0;
+    m_inc = 0.01;
 }
 
 BitmapImage::BitmapImage(const BitmapImage &image)
@@ -17,6 +18,7 @@ BitmapImage::BitmapImage(const BitmapImage &image)
     m_ScaleFactor = 1.0;
     m_ScaleFactorInv = 1.0;
     visible = true;
+    m_inc = 0.01;
 }
 
 BitmapImage::BitmapImage(Object *parent, QRect boundaries, QColor color)
@@ -28,6 +30,7 @@ BitmapImage::BitmapImage(Object *parent, QRect boundaries, QColor color)
     m_ScaleFactor = 1.0;
     m_ScaleFactorInv = 1.0;
     visible = true;
+    m_inc = 0.01;
 }
 
 BitmapImage::BitmapImage(Object *parent, QRect boundaries, QImage image)
@@ -39,6 +42,7 @@ BitmapImage::BitmapImage(Object *parent, QRect boundaries, QImage image)
     visible = true;
     m_ScaleFactor = 1.0;
     m_ScaleFactorInv = 1.0;
+    m_inc = 0.01;
 }
 
 BitmapImage::BitmapImage(QRect boundaries, QColor color)
@@ -56,6 +60,7 @@ BitmapImage::BitmapImage(QRect boundaries, QColor color)
     visible = true;
     m_ScaleFactor = 1.0;
     m_ScaleFactorInv = 1.0;
+    m_inc = 0.01;
 }
 
 BitmapImage::BitmapImage(QRect boundaries, QPixmap pixMap)
@@ -65,6 +70,7 @@ BitmapImage::BitmapImage(QRect boundaries, QPixmap pixMap)
     visible = true;
     m_ScaleFactor = 1.0;
     m_ScaleFactorInv = 1.0;
+    m_inc = 0.01;
 }
 
 void BitmapImage::paintImage(QPainter &painter)
@@ -134,12 +140,13 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
     path.moveTo(pointInfo.first());
     path.lineTo(pointInfo.last());
 
-    inc = (qreal)getIncrement(pointInfo.first(), pointInfo.last());
-    qDebug() << "Ready to Draw. Increment value: " << inc << endl;
+    inc = getIncrement(pointInfo.first(), pointInfo.last());
+    if(inc == 0){
+        inc = m_inc;
+    }
 
     /* Automatically adjust the incrementing value */
     for(qreal i = 0; i < 1; i+= inc * brush.getSpacing()){
-        qDebug() << "Drawing" << endl;
         painter.drawPixmap(QPoint(path.pointAtPercent(i).x() - stencil.width()/2, path.pointAtPercent(i).y() - stencil.width()/2), stencil);
     }
 
@@ -279,19 +286,35 @@ void BitmapImage::cutImgOp(QRect rect, QColor col){
 }
 
 qreal BitmapImage::getIncrement(QPointF p1, QPointF p2){
-    return calculateMidpoint(p1, p2, 1.0);
+    qreal ret = calculateMidpoint(p1, p2, 1.0);
+    qDebug() << "Increment: " << QString::number(ret, 10, 10);
+    return ret;
 }
 
 qreal BitmapImage::calculateMidpoint(QPointF p1, QPointF p2, qreal inc){
     QPointF point = p2 + p1;
     if(point.manhattanLength() <= 1.0){
-        qDebug() << "Done." << endl;
+        m_inc = inc;
         return inc;
     }
     QPointF hP1(p1.x() / 2.0, p1.y() / 2.0);
     QPointF hP2(p2.x() / 2.0, p2.y() / 2.0);
     calculateMidpoint(hP1, hP2, inc / 2.0);
     qDebug() << "Calculating.... Increment: " << inc << endl;
+}
+
+QString BitmapImage::getInc(QPointF p1, QPointF p2){
+    return calcMid(p1, p2, 1.0);
+}
+
+QString BitmapImage::calcMid(QPointF p1, QPointF p2, qreal inc){
+    QPointF point = p2 + p1;
+    if(point.manhattanLength() <= 1.0){
+        return QString::number(inc, 10, 10);
+    }
+    QPointF hP1(p1.x()/2.0, p1.y()/2.0);
+    QPointF hP2(p2.x()/2.0, p2.y()/2.0);
+    calcMid(hP1, hP2, inc/2.0);
 }
 
 QPixmap BitmapImage::getCompositeImage()
