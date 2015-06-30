@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     a.setApplicationVersion("0.0.74");
     a.setOrganizationName("SwingInnovations");
     a.setOrganizationDomain("www.swinginnovations.com");
-    a.setWindowIcon(QIcon(":/icon/resource/icon.svg"));
+    a.setWindowIcon(QIcon(":/icon/resource/icon.png"));
     a.setStyle(QStyleFactory::create("fusion"));
     QSettings settings("SwingInnovations", "Odessa");
     QPalette palette;
