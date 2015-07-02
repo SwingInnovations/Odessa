@@ -111,6 +111,7 @@ void BitmapImage::paintImage(QPoint point, Brush brush){
     QPixmap stencil = QPixmap::fromImage(stencilImage.scaled(brushWidth, brushWidth, Qt::IgnoreAspectRatio, Qt::FastTransformation));
     QPainter p(&m_pixmap);
     p.setRenderHint(QPainter::Antialiasing);
+    point /= m_ScaleFactor;
     p.drawPixmap(QPoint(point.x() - stencil.width()/2, point.y() - stencil.height()/2), stencil);
 }
 
@@ -145,9 +146,12 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
         inc = m_inc;
     }
 
+    qDebug() << "Reported Increment: " << m_inc << endl;
+
     /* Automatically adjust the incrementing value */
     for(qreal i = 0; i < 1; i+= inc * brush.getSpacing()){
-        painter.drawPixmap(QPoint(path.pointAtPercent(i).x() - stencil.width()/2, path.pointAtPercent(i).y() - stencil.width()/2), stencil);
+        QPointF point = path.pointAtPercent(i) / m_ScaleFactor;
+        painter.drawPixmap(QPoint(point.x() - stencil.width()/2, point.y() - stencil.width()/2), stencil);
     }
 
     /*-Old Method-*/
@@ -287,7 +291,6 @@ void BitmapImage::cutImgOp(QRect rect, QColor col){
 
 qreal BitmapImage::getIncrement(QPointF p1, QPointF p2){
     qreal ret = calculateMidpoint(p1, p2, 1.0);
-    qDebug() << "Increment: " << QString::number(ret, 10, 10);
     return ret;
 }
 
@@ -300,7 +303,6 @@ qreal BitmapImage::calculateMidpoint(QPointF p1, QPointF p2, qreal inc){
     QPointF hP1(p1.x() / 2.0, p1.y() / 2.0);
     QPointF hP2(p2.x() / 2.0, p2.y() / 2.0);
     calculateMidpoint(hP1, hP2, inc / 2.0);
-    qDebug() << "Calculating.... Increment: " << inc << endl;
 }
 
 QString BitmapImage::getInc(QPointF p1, QPointF p2){
