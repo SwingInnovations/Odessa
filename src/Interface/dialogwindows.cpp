@@ -325,6 +325,8 @@ GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
     mProjectPathLbl = new QLabel("Project path:", this);
     mProjectPathLE = new QLineEdit(this);
     mProjectPathLE->setText(filePath);
+    mProjectPathLE->setAlignment(Qt::AlignRight);
+    mProjectPathLE->home(false);
     mChangeProjectPathBtn = new QPushButton("...", this);
     QHBoxLayout* projectPathGrp = new QHBoxLayout;
     projectPathGrp->addWidget(mProjectPathLbl);
@@ -373,6 +375,7 @@ GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
 void GeneralPrefPage::changeProjectPath(){
     QString filePath = QFileDialog::getExistingDirectory(this, "Set Project Path: ", QDir::currentPath());
     mProjectPathLE->setText(filePath);
+    mProjectPathLE->home(false);
     emit projectPathChanged(filePath);
 }
 
