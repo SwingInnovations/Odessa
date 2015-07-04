@@ -148,11 +148,19 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
 
     qDebug() << "Reported Increment: " << m_inc << endl;
 
+    inc /= (qreal)brush.getSpacing();
+
     /* Automatically adjust the incrementing value */
-    for(qreal i = 0; i < 1; i+= inc * brush.getSpacing()){
+    QTime time;
+    time.start();
+    for(qreal i = 0.0; i < 1.0; i+= inc){
         QPointF point = path.pointAtPercent(i) / m_ScaleFactor;
-        painter.drawPixmap(QPoint(point.x() - stencil.width()/2, point.y() - stencil.width()/2), stencil);
+        qDebug() << "Increment: " << i << endl;
+        painter.drawLine(point, path.pointAtPercent(i+inc) / m_ScaleFactor);
+        //painter.drawPixmap(QPoint(point.x() - stencil.width()/2, point.y() - stencil.width()/2), stencil);
     }
+    qDebug() << "Finished drawing operation at: " << time.msec() << endl;
+    qDebug() << endl;
 
     /*-Old Method-*/
 
@@ -165,11 +173,9 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
 //    drawPoint = pointInfo.first();
 
 //    for(int i = 0; i < length; i++){
-//        if(drawPoint != pointInfo.last() || drawPoint != pointInfo.first()){
-//            drawPoint.setX(drawPoint.x() + (xInc / (double)brush.getSpacing() ));
-//            drawPoint.setY(drawPoint.y() + (yInc / (double)brush.getSpacing() ));
-//            painter.drawPixmap(QPoint(drawPoint.x() - stencil.width() / 2, drawPoint.y() - stencil.height()/2) / m_ScaleFactor, stencil);
-//        }
+//        drawPoint.setX(drawPoint.x() + (xInc / (double)brush.getSpacing() ));
+//        drawPoint.setY(drawPoint.y() + (yInc / (double)brush.getSpacing() ));
+//        painter.drawPixmap(QPoint(drawPoint.x() - stencil.width() / 2, drawPoint.y() - stencil.height()/2) / m_ScaleFactor, stencil);
 //    }
 }
 

@@ -10,6 +10,7 @@
 #include <QPointF>
 #include <QVector>
 #include <QQueue>
+#include <QTime>
 #include <vector>
 
 #include "../../Structure/brush.h"
