@@ -125,7 +125,8 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
     stencilBase.createAlphaMask();
     stencilBase.convertToFormat(QImage::Format_ARGB32, Qt::AutoColor);
     QImage stencilImage = QImage(stencilBase);
-    QColor color = brush.getColor();
+    //QColor color = brush.getColor();
+    QColor color(Qt::black);
     color.setAlpha(brush.getOpacity() + (brush.getPressureVal() * brush.getTransferOpacity()));
     stencilImage.fill(color);
     stencilImage.setAlphaChannel(stencilBase);
@@ -151,16 +152,10 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
     inc /= (qreal)brush.getSpacing();
 
     /* Automatically adjust the incrementing value */
-    QTime time;
-    time.start();
     for(qreal i = 0.0; i < 1.0; i+= inc){
         QPointF point = path.pointAtPercent(i) / m_ScaleFactor;
-        qDebug() << "Increment: " << i << endl;
-        painter.drawLine(point, path.pointAtPercent(i+inc) / m_ScaleFactor);
-        //painter.drawPixmap(QPoint(point.x() - stencil.width()/2, point.y() - stencil.width()/2), stencil);
+        painter.drawPixmap(QPoint(point.x() - stencil.width()/2, point.y() - stencil.width()/2), stencil); // Not working
     }
-    qDebug() << "Finished drawing operation at: " << time.msec() << endl;
-    qDebug() << endl;
 
     /*-Old Method-*/
 

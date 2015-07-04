@@ -15,6 +15,8 @@ Brush::Brush() : mHardness(0),
     myPen.setCapStyle(Qt::RoundCap);
     m_Name = "";
     mStencil = QPixmap();
+    myColor = QColor(Qt::black);
+    brushShape = CIRCLE_SHAPE;
 }
 
 void Brush::generatePixmap(){

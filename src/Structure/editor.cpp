@@ -169,6 +169,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                 }
                 emit curToolPressureChanged(m_CurrentTool.getPressureVal());
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
+
             }
             break;
         case ERASER_TOOL:
