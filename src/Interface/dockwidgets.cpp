@@ -11,6 +11,7 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     mTempBrushList = QVector<Brush>();
 
     mCurrentBrushIndex = 0;
+    m_firstTimeRun = false;
 
     readSettings();
     mBrushLib = mProjectPath + "/Brush/default.blib";
@@ -28,6 +29,7 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
         mGenBrushWidget->addBrush(mActualBrushList.at(0));
         mStencilWidget->updateStencilWidth(mTempBrushList.at(0).getSWidth());
         mStencilWidget->updateStencilHeight(mTempBrushList.at(0).getSHeight());
+        m_firstTimeRun = true;
         qDebug() << "Generating new Library" << mBrushLib << endl;
     }else{
         //use loaded data
@@ -478,7 +480,11 @@ void BrushDockWidget::saveBrushLib(QString filePath){
 }
 
 Brush BrushDockWidget::getStartBrush(){
-    mGenBrushWidget->setStencilPixmap(mActualBrushList[0].getStencil());
+    if(m_firstTimeRun){
+        mActualBrushList[0].SetStencil(mStencilWidget->GeneratePixmap());
+    }else{
+        mGenBrushWidget->setStencilPixmap(mActualBrushList[0].getStencil());
+    }
     return mActualBrushList[0];
 }
 

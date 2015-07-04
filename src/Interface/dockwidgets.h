@@ -68,6 +68,7 @@ public:
     void setDirectory(QString dir);
     virtual ~BrushDockWidget();
     Brush getStartBrush();
+    bool isFirstRun();
 protected:
     void resizeEvent(QResizeEvent*);
 signals:
@@ -161,6 +162,8 @@ private:
     /*-Data-*/
     QVector<Brush> mTempBrushList;
     QVector<Brush> mActualBrushList;
+
+    bool m_firstTimeRun;
 
 };
 
