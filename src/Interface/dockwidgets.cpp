@@ -24,14 +24,13 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
         mActualBrushList[0].setSpacing(1);
         mActualBrushList[0].setHardness(100);
         mActualBrushList[0].SetName("Default");
+        mStencilWidget->setBrushSettings(mActualBrushList.first());
         mActualBrushList[0].SetStencil(mStencilWidget->GeneratePixmap());
         mTempBrushList = mActualBrushList;
         mGenBrushWidget->addBrush(mActualBrushList.at(0));
         mStencilWidget->updateStencilWidth(mTempBrushList.at(0).getSWidth());
         mStencilWidget->updateStencilHeight(mTempBrushList.at(0).getSHeight());
         saveBrushLib(mBrushLib);
-        qDebug() << "Generating new Library" << mBrushLib << endl;
-
     }else{
         //use loaded data
         mActualBrushList = loadBrushLib(mBrushLib);
@@ -486,11 +485,9 @@ void BrushDockWidget::saveBrushLib(QString filePath){
 }
 
 Brush BrushDockWidget::getStartBrush(){
-    if(m_firstTimeRun){
-        mActualBrushList[0].SetStencil(mStencilWidget->GeneratePixmap());
-    }else{
-        mGenBrushWidget->setStencilPixmap(mActualBrushList[0].getStencil());
-    }
+    QPixmap regenStencil = mStencilWidget->GeneratePixmap();
+    repaint();
+    mActualBrushList[0].SetStencil(regenStencil);
     return mActualBrushList[0];
 }
 
@@ -1009,6 +1006,14 @@ void CustomBrushWidget::updateStencilTextureLE(QString val){
     }
 }
 
+void CustomBrushWidget::setBrushSettings(Brush b){
+    mWidthSlider->setValue(b.sWidth);
+    mHeightSlider->setValue(b.sHeight);
+    mHardnessSlider->setValue(b.getHardness());
+    mRotateSlider->setValue(b.getRotate());
+    update();
+}
+
 QPixmap CustomBrushWidget::GeneratePixmap(){
     int stencilWidth = (mStencilPreview.width() * mWidthSlider->value()/10)/2;
     int stencilHeight = (mStencilPreview.height()* mHeightSlider->value()/10)/2;
@@ -1019,7 +1024,7 @@ QPixmap CustomBrushWidget::GeneratePixmap(){
     radGrad.setColorAt(midPoint.x(), Qt::black);
     radGrad.setFocalRadius(hardness);
 
-    QImage img = mStencilPreview.toImage();
+    QPixmap img = mStencilPreview;
 
     QPainter p;
     p.begin(&img);
@@ -1036,7 +1041,6 @@ QPixmap CustomBrushWidget::GeneratePixmap(){
             p.setBrush(radGrad);
         }
         p.drawEllipse(midPoint, stencilWidth, stencilHeight);
-        p.end();
         break;
     case SQUARE_SHAPE:
         int originX =  midPoint.x() - stencilWidth;
@@ -1055,7 +1059,8 @@ QPixmap CustomBrushWidget::GeneratePixmap(){
         p.drawRect(originX, originY, dimX, dimY);
         break;
     }
-    mStencilPreview = QPixmap::fromImage(img);
+    mStencilPreview = img;
+    repaint();
     return mStencilPreview;
 }
 
@@ -1069,6 +1074,7 @@ void CustomBrushWidget::paintEvent(QPaintEvent *event){
     QRadialGradient radGrad(midPoint, mStencilPreview.width()/2);
     radGrad.setColorAt(midPoint.x(), Qt::black);
     radGrad.setFocalRadius(hardness);
+
     QPainter painter(&mStencilPreview);
     painter.setPen(Qt::NoPen);
     switch(mBrushShape){
@@ -1109,17 +1115,20 @@ void CustomBrushWidget::paintEvent(QPaintEvent *event){
 
 void CustomBrushWidget::updateBrushShape_Circle(){
     mBrushShape = CIRCLE_SHAPE;
-    emit stencilChanged(this->GeneratePixmap());
+    update();
+    emit stencilChanged(GeneratePixmap());
 }
 
 void CustomBrushWidget::updateBrushShape_Square(){
     mBrushShape = SQUARE_SHAPE;
-    emit stencilChanged(this->GeneratePixmap());
+    update();
+    emit stencilChanged(GeneratePixmap());
 }
 
 void CustomBrushWidget::updateBrushShape_Polygon(){
     mBrushShape = CUSTOM;
-    emit stencilChanged(this->GeneratePixmap());
+    update();
+    emit stencilChanged(GeneratePixmap());
 }
 
 CustomBrushWidget::~CustomBrushWidget(){

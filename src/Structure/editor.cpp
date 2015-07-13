@@ -697,20 +697,24 @@ void Editor::backup(int backupLayer, int backupFrame)
 
 void Editor::undo()
 {
-    m_BackupIndex--;
-    HistoryStack* lastElement = m_HistoryStack[m_BackupIndex];
-    BitmapHistoryStack* lastBitmapHist = (BitmapHistoryStack*)lastElement;
-    m_Layers.at(lastBitmapHist->m_Layer)->getFrame(lastBitmapHist->m_Frame)->setPixmap(lastBitmapHist->m_Bitmap.getPixmap());
+    if(!m_Layers.isEmpty()){
+        m_BackupIndex--;
+        HistoryStack* lastElement = m_HistoryStack[m_BackupIndex];
+        BitmapHistoryStack* lastBitmapHist = (BitmapHistoryStack*)lastElement;
+        m_Layers.at(lastBitmapHist->m_Layer)->getFrame(lastBitmapHist->m_Frame)->setPixmap(lastBitmapHist->m_Bitmap.getPixmap());
+    }
 }
 
 void Editor::redo()
 {
-    if(m_BackupIndex > -1 && m_BackupIndex < m_HistoryStack.size() -1)
-    {
-        m_BackupIndex++;
-        HistoryStack* lastElement = m_HistoryStack[m_BackupIndex];
-        BitmapHistoryStack* lastBitmapHist = (BitmapHistoryStack*)lastElement;
-        m_Layers.at(lastBitmapHist->m_Layer)->getFrame(lastBitmapHist->m_Frame)->setPixmap(lastBitmapHist->m_Bitmap.getPixmap());
+    if(!m_Layers.isEmpty()){
+        if(m_BackupIndex > -1 && m_BackupIndex < m_HistoryStack.size() -1)
+        {
+            m_BackupIndex++;
+            HistoryStack* lastElement = m_HistoryStack[m_BackupIndex];
+            BitmapHistoryStack* lastBitmapHist = (BitmapHistoryStack*)lastElement;
+            m_Layers.at(lastBitmapHist->m_Layer)->getFrame(lastBitmapHist->m_Frame)->setPixmap(lastBitmapHist->m_Bitmap.getPixmap());
+        }
     }
 }
 

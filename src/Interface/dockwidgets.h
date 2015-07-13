@@ -241,6 +241,7 @@ public:
     void TempSave(QPixmap);
     QString GetDir(){return this->mDir;}
     QPixmap GetPixmap(){return mStencilPreview;}
+    void setBrushSettings(Brush);
     QPixmap GeneratePixmap();
 protected:
     void paintEvent(QPaintEvent*);

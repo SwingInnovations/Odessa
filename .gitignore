@@ -213,3 +213,8 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+build-Odessa-Desktop_Qt_5_5_0_MSVC2013_64bit-Debug/Makefile
+build-Odessa-Desktop_Qt_5_5_0_MSVC2013_64bit-Debug/srv/pingme.txt
+build-Odessa-Desktop_Qt_5_5_0_MSVC2013_64bit-Debug/Makefile.Debug
+build-Odessa-Desktop_Qt_5_5_0_MSVC2013_64bit-Debug/Odessa_resource.rc
+build-Odessa-Desktop_Qt_5_5_0_MSVC2013_64bit-Debug/Makefile.Release
