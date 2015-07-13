@@ -29,16 +29,21 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
         mGenBrushWidget->addBrush(mActualBrushList.at(0));
         mStencilWidget->updateStencilWidth(mTempBrushList.at(0).getSWidth());
         mStencilWidget->updateStencilHeight(mTempBrushList.at(0).getSHeight());
-        m_firstTimeRun = true;
+        saveBrushLib(mBrushLib);
         qDebug() << "Generating new Library" << mBrushLib << endl;
+
     }else{
         //use loaded data
         mActualBrushList = loadBrushLib(mBrushLib);
         for(int i = 0; i < mActualBrushList.size(); i++){
-            qDebug()<< mBrushLib <<"Loaded brush " << i << endl;
             mGenBrushWidget->addBrush(mActualBrushList.at(i));
         }
         mTempBrushList = mActualBrushList;
+        if(mActualBrushList[0].getStencil().isNull()){
+            qDebug() << "Uh.. We got a problem" << endl;
+        }else{
+            qDebug() << "Now we really got a problem" << endl;
+        }
     }
 
     mDrawModeComboBox = new QComboBox(this);
@@ -208,6 +213,7 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(mStencilWidget, SIGNAL(rotateChanged(int)), SLOT(updateStencilRotate(int)));
     connect(mGenBrushWidget, SIGNAL(brushLibIndexChanged(int)), SLOT(setCurrentIndex(int)));
     connect(mGenBrushWidget, SIGNAL(brushNameChanged(QString)), SLOT(updateBrushName(QString)));
+    update();
 }
 
 void BrushDockWidget::setDirectory(QString dir){
