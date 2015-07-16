@@ -176,6 +176,12 @@ private:
     void shiftLayerForward();
     void shiftLayerBack();
 
+    void increaseOpacity();
+    void decreaseOpacity();
+
+    void increaseBrushSize();
+    void decreaseBrushSize();
+
     QPixmap generateShapePixmap(Primitive);
 
     bool m_DeviceDown;

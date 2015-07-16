@@ -24,7 +24,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_Brush.setOpacity(m_OpacityVal);
     m_Brush.setSpacing(1);
     m_CurrentTool = m_Brush;
-    m_ToolType = CURSOR_TOOL;
+    m_ToolType = BRUSH_TOOL;
 
     m_Eraser = Brush();
     m_Eraser.setWidth(5);
@@ -308,12 +308,17 @@ void Editor::paintEvent(QPaintEvent *event)
 
     if(m_ToolType == BRUSH_TOOL){
         painter.setPen(Qt::darkGray);
+        QPen pHandle = painter.pen();
+        pHandle.setWidth(5);
+        painter.setPen(pHandle);
         painter.setBrush(Qt::transparent);
-        painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
+        //painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
+        painter.drawEllipse(QCursor::pos(), m_CurrentTool.getSize()/2, m_CurrentTool.getSize()/2);
+        painter.drawPixmap(QCursor::pos(), m_CurrentTool.getStencil().scaled(m_CurrentTool.getSize(), m_CurrentTool.getSize()));
         painter.end();
         setCursor(QCursor(Qt::CrossCursor));
     }else if(m_ToolType == ERASER_TOOL){
-        this->setCursor(QCursor(Qt::CrossCursor));
+        setCursor(QCursor(Qt::CrossCursor));
         painter.setPen(Qt::darkGray);
         painter.setBrush(Qt::transparent);
         painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
@@ -364,15 +369,22 @@ void Editor::keyPressEvent(QKeyEvent *e){
         emit boldToggled();
     }else if(e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_I){
         //toggle italic
-
         setItalic(!m_isItalic);
         emit italicToggled();
     }else if(e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_U){
         //toggle underline
-
         setUnderline(!m_isUnderline);
         emit underlineToggled();
+    }else if(e->key() == Qt::Key_O && e->key() == Qt::Key_BracketLeft){
+        decreaseOpacity();
+    }else if(e->key() == Qt::Key_O && e->key() == Qt::Key_BracketRight){
+        increaseOpacity();
+    }else if(e->key() == Qt::Key_BracketLeft && !m_acceptTextInput){
+        decreaseBrushSize();
+    }else if(e->key() == Qt::Key_BracketRight && !m_acceptTextInput){
+        increaseBrushSize();
     }
+
     if(m_acceptTextInput){
         if(e->key() == Qt::Key_Backspace){
             m_textCursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor);
@@ -539,6 +551,22 @@ void Editor::setBrushSize(int val)
     }
 }
 
+void Editor::increaseBrushSize(){
+    if(m_CurrentTool.getSize() < 500){
+        setBrushSize(m_CurrentTool.getSize() + 5);
+    }
+    emit brushSizeChanged(m_CurrentTool.getSize());
+}
+
+void Editor::decreaseBrushSize(){
+    if(m_CurrentTool.getSize() > 0){
+        setBrushSize(m_CurrentTool.getSize() - 5);
+    }else{
+        setBrushSize(0);
+    }
+    emit brushSizeChanged(m_CurrentTool.getSize());
+}
+
 void Editor::setBrushSpacing(int val)
 {
     m_CurrentTool.setSpacing(val);
@@ -576,6 +604,20 @@ void Editor::setBlueValue(int val)
     m_PrimaryColor.setBlue(m_BlueVal);
     m_CurrentTool.setColor(m_PrimaryColor);
     m_fmt.setForeground(QBrush(m_PrimaryColor));
+}
+
+void Editor::increaseOpacity(){
+    if(m_OpacityVal < 100){
+        setOpacity(m_OpacityVal+10);
+    }
+    emit brushOpacityChanged(m_OpacityVal);
+}
+
+void Editor::decreaseOpacity(){
+    if(m_OpacityVal > 0){
+        setOpacity(m_OpacityVal-10);
+    }
+    emit brushOpacityChanged(m_OpacityVal);
 }
 
 void Editor::setOpacity(int val)

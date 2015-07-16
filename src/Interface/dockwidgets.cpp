@@ -667,6 +667,9 @@ void GeneralBrushWidget::addBrush(int iD, Brush brush){
 
 void GeneralBrushWidget::addBrush(Brush brush){
     QListWidgetItem* itm = new QListWidgetItem(brush.m_Name);
+    QImage stencilIcon = brush.getStencil().toImage();
+    stencilIcon.invertPixels();
+    itm->setIcon(QPixmap::fromImage(stencilIcon));
     itm->setFlags(itm->flags() | Qt::ItemIsEditable);
     mBrushIndex->addItem(itm);
 }
