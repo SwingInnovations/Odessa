@@ -57,6 +57,11 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_fmt = QTextCharFormat(m_textCursor.charFormat());
     m_fmt.setFont(m_Font);
     m_fmt.setForeground(QBrush(Qt::black));
+
+    m_keyEntry[0] = -1;
+    m_keyEntry[1] = -1;
+
+    m_useCustomCombo = false;
 }
 
 void Editor::setHistoyStep(int h){
@@ -356,6 +361,21 @@ QString Editor::addText(int i, QString s){
 }
 
 void Editor::keyPressEvent(QKeyEvent *e){
+
+    if(m_keyEntry[0] != -1 && m_keyEntry[1] != -1){
+        if(m_keyEntry[0] == Qt::Key_O || m_keyEntry[1] == Qt::Key_BracketLeft){
+            increaseOpacity();
+        }else if(m_keyEntry[0] == Qt::Key_O || m_keyEntry[1] == Qt::Key_BracketRight){
+            decreaseOpacity();
+        }
+    }else if(m_keyEntry[0] == -1){
+        if(!m_useCustomCombo) m_useCustomCombo = true;
+        m_keyEntry[0] = e->key();
+    }else if(m_keyEntry[1] == -1){
+        m_keyEntry[1] = e->key();
+    }
+
+
     if(e->key() == Qt::Key_Escape){
         setBrush(CURSOR_TOOL);
     }else if(e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_Enter){
@@ -364,7 +384,6 @@ void Editor::keyPressEvent(QKeyEvent *e){
         emit commitAction();
     }else if(e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_B){
         //toggle bold
-
         setBold(!m_isBold);
         emit boldToggled();
     }else if(e->modifiers() == Qt::ControlModifier && e->key() == Qt::Key_I){
@@ -375,15 +394,12 @@ void Editor::keyPressEvent(QKeyEvent *e){
         //toggle underline
         setUnderline(!m_isUnderline);
         emit underlineToggled();
-    }else if(e->key() == Qt::Key_O && e->key() == Qt::Key_BracketLeft){
-        decreaseOpacity();
-    }else if(e->key() == Qt::Key_O && e->key() == Qt::Key_BracketRight){
-        increaseOpacity();
-    }else if(e->key() == Qt::Key_BracketLeft && !m_acceptTextInput){
+    }else if(e->key() == Qt::Key_BracketLeft && !m_acceptTextInput && !m_useCustomCombo){
         decreaseBrushSize();
-    }else if(e->key() == Qt::Key_BracketRight && !m_acceptTextInput){
+    }else if(e->key() == Qt::Key_BracketRight && !m_acceptTextInput && !m_useCustomCombo){
         increaseBrushSize();
     }
+
 
     if(m_acceptTextInput){
         if(e->key() == Qt::Key_Backspace){
@@ -399,6 +415,16 @@ void Editor::keyPressEvent(QKeyEvent *e){
         }
     }
     update();
+}
+
+void Editor::keyReleaseEvent(QKeyEvent *e){
+    if(m_keyEntry[1] == e->key()){
+        m_keyEntry[1] = -1;
+    }
+    if(m_keyEntry[0] == e->key()){
+        m_keyEntry[0] = -1;
+        if(m_useCustomCombo) m_useCustomCombo = false;
+    }
 }
 
 void Editor::newProject(ProjectInfo &info){

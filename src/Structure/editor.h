@@ -111,6 +111,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void tabletEvent(QTabletEvent *event);
     void keyPressEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
 public slots:
     void newProject(ProjectInfo&);
 
@@ -226,6 +227,10 @@ private:
     int m_HistorySteps;
     int m_BackupIndex;
 
+//Other Keyboard things
+    int m_keyEntry[2];
+    bool m_useCustomCombo;
+
 //Clipboard stuff
     QString m_Text;
     bool m_isBold;
@@ -238,7 +243,7 @@ private:
     int m_textCursorPos;
     QPixmap generateTextPixmap();
 
-    //New TextEditor tools
+//New TextEditor tools
     QTextDocument *m_textDocument;
     QTextCursor m_textCursor;
     QTextCharFormat m_fmt;
