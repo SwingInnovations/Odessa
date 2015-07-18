@@ -31,5 +31,6 @@
         <file>resource/temp_Open.png</file>
         <file>resource/icon.png</file>
         <file>resource/default.png</file>
+        <file>resource/airStencil.png</file>
     </qresource>
 </RCC>

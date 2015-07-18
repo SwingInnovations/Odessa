@@ -28,8 +28,17 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
         QPixmap sten1;
         sten1.load(":/icon/resource/default.png");
         mActualBrushList[0].SetStencil(sten1);
+        mActualBrushList.append(Brush());
+        mActualBrushList[1].setSWidth(10);
+        mActualBrushList[1].setSHeight(10);
+        mActualBrushList[1].setSpacing(1);
+        mActualBrushList[1].setHardness(0);
+        mActualBrushList[1].SetName("Airbrush");
+        sten1.load(":/icon/resource/airStencil.png");
+        mActualBrushList[1].SetStencil(sten1);
         mTempBrushList = mActualBrushList;
         mGenBrushWidget->addBrush(mActualBrushList.at(0));
+        mGenBrushWidget->addBrush(mActualBrushList.at(1));
         mGenBrushWidget->setStencilPixmap(mActualBrushList.first().getStencil());
         mStencilWidget->updateStencilWidth(mTempBrushList.at(0).getSWidth());
         mStencilWidget->updateStencilHeight(mTempBrushList.at(0).getSHeight());
@@ -1081,55 +1090,62 @@ QPixmap CustomBrushWidget::GeneratePixmap(){
 
 void CustomBrushWidget::paintEvent(QPaintEvent *event){
     Q_UNUSED(event);
-//    int stencilWidth = (mStencilPreview.width() * mWidthSlider->value()/10)/2;
-//    int stencilHeight = (mStencilPreview.height()* mHeightSlider->value()/10)/2;
-//    qreal hardness = 78 * ((qreal)mHardnessSlider->value()/100);
-//    QPoint midPoint(mStencilPreview.width()/2, mStencilPreview.height()/2);
-//    mStencilPreview.fill(Qt::transparent);
-//    QRadialGradient radGrad(midPoint, mStencilPreview.width()/2);
-//    radGrad.setColorAt(midPoint.x()/mStencilPreview.width(), Qt::black);
-//    radGrad.setFocalRadius(hardness);
+    int stencilWidth = (mStencilPreview.width() * mWidthSlider->value()/10)/2;
+    int stencilHeight = (mStencilPreview.height()* mHeightSlider->value()/10)/2;
+    qreal hardness = ((qreal)mHardnessSlider->value()/100);
+    QPoint midPoint(mStencilPreview.width()/2, mStencilPreview.height()/2);
+    mStencilPreview.fill(Qt::transparent);
+    QRadialGradient radGrad(midPoint, mStencilPreview.width()/2);
+    radGrad.setColorAt(midPoint.x()/mStencilPreview.width(), Qt::black);
+    radGrad.setColorAt(0.0, Qt::black);
+    radGrad.setColorAt(hardness, Qt::black);
+    if(hardness == 1.0){
+        radGrad.setColorAt(1.0, Qt::black);
+    }else{
+        radGrad.setColorAt(1.0, Qt::transparent);
+    }
 
-//    QPainter painter(&mStencilPreview);
-//    painter.setPen(Qt::NoPen);
-//    switch(mBrushShape){
-//        case CIRCLE_SHAPE:
-//            if(hasTexture){
-//                QBrush brush;
-//                brush.setTexture(mStencilTexture);
-//                painter.setBrush(brush);
-//            }else{
-//                painter.setBrush(radGrad);
-//            }
-//            painter.translate(midPoint);
-//            painter.rotate(mRotateSlider->value());
-//            painter.translate(-midPoint);
-//            painter.drawEllipse(midPoint, stencilWidth, stencilHeight);
-//            break;
-//        case SQUARE_SHAPE:
-//            int originX =  midPoint.x() - stencilWidth;
-//            int originY = midPoint.y() - stencilHeight;
-//            int dimX = stencilWidth*2;
-//            int dimY = stencilHeight*2;
+    QPainter painter(&mStencilPreview);
+    painter.setPen(Qt::NoPen);
+    switch(mBrushShape){
+        case CIRCLE_SHAPE:
+            if(hasTexture){
+                QBrush brush;
+                brush.setTexture(mStencilTexture);
+                painter.setBrush(brush);
+            }else{
+                painter.setBrush(radGrad);
+            }
+            painter.translate(midPoint);
+            painter.rotate(mRotateSlider->value());
+            painter.translate(-midPoint);
+            painter.drawEllipse(midPoint, stencilWidth, stencilHeight);
+            break;
+        case SQUARE_SHAPE:
+            int originX =  midPoint.x() - stencilWidth;
+            int originY = midPoint.y() - stencilHeight;
+            int dimX = stencilWidth*2;
+            int dimY = stencilHeight*2;
 
-//            if(hasTexture){
-//                QBrush brush;
-//                brush.setTexture(mStencilTexture);
-//                painter.setBrush(brush);
-//            }else{
-//                painter.setBrush(Qt::black);
-//            }
-//            painter.translate(midPoint);
-//            painter.rotate(mRotateSlider->value());
-//            painter.translate(-midPoint);
-//            painter.drawRect(originX, originY, dimX, dimY);
-//            break;
-//    }
-//    mStencilLabel->setPixmap(mStencilPreview);
-   QImage ret = GeneratePixmap().toImage();
-   ret.invertPixels(QImage::InvertRgba);
-   mStencilPreview = QPixmap::fromImage(ret);
-   mStencilLabel->setPixmap(mStencilPreview);
+            if(hasTexture){
+                QBrush brush;
+                brush.setTexture(mStencilTexture);
+                painter.setBrush(brush);
+            }else{
+                painter.setBrush(Qt::black);
+            }
+            painter.translate(midPoint);
+            painter.rotate(mRotateSlider->value());
+            painter.translate(-midPoint);
+            painter.drawRect(originX, originY, dimX, dimY);
+            break;
+    }
+    mStencilLabel->setPixmap(mStencilPreview);
+
+//   QImage ret = GeneratePixmap().toImage();
+//   ret.invertPixels(QImage::InvertRgba);
+//   mStencilPreview = QPixmap::fromImage(ret);
+//   mStencilLabel->setPixmap(mStencilPreview);
 }
 
 void CustomBrushWidget::updateBrushShape_Circle(){
