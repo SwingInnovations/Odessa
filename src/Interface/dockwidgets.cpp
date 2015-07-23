@@ -1893,6 +1893,11 @@ void LayerDockWidget::updateOpacity(QString o){
     emit opacityChanged(o.toInt());
 }
 
+void LayerDockWidget::updateLayerPreview(int i, QPixmap pix){
+    QTreeWidgetItem* itm = m_layerManager->currentItem();
+    itm->setIcon(0, QIcon(pix));
+}
+
 void LayerDockWidget::setCompositionMode(int i){
     m_compositionMode->setCurrentIndex(i);
 }
@@ -1903,6 +1908,14 @@ void LayerDockWidget::updateLayer(QTreeWidgetItem *itm, int i){
     m_opacitySlider->setValue(itm->data(0, Qt::UserRole + 3).toInt());
     m_opacitySpinbox->setValue(itm->data(0, Qt::UserRole + 3).toInt());
 
+    if(itm->checkState(i) == Qt::Unchecked){
+        emit toggleLayerVisible(false);
+    }else if(itm->checkState(i) == Qt::Checked){
+        emit toggleLayerVisible(true);
+    }else{
+        qDebug() << "Cannot uncheck the noncheckable." << endl;
+    }
+
     emit compositionModeChanged(itm->data(0, Qt::UserRole + 4).toInt());
     emit opacityChanged(itm->data(0, Qt::UserRole + 3).toInt());
     emit layerChanged(itm->data(i, Qt::UserRole + 1).toInt());
@@ -1910,7 +1923,7 @@ void LayerDockWidget::updateLayer(QTreeWidgetItem *itm, int i){
 
 void LayerDockWidget::updateLayerInfo(QTreeWidgetItem *itm, int i){
     if(itm->checkState(i) == Qt::Unchecked || itm->checkState(i) == Qt::Checked){
-        emit toggleLayerVisible(itm->data(i, Qt::UserRole +1).toInt());
+        //emit toggleLayerVisible(itm->data(i, Qt::UserRole +1).toInt());
     }
 }
 

@@ -89,6 +89,8 @@ signals:
     void currentIndexChanged(int);
     void currentFrameChanged(int);
 
+    void layerPreviewChanged(int, QPixmap);
+
     void boldToggled();
     void italicToggled();
     void underlineToggled();

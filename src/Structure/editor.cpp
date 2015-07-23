@@ -285,6 +285,7 @@ void Editor::paintEvent(QPaintEvent *event)
                    p.setOpacity((qreal)m_Layers.at(i)->getOpacity()/100.0);
                }
                p.drawImage(0, 0, drawnImage);
+               emit layerPreviewChanged(i, QPixmap::fromImage(drawnImage));
            }
         }
         p.end();
@@ -486,6 +487,7 @@ void Editor::setLayerCompositionMode(int c){
 
 void Editor::setLayerVisible(bool val){
     if(!m_Layers.empty()){ m_Layers.at(m_CurrentIndex-1)->setVisible(val); }
+    update();
 }
 
 void Editor::setLayerVisible(int val){
