@@ -470,11 +470,14 @@ void Editor::addLayer()
 
 void Editor::setLayerIndex(int i){
     if(i >= 1){ m_CurrentIndex = i+1; }else{ m_CurrentIndex = 1; }
+    qDebug() << "Layer at: " << m_CurrentIndex-1 << "Layer Opacity: " << m_Layers.at(m_CurrentIndex-1)->getOpacity() << endl;
     emit currentIndexChanged(m_CurrentIndex);
     update();
 }
 
 void Editor::setLayerOpacity(int o){
+    qDebug() << "Setting Layer at " << m_CurrentIndex-1 << " Opacity to: " << o << endl;
+
     if(!m_Layers.empty()){
         m_Layers.at(m_CurrentIndex-1)->setOpacity(o);
     }
