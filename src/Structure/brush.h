@@ -68,6 +68,8 @@ public:
 
     void SetRotate(int val){mRotate = val;}
 
+    void setToolType(int);
+
     int getHardness()const{return mHardness;}
     int getRotate()const{return mRotate;}
     void setOpacity(int val){mOpacity = val;}
@@ -80,6 +82,7 @@ public:
     void setHardness(int val){ mHardness = val; }
 
     void setBrushShape(BrushShape shape){ brushShape = shape; }
+    bool isType(int);
 
     //color Centric
     void setRed(int val){myColor.setRed(val);}
@@ -128,6 +131,8 @@ public:
     qreal m_yTilt;
 
     QPixmap mStencil;
+
+    int m_toolType;
 };
 
 #endif // BRUSH_H

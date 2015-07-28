@@ -320,6 +320,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_Editor, SIGNAL(currentIndexChanged(int)), debugWin, SLOT(updateCurrentIndex(int)));
     connect(m_Editor, SIGNAL(currentFrameChanged(int)), debugWin, SLOT(updateCurrentFrame(int)));
     connect(m_Editor, SIGNAL(curToolPressureChanged(qreal)), debugWin, SLOT(updateActualPressure(qreal)));
+    connect(m_Editor, SIGNAL(brushToolSelected()), SLOT(assignBrushTool()));
+    connect(m_Editor, SIGNAL(eraserToolSelected()), SLOT(assignEraserTool()));
+    connect(m_Editor, SIGNAL(cursorToolSelected()), SLOT(assignCursorTool()));
     connect(eyeDropperTool, SIGNAL(triggered()), SLOT(assignEyeDropperTool()));
     connect(eyeDropper, SIGNAL(activated()), SLOT(assignEyeDropperTool()));
     connect(debugWinAct, SIGNAL(triggered()), SLOT(showDebugWin()));

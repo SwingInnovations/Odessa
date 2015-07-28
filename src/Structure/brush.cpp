@@ -14,6 +14,7 @@ Brush::Brush() : mHardness(0),
     myPen = QPen();
     myPen.setCapStyle(Qt::RoundCap);
     m_Name = "";
+    m_toolType = 0;
     mStencil = QPixmap();
     myColor = QColor(Qt::black);
     brushShape = CIRCLE_SHAPE;
@@ -28,4 +29,12 @@ void Brush::generatePixmap(){
     radGrad.setColorAt(midPoint.x(), Qt::black);
     radGrad.setFocalRadius(hardness);
     //TODO finish this implementation
+}
+
+void Brush::setToolType(int t){
+    m_toolType = t;
+}
+
+bool Brush::isType(int t){
+    return (m_toolType == t);
 }

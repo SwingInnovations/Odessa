@@ -23,10 +23,12 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_Brush.setWidth(5);
     m_Brush.setOpacity(m_OpacityVal);
     m_Brush.setSpacing(1);
+    m_Brush.setToolType(0);
     m_CurrentTool = m_Brush;
     m_ToolType = BRUSH_TOOL;
 
     m_Eraser = Brush();
+    m_Eraser.setToolType(1);
     m_Eraser.setWidth(5);
     m_Eraser.setColor(Qt::white);
     m_Eraser.setBrush(QBrush(Qt::SolidPattern));
@@ -227,6 +229,22 @@ void Editor::tabletEvent(QTabletEvent *event)
 {
     if(!m_Layers.isEmpty())
     {
+        if(!m_CurrentTool.isType(2)){
+            switch(event->pointerType()){
+            case QTabletEvent::PointerType::Pen:
+                emit brushToolSelected();
+                break;
+            case QTabletEvent::PointerType::Eraser:
+                emit eraserToolSelected();
+                break;
+            case QTabletEvent::PointerType::Cursor:
+                emit cursorToolSelected();
+                break;
+            default:
+                emit brushToolSelected();
+                ;
+            }
+        }
         switch(event->type())
         {
         case QEvent::TabletPress:
@@ -470,7 +488,6 @@ void Editor::addLayer()
 
 void Editor::setLayerIndex(int i){
     if(i >= 1){ m_CurrentIndex = i+1; }else{ m_CurrentIndex = 1; }
-    qDebug() << "Layer at: " << m_CurrentIndex-1 << "Layer Opacity: " << m_Layers.at(m_CurrentIndex-1)->getOpacity() << endl;
     emit currentIndexChanged(m_CurrentIndex);
     update();
 }
@@ -518,31 +535,42 @@ void Editor::setBrush(ToolType type)
     case BRUSH_TOOL:
         m_CurrentTool = m_Brush;
         m_CurrentTool.setColor(m_PrimaryColor);
+        m_CurrentTool.setToolType(0);
         m_acceptTextInput = false;
         emit brushSizeChanged(m_Brush.getSize());
         emit toolChanged(0);
         break;
     case ERASER_TOOL:
         m_CurrentTool = m_Eraser;
+        m_CurrentTool.setToolType(1);
         m_acceptTextInput = false;
         emit brushSizeChanged(m_Eraser.getSize());
         emit toolChanged(1);
     case TEXT_TOOL:
+        m_CurrentTool.setToolType(2);
         m_acceptTextInput = true;
         m_ClipboardPresent = true;
         emit toolChanged(2);
         break;
     case PRIMITIVE_TOOL:
+        m_CurrentTool.setToolType(2);
         emit toolChanged(3);
         break;
     case EYEDROPPER_TOOL:
+        m_CurrentTool.setToolType(2);
+        m_acceptTextInput = false;
+        break;
+    case FILL_TOOL:
+        m_CurrentTool.setToolType(2);
         m_acceptTextInput = false;
         break;
     case TRANSFORM_TRANSLATE:
+        m_CurrentTool.setToolType(2);
         m_acceptTextInput = false;
         emit toolChanged(7);
         break;
     default:
+        m_CurrentTool.setToolType(0);
         emit toolChanged(0);
         break;
     }

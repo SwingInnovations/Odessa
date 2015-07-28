@@ -86,6 +86,9 @@ signals:
     void brushFeatherChanged(int);
     void brushOpacityChanged(int);
     void brushSpacingChanged(int);
+    void brushToolSelected();
+    void eraserToolSelected();
+    void cursorToolSelected();
     void currentIndexChanged(int);
     void currentFrameChanged(int);
 
