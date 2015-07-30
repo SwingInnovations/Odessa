@@ -121,47 +121,47 @@ private:
     QVector<Brush> loadBrushLib(QString filePath);
     void saveBrushLib(QString filePath);
 
-    QString mBrushLib;
-    QString mProjectPath;
-    int mCurrentBrushIndex;
-    QTabWidget* mTabWidget;
+    QString m_BrushLib;
+    QString m_ProjectPath;
+    int m_CurrentBrushIndex;
+    QTabWidget* m_TabWidget;
 
     /*--General Parameters--*/
-    GeneralBrushWidget* mGenBrushWidget;
-    QComboBox* mDrawModeComboBox;
+    GeneralBrushWidget* m_GenBrushWidget;
+    QComboBox* m_DrawModeCmbx;
     /*-Size-*/
-    QLabel* mSizeLabel;
-    QSlider* mSizeSlider;
-    QSpinBox* mSizeLE;
+    QLabel* m_SizeLabel;
+    QSlider* m_SizeSlider;
+    QSpinBox* m_SizeLE;
 
     /*-Opacity-*/
-    QLabel* mOpacityLabel;
-    QSlider* mOpacitySlider;
-    QSpinBox* mOpacityLE;
+    QLabel* m_OpacityLabel;
+    QSlider* m_OpacitySlider;
+    QSpinBox* m_OpacityLE;
 
     /*-Spacing-*/
-    QLabel* mSpacingLabel;
-    QSlider* mSpacingSlider;
-    QSpinBox* mSpacingLE;
+    QLabel* m_SpacingLabel;
+    QSlider* m_SpacingSlider;
+    QSpinBox* m_SpacingLE;
 
     /*--Transfer--*/
-    QGroupBox* transGrpBox;
+    QGroupBox* m_transGrpBox;
     /*-TransferSize-*/
-    QCheckBox* mTransferSizeToggle;
-    QSlider* mTransferSizeSlider;
-    QSpinBox* mTransferSizeLE;
+    QCheckBox* m_TransferSizeToggle;
+    QSlider* m_TransferSizeSlider;
+    QSpinBox* m_TransferSizeLE;
 
     /*-TransferOpacity-*/
-    QCheckBox* mTransferOpacityToggle;
-    QSlider* mTransferOpacitySlider;
-    QSpinBox* mTransferOpacityLE;
+    QCheckBox* m_TransferOpacityToggle;
+    QSlider* m_TransferOpacitySlider;
+    QSpinBox* m_TransferOpacityLE;
 
     /*--Custom--*/
-    CustomBrushWidget* mStencilWidget;
+    CustomBrushWidget* m_StencilWidget;
 
     /*-Data-*/
-    QVector<Brush> mTempBrushList;
-    QVector<Brush> mActualBrushList;
+    QVector<Brush> m_TempBrushList;
+    QVector<Brush> m_ActualBrushList;
 
     bool m_firstTimeRun;
 
@@ -175,10 +175,10 @@ public:
     virtual ~GeneralBrushWidget();
     void addBrush(int iD, Brush brush);
     void addBrush(Brush brush);
-    void setBrushIndex(int val){this->mCurrentBrushIndex = val;}
-    void setDir(QString dir){this->mDir = dir;}
-    int getBrushIndex(){return this->mCurrentBrushIndex;}
-    QString getDir(){return this->mDir;}
+    void setBrushIndex(int val){this->m_CurrentBrushIndex = val;}
+    void setDir(QString dir){this->m_Dir = dir;}
+    int getBrushIndex(){return this->m_CurrentBrushIndex;}
+    QString getDir(){return this->m_Dir;}
     void setStencilPixmap(QPixmap);
     void activateUsePressureWidth(bool);
     void generateStrokePreview();
@@ -200,7 +200,7 @@ public slots:
     void updateSaveBrush(){emit saveBrushTriggered();}
     void updateSaveBrushSet(){emit saveBrushSetTriggered();}
     void updateDeleteBrush(){emit deleteBrushTriggered();}
-    void updateBrushLibIndex(int val){mCurrentBrushIndex = val; emit brushLibIndexChanged(val);}
+    void updateBrushLibIndex(int val){m_CurrentBrushIndex = val; emit brushLibIndexChanged(val);}
     void updateStencil(QPixmap);
     void updateName(QListWidgetItem* item);
     void showStencil(bool);
@@ -209,8 +209,8 @@ protected:
     void resizeEvent(QResizeEvent *);
 private:
     bool m_usePressureWidth;
-    unsigned int mCurrentBrushIndex;
-    QString mDir;
+    unsigned int m_CurrentBrushIndex;
+    QString m_Dir;
     QPixmap m_StrokePreview;
     QPixmap m_StencilPreview;
     qreal m_minSize;
@@ -218,16 +218,16 @@ private:
     QPushButton* m_showStencilBtn;
     QPushButton* m_showStrokeBtn;
     QLabel* m_PreviewLabel;
-    QListWidget* mBrushIndex;
-    QToolButton* mToolBtn;
-    QMenu* mToolMenu;
-    QAction* mLoadStencilAct;
-    QAction* mLoadBrushAct;
-    QAction* mLoadBrushSetAct;
-    QAction* mSaveStencilAct;
-    QAction* mSaveBrushAct;
-    QAction* mSaveBrushSetAct;
-    QAction* mDeleteBrushAct;
+    QListWidget* m_BrushIndex;
+    QToolButton* m_ToolBtn;
+    QMenu* m_ToolMenu;
+    QAction* m_LoadStencilAct;
+    QAction* m_LoadBrushAct;
+    QAction* m_LoadBrushSetAct;
+    QAction* m_SaveStencilAct;
+    QAction* m_SaveBrushAct;
+    QAction* m_SaveBrushSetAct;
+    QAction* m_DeleteBrushAct;
 };
 
 class CustomBrushWidget : public QWidget
@@ -237,10 +237,10 @@ public:
     enum BrushShape{LINE_SHAPE, CIRCLE_SHAPE, SQUARE_SHAPE, CUSTOM};
     CustomBrushWidget();
     virtual ~CustomBrushWidget();
-    void SetDir(QString dir){this->mDir = dir;}
+    void SetDir(QString dir){this->m_Dir = dir;}
     void TempSave(QPixmap);
-    QString GetDir(){return this->mDir;}
-    QPixmap GetPixmap(){return mStencilPreview;}
+    QString GetDir(){return this->m_Dir;}
+    QPixmap GetPixmap(){return m_StencilPreview;}
     void setBrushSettings(Brush);
     QPixmap GeneratePixmap();
 protected:
@@ -283,56 +283,56 @@ public slots:
     void updateStencilTextureLE(QString);
 private:
 
-    QString mDir;
+    QString m_Dir;
 
     /*--Custom--*/
-    QLabel* mStencilLabel;
-    QPixmap mStencilPreview;
-    QPixmap mStencilTexture;
-    bool hasTexture;
+    QLabel* m_StencilLbl;
+    QPixmap m_StencilPreview;
+    QPixmap m_StencilTexture;
+    bool m_HasTexture;
 
     /*-Width-*/
-    QLabel* mWidthLabel;
-    QSlider* mWidthSlider;
-    QLineEdit* mWidthLE;
+    QLabel* m_WidthLbl;
+    QSlider* m_WidthSlider;
+    QLineEdit* m_WidthLE;
 
     /*-Height-*/
-    QLabel* mHeightLabel;
-    QSlider* mHeightSlider;
-    QLineEdit* mHeightLE;
+    QLabel* m_HeightLbl;
+    QSlider* m_HeightSlider;
+    QLineEdit* m_HeightLE;
 
     /*-Hardness-*/
-    QLabel* mHardnessLabel;
-    QSlider* mHardnessSlider;
-    QLineEdit* mHardnessLE;
+    QLabel* m_HardnessLbl;
+    QSlider* m_HardnessSlider;
+    QLineEdit* m_HardnessLE;
 
     /*-Rotate-*/
-    QLabel* mRotateLabel;
-    QSlider* mRotateSlider;
-    QLineEdit* mRotateLE;
+    QLabel* m_RotateLbl;
+    QSlider* m_RotateSlider;
+    QLineEdit* m_RotateLE;
 
     /*-SelectShape-*/
-    BrushShape mBrushShape;
-    QPushButton* mCircleButton;
-    QPushButton* mSquareButton;
-    QPushButton* mCustomButton;
+    BrushShape m_BrushShape;
+    QPushButton* m_CircleButton;
+    QPushButton* m_SquareButton;
+    QPushButton* m_CustomButton;
 
-    QLabel* mTextureLabel;
-    QLineEdit* mTextureFileLE;
-    QPushButton* mTextureBtn;
+    QLabel* m_TextureLbl;
+    QLineEdit* m_TextureFileLE;
+    QPushButton* m_TextureBtn;
 
     /*-Tool_Menu-*/
-    QToolButton* mToolBtn;
-    QMenu* mToolMenu;
-    QAction* mLoadStencilAct;
-    QAction* mLoadBrushAct;
-    QAction* mLoadBrushSetAct;
-    QAction* mSaveStencilAct;
-    QAction* mSaveBrushAct;
-    QAction* mSaveBrushSetAct;
-    QAction* mDeleteBrushAct;
+    QToolButton* m_ToolBtn;
+    QMenu* m_ToolMenu;
+    QAction* m_LoadStencilAct;
+    QAction* m_LoadBrushAct;
+    QAction* m_LoadBrushSetAct;
+    QAction* m_SaveStencilAct;
+    QAction* m_SaveBrushAct;
+    QAction* m_SaveBrushSetAct;
+    QAction* m_DeleteBrushAct;
     /*-File Stuff-*/
-    QTemporaryFile tempFile;
+    QTemporaryFile m_TempFile;
 };
 
 class BrushShapeWidget : public QLabel
@@ -382,34 +382,34 @@ signals:
     void greenChanged(int);
     void blueChanged(int);
 private:
-    ColorWheel* mColorWheel;
-    QTabWidget* mColorTabs;
+    ColorWheel* m_ColorWheel;
+    QTabWidget* m_ColorTabs;
 
     /*-RGB Parameters-*/
-    QLabel *mRLabel;
-    QSlider *mRSlider;
-    QSpinBox *mRSpinBox;
+    QLabel *m_RLabel;
+    QSlider *m_RSlider;
+    QSpinBox *m_RSpinBox;
 
-    QLabel *mGLabel;
-    QSlider *mGSlider;
-    QSpinBox *mGSpinBox;
+    QLabel *m_GLabel;
+    QSlider *m_GSlider;
+    QSpinBox *m_GSpinBox;
 
-    QLabel *mBLabel;
-    QSlider *mBSlider;
-    QSpinBox *mBSpinBox;
+    QLabel *m_BLabel;
+    QSlider *m_BSlider;
+    QSpinBox *m_BSpinBox;
 
     /*-HSV Parameters-*/
-    QLabel *mHLabel;
-    QSlider *mHSlider;
-    QSpinBox *mHSpinBox;
+    QLabel *m_HLabel;
+    QSlider *m_HSlider;
+    QSpinBox *m_HSpinBox;
 
-    QLabel *mSLabel;
-    QSlider *mSSlider;
-    QSpinBox *mSSpinBox;
+    QLabel *m_SLabel;
+    QSlider *m_SSlider;
+    QSpinBox *m_SSpinBox;
 
-    QLabel * mVLabel;
-    QSlider *mVSlider;
-    QSpinBox *mVSpinBox;
+    QLabel* m_VLabel;
+    QSlider *m_VSlider;
+    QSpinBox *m_VSpinBox;
 };
 
 
@@ -441,27 +441,27 @@ private:
     void processHSV(QColor col);
     QColor getColorFromPoint(QPoint);
     void processBaseMovePoint();
-    QPixmap mPixmap;
-    int mHue;
-    int mSaturation;
-    int mValue;
-    int actualRed;
-    int actualGreen;
-    int actualBlue;
-    int primaryRed;
-    int primaryBlue;
-    int primaryGreen;
-    int altRed;
-    int altGreen;
-    int altBlue;
-    QRect primaryColorRect, altColorRect;
-    QPoint preciseColor;
-    QPoint primaryBasePoint, altBasePoint, centerRectPoint;
-    QVector<QPoint>points;
-    QPainterPath colorRangeTri;
-    double rotationAngle;
-    bool mouseDown;
-    bool toggleAlt;
+    QPixmap m_Pixmap;
+    int m_Hue;
+    int m_Saturation;
+    int m_Value;
+    int m_ActualRed;
+    int m_ActualGreen;
+    int m_ActualBlue;
+    int m_PrimaryRed;
+    int m_PrimaryBlue;
+    int m_PrimaryGreen;
+    int m_AltRed;
+    int m_AltGreen;
+    int m_AltBlue;
+    QRect m_PrimaryColorRect, m_AltColorRect;
+    QPoint m_PreciseColor;
+    QPoint m_PrimaryBasePoint, m_AltBasePoint, m_CenterRectPoint;
+    QVector<QPoint>m_Points;
+    QPainterPath m_ColorRangeTri;
+    double m_RotationAngle;
+    bool m_MouseDown;
+    bool m_toggleAlt;
 };
 
 class TimelineDockWidget : public QDockWidget

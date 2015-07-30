@@ -3,160 +3,175 @@
 BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
 {
     /*-Constructor-*/
-    mTabWidget = new QTabWidget(this);
-    mGenBrushWidget = new GeneralBrushWidget;
-    mStencilWidget = new CustomBrushWidget;
+    m_TabWidget = new QTabWidget(this);
+    m_GenBrushWidget = new GeneralBrushWidget;
+    m_StencilWidget = new CustomBrushWidget;
 
-    mActualBrushList = QVector<Brush>();
-    mTempBrushList = QVector<Brush>();
+    m_ActualBrushList = QVector<Brush>();
+    m_TempBrushList = QVector<Brush>();
 
-    mCurrentBrushIndex = 0;
+    m_CurrentBrushIndex = 0;
     m_firstTimeRun = false;
 
     readSettings();
-    mBrushLib = mProjectPath + "/Brush/default.blib";
+    m_BrushLib = m_ProjectPath + "/Brush/default.blib";
 
-    if(!QFile(mBrushLib).exists()){
+    if(!QFile(m_BrushLib).exists()){
         //generate default
-        mActualBrushList.append(Brush());
-        mActualBrushList[0].setSWidth(10);
-        mActualBrushList[0].setSHeight(10);
-        mActualBrushList[0].setSpacing(1);
-        mActualBrushList[0].setHardness(100);
-        mActualBrushList[0].SetName("Default");
-        mStencilWidget->setBrushSettings(mActualBrushList.first());
+        m_ActualBrushList.append(Brush());
+        m_ActualBrushList[0].setSWidth(10);
+        m_ActualBrushList[0].setSHeight(10);
+        m_ActualBrushList[0].setSpacing(1);
+        m_ActualBrushList[0].setHardness(100);
+        m_ActualBrushList[0].SetName("Default");
+        m_StencilWidget->setBrushSettings(m_ActualBrushList.first());
         QPixmap sten1;
         sten1.load(":/icon/resource/default.png");
-        mActualBrushList[0].SetStencil(sten1);
-        mActualBrushList.append(Brush());
-        mActualBrushList[1].setSWidth(10);
-        mActualBrushList[1].setSHeight(10);
-        mActualBrushList[1].setSpacing(1);
-        mActualBrushList[1].setHardness(0);
-        mActualBrushList[1].SetName("Airbrush");
+        m_ActualBrushList[0].SetStencil(sten1);
+        m_ActualBrushList.append(Brush());
+        m_ActualBrushList[1].setSWidth(10);
+        m_ActualBrushList[1].setSHeight(10);
+        m_ActualBrushList[1].setSpacing(1);
+        m_ActualBrushList[1].setHardness(0);
+        m_ActualBrushList[1].SetName("Airbrush");
         sten1.load(":/icon/resource/airStencil.png");
-        mActualBrushList[1].SetStencil(sten1);
-        mTempBrushList = mActualBrushList;
-        mGenBrushWidget->addBrush(mActualBrushList.at(0));
-        mGenBrushWidget->addBrush(mActualBrushList.at(1));
-        mGenBrushWidget->setStencilPixmap(mActualBrushList.first().getStencil());
-        mStencilWidget->updateStencilWidth(mTempBrushList.at(0).getSWidth());
-        mStencilWidget->updateStencilHeight(mTempBrushList.at(0).getSHeight());
-        saveBrushLib(mBrushLib);
+        m_ActualBrushList[1].SetStencil(sten1);
+        m_TempBrushList = m_ActualBrushList;
+        m_GenBrushWidget->addBrush(m_ActualBrushList.at(0));
+        m_GenBrushWidget->addBrush(m_ActualBrushList.at(1));
+        m_GenBrushWidget->setStencilPixmap(m_ActualBrushList.first().getStencil());
+        m_StencilWidget->updateStencilWidth(m_TempBrushList.at(0).getSWidth());
+        m_StencilWidget->updateStencilHeight(m_TempBrushList.at(0).getSHeight());
+        saveBrushLib(m_BrushLib);
     }else{
         //use loaded data
-        mActualBrushList = loadBrushLib(mBrushLib);
-        for(int i = 0; i < mActualBrushList.size(); i++){
-            mGenBrushWidget->addBrush(mActualBrushList.at(i));
+        m_ActualBrushList = loadBrushLib(m_BrushLib);
+        for(int i = 0; i < m_ActualBrushList.size(); i++){
+            m_GenBrushWidget->addBrush(m_ActualBrushList.at(i));
         }
-        mTempBrushList = mActualBrushList;
+        m_TempBrushList = m_ActualBrushList;
     }
 
-    mDrawModeComboBox = new QComboBox(this);
-    mDrawModeComboBox->addItem("Normal");
-    mDrawModeComboBox->addItem("Multiply");
-    mDrawModeComboBox->addItem("Color");
-    mSizeLabel = new QLabel("Size:", this);
-    mSizeSlider = new QSlider(Qt::Horizontal, this);
-    mSizeSlider->setRange(0, 500);
-    mSizeSlider->setValue(5);
-    mSizeSlider->setMinimumWidth(150);
-    mSizeLE = new QSpinBox(this);
-    mSizeLE->setRange(0, 500);
-    mSizeLE->setFixedWidth(48);
-    mSizeLE->setValue(5);
+    m_DrawModeCmbx = new QComboBox(this);
+    m_DrawModeCmbx->addItem("Normal");
+    m_DrawModeCmbx->insertSeparator(1);
+    m_DrawModeCmbx->addItem("Plus");
+    m_DrawModeCmbx->addItem("Multiply");
+    m_DrawModeCmbx->insertSeparator(4);
+    m_DrawModeCmbx->addItem("Screen");
+    m_DrawModeCmbx->addItem("Overlay");
+    m_DrawModeCmbx->insertSeparator(7);
+    m_DrawModeCmbx->addItem("Darken");
+    m_DrawModeCmbx->addItem("Lighten");
+    m_DrawModeCmbx->addItem("Color Dodge");
+    m_DrawModeCmbx->addItem("Color Burn");
+    m_DrawModeCmbx->addItem("Hard Light");
+    m_DrawModeCmbx->addItem("Soft Light");
+    m_DrawModeCmbx->insertSeparator(14);
+    m_DrawModeCmbx->addItem("Difference");
+    m_DrawModeCmbx->addItem("Exclusion");
+
+    m_SizeLabel = new QLabel("Size:", this);
+    m_SizeSlider = new QSlider(Qt::Horizontal, this);
+    m_SizeSlider->setRange(0, 500);
+    m_SizeSlider->setValue(5);
+    m_SizeSlider->setMinimumWidth(150);
+    m_SizeLE = new QSpinBox(this);
+    m_SizeLE->setRange(0, 500);
+    m_SizeLE->setFixedWidth(48);
+    m_SizeLE->setValue(5);
     QHBoxLayout* sizeLayout = new QHBoxLayout();
-    sizeLayout->addWidget(mSizeLabel);
-    sizeLayout->addWidget(mSizeSlider);
-    sizeLayout->addWidget(mSizeLE);
+    sizeLayout->addWidget(m_SizeLabel);
+    sizeLayout->addWidget(m_SizeSlider);
+    sizeLayout->addWidget(m_SizeLE);
 
-    mOpacityLabel = new QLabel("Opacity:", this);
-    mOpacitySlider = new QSlider(Qt::Horizontal, this);
-    mOpacitySlider->setRange(0, 100);
-    mOpacitySlider->setValue(100);
-    mOpacityLE = new QSpinBox(this);
-    mOpacityLE->setRange(0, 100);
-    mOpacityLE->setFixedWidth(48);
-    mOpacityLE->setValue(100);
+    m_OpacityLabel = new QLabel("Opacity:", this);
+    m_OpacitySlider = new QSlider(Qt::Horizontal, this);
+    m_OpacitySlider->setRange(0, 100);
+    m_OpacitySlider->setValue(100);
+    m_OpacityLE = new QSpinBox(this);
+    m_OpacityLE->setRange(0, 100);
+    m_OpacityLE->setFixedWidth(48);
+    m_OpacityLE->setValue(100);
     QHBoxLayout* opacityLayout = new QHBoxLayout;
-    opacityLayout->addWidget(mOpacityLabel);
-    opacityLayout->addWidget(mOpacitySlider);
-    opacityLayout->addWidget(mOpacityLE);
+    opacityLayout->addWidget(m_OpacityLabel);
+    opacityLayout->addWidget(m_OpacitySlider);
+    opacityLayout->addWidget(m_OpacityLE);
 
-    mSpacingLabel = new QLabel("Spacing:", this);
-    mSpacingSlider = new QSlider(Qt::Horizontal, this);
-    mSpacingSlider->setRange(0, 3);
-    mSpacingSlider->setPageStep(0.1);
-    mSpacingSlider->setValue(1);
-    mSpacingSlider->setMinimumWidth(150);
-    mSpacingLE = new QSpinBox(this);
-    mSpacingLE->setFixedWidth(48);
-    mSpacingLE->setValue(1);
+    m_SpacingLabel = new QLabel("Spacing:", this);
+    m_SpacingSlider = new QSlider(Qt::Horizontal, this);
+    m_SpacingSlider->setRange(0, 3);
+    m_SpacingSlider->setPageStep(0.1);
+    m_SpacingSlider->setValue(1);
+    m_SpacingSlider->setMinimumWidth(150);
+    m_SpacingLE = new QSpinBox(this);
+    m_SpacingLE->setFixedWidth(48);
+    m_SpacingLE->setValue(1);
     QHBoxLayout* spacingLayout = new QHBoxLayout;
-    spacingLayout->addWidget(mSpacingLabel);
-    spacingLayout->addWidget(mSpacingSlider);
-    spacingLayout->addWidget(mSpacingLE);
+    spacingLayout->addWidget(m_SpacingLabel);
+    spacingLayout->addWidget(m_SpacingSlider);
+    spacingLayout->addWidget(m_SpacingLE);
 
     QVBoxLayout* generalParam = new QVBoxLayout;
-    generalParam->addWidget(mDrawModeComboBox);
+    generalParam->addWidget(m_DrawModeCmbx);
     generalParam->addLayout(sizeLayout);
     generalParam->addLayout(opacityLayout);
     generalParam->addLayout(spacingLayout);
 
     /*-Transfer-*/
-    mTransferSizeToggle = new QCheckBox("Size:", this);
-    mTransferSizeToggle->setChecked(false);
-    mTransferSizeSlider = new QSlider(Qt::Horizontal, this);
-    mTransferSizeSlider->setRange(0, 500);
-    mTransferSizeSlider->setValue(0);
-    mTransferSizeSlider->setEnabled(false);
-    mTransferSizeLE = new QSpinBox(this);
-    mTransferSizeLE->setFixedWidth(48);
-    mTransferSizeLE->setRange(0, 500);
-    mTransferSizeLE->setValue(0);
-    mTransferSizeLE->setEnabled(false);
+    m_TransferSizeToggle = new QCheckBox("Size:", this);
+    m_TransferSizeToggle->setChecked(false);
+    m_TransferSizeSlider = new QSlider(Qt::Horizontal, this);
+    m_TransferSizeSlider->setRange(0, 500);
+    m_TransferSizeSlider->setValue(0);
+    m_TransferSizeSlider->setEnabled(false);
+    m_TransferSizeLE = new QSpinBox(this);
+    m_TransferSizeLE->setFixedWidth(48);
+    m_TransferSizeLE->setRange(0, 500);
+    m_TransferSizeLE->setValue(0);
+    m_TransferSizeLE->setEnabled(false);
     QHBoxLayout* transferSizeLayout = new QHBoxLayout;
-    transferSizeLayout->addWidget(mTransferSizeToggle);
-    transferSizeLayout->addWidget(mTransferSizeSlider);
-    transferSizeLayout->addWidget(mTransferSizeLE);
+    transferSizeLayout->addWidget(m_TransferSizeToggle);
+    transferSizeLayout->addWidget(m_TransferSizeSlider);
+    transferSizeLayout->addWidget(m_TransferSizeLE);
 
-    mTransferOpacityToggle = new QCheckBox("Opacity:", this);
-    mTransferOpacityToggle->setChecked(false);
-    mTransferOpacitySlider = new QSlider(Qt::Horizontal, this);
-    mTransferOpacitySlider->setRange(0, 255);
-    mTransferOpacitySlider->setValue(0);
-    mTransferOpacitySlider->setEnabled(false);
-    mTransferOpacityLE = new QSpinBox(this);
-    mTransferOpacityLE->setRange(0, 100);
-    mTransferOpacityLE->setFixedWidth(48);
-    mTransferOpacityLE->setValue(0);
-    mTransferOpacityLE->setEnabled(false);
+    m_TransferOpacityToggle = new QCheckBox("Opacity:", this);
+    m_TransferOpacityToggle->setChecked(false);
+    m_TransferOpacitySlider = new QSlider(Qt::Horizontal, this);
+    m_TransferOpacitySlider->setRange(0, 255);
+    m_TransferOpacitySlider->setValue(0);
+    m_TransferOpacitySlider->setEnabled(false);
+    m_TransferOpacityLE = new QSpinBox(this);
+    m_TransferOpacityLE->setRange(0, 100);
+    m_TransferOpacityLE->setFixedWidth(48);
+    m_TransferOpacityLE->setValue(0);
+    m_TransferOpacityLE->setEnabled(false);
     QHBoxLayout* transferOpacityLayout = new QHBoxLayout;
-    transferOpacityLayout->addWidget(mTransferOpacityToggle);
-    transferOpacityLayout->addWidget(mTransferOpacitySlider);
-    transferOpacityLayout->addWidget(mTransferOpacityLE);
+    transferOpacityLayout->addWidget(m_TransferOpacityToggle);
+    transferOpacityLayout->addWidget(m_TransferOpacitySlider);
+    transferOpacityLayout->addWidget(m_TransferOpacityLE);
 
-    mTransferOpacityLE->setVisible(false);
-    mTransferOpacitySlider->setVisible(false);
-    mTransferOpacityToggle->setVisible(false);
-    mTransferSizeLE->setVisible(false);
-    mTransferSizeSlider->setVisible(false);
-    mTransferSizeToggle->setVisible(false);
+    m_TransferOpacityLE->setVisible(false);
+    m_TransferOpacitySlider->setVisible(false);
+    m_TransferOpacityToggle->setVisible(false);
+    m_TransferSizeLE->setVisible(false);
+    m_TransferSizeSlider->setVisible(false);
+    m_TransferSizeToggle->setVisible(false);
 
     QVBoxLayout* transferParam = new QVBoxLayout;
     transferParam->addLayout(transferSizeLayout);
     transferParam->addLayout(transferOpacityLayout);
-    transGrpBox = new QGroupBox("Transfer" ,this);
-    transGrpBox->setCheckable(true);
-    transGrpBox->setChecked(false);
-    transGrpBox->setLayout(transferParam);
+    m_transGrpBox = new QGroupBox("Transfer" ,this);
+    m_transGrpBox->setCheckable(true);
+    m_transGrpBox->setChecked(false);
+    m_transGrpBox->setLayout(transferParam);
 
-    generalParam->addWidget(transGrpBox);
+    generalParam->addWidget(m_transGrpBox);
 
     /*-Brush_General-*/
 
     QVBoxLayout* GeneralBrushLayout = new QVBoxLayout;
-    GeneralBrushLayout->addWidget(mGenBrushWidget);
+    GeneralBrushLayout->addWidget(m_GenBrushWidget);
     GeneralBrushLayout->addLayout(generalParam);
 
     QWidget* GeneralBrushTab = new QWidget(this);
@@ -165,19 +180,19 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
     /*-Brush_Advanced-*/
 
     QVBoxLayout* AdvancedBrushLayout = new QVBoxLayout;
-    AdvancedBrushLayout->addWidget(mStencilWidget);
+    AdvancedBrushLayout->addWidget(m_StencilWidget);
 
     QWidget* AdvancedBrushTab = new QWidget(this);
     AdvancedBrushTab->setLayout(AdvancedBrushLayout);
 
-    mTabWidget->addTab(GeneralBrushTab, "General");
-    mTabWidget->addTab(AdvancedBrushTab, "Custom");
+    m_TabWidget->addTab(GeneralBrushTab, "General");
+    m_TabWidget->addTab(AdvancedBrushTab, "Custom");
 
-    mTabWidget->setTabPosition(QTabWidget::North);
-    mTabWidget->setTabShape(QTabWidget::Rounded);
+    m_TabWidget->setTabPosition(QTabWidget::North);
+    m_TabWidget->setTabShape(QTabWidget::Rounded);
 
     QVBoxLayout* displayLayout = new QVBoxLayout;
-    displayLayout->addWidget(mTabWidget);
+    displayLayout->addWidget(m_TabWidget);
     displayLayout->addSpacerItem(new QSpacerItem(292, 10, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     QWidget* displayWidget = new QWidget(this);
@@ -185,167 +200,167 @@ BrushDockWidget::BrushDockWidget(QWidget *parent) : QDockWidget(parent)
 
     setWidget(displayWidget);
 
-    connect(mSizeSlider, SIGNAL(valueChanged(int)), SLOT(updateSize(int)));
-    connect(mSizeLE, SIGNAL(valueChanged(QString)), SLOT(updateSize(QString)));
-    connect(mOpacitySlider, SIGNAL(valueChanged(int)), SLOT(updateOpacity(int)));
-    connect(mOpacityLE, SIGNAL(valueChanged(QString)), SLOT(updateOpacity(QString)));
-    connect(mSpacingSlider, SIGNAL(valueChanged(int)), SLOT(updateSpacing(int)));
-    connect(mSpacingLE, SIGNAL(valueChanged(QString)), SLOT(updateSpacing(QString)));
-    connect(mTransferSizeToggle, SIGNAL(toggled(bool)), SLOT(toggleTransferSize(bool)));
-    connect(mTransferSizeSlider, SIGNAL(valueChanged(int)), SLOT(updateTransferSize(int)));
-    connect(mTransferSizeLE, SIGNAL(valueChanged(QString)), SLOT(updateTransferSize(QString)));
-    connect(mTransferOpacityToggle, SIGNAL(toggled(bool)), SLOT(toggleTransferOpacity(bool)));
-    connect(mTransferOpacitySlider, SIGNAL(valueChanged(int)), SLOT(updateTransferOpacity(int)));
-    connect(mTransferOpacityLE, SIGNAL(valueChanged(QString)), SLOT(updateTransferOpacity(QString)));
-    connect(mStencilWidget, SIGNAL(stencilChanged(QPixmap)), SLOT(updateStencil(QPixmap)));
-    connect(mStencilWidget, SIGNAL(stencilChanged(QPixmap)), mGenBrushWidget, SLOT(updateStencil(QPixmap)));
-    connect(mStencilWidget, SIGNAL(stencilPathChanged(QString)), SLOT(updateStencilPath(QString)));
-    connect(transGrpBox, SIGNAL(toggled(bool)), SLOT(toggleTransferVisibility(bool)));
-    connect(mGenBrushWidget, SIGNAL(loadStencilTriggered()), SLOT(loadStencilAct()));
-    connect(mGenBrushWidget, SIGNAL(loadBrushTriggered()), SLOT(loadBrushAct()));
-    connect(mGenBrushWidget, SIGNAL(loadBrushSetTriggered()), SLOT(loadBrushSetAct()));
-    connect(mGenBrushWidget, SIGNAL(saveStencilTriggered()), SLOT(saveStencilAct()));
-    connect(mGenBrushWidget, SIGNAL(saveBrushTriggered()), SLOT(saveBrushAct()));
-    connect(mGenBrushWidget, SIGNAL(saveBrushSetTriggered()), SLOT(saveBrushSetAct()));
-    connect(mStencilWidget, SIGNAL(loadStencilTriggered()), SLOT(loadStencilAct()));
-    connect(mStencilWidget, SIGNAL(loadBrushTriggered()), SLOT(loadBrushAct()));
-    connect(mStencilWidget, SIGNAL(loadBrushSetTriggered()), SLOT(loadBrushSetAct()));
-    connect(mStencilWidget, SIGNAL(saveStencilTriggered()), SLOT(saveStencilAct()));
-    connect(mStencilWidget, SIGNAL(saveBrushTriggered()), SLOT(saveBrushAct()));
-    connect(mStencilWidget, SIGNAL(saveBrushSetTriggered()), SLOT(saveBrushSetAct()));
-    connect(mStencilWidget, SIGNAL(StencilWidthChanged(int)), SLOT(updateStencilWidth(int)));
-    connect(mStencilWidget, SIGNAL(stencilHeightChanged(int)), SLOT(updateStencilHeight(int)));
-    connect(mStencilWidget, SIGNAL(brushHardnessChanged(int)), SLOT(updateStencilHardness(int)));
-    connect(mStencilWidget, SIGNAL(rotateChanged(int)), SLOT(updateStencilRotate(int)));
-    connect(mGenBrushWidget, SIGNAL(brushLibIndexChanged(int)), SLOT(setCurrentIndex(int)));
-    connect(mGenBrushWidget, SIGNAL(brushNameChanged(QString)), SLOT(updateBrushName(QString)));
+    connect(m_SizeSlider, SIGNAL(valueChanged(int)), SLOT(updateSize(int)));
+    connect(m_SizeLE, SIGNAL(valueChanged(QString)), SLOT(updateSize(QString)));
+    connect(m_OpacitySlider, SIGNAL(valueChanged(int)), SLOT(updateOpacity(int)));
+    connect(m_OpacityLE, SIGNAL(valueChanged(QString)), SLOT(updateOpacity(QString)));
+    connect(m_SpacingSlider, SIGNAL(valueChanged(int)), SLOT(updateSpacing(int)));
+    connect(m_SpacingLE, SIGNAL(valueChanged(QString)), SLOT(updateSpacing(QString)));
+    connect(m_TransferSizeToggle, SIGNAL(toggled(bool)), SLOT(toggleTransferSize(bool)));
+    connect(m_TransferSizeSlider, SIGNAL(valueChanged(int)), SLOT(updateTransferSize(int)));
+    connect(m_TransferSizeLE, SIGNAL(valueChanged(QString)), SLOT(updateTransferSize(QString)));
+    connect(m_TransferOpacityToggle, SIGNAL(toggled(bool)), SLOT(toggleTransferOpacity(bool)));
+    connect(m_TransferOpacitySlider, SIGNAL(valueChanged(int)), SLOT(updateTransferOpacity(int)));
+    connect(m_TransferOpacityLE, SIGNAL(valueChanged(QString)), SLOT(updateTransferOpacity(QString)));
+    connect(m_StencilWidget, SIGNAL(stencilChanged(QPixmap)), SLOT(updateStencil(QPixmap)));
+    connect(m_StencilWidget, SIGNAL(stencilChanged(QPixmap)), m_GenBrushWidget, SLOT(updateStencil(QPixmap)));
+    connect(m_StencilWidget, SIGNAL(stencilPathChanged(QString)), SLOT(updateStencilPath(QString)));
+    connect(m_transGrpBox, SIGNAL(toggled(bool)), SLOT(toggleTransferVisibility(bool)));
+    connect(m_GenBrushWidget, SIGNAL(loadStencilTriggered()), SLOT(loadStencilAct()));
+    connect(m_GenBrushWidget, SIGNAL(loadBrushTriggered()), SLOT(loadBrushAct()));
+    connect(m_GenBrushWidget, SIGNAL(loadBrushSetTriggered()), SLOT(loadBrushSetAct()));
+    connect(m_GenBrushWidget, SIGNAL(saveStencilTriggered()), SLOT(saveStencilAct()));
+    connect(m_GenBrushWidget, SIGNAL(saveBrushTriggered()), SLOT(saveBrushAct()));
+    connect(m_GenBrushWidget, SIGNAL(saveBrushSetTriggered()), SLOT(saveBrushSetAct()));
+    connect(m_StencilWidget, SIGNAL(loadStencilTriggered()), SLOT(loadStencilAct()));
+    connect(m_StencilWidget, SIGNAL(loadBrushTriggered()), SLOT(loadBrushAct()));
+    connect(m_StencilWidget, SIGNAL(loadBrushSetTriggered()), SLOT(loadBrushSetAct()));
+    connect(m_StencilWidget, SIGNAL(saveStencilTriggered()), SLOT(saveStencilAct()));
+    connect(m_StencilWidget, SIGNAL(saveBrushTriggered()), SLOT(saveBrushAct()));
+    connect(m_StencilWidget, SIGNAL(saveBrushSetTriggered()), SLOT(saveBrushSetAct()));
+    connect(m_StencilWidget, SIGNAL(StencilWidthChanged(int)), SLOT(updateStencilWidth(int)));
+    connect(m_StencilWidget, SIGNAL(stencilHeightChanged(int)), SLOT(updateStencilHeight(int)));
+    connect(m_StencilWidget, SIGNAL(brushHardnessChanged(int)), SLOT(updateStencilHardness(int)));
+    connect(m_StencilWidget, SIGNAL(rotateChanged(int)), SLOT(updateStencilRotate(int)));
+    connect(m_GenBrushWidget, SIGNAL(brushLibIndexChanged(int)), SLOT(setCurrentIndex(int)));
+    connect(m_GenBrushWidget, SIGNAL(brushNameChanged(QString)), SLOT(updateBrushName(QString)));
     update();
 }
 
 void BrushDockWidget::setDirectory(QString dir){
-    mProjectPath = dir;
-    mGenBrushWidget->setDir(dir);
+    m_ProjectPath = dir;
+    m_GenBrushWidget->setDir(dir);
 }
 
 void BrushDockWidget::updateSize(int val)
 {
-    mSizeLE->setValue(val);
+    m_SizeLE->setValue(val);
     emit brushSizeChanged(val);
 }
 
 void BrushDockWidget::updateSize(QString val)
 {
-    mSizeSlider->setValue(val.toInt());
+    m_SizeSlider->setValue(val.toInt());
     emit brushSizeChanged(val.toInt());
 }
 
 void BrushDockWidget::updateOpacity(int val)
 {
-    mOpacityLE->setValue(val);
+    m_OpacityLE->setValue(val);
     emit brushOpacityChanged(val);
 }
 
 void BrushDockWidget::updateOpacity(QString val)
 {
-    mOpacitySlider->setValue(val.toInt());
+    m_OpacitySlider->setValue(val.toInt());
     emit brushOpacityChanged(val.toInt());
 }
 
 void BrushDockWidget::updateSpacing(int val){
-    mSpacingLE->setValue(val);
+    m_SpacingLE->setValue(val);
     emit brushSpacingChanged(val);
 }
 
 void BrushDockWidget::updateSpacing(QString val){
-    mSpacingSlider->setValue(val.toInt());
+    m_SpacingSlider->setValue(val.toInt());
     emit brushSpacingChanged(val.toInt());
 }
 
 void BrushDockWidget::updateTransferSize(int val)
 {
-    mTransferSizeLE->setValue(val);
-    mGenBrushWidget->generateStrokePreview();
+    m_TransferSizeLE->setValue(val);
+    m_GenBrushWidget->generateStrokePreview();
     emit brushTransferSizeChanged(val);
 }
 
 void BrushDockWidget::updateTransferSize(QString val)
 {
-    mTransferSizeSlider->setValue(val.toInt());
+    m_TransferSizeSlider->setValue(val.toInt());
     emit brushTransferSizeChanged(val.toInt());
 }
 
 void BrushDockWidget::updateTransferOpacity(int val)
 {
-    mTransferOpacityLE->setValue(val);
+    m_TransferOpacityLE->setValue(val);
     emit brushTransferOpacityChanged(val);
 }
 
 void BrushDockWidget::updateTransferOpacity(QString val)
 {
-    mTransferOpacitySlider->setValue(val.toInt());
+    m_TransferOpacitySlider->setValue(val.toInt());
     emit brushTransferOpacityChanged(val.toInt());
 }
 
 void BrushDockWidget::toggleTransferSize(bool val)
 {
-    mTransferSizeSlider->setEnabled(val);
-    mTransferSizeLE->setEnabled(val);
-    mGenBrushWidget->activateUsePressureWidth(val);
+    m_TransferSizeSlider->setEnabled(val);
+    m_TransferSizeLE->setEnabled(val);
+    m_GenBrushWidget->activateUsePressureWidth(val);
     if(!val){
         emit brushTransferSizeChanged(0);
     }else{
-        emit brushTransferSizeChanged(mTransferSizeLE->value());
+        emit brushTransferSizeChanged(m_TransferSizeLE->value());
     }
 }
 
 void BrushDockWidget::toggleTransferOpacity(bool val)
 {
-    mTransferOpacitySlider->setEnabled(val);
-    mTransferOpacityLE->setEnabled(val);
+    m_TransferOpacitySlider->setEnabled(val);
+    m_TransferOpacityLE->setEnabled(val);
     if(val == false){
         emit brushTransferOpacityChanged(0);
     }else{
-        emit brushTransferOpacityChanged(mTransferSizeSlider->value());
+        emit brushTransferOpacityChanged(m_TransferSizeSlider->value());
     }
 }
 
 void BrushDockWidget::toggleTransferVisibility(bool val){
     if(val){
-        mTransferOpacityLE->setVisible(true);
-        mTransferOpacitySlider->setVisible(true);
-        mTransferOpacityToggle->setVisible(true);
-        mTransferSizeLE->setVisible(true);
-        mTransferSizeSlider->setVisible(true);
-        mTransferSizeToggle->setVisible(true);
+        m_TransferOpacityLE->setVisible(true);
+        m_TransferOpacitySlider->setVisible(true);
+        m_TransferOpacityToggle->setVisible(true);
+        m_TransferSizeLE->setVisible(true);
+        m_TransferSizeSlider->setVisible(true);
+        m_TransferSizeToggle->setVisible(true);
     }else{
-        mTransferOpacityLE->setVisible(false);
-        mTransferOpacitySlider->setVisible(false);
-        mTransferOpacityToggle->setVisible(false);
-        mTransferSizeLE->setVisible(false);
-        mTransferSizeSlider->setVisible(false);
-        mTransferSizeToggle->setVisible(false);
+        m_TransferOpacityLE->setVisible(false);
+        m_TransferOpacitySlider->setVisible(false);
+        m_TransferOpacityToggle->setVisible(false);
+        m_TransferSizeLE->setVisible(false);
+        m_TransferSizeSlider->setVisible(false);
+        m_TransferSizeToggle->setVisible(false);
     }
 }
 
 void BrushDockWidget::updateStencilWidth(int val){
-    mTempBrushList[mCurrentBrushIndex].setSWidth(val);
+    m_TempBrushList[m_CurrentBrushIndex].setSWidth(val);
 }
 
 void BrushDockWidget::updateStencilHeight(int val){
-    mTempBrushList[mCurrentBrushIndex].setSHeight(val);
+    m_TempBrushList[m_CurrentBrushIndex].setSHeight(val);
 }
 
 void BrushDockWidget::updateStencilHardness(int val){
-    mTempBrushList[mCurrentBrushIndex].setHardness(val);
+    m_TempBrushList[m_CurrentBrushIndex].setHardness(val);
 }
 
 void BrushDockWidget::updateStencilRotate(int val){
-    mTempBrushList[mCurrentBrushIndex].SetRotate(val);
+    m_TempBrushList[m_CurrentBrushIndex].SetRotate(val);
 }
 
 void BrushDockWidget::updateStencil(QPixmap pixmap){
-    mTempBrushList[mCurrentBrushIndex].SetStencil(pixmap);
-    mGenBrushWidget->setStencilPixmap(pixmap);
+    m_TempBrushList[m_CurrentBrushIndex].SetStencil(pixmap);
+    m_GenBrushWidget->setStencilPixmap(pixmap);
     emit brushStencilChanged(pixmap);
 }
 
@@ -354,23 +369,23 @@ void BrushDockWidget::updateStencilPath(QString filePath){
 }
 
 void BrushDockWidget::updateBrushName(QString name){
-    mActualBrushList[mCurrentBrushIndex].SetName(name);
-    mTempBrushList[mCurrentBrushIndex].SetName(name);
+    m_ActualBrushList[m_CurrentBrushIndex].SetName(name);
+    m_TempBrushList[m_CurrentBrushIndex].SetName(name);
 }
 
 void BrushDockWidget::setCurrentIndex(int val){
-    mCurrentBrushIndex = val;
-    mStencilWidget->updateStencilWidth(mActualBrushList.at(mCurrentBrushIndex).getSWidth());
-    mStencilWidget->updateStencilHeight(mActualBrushList.at(mCurrentBrushIndex).getSHeight());
-    mStencilWidget->updateBrushHardness(mActualBrushList.at(mCurrentBrushIndex).getHardness());
-    mStencilWidget->updateStencilRotate(mActualBrushList.at(mCurrentBrushIndex).getRotate());
-    mStencilWidget->updateStencil(mActualBrushList.at(mCurrentBrushIndex).getStencil());
-    mGenBrushWidget->setStencilPixmap(mActualBrushList.at(mCurrentBrushIndex).getStencil());
-    emit stencilWidthChanged(mActualBrushList.at(mCurrentBrushIndex).getSWidth());
-    emit stencilHeightChanged(mActualBrushList.at(mCurrentBrushIndex).getSHeight());
-    emit brushHardnessChanged(mActualBrushList.at(mCurrentBrushIndex).getHardness());
-    emit stencilRotateChanged(mActualBrushList.at(mCurrentBrushIndex).getRotate());
-    emit brushStencilChanged(mActualBrushList.at(mCurrentBrushIndex).getStencil());
+    m_CurrentBrushIndex = val;
+    m_StencilWidget->updateStencilWidth(m_ActualBrushList.at(m_CurrentBrushIndex).getSWidth());
+    m_StencilWidget->updateStencilHeight(m_ActualBrushList.at(m_CurrentBrushIndex).getSHeight());
+    m_StencilWidget->updateBrushHardness(m_ActualBrushList.at(m_CurrentBrushIndex).getHardness());
+    m_StencilWidget->updateStencilRotate(m_ActualBrushList.at(m_CurrentBrushIndex).getRotate());
+    m_StencilWidget->updateStencil(m_ActualBrushList.at(m_CurrentBrushIndex).getStencil());
+    m_GenBrushWidget->setStencilPixmap(m_ActualBrushList.at(m_CurrentBrushIndex).getStencil());
+    emit stencilWidthChanged(m_ActualBrushList.at(m_CurrentBrushIndex).getSWidth());
+    emit stencilHeightChanged(m_ActualBrushList.at(m_CurrentBrushIndex).getSHeight());
+    emit brushHardnessChanged(m_ActualBrushList.at(m_CurrentBrushIndex).getHardness());
+    emit stencilRotateChanged(m_ActualBrushList.at(m_CurrentBrushIndex).getRotate());
+    emit brushStencilChanged(m_ActualBrushList.at(m_CurrentBrushIndex).getStencil());
 }
 
 void BrushDockWidget::loadStencilAct(){
@@ -378,20 +393,20 @@ void BrushDockWidget::loadStencilAct(){
     QString filePath = QFileDialog::getOpenFileName(this, "Open Stencil", QDir::currentPath());
     QPixmap pixmap;
     pixmap.load(filePath);
-    mStencilWidget->updateStencil(pixmap);
+    m_StencilWidget->updateStencil(pixmap);
 }
 
 void BrushDockWidget::loadBrushAct(){
-    QString filePath = QFileDialog::getOpenFileName(this, "Open Brush", mProjectPath, ".brsh");
+    QString filePath = QFileDialog::getOpenFileName(this, "Open Brush", m_ProjectPath, ".brsh");
     Brush temp = loadBrush(filePath);
-    mTempBrushList.append(temp);
-    mActualBrushList.append(temp);
-    mGenBrushWidget->addBrush(temp);
+    m_TempBrushList.append(temp);
+    m_ActualBrushList.append(temp);
+    m_GenBrushWidget->addBrush(temp);
     qDebug()<<"Loading Brush" << endl;
 }
 
 void BrushDockWidget::loadBrushSetAct(){
-    QString filePath = QFileDialog::getOpenFileName(this, "Open Brush Library", mProjectPath, "*.blib");
+    QString filePath = QFileDialog::getOpenFileName(this, "Open Brush Library", m_ProjectPath, "*.blib");
 
     QMessageBox msgBox;
     msgBox.setText("Would you like to Load a new brush set or add to existing?");
@@ -400,12 +415,12 @@ void BrushDockWidget::loadBrushSetAct(){
     msgBox.setButtonText(QMessageBox::Cancel, "Add to existing set");
     switch(msgBox.exec()){
     case QMessageBox::Ok:                       //Replaces Existing
-       mActualBrushList = loadBrushLib(filePath);
-       mBrushLib = filePath;
+       m_ActualBrushList = loadBrushLib(filePath);
+       m_BrushLib = filePath;
         break;
     case QMessageBox::Cancel:                   //Appends to brush set
         QVector<Brush> temp = loadBrushLib(filePath);
-        mActualBrushList = mActualBrushList + temp;
+        m_ActualBrushList = m_ActualBrushList + temp;
         break;
     }
 
@@ -414,7 +429,7 @@ void BrushDockWidget::loadBrushSetAct(){
 
 void BrushDockWidget::saveStencilAct(){
     QString filePath = QFileDialog::getSaveFileName(this, "Save Stencil",QDir::currentPath());
-    QPixmap pixmap = mStencilWidget->GetPixmap();
+    QPixmap pixmap = m_StencilWidget->GetPixmap();
     pixmap.save(filePath);
 
     qDebug() << "Saving Stencil" << endl;
@@ -428,14 +443,14 @@ void BrushDockWidget::saveBrushAct(){
     msgBox.setButtonText(QMessageBox::Cancel, "Save to library and external");
     switch(msgBox.exec()){
     case QMessageBox::Ok:
-        mActualBrushList.push_back(mTempBrushList.at(mCurrentBrushIndex));
-        mGenBrushWidget->addBrush(mTempBrushList.at(mCurrentBrushIndex));
-        mTempBrushList = mActualBrushList;
+        m_ActualBrushList.push_back(m_TempBrushList.at(m_CurrentBrushIndex));
+        m_GenBrushWidget->addBrush(m_TempBrushList.at(m_CurrentBrushIndex));
+        m_TempBrushList = m_ActualBrushList;
         break;
     case QMessageBox::Cancel:
-        QString filePath = QFileDialog::getSaveFileName(this, "Save Brush", mProjectPath, ".brsh");
+        QString filePath = QFileDialog::getSaveFileName(this, "Save Brush", m_ProjectPath, ".brsh");
         int encrypt = 5025;
-        Brush ret = mTempBrushList[mCurrentBrushIndex];
+        Brush ret = m_TempBrushList[m_CurrentBrushIndex];
         QFile file(filePath);
         if(!file.open(QIODevice::WriteOnly)){
             qDebug() << "Error, cannot open file";
@@ -448,15 +463,15 @@ void BrushDockWidget::saveBrushAct(){
         file.flush();
         file.close();
 
-        mActualBrushList.push_back(mTempBrushList.at(mCurrentBrushIndex));
-        mGenBrushWidget->addBrush(mTempBrushList.at(mCurrentBrushIndex));
-        mTempBrushList = mActualBrushList;
+        m_ActualBrushList.push_back(m_TempBrushList.at(m_CurrentBrushIndex));
+        m_GenBrushWidget->addBrush(m_TempBrushList.at(m_CurrentBrushIndex));
+        m_TempBrushList = m_ActualBrushList;
         break;
     }
 }
 
 void BrushDockWidget::saveBrushSetAct(){
-    QString filePath = QFileDialog::getSaveFileName(this, "Save brush library", mProjectPath, ".blib");
+    QString filePath = QFileDialog::getSaveFileName(this, "Save brush library", m_ProjectPath, ".blib");
     saveBrushLib(filePath);
 }
 
@@ -484,7 +499,7 @@ void BrushDockWidget::saveBrushLib(QString filePath){
     QDataStream out(&file);
 
     out.setVersion(QDataStream::Qt_5_0);
-    out << encrypt << mActualBrushList;
+    out << encrypt << m_ActualBrushList;
 
     file.flush();
     file.close();
@@ -492,8 +507,8 @@ void BrushDockWidget::saveBrushLib(QString filePath){
 }
 
 Brush BrushDockWidget::getStartBrush(){
-    qDebug() << "Stencil stats: \t Width: " << mActualBrushList.first().getStencil().width() << " Height: " << mActualBrushList.first().getStencil().height() << endl;
-    return mActualBrushList[0];
+    qDebug() << "Stencil stats: \t Width: " << m_ActualBrushList.first().getStencil().width() << " Height: " << m_ActualBrushList.first().getStencil().height() << endl;
+    return m_ActualBrushList[0];
 }
 
 Brush BrushDockWidget::loadBrush(QString filePath){
@@ -522,20 +537,20 @@ void BrushDockWidget::resizeEvent(QResizeEvent *e){
 
 void BrushDockWidget::readSettings(){
     QSettings settings("SwingInnovations", "Odessa");
-    mProjectPath = settings.value("projectPath").toString();
-    mBrushLib = settings.value("activeBrushLib").toString();
+    m_ProjectPath = settings.value("projectPath").toString();
+    m_BrushLib = settings.value("activeBrushLib").toString();
 }
 
 void BrushDockWidget::writeSettings(){
     QSettings settings("SwingInnovations", "Odessa");
-    settings.setValue("activeBrushLib", mBrushLib);
-    qDebug() << mBrushLib << endl;
-    saveBrushLib(mBrushLib);
+    settings.setValue("activeBrushLib", m_BrushLib);
+    qDebug() << m_BrushLib << endl;
+    saveBrushLib(m_BrushLib);
 }
 
 BrushDockWidget::~BrushDockWidget()
 {
-    saveBrushLib(mBrushLib);
+    saveBrushLib(m_BrushLib);
     writeSettings();
 }
 
@@ -598,32 +613,32 @@ void BrushShapeWidget::mousePressEvent(QMouseEvent *event)
 
 GeneralBrushWidget::GeneralBrushWidget(){
     m_usePressureWidth = false;
-    mToolBtn = new QToolButton(this);
-    mToolBtn->setText("Tool");
-    mToolBtn->setFixedWidth(48);
-    mToolBtn->setFixedHeight(48);
-    mToolMenu = new QMenu(this);
-    mLoadStencilAct = new QAction("&Load Stencil", this);
-    mLoadBrushAct = new QAction("&Load Brush", this);
-    mLoadBrushSetAct = new QAction("&Load Brush Set", this);
-    mSaveStencilAct = new QAction("&Save Stencil", this);
-    mSaveBrushAct = new QAction("&Save Brush", this);
-    mSaveBrushSetAct = new QAction("&Save Brush Set", this);
-    mDeleteBrushAct = new QAction("Delete Brush", this);
-    mToolMenu->addAction(mLoadStencilAct);
-    mToolMenu->addAction(mLoadBrushAct);
-    mToolMenu->addAction(mLoadBrushSetAct);
-    mToolMenu->addSeparator();
-    mToolMenu->addAction(mSaveStencilAct);
-    mToolMenu->addAction(mSaveBrushAct);
-    mToolMenu->addAction(mSaveBrushSetAct);
-    mToolMenu->addSeparator();
-    mToolMenu->addAction(mDeleteBrushAct);
-    mToolBtn->setMenu(mToolMenu);
+    m_ToolBtn = new QToolButton(this);
+    m_ToolBtn->setText("Tool");
+    m_ToolBtn->setFixedWidth(48);
+    m_ToolBtn->setFixedHeight(48);
+    m_ToolMenu = new QMenu(this);
+    m_LoadStencilAct = new QAction("&Load Stencil", this);
+    m_LoadBrushAct = new QAction("&Load Brush", this);
+    m_LoadBrushSetAct = new QAction("&Load Brush Set", this);
+    m_SaveStencilAct = new QAction("&Save Stencil", this);
+    m_SaveBrushAct = new QAction("&Save Brush", this);
+    m_SaveBrushSetAct = new QAction("&Save Brush Set", this);
+    m_DeleteBrushAct = new QAction("Delete Brush", this);
+    m_ToolMenu->addAction(m_LoadStencilAct);
+    m_ToolMenu->addAction(m_LoadBrushAct);
+    m_ToolMenu->addAction(m_LoadBrushSetAct);
+    m_ToolMenu->addSeparator();
+    m_ToolMenu->addAction(m_SaveStencilAct);
+    m_ToolMenu->addAction(m_SaveBrushAct);
+    m_ToolMenu->addAction(m_SaveBrushSetAct);
+    m_ToolMenu->addSeparator();
+    m_ToolMenu->addAction(m_DeleteBrushAct);
+    m_ToolBtn->setMenu(m_ToolMenu);
 
-    mBrushIndex = new QListWidget(this);
-    mBrushIndex->setMinimumWidth(130);
-    mBrushIndex->setBaseSize(130, 130);
+    m_BrushIndex = new QListWidget(this);
+    m_BrushIndex->setMinimumWidth(130);
+    m_BrushIndex->setBaseSize(130, 130);
     m_StencilPreview = QPixmap(175, 100);
     m_StencilPreview.fill(Qt::gray);
     m_PreviewLabel = new QLabel(this);
@@ -640,10 +655,10 @@ GeneralBrushWidget::GeneralBrushWidget(){
     toggleStrokeLayout->addWidget(m_showStrokeBtn);
 
     QVBoxLayout* vert1 = new QVBoxLayout;
-    vert1->addWidget(mToolBtn);
+    vert1->addWidget(m_ToolBtn);
     vert1->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
     QHBoxLayout* horiz1 = new QHBoxLayout;
-    horiz1->addWidget(mBrushIndex);
+    horiz1->addWidget(m_BrushIndex);
     horiz1->addLayout(vert1);
     QVBoxLayout* generalBrushLayout = new QVBoxLayout;
     generalBrushLayout->addLayout(horiz1);
@@ -652,15 +667,15 @@ GeneralBrushWidget::GeneralBrushWidget(){
     generalBrushLayout->addLayout(toggleStrokeLayout);
 
     setLayout(generalBrushLayout);
-    connect(mLoadStencilAct, SIGNAL(triggered()), SLOT(updateLoadStencil()));
-    connect(mLoadBrushAct, SIGNAL(triggered()), SLOT(updateLoadBrush()));
-    connect(mLoadBrushSetAct, SIGNAL(triggered()), SLOT(updateLoadBrushSet()));
-    connect(mSaveStencilAct, SIGNAL(triggered()), SLOT(updateSaveStencil()));
-    connect(mSaveBrushAct, SIGNAL(triggered()), SLOT(updateSaveBrush()));
-    connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(updateSaveBrushSet()));
-    connect(mDeleteBrushAct, SIGNAL(triggered()), SLOT(updateDeleteBrush()));
-    connect(mBrushIndex, SIGNAL(currentRowChanged(int)), SLOT(updateBrushLibIndex(int)));
-    connect(mBrushIndex, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(updateName(QListWidgetItem*)));
+    connect(m_LoadStencilAct, SIGNAL(triggered()), SLOT(updateLoadStencil()));
+    connect(m_LoadBrushAct, SIGNAL(triggered()), SLOT(updateLoadBrush()));
+    connect(m_LoadBrushSetAct, SIGNAL(triggered()), SLOT(updateLoadBrushSet()));
+    connect(m_SaveStencilAct, SIGNAL(triggered()), SLOT(updateSaveStencil()));
+    connect(m_SaveBrushAct, SIGNAL(triggered()), SLOT(updateSaveBrush()));
+    connect(m_SaveBrushSetAct, SIGNAL(triggered()), SLOT(updateSaveBrushSet()));
+    connect(m_DeleteBrushAct, SIGNAL(triggered()), SLOT(updateDeleteBrush()));
+    connect(m_BrushIndex, SIGNAL(currentRowChanged(int)), SLOT(updateBrushLibIndex(int)));
+    connect(m_BrushIndex, SIGNAL(itemChanged(QListWidgetItem*)), SLOT(updateName(QListWidgetItem*)));
     connect(m_showStencilBtn, SIGNAL(toggled(bool)), SLOT(showStencil(bool)));
     connect(m_showStrokeBtn, SIGNAL(toggled(bool)), SLOT(showStroke(bool)));
 }
@@ -680,7 +695,7 @@ void GeneralBrushWidget::addBrush(Brush brush){
     stencilIcon.invertPixels();
     itm->setIcon(QPixmap::fromImage(stencilIcon));
     itm->setFlags(itm->flags() | Qt::ItemIsEditable);
-    mBrushIndex->addItem(itm);
+    m_BrushIndex->addItem(itm);
 }
 
 void GeneralBrushWidget::updateStencil(QPixmap pixmap){
@@ -780,109 +795,109 @@ GeneralBrushWidget::~GeneralBrushWidget(){
 
 CustomBrushWidget::CustomBrushWidget(){
 
-    mBrushShape = CIRCLE_SHAPE;
-    hasTexture = false;
+    m_BrushShape = CIRCLE_SHAPE;
+    m_HasTexture = false;
 
-    mStencilPreview = QPixmap(160, 160);
-    mStencilPreview.fill(Qt::transparent);
-    mStencilLabel = new QLabel(this);
-    mStencilLabel->setPixmap(mStencilPreview);
+    m_StencilPreview = QPixmap(160, 160);
+    m_StencilPreview.fill(Qt::transparent);
+    m_StencilLbl = new QLabel(this);
+    m_StencilLbl->setPixmap(m_StencilPreview);
 
-    mToolBtn = new QToolButton(this);
-    mToolBtn->setText("Tool");
-    mToolBtn->setFixedWidth(48);
-    mToolBtn->setFixedHeight(48);
-    mToolMenu = new QMenu(this);
-    mLoadStencilAct = new QAction("&Load Stencil", this);
-    mLoadBrushAct = new QAction("&Load Brush", this);
-    mLoadBrushSetAct = new QAction("&Load Brush Set", this);
-    mSaveStencilAct = new QAction("&Save Stencil", this);
-    mSaveBrushAct = new QAction("&Save Brush", this);
-    mSaveBrushSetAct = new QAction("&Save Brush Set", this);
-    mDeleteBrushAct = new QAction("Delete Brush", this);
-    mToolMenu->addAction(mLoadStencilAct);
-    mToolMenu->addAction(mLoadBrushAct);
-    mToolMenu->addAction(mLoadBrushSetAct);
-    mToolMenu->addSeparator();
-    mToolMenu->addAction(mSaveStencilAct);
-    mToolMenu->addAction(mSaveBrushAct);
-    mToolMenu->addAction(mSaveBrushSetAct);
-    mToolMenu->addSeparator();
-    mToolMenu->addAction(mDeleteBrushAct);
-    mToolBtn->setMenu(mToolMenu);
+    m_ToolBtn = new QToolButton(this);
+    m_ToolBtn->setText("Tool");
+    m_ToolBtn->setFixedWidth(48);
+    m_ToolBtn->setFixedHeight(48);
+    m_ToolMenu = new QMenu(this);
+    m_LoadStencilAct = new QAction("&Load Stencil", this);
+    m_LoadBrushAct = new QAction("&Load Brush", this);
+    m_LoadBrushSetAct = new QAction("&Load Brush Set", this);
+    m_SaveStencilAct = new QAction("&Save Stencil", this);
+    m_SaveBrushAct = new QAction("&Save Brush", this);
+    m_SaveBrushSetAct = new QAction("&Save Brush Set", this);
+    m_DeleteBrushAct = new QAction("Delete Brush", this);
+    m_ToolMenu->addAction(m_LoadStencilAct);
+    m_ToolMenu->addAction(m_LoadBrushAct);
+    m_ToolMenu->addAction(m_LoadBrushSetAct);
+    m_ToolMenu->addSeparator();
+    m_ToolMenu->addAction(m_SaveStencilAct);
+    m_ToolMenu->addAction(m_SaveBrushAct);
+    m_ToolMenu->addAction(m_SaveBrushSetAct);
+    m_ToolMenu->addSeparator();
+    m_ToolMenu->addAction(m_DeleteBrushAct);
+    m_ToolBtn->setMenu(m_ToolMenu);
 
     QVBoxLayout* v1Layout = new QVBoxLayout;
-    v1Layout->addWidget(mToolBtn);
+    v1Layout->addWidget(m_ToolBtn);
     v1Layout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Fixed, QSizePolicy::Expanding));
 
     QHBoxLayout* StencilPreviewLayout = new QHBoxLayout;
-    StencilPreviewLayout->addWidget(mStencilLabel);
-    StencilPreviewLayout->setAlignment(mStencilLabel, Qt::AlignCenter);
+    StencilPreviewLayout->addWidget(m_StencilLbl);
+    StencilPreviewLayout->setAlignment(m_StencilLbl, Qt::AlignCenter);
     StencilPreviewLayout->addLayout(v1Layout);
 
-    mWidthLabel = new QLabel("Width:", this);
-    mWidthSlider = new QSlider(Qt::Horizontal, this);
-    mWidthSlider->setRange(0, 10);
-    mWidthSlider->setValue(10);
-    mWidthLE = new QLineEdit(this);
-    mWidthLE->setFixedWidth(32);
-    mWidthLE->setText(QString::number(10));
+    m_WidthLbl = new QLabel("Width:", this);
+    m_WidthSlider = new QSlider(Qt::Horizontal, this);
+    m_WidthSlider->setRange(0, 10);
+    m_WidthSlider->setValue(10);
+    m_WidthLE = new QLineEdit(this);
+    m_WidthLE->setFixedWidth(32);
+    m_WidthLE->setText(QString::number(10));
     QHBoxLayout* widthLayout = new QHBoxLayout;
-    widthLayout->addWidget(mWidthLabel);
-    widthLayout->addWidget(mWidthSlider);
-    widthLayout->addWidget(mWidthLE);
+    widthLayout->addWidget(m_WidthLbl);
+    widthLayout->addWidget(m_WidthSlider);
+    widthLayout->addWidget(m_WidthLE);
 
-    mHeightLabel = new QLabel("Height:", this);
-    mHeightSlider = new QSlider(Qt::Horizontal, this);
-    mHeightSlider->setRange(0, 10);
-    mHeightSlider->setValue(10);
-    mHeightLE = new QLineEdit(this);
-    mHeightLE->setFixedWidth(32);
-    mHeightLE->setText(QString::number(10));
+    m_HeightLbl = new QLabel("Height:", this);
+    m_HeightSlider = new QSlider(Qt::Horizontal, this);
+    m_HeightSlider->setRange(0, 10);
+    m_HeightSlider->setValue(10);
+    m_HeightLE = new QLineEdit(this);
+    m_HeightLE->setFixedWidth(32);
+    m_HeightLE->setText(QString::number(10));
     QHBoxLayout* heightLayout = new QHBoxLayout;
-    heightLayout->addWidget(mHeightLabel);
-    heightLayout->addWidget(mHeightSlider);
-    heightLayout->addWidget(mHeightLE);
+    heightLayout->addWidget(m_HeightLbl);
+    heightLayout->addWidget(m_HeightSlider);
+    heightLayout->addWidget(m_HeightLE);
 
-    mHardnessLabel = new QLabel("Hardness:", this);
-    mHardnessSlider = new QSlider(Qt::Horizontal, this);
-    mHardnessSlider->setRange(0, 100);
-    mHardnessSlider->setValue(100);
-    mHardnessLE = new QLineEdit(this);
-    mHardnessLE->setFixedWidth(32);
-    mHardnessLE->setText(QString::number(100));
+    m_HardnessLbl = new QLabel("Hardness:", this);
+    m_HardnessSlider = new QSlider(Qt::Horizontal, this);
+    m_HardnessSlider->setRange(0, 100);
+    m_HardnessSlider->setValue(100);
+    m_HardnessLE = new QLineEdit(this);
+    m_HardnessLE->setFixedWidth(32);
+    m_HardnessLE->setText(QString::number(100));
     QHBoxLayout* hardnessLayout = new QHBoxLayout;
-    hardnessLayout->addWidget(mHardnessLabel);
-    hardnessLayout->addWidget(mHardnessSlider);
-    hardnessLayout->addWidget(mHardnessLE);
+    hardnessLayout->addWidget(m_HardnessLbl);
+    hardnessLayout->addWidget(m_HardnessSlider);
+    hardnessLayout->addWidget(m_HardnessLE);
 
-    mRotateLabel = new QLabel("Rotate:", this);
-    mRotateSlider = new QSlider(Qt::Horizontal, this);
-    mRotateSlider->setRange(0, 361);
-    mRotateSlider->setValue(0);
-    mRotateLE = new QLineEdit(this);
-    mRotateLE->setFixedWidth(32);
-    mRotateLE->setText(QString::number(0));
+    m_RotateLbl = new QLabel("Rotate:", this);
+    m_RotateSlider = new QSlider(Qt::Horizontal, this);
+    m_RotateSlider->setRange(0, 361);
+    m_RotateSlider->setValue(0);
+    m_RotateLE = new QLineEdit(this);
+    m_RotateLE->setFixedWidth(32);
+    m_RotateLE->setText(QString::number(0));
     QHBoxLayout* rotateLayout = new QHBoxLayout;
-    rotateLayout->addWidget(mRotateLabel);
-    rotateLayout->addWidget(mRotateSlider);
-    rotateLayout->addWidget(mRotateLE);
+    rotateLayout->addWidget(m_RotateLbl);
+    rotateLayout->addWidget(m_RotateSlider);
+    rotateLayout->addWidget(m_RotateLE);
 
-    mCircleButton = new QPushButton("Circle", this);
-    mSquareButton = new QPushButton("Square", this);
-    mCustomButton = new QPushButton("Custom", this);
+    m_CircleButton = new QPushButton("Circle", this);
+    m_SquareButton = new QPushButton("Square", this);
+    m_CustomButton = new QPushButton("Custom", this);
     QHBoxLayout* stencilShapeLayout = new QHBoxLayout;
-    stencilShapeLayout->addWidget(mCircleButton);
-    stencilShapeLayout->addWidget(mSquareButton);
-    stencilShapeLayout->addWidget(mCustomButton);
+    stencilShapeLayout->addWidget(m_CircleButton);
+    stencilShapeLayout->addWidget(m_SquareButton);
+    stencilShapeLayout->addWidget(m_CustomButton);
 
-    mTextureLabel = new QLabel("Texture: ", this);
-    mTextureFileLE = new QLineEdit(this);
-    mTextureBtn = new QPushButton("...",this);
+    m_TextureLbl = new QLabel("Texture: ", this);
+    m_TextureFileLE = new QLineEdit(this);
+    m_TextureBtn = new QPushButton("...",this);
     QHBoxLayout* textureLayout = new QHBoxLayout;
-    textureLayout->addWidget(mTextureLabel);
-    textureLayout->addWidget(mTextureFileLE);
-    textureLayout->addWidget(mTextureBtn);
+    textureLayout->addWidget(m_TextureLbl);
+    textureLayout->addWidget(m_TextureFileLE);
+    textureLayout->addWidget(m_TextureBtn);
 
     QVBoxLayout* advancedLayout = new QVBoxLayout;
     advancedLayout->addLayout(widthLayout);
@@ -897,38 +912,38 @@ CustomBrushWidget::CustomBrushWidget(){
     AdvancedPanel->addLayout(advancedLayout);
     setLayout(AdvancedPanel);
 
-    connect(mLoadStencilAct, SIGNAL(triggered()), SLOT(updateLoadStencil()));
-    connect(mLoadBrushAct, SIGNAL(triggered()), SLOT(updateLoadBrush()));
-    connect(mLoadBrushSetAct, SIGNAL(triggered()), SLOT(updateLoadBrushSet()));
-    connect(mSaveStencilAct, SIGNAL(triggered()), SLOT(updateSaveStencil()));
-    connect(mSaveBrushAct, SIGNAL(triggered()), SLOT(updateSaveBrush()));
-    connect(mSaveBrushSetAct, SIGNAL(triggered()), SLOT(updateSaveBrushSet()));
-    connect(mDeleteBrushAct, SIGNAL(triggered()), SLOT(updateDeleteBrush()));
-    connect(mWidthLE, SIGNAL(textChanged(QString)), SLOT(updateStencilWidth(QString)));
-    connect(mWidthSlider, SIGNAL(valueChanged(int)), SLOT(updateStencilWidth(int)));
-    connect(mHeightLE, SIGNAL(textChanged(QString)), SLOT(updateStencilHeight(QString)));
-    connect(mHeightSlider, SIGNAL(valueChanged(int)), SLOT(updateStencilHeight(int)));
-    connect(mHeightLE, SIGNAL(textChanged(QString)), SLOT(updateStencilHeight(QString)));
-    connect(mHardnessSlider, SIGNAL(valueChanged(int)), SLOT(updateBrushHardness(int)));
-    connect(mHardnessLE, SIGNAL(textChanged(QString)), SLOT(updateBrushHardness(QString)));
-    connect(mRotateSlider, SIGNAL(valueChanged(int)), SLOT(updateStencilRotate(int)));
-    connect(mRotateLE, SIGNAL(textChanged(QString)), SLOT(updateStencilRotate(QString)));
+    connect(m_LoadStencilAct, SIGNAL(triggered()), SLOT(updateLoadStencil()));
+    connect(m_LoadBrushAct, SIGNAL(triggered()), SLOT(updateLoadBrush()));
+    connect(m_LoadBrushSetAct, SIGNAL(triggered()), SLOT(updateLoadBrushSet()));
+    connect(m_SaveStencilAct, SIGNAL(triggered()), SLOT(updateSaveStencil()));
+    connect(m_SaveBrushAct, SIGNAL(triggered()), SLOT(updateSaveBrush()));
+    connect(m_SaveBrushSetAct, SIGNAL(triggered()), SLOT(updateSaveBrushSet()));
+    connect(m_DeleteBrushAct, SIGNAL(triggered()), SLOT(updateDeleteBrush()));
+    connect(m_WidthLE, SIGNAL(textChanged(QString)), SLOT(updateStencilWidth(QString)));
+    connect(m_WidthSlider, SIGNAL(valueChanged(int)), SLOT(updateStencilWidth(int)));
+    connect(m_HeightLE, SIGNAL(textChanged(QString)), SLOT(updateStencilHeight(QString)));
+    connect(m_HeightSlider, SIGNAL(valueChanged(int)), SLOT(updateStencilHeight(int)));
+    connect(m_HeightLE, SIGNAL(textChanged(QString)), SLOT(updateStencilHeight(QString)));
+    connect(m_HardnessSlider, SIGNAL(valueChanged(int)), SLOT(updateBrushHardness(int)));
+    connect(m_HardnessLE, SIGNAL(textChanged(QString)), SLOT(updateBrushHardness(QString)));
+    connect(m_RotateSlider, SIGNAL(valueChanged(int)), SLOT(updateStencilRotate(int)));
+    connect(m_RotateLE, SIGNAL(textChanged(QString)), SLOT(updateStencilRotate(QString)));
     connect(this, SIGNAL(stencilChanged(QPixmap)), SLOT(updateStencil(QPixmap)));
-    connect(mCircleButton, SIGNAL(clicked()), SLOT(updateBrushShape_Circle()));
-    connect(mSquareButton, SIGNAL(clicked()), SLOT(updateBrushShape_Square()));
-    connect(mCustomButton, SIGNAL(clicked()), SLOT(updateBrushShape_Polygon()));
-    connect(mTextureBtn, SIGNAL(clicked()), SLOT(updateStencilTexture()));
-    connect(mTextureFileLE, SIGNAL(textChanged(QString)), SLOT(updateStencilTextureLE(QString)));
+    connect(m_CircleButton, SIGNAL(clicked()), SLOT(updateBrushShape_Circle()));
+    connect(m_SquareButton, SIGNAL(clicked()), SLOT(updateBrushShape_Square()));
+    connect(m_CustomButton, SIGNAL(clicked()), SLOT(updateBrushShape_Polygon()));
+    connect(m_TextureBtn, SIGNAL(clicked()), SLOT(updateStencilTexture()));
+    connect(m_TextureFileLE, SIGNAL(textChanged(QString)), SLOT(updateStencilTextureLE(QString)));
 }
 
 void CustomBrushWidget::TempSave(QPixmap pixmap){
     QImage image = pixmap.toImage();
     image.convertToFormat(QImage::Format_RGB888, Qt::AutoColor);
-    if(tempFile.open()){
-        image.save(tempFile.fileName());
+    if(m_TempFile.open()){
+        image.save(m_TempFile.fileName());
     }
-    tempFile.close();
-    emit stencilPathChanged(tempFile.fileName());
+    m_TempFile.close();
+    emit stencilPathChanged(m_TempFile.fileName());
 }
 
 void CustomBrushWidget::updateStencil(QPixmap pixmap){
@@ -936,14 +951,14 @@ void CustomBrushWidget::updateStencil(QPixmap pixmap){
 }
 
 void CustomBrushWidget::updateStencilTexture(){
-    hasTexture = true;
+    m_HasTexture = true;
     QString fileName = QFileDialog::getOpenFileName(this, "Load Texture", QDir::currentPath());
-    mStencilTexture.load(fileName);
-    QImage image = mStencilTexture.toImage();
+    m_StencilTexture.load(fileName);
+    QImage image = m_StencilTexture.toImage();
     QRgb col;
     int gray;
-    int width = mStencilTexture.width();
-    int height = mStencilTexture.height();
+    int width = m_StencilTexture.width();
+    int height = m_StencilTexture.height();
     for(int i = 0; i < width; i++){
         for(int j = 0; j < height; j++){
             col = image.pixel(i, j);
@@ -951,86 +966,86 @@ void CustomBrushWidget::updateStencilTexture(){
             image.setPixel(i, j, qRgb(gray, gray, gray));
         }
     }
-    mStencilTexture = mStencilTexture.fromImage(image);
-    mStencilTexture = mStencilTexture.scaled(mStencilPreview.width(), mStencilPreview.height(), Qt::IgnoreAspectRatio, Qt::FastTransformation);
-    mTextureFileLE->setText(fileName);
+    m_StencilTexture = m_StencilTexture.fromImage(image);
+    m_StencilTexture = m_StencilTexture.scaled(m_StencilPreview.width(), m_StencilPreview.height(), Qt::IgnoreAspectRatio, Qt::FastTransformation);
+    m_TextureFileLE->setText(fileName);
 }
 
 void CustomBrushWidget::updateStencilWidth(int val){
-   mWidthLE->setText(QString::number(val));
+   m_WidthLE->setText(QString::number(val));
    emit StencilWidthChanged(val);
-   emit stencilChanged(mStencilPreview);
+   emit stencilChanged(m_StencilPreview);
 }
 
 void CustomBrushWidget::updateStencilWidth(QString val){
-    mWidthSlider->setValue(val.toInt());
+    m_WidthSlider->setValue(val.toInt());
     emit StencilWidthChanged(val.toInt());
 }
 
 void CustomBrushWidget::updateStencilHeight(int val){
-    mHeightLE->setText(QString::number(val));
+    m_HeightLE->setText(QString::number(val));
     emit stencilHeightChanged(val);
-    emit stencilChanged(mStencilPreview);
+    emit stencilChanged(m_StencilPreview);
 }
 
 void CustomBrushWidget::updateStencilHeight(QString val){
-    mHeightSlider->setValue(val.toInt());
+    m_HeightSlider->setValue(val.toInt());
     emit stencilHeightChanged(val.toInt());
 }
 
 void CustomBrushWidget::updateBrushHardness(int val){
-    mHardnessLE->setText(QString::number(val));
+    m_HardnessLE->setText(QString::number(val));
     emit brushHardnessChanged(val);
-    emit stencilChanged(mStencilPreview);
+    emit stencilChanged(m_StencilPreview);
 }
 
 void CustomBrushWidget::updateBrushHardness(QString val){
-    mHardnessSlider->setValue(val.toInt());
+    m_HardnessSlider->setValue(val.toInt());
     emit brushHardnessChanged(val.toInt());
 }
 
 void CustomBrushWidget::updateStencilRotate(int val){
     if(val > 360){
         val = 0;
-        mRotateSlider->setValue(0);
+        m_RotateSlider->setValue(0);
     }
-    mRotateLE->setText(QString::number(val));
+    m_RotateLE->setText(QString::number(val));
     emit rotateChanged(val);
-    emit stencilChanged(mStencilPreview);
+    emit stencilChanged(m_StencilPreview);
 }
 
 void CustomBrushWidget::updateStencilRotate(QString val){
     if(val.toInt() > 360){
-        mRotateSlider->setValue(0);
+        m_RotateSlider->setValue(0);
         emit rotateChanged(0);
     }else{
-        mRotateSlider->setValue(val.toInt());
+        m_RotateSlider->setValue(val.toInt());
         emit rotateChanged(val.toInt());
     }
 }
 
 void CustomBrushWidget::updateStencilTextureLE(QString val){
     if(val.isEmpty()){
-        hasTexture = false;
+        m_HasTexture = false;
     }else{
-        hasTexture = true;
+        m_HasTexture = true;
     }
 }
 
 void CustomBrushWidget::setBrushSettings(Brush b){
-    mWidthSlider->setValue(b.sWidth);
-    mHeightSlider->setValue(b.sHeight);
-    mHardnessSlider->setValue(b.getHardness());
-    mRotateSlider->setValue(b.getRotate());
+    m_WidthSlider->setValue(b.sWidth);
+    m_HeightSlider->setValue(b.sHeight);
+    m_HardnessSlider->setValue(b.getHardness());
+    m_RotateSlider->setValue(b.getRotate());
     update();
 }
 
 QPixmap CustomBrushWidget::GeneratePixmap(){
-    mStencilPreview.fill(Qt::transparent);
-    int stencilWidth = (mStencilPreview.width() * mWidthSlider->value()/10)/2;
-    int stencilHeight = (mStencilPreview.height()* mHeightSlider->value()/10)/2;
-    qreal fRadius = ((qreal)mHardnessSlider->value()/100.0);
-    QPoint midPoint(mStencilPreview.width()/2, mStencilPreview.height()/2);
+    m_StencilPreview.fill(Qt::transparent);
+    int stencilWidth = (m_StencilPreview.width() * m_WidthSlider->value()/10)/2;
+    int stencilHeight = (m_StencilPreview.height()* m_HeightSlider->value()/10)/2;
+    qreal fRadius = ((qreal)m_HardnessSlider->value()/100.0);
+    QPoint midPoint(m_StencilPreview.width()/2, m_StencilPreview.height()/2);
 
     qDebug() << "fRadius: " << fRadius << endl;
 
@@ -1043,7 +1058,7 @@ QPixmap CustomBrushWidget::GeneratePixmap(){
         radGrad.setColorAt(1.0, Qt::transparent);
     }
 
-    QPixmap img = mStencilPreview;
+    QPixmap img = m_StencilPreview;
 
     QPainter p;
     p.begin(&img);
@@ -1051,11 +1066,11 @@ QPixmap CustomBrushWidget::GeneratePixmap(){
     p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
     p.setPen(Qt::NoPen);
     p.setBrush(radGrad);
-    switch(mBrushShape){
+    switch(m_BrushShape){
     case CIRCLE_SHAPE:
-        if(hasTexture){
+        if(m_HasTexture){
             QBrush brush;
-            brush.setTexture(mStencilTexture);
+            brush.setTexture(m_StencilTexture);
             p.setBrush(brush);
         }else{
             p.setBrush(radGrad);
@@ -1069,9 +1084,9 @@ QPixmap CustomBrushWidget::GeneratePixmap(){
         int dimX = stencilWidth*2;
         int dimY = stencilHeight*2;
 
-        if(hasTexture){
+        if(m_HasTexture){
             QBrush brush;
-            brush.setTexture(mStencilTexture);
+            brush.setTexture(m_StencilTexture);
             p.setBrush(brush);
         }else{
             p.setBrush(Qt::black);
@@ -1084,19 +1099,19 @@ QPixmap CustomBrushWidget::GeneratePixmap(){
         break;
     }
     p.end();
-    mStencilPreview = img;
-    return mStencilPreview;
+    m_StencilPreview = img;
+    return m_StencilPreview;
 }
 
 void CustomBrushWidget::paintEvent(QPaintEvent *event){
     Q_UNUSED(event);
-    int stencilWidth = (mStencilPreview.width() * mWidthSlider->value()/10)/2;
-    int stencilHeight = (mStencilPreview.height()* mHeightSlider->value()/10)/2;
-    qreal hardness = ((qreal)mHardnessSlider->value()/100);
-    QPoint midPoint(mStencilPreview.width()/2, mStencilPreview.height()/2);
-    mStencilPreview.fill(Qt::transparent);
-    QRadialGradient radGrad(midPoint, mStencilPreview.width()/2);
-    radGrad.setColorAt(midPoint.x()/mStencilPreview.width(), Qt::black);
+    int stencilWidth = (m_StencilPreview.width() * m_WidthSlider->value()/10)/2;
+    int stencilHeight = (m_StencilPreview.height()* m_HeightSlider->value()/10)/2;
+    qreal hardness = ((qreal)m_HardnessSlider->value()/100);
+    QPoint midPoint(m_StencilPreview.width()/2, m_StencilPreview.height()/2);
+    m_StencilPreview.fill(Qt::transparent);
+    QRadialGradient radGrad(midPoint, m_StencilPreview.width()/2);
+    radGrad.setColorAt(midPoint.x()/m_StencilPreview.width(), Qt::black);
     radGrad.setColorAt(0.0, Qt::black);
     radGrad.setColorAt(hardness, Qt::black);
     if(hardness == 1.0){
@@ -1105,19 +1120,19 @@ void CustomBrushWidget::paintEvent(QPaintEvent *event){
         radGrad.setColorAt(1.0, Qt::transparent);
     }
 
-    QPainter painter(&mStencilPreview);
+    QPainter painter(&m_StencilPreview);
     painter.setPen(Qt::NoPen);
-    switch(mBrushShape){
+    switch(m_BrushShape){
         case CIRCLE_SHAPE:
-            if(hasTexture){
+            if(m_HasTexture){
                 QBrush brush;
-                brush.setTexture(mStencilTexture);
+                brush.setTexture(m_StencilTexture);
                 painter.setBrush(brush);
             }else{
                 painter.setBrush(radGrad);
             }
             painter.translate(midPoint);
-            painter.rotate(mRotateSlider->value());
+            painter.rotate(m_RotateSlider->value());
             painter.translate(-midPoint);
             painter.drawEllipse(midPoint, stencilWidth, stencilHeight);
             break;
@@ -1127,20 +1142,20 @@ void CustomBrushWidget::paintEvent(QPaintEvent *event){
             int dimX = stencilWidth*2;
             int dimY = stencilHeight*2;
 
-            if(hasTexture){
+            if(m_HasTexture){
                 QBrush brush;
-                brush.setTexture(mStencilTexture);
+                brush.setTexture(m_StencilTexture);
                 painter.setBrush(brush);
             }else{
                 painter.setBrush(Qt::black);
             }
             painter.translate(midPoint);
-            painter.rotate(mRotateSlider->value());
+            painter.rotate(m_RotateSlider->value());
             painter.translate(-midPoint);
             painter.drawRect(originX, originY, dimX, dimY);
             break;
     }
-    mStencilLabel->setPixmap(mStencilPreview);
+    m_StencilLbl->setPixmap(m_StencilPreview);
 
 //   QImage ret = GeneratePixmap().toImage();
 //   ret.invertPixels(QImage::InvertRgba);
@@ -1149,19 +1164,19 @@ void CustomBrushWidget::paintEvent(QPaintEvent *event){
 }
 
 void CustomBrushWidget::updateBrushShape_Circle(){
-    mBrushShape = CIRCLE_SHAPE;
+    m_BrushShape = CIRCLE_SHAPE;
     update();
     emit stencilChanged(GeneratePixmap());
 }
 
 void CustomBrushWidget::updateBrushShape_Square(){
-    mBrushShape = SQUARE_SHAPE;
+    m_BrushShape = SQUARE_SHAPE;
     update();
     emit stencilChanged(GeneratePixmap());
 }
 
 void CustomBrushWidget::updateBrushShape_Polygon(){
-    mBrushShape = CUSTOM;
+    m_BrushShape = CUSTOM;
     update();
     emit stencilChanged(GeneratePixmap());
 }
@@ -1175,98 +1190,98 @@ ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
 {
     setWindowTitle("Color");
     //initialize everything
-    mColorWheel = new ColorWheel(this);
-    mColorTabs = new QTabWidget(this);
+    m_ColorWheel = new ColorWheel(this);
+    m_ColorTabs = new QTabWidget(this);
 
     //Red Parameters
-    mRLabel = new QLabel("R:", this);
-    mRSlider = new QSlider(this);
-    mRSlider->setOrientation(Qt::Horizontal);
-    mRSlider->setRange(0, 255);
-    mRSlider->setValue(0);
-    mRSpinBox = new QSpinBox(this);
-    mRSpinBox->setRange(0, 255);
-    mRSpinBox->setValue(0);
+    m_RLabel = new QLabel("R:", this);
+    m_RSlider = new QSlider(this);
+    m_RSlider->setOrientation(Qt::Horizontal);
+    m_RSlider->setRange(0, 255);
+    m_RSlider->setValue(0);
+    m_RSpinBox = new QSpinBox(this);
+    m_RSpinBox->setRange(0, 255);
+    m_RSpinBox->setValue(0);
 
     QHBoxLayout* rBoxLayout = new QHBoxLayout;
-    rBoxLayout->addWidget(mRLabel);
-    rBoxLayout->addWidget(mRSlider);
-    rBoxLayout->addWidget(mRSpinBox);
+    rBoxLayout->addWidget(m_RLabel);
+    rBoxLayout->addWidget(m_RSlider);
+    rBoxLayout->addWidget(m_RSpinBox);
 
     //Green Parameters
-    mGLabel = new QLabel("G:", this);
-    mGSlider = new QSlider(this);
-    mGSlider->setOrientation(Qt::Horizontal);
-    mGSlider->setRange(0, 255);
-    mGSlider->setValue(0);
-    mGSpinBox = new QSpinBox(this);
-    mGSpinBox->setRange(0, 255);
-    mGSpinBox->setValue(0);
+    m_GLabel = new QLabel("G:", this);
+    m_GSlider = new QSlider(this);
+    m_GSlider->setOrientation(Qt::Horizontal);
+    m_GSlider->setRange(0, 255);
+    m_GSlider->setValue(0);
+    m_GSpinBox = new QSpinBox(this);
+    m_GSpinBox->setRange(0, 255);
+    m_GSpinBox->setValue(0);
 
     QHBoxLayout* gBoxLayout = new QHBoxLayout;
-    gBoxLayout->addWidget(mGLabel);
-    gBoxLayout->addWidget(mGSlider);
-    gBoxLayout->addWidget(mGSpinBox);
+    gBoxLayout->addWidget(m_GLabel);
+    gBoxLayout->addWidget(m_GSlider);
+    gBoxLayout->addWidget(m_GSpinBox);
 
     //Blue Parameters
-    mBLabel = new QLabel("B:", this);
-    mBSlider = new QSlider(this);
-    mBSlider->setOrientation(Qt::Horizontal);
-    mBSlider->setRange(0, 255);
-    mBSlider->setValue(0);
-    mBSpinBox = new QSpinBox(this);
-    mBSpinBox->setRange(0, 255);
-    mBSpinBox->setValue(0);
+    m_BLabel = new QLabel("B:", this);
+    m_BSlider = new QSlider(this);
+    m_BSlider->setOrientation(Qt::Horizontal);
+    m_BSlider->setRange(0, 255);
+    m_BSlider->setValue(0);
+    m_BSpinBox = new QSpinBox(this);
+    m_BSpinBox->setRange(0, 255);
+    m_BSpinBox->setValue(0);
 
     QHBoxLayout* bBoxLayout = new QHBoxLayout;
-    bBoxLayout->addWidget(mBLabel);
-    bBoxLayout->addWidget(mBSlider);
-    bBoxLayout->addWidget(mBSpinBox);
+    bBoxLayout->addWidget(m_BLabel);
+    bBoxLayout->addWidget(m_BSlider);
+    bBoxLayout->addWidget(m_BSpinBox);
 
     //Hue Parameters
-    mHLabel = new QLabel("H:", this);
-    mHSlider = new QSlider(this);
-    mHSlider->setOrientation(Qt::Horizontal);
-    mHSlider->setRange(0, 255);
-    mHSlider->setValue(0);
-    mHSpinBox = new QSpinBox(this);
-    mHSpinBox->setRange(0, 255);
-    mHSpinBox->setValue(0);
+    m_HLabel = new QLabel("H:", this);
+    m_HSlider = new QSlider(this);
+    m_HSlider->setOrientation(Qt::Horizontal);
+    m_HSlider->setRange(0, 255);
+    m_HSlider->setValue(0);
+    m_HSpinBox = new QSpinBox(this);
+    m_HSpinBox->setRange(0, 255);
+    m_HSpinBox->setValue(0);
 
     QHBoxLayout* hBoxLayout = new QHBoxLayout;
-    hBoxLayout->addWidget(mHLabel);
-    hBoxLayout->addWidget(mHSlider);
-    hBoxLayout->addWidget(mHSpinBox);
+    hBoxLayout->addWidget(m_HLabel);
+    hBoxLayout->addWidget(m_HSlider);
+    hBoxLayout->addWidget(m_HSpinBox);
 
     //Saturation Parameters
-    mSLabel = new QLabel("S:", this);
-    mSSlider = new QSlider(this);
-    mSSlider->setOrientation(Qt::Horizontal);
-    mSSlider->setRange(0, 255);
-    mSSlider->setValue(0);
-    mSSpinBox = new QSpinBox(this);
-    mSSpinBox->setRange(0, 255);
-    mSSpinBox->setValue(0);
+    m_SLabel = new QLabel("S:", this);
+    m_SSlider = new QSlider(this);
+    m_SSlider->setOrientation(Qt::Horizontal);
+    m_SSlider->setRange(0, 255);
+    m_SSlider->setValue(0);
+    m_SSpinBox = new QSpinBox(this);
+    m_SSpinBox->setRange(0, 255);
+    m_SSpinBox->setValue(0);
 
     QHBoxLayout* sBoxLayout = new QHBoxLayout;
-    sBoxLayout->addWidget(mSLabel);
-    sBoxLayout->addWidget(mSSlider);
-    sBoxLayout->addWidget(mSSpinBox);
+    sBoxLayout->addWidget(m_SLabel);
+    sBoxLayout->addWidget(m_SSlider);
+    sBoxLayout->addWidget(m_SSpinBox);
 
     //Value Parameters
-    mVLabel = new QLabel("V:", this);
-    mVSlider = new QSlider(this);
-    mVSlider->setOrientation(Qt::Horizontal);
-    mVSlider->setRange(0, 255);
-    mVSlider->setValue(0);
-    mVSpinBox = new QSpinBox(this);
-    mVSpinBox->setRange(0, 255);
-    mVSpinBox->setValue(0);
+    m_VLabel = new QLabel("V:", this);
+    m_VSlider = new QSlider(this);
+    m_VSlider->setOrientation(Qt::Horizontal);
+    m_VSlider->setRange(0, 255);
+    m_VSlider->setValue(0);
+    m_VSpinBox = new QSpinBox(this);
+    m_VSpinBox->setRange(0, 255);
+    m_VSpinBox->setValue(0);
 
     QHBoxLayout* vBoxLayout = new QHBoxLayout;
-    vBoxLayout->addWidget(mVLabel);
-    vBoxLayout->addWidget(mVSlider);
-    vBoxLayout->addWidget(mVSpinBox);
+    vBoxLayout->addWidget(m_VLabel);
+    vBoxLayout->addWidget(m_VSlider);
+    vBoxLayout->addWidget(m_VSpinBox);
 
     QVBoxLayout* RGBLayout = new QVBoxLayout;
     RGBLayout->addLayout(rBoxLayout);
@@ -1282,137 +1297,137 @@ ColorDockWidget::ColorDockWidget(QWidget *parent) : QDockWidget(parent)
     QWidget* HSVPanel = new QWidget(this);
     HSVPanel->setLayout(HSVLayout);
 
-    mColorTabs->addTab(RGBPanel, "RGB");
-    mColorTabs->addTab(HSVPanel, "HSV");
+    m_ColorTabs->addTab(RGBPanel, "RGB");
+    m_ColorTabs->addTab(HSVPanel, "HSV");
 
     QVBoxLayout* masterLayout = new QVBoxLayout;
-    masterLayout->addWidget(mColorWheel);
-    masterLayout->setAlignment(mColorWheel, Qt::AlignCenter);
-    masterLayout->addWidget(mColorTabs);
+    masterLayout->addWidget(m_ColorWheel);
+    masterLayout->setAlignment(m_ColorWheel, Qt::AlignCenter);
+    masterLayout->addWidget(m_ColorTabs);
     masterLayout->addSpacerItem(new QSpacerItem(292, 10, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     QWidget* masterWidget = new QWidget(this);
     masterWidget->setLayout(masterLayout);
     setWidget(masterWidget);
 
-    connect(mColorWheel, SIGNAL(redChanged(int)), SLOT(updateRed(int)));
-    connect(mColorWheel, SIGNAL(blueChanged(int)), SLOT(updateBlue(int)));
-    connect(mColorWheel, SIGNAL(greenChanged(int)), SLOT(updateGreen(int)));
-    connect(mColorWheel, SIGNAL(colorChanged(QColor)), SLOT(updateColor(QColor)));
-    connect(mRSlider, SIGNAL(valueChanged(int)), SLOT(updateRed(int)));
-    connect(mGSlider, SIGNAL(valueChanged(int)), SLOT(updateGreen(int)));
-    connect(mBSlider, SIGNAL(valueChanged(int)), SLOT(updateBlue(int)));
-    connect(mRSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateRed(QString)));
-    connect(mGSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateGreen(QString)));
-    connect(mBSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateBlue(QString)));
-    connect(mHSlider, SIGNAL(valueChanged(int)), SLOT(updateHue(int)));
-    connect(mSSlider, SIGNAL(valueChanged(int)), SLOT(updateSat(int)));
-    connect(mVSlider, SIGNAL(valueChanged(int)), SLOT(updateVal(int)));
-    connect(mHSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateHue(QString)));
-    connect(mSSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateSat(QString)));
-    connect(mVSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateVal(QString)));
+    connect(m_ColorWheel, SIGNAL(redChanged(int)), SLOT(updateRed(int)));
+    connect(m_ColorWheel, SIGNAL(blueChanged(int)), SLOT(updateBlue(int)));
+    connect(m_ColorWheel, SIGNAL(greenChanged(int)), SLOT(updateGreen(int)));
+    connect(m_ColorWheel, SIGNAL(colorChanged(QColor)), SLOT(updateColor(QColor)));
+    connect(m_RSlider, SIGNAL(valueChanged(int)), SLOT(updateRed(int)));
+    connect(m_GSlider, SIGNAL(valueChanged(int)), SLOT(updateGreen(int)));
+    connect(m_BSlider, SIGNAL(valueChanged(int)), SLOT(updateBlue(int)));
+    connect(m_RSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateRed(QString)));
+    connect(m_GSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateGreen(QString)));
+    connect(m_BSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateBlue(QString)));
+    connect(m_HSlider, SIGNAL(valueChanged(int)), SLOT(updateHue(int)));
+    connect(m_SSlider, SIGNAL(valueChanged(int)), SLOT(updateSat(int)));
+    connect(m_VSlider, SIGNAL(valueChanged(int)), SLOT(updateVal(int)));
+    connect(m_HSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateHue(QString)));
+    connect(m_SSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateSat(QString)));
+    connect(m_VSpinBox, SIGNAL(valueChanged(QString)), SLOT(updateVal(QString)));
 }
 
 void ColorDockWidget::updateRed(int val){
-    mRSpinBox->setValue(val);
-    mColorWheel->setRed(val);
+    m_RSpinBox->setValue(val);
+    m_ColorWheel->setRed(val);
     emit redChanged(val);
 }
 
 void ColorDockWidget::updateRed(QString val){
-    mRSlider->setValue(val.toInt());
+    m_RSlider->setValue(val.toInt());
     emit redChanged(val.toInt());
 }
 
 void ColorDockWidget::updateGreen(int val){
-    mGSpinBox->setValue(val);
-    mColorWheel->setGreen(val);
+    m_GSpinBox->setValue(val);
+    m_ColorWheel->setGreen(val);
     emit greenChanged(val);
 }
 
 void ColorDockWidget::updateGreen(QString val){
-    mGSlider->setValue(val.toInt());
+    m_GSlider->setValue(val.toInt());
     emit greenChanged(val.toInt());
 }
 
 void ColorDockWidget::updateBlue(int val){
-    mBSpinBox->setValue(val);
-    mColorWheel->setBlue(val);
+    m_BSpinBox->setValue(val);
+    m_ColorWheel->setBlue(val);
     emit blueChanged(val);
 }
 
 void ColorDockWidget::updateBlue(QString val){
-    mBSlider->setValue(val.toInt());
+    m_BSlider->setValue(val.toInt());
     emit blueChanged(val.toInt());
 }
 
 void ColorDockWidget::updateHue(int val){
-    QColor col = mColorWheel->getColor();
-    mHSpinBox->setValue(val);
+    QColor col = m_ColorWheel->getColor();
+    m_HSpinBox->setValue(val);
     int h = val;
     int s = col.saturation();
     int v = col.value();
     col.setHsv(h, s, v);
-    mColorWheel->setActualColor(col);
+    m_ColorWheel->setActualColor(col);
     emit redChanged(col.red());
     emit greenChanged(col.green());
     emit blueChanged(col.blue());
 }
 
 void ColorDockWidget::updateHue(QString val){
-    QColor col = mColorWheel->getColor();
-    mHSlider->setValue(val.toInt());
+    QColor col = m_ColorWheel->getColor();
+    m_HSlider->setValue(val.toInt());
     int h = val.toInt();
     int s = col.saturation();
     int v = col.value();
     col.setHsv(h, s, v);
-    mColorWheel->setActualColor(col);
+    m_ColorWheel->setActualColor(col);
 }
 
 void ColorDockWidget::updateSat(int val){
-    QColor col = mColorWheel->getColor();
-    mSSpinBox->setValue(val);
+    QColor col = m_ColorWheel->getColor();
+    m_SSpinBox->setValue(val);
     int h = col.hue();
     int s = val;
     int v = col.value();
     col.setHsv(h, s, v);
-    mColorWheel->setActualColor(col);
+    m_ColorWheel->setActualColor(col);
     emit redChanged(col.red());
     emit greenChanged(col.green());
     emit blueChanged(col.blue());
 }
 
 void ColorDockWidget::updateSat(QString val){
-    QColor col = mColorWheel->getColor();
-    mSSlider->setValue(val.toInt());
+    QColor col = m_ColorWheel->getColor();
+    m_SSlider->setValue(val.toInt());
     int h = col.hue();
     int s = val.toInt();
     int v = col.value();
     col.setHsv(h, s, v);
-    mColorWheel->setActualColor(col);
+    m_ColorWheel->setActualColor(col);
 }
 
 void ColorDockWidget::updateVal(int val){
-    QColor col = mColorWheel->getColor();
-    mVSpinBox->setValue(val);
+    QColor col = m_ColorWheel->getColor();
+    m_VSpinBox->setValue(val);
     int h = col.hue();
     int s = col.saturation();
     int v = val;
     col.setHsv(h, s, v);
-    mColorWheel->setActualColor(col);
+    m_ColorWheel->setActualColor(col);
     emit redChanged(col.red());
     emit greenChanged(col.green());
     emit blueChanged(col.blue());
 }
 
 void ColorDockWidget::updateVal(QString val){
-    QColor col = mColorWheel->getColor();
-    mVSlider->setValue(val.toInt());
+    QColor col = m_ColorWheel->getColor();
+    m_VSlider->setValue(val.toInt());
     int h = col.hue();
     int s = col.saturation();
     int v = val.toInt();
     col.setHsv(h, s, v);
-    mColorWheel->setActualColor(col);
+    m_ColorWheel->setActualColor(col);
 }
 
 void ColorDockWidget::updateColor(QColor col){
@@ -1424,60 +1439,60 @@ void ColorDockWidget::updateColor(QColor col){
     int s = col.saturation();
     int v = col.value();
 
-    mRSlider->setValue(r);
-    mRSpinBox->setValue(r);
-    mGSlider->setValue(g);
-    mGSpinBox->setValue(g);
-    mBSlider->setValue(b);
-    mBSlider->setValue(b);
+    m_RSlider->setValue(r);
+    m_RSpinBox->setValue(r);
+    m_GSlider->setValue(g);
+    m_GSpinBox->setValue(g);
+    m_BSlider->setValue(b);
+    m_BSlider->setValue(b);
 
-    mHSlider->setValue(h);
-    mHSpinBox->setValue(h);
-    mSSlider->setValue(s);
-    mSSpinBox->setValue(s);
-    mVSlider->setValue(v);
-    mVSpinBox->setValue(v);
+    m_HSlider->setValue(h);
+    m_HSpinBox->setValue(h);
+    m_SSlider->setValue(s);
+    m_SSpinBox->setValue(s);
+    m_VSlider->setValue(v);
+    m_VSpinBox->setValue(v);
 }
 
 /*- Color wheel -*/
 ColorWheel::ColorWheel(QWidget *parent) : QLabel(parent)
 {
-    mPixmap = QPixmap(250, 200);
-    mPixmap.fill(QColor(53, 53, 53));
-    setPixmap(mPixmap);
+    m_Pixmap = QPixmap(250, 200);
+    m_Pixmap.fill(QColor(53, 53, 53));
+    setPixmap(m_Pixmap);
 
-    primaryRed = 0;
-    primaryGreen = 0;
-    primaryBlue = 0;
-    altRed = 255;
-    altGreen = 255;
-    altBlue = 255;
+    m_PrimaryRed = 0;
+    m_PrimaryGreen = 0;
+    m_PrimaryBlue = 0;
+    m_AltRed = 255;
+    m_AltGreen = 255;
+    m_AltBlue = 255;
 
-    rotationAngle = 0.0;
+    m_RotationAngle = 0.0;
 
-    primaryColorRect = QRect(210, 160, 20, 20);
-    altColorRect = QRect(220, 170, 20, 20);
+    m_PrimaryColorRect = QRect(210, 160, 20, 20);
+    m_AltColorRect = QRect(220, 170, 20, 20);
     QRect referenceRect(72, 47,105, 105);
 
-    points.reserve(3);
-    points.push_back(QPoint(referenceRect.topLeft().x() + referenceRect.width()/2, referenceRect.top() - 20));
-    points.push_back(referenceRect.bottomLeft());
-    points.push_back(referenceRect.bottomRight());
+    m_Points.reserve(3);
+    m_Points.push_back(QPoint(referenceRect.topLeft().x() + referenceRect.width()/2, referenceRect.top() - 20));
+    m_Points.push_back(referenceRect.bottomLeft());
+    m_Points.push_back(referenceRect.bottomRight());
 
-    centerRectPoint = QPoint(points.at(0).x(), 100);
+    m_CenterRectPoint = QPoint(m_Points.at(0).x(), 100);
 
-    colorRangeTri.moveTo(points.at(0));
-    colorRangeTri.lineTo(points.at(1));
-    colorRangeTri.lineTo(points.at(2));
-    colorRangeTri.lineTo(points.at(0));
+    m_ColorRangeTri.moveTo(m_Points.at(0));
+    m_ColorRangeTri.lineTo(m_Points.at(1));
+    m_ColorRangeTri.lineTo(m_Points.at(2));
+    m_ColorRangeTri.lineTo(m_Points.at(0));
 
-    primaryBasePoint = QPoint(125, 15);
-    altBasePoint = QPoint(125, 185);
-    toggleAlt = false;
-    QColor col(primaryRed, primaryGreen, primaryBlue);
-    mHue = col.hue();
-    mSaturation = col.saturation();
-    mValue = col.value();
+    m_PrimaryBasePoint = QPoint(125, 15);
+    m_AltBasePoint = QPoint(125, 185);
+    m_toggleAlt = false;
+    QColor col(m_PrimaryRed, m_PrimaryGreen, m_PrimaryBlue);
+    m_Hue = col.hue();
+    m_Saturation = col.saturation();
+    m_Value = col.value();
 }
 
 QColor ColorWheel::getColorFromPoint(QPoint point){
@@ -1487,108 +1502,108 @@ QColor ColorWheel::getColorFromPoint(QPoint point){
 }
 
 void ColorWheel::setActualColor(QColor col){
-    actualRed = col.red();
-    actualGreen = col.green();
-    actualBlue = col.blue();
+    m_ActualRed = col.red();
+    m_ActualGreen = col.green();
+    m_ActualBlue = col.blue();
     update();
 }
 
 QColor ColorWheel::getColor(){
-    QColor ret(actualRed, actualGreen, actualBlue);
+    QColor ret(m_ActualRed, m_ActualGreen, m_ActualBlue);
     return ret;
 }
 
 void ColorWheel::setRed(int r){
-    actualRed = r;
+    m_ActualRed = r;
     repaint();
 }
 
 void ColorWheel::setGreen(int g){
-    actualGreen = g;
+    m_ActualGreen = g;
     repaint();
 }
 
 void ColorWheel::setBlue(int b){
-    actualBlue = b;
+    m_ActualBlue = b;
     repaint();
 }
 
 void ColorWheel::processHSV(QColor col){
-    mHue = col.hslHue();
-    mSaturation = col.saturation();
-    mValue = col.value();
+    m_Hue = col.hslHue();
+    m_Saturation = col.saturation();
+    m_Value = col.value();
 }
 
 void ColorWheel::mousePressEvent(QMouseEvent *ev){
     if(ev->button() == Qt::LeftButton){
-        if(primaryColorRect.contains(ev->pos())){
-            QColor color = QColorDialog::getColor(QColor(actualRed, actualGreen, actualBlue));
+        if(m_PrimaryColorRect.contains(ev->pos())){
+            QColor color = QColorDialog::getColor(QColor(m_ActualRed, m_ActualGreen, m_ActualBlue));
             if(color.isValid()){
-                actualRed = color.red();
-                actualGreen = color.green();
-                actualBlue = color.blue();
+                m_ActualRed = color.red();
+                m_ActualGreen = color.green();
+                m_ActualBlue = color.blue();
             }
-            emit redChanged(actualRed);
-            emit greenChanged(actualGreen);
-            emit blueChanged(actualBlue);
-            emit colorChanged(QColor(actualRed, actualGreen, actualBlue));
+            emit redChanged(m_ActualRed);
+            emit greenChanged(m_ActualGreen);
+            emit blueChanged(m_ActualBlue);
+            emit colorChanged(QColor(m_ActualRed, m_ActualGreen, m_ActualBlue));
         }
-        if(altColorRect.contains(ev->pos())){
-            emit redChanged(altRed);
-            emit greenChanged(altGreen);
-            emit blueChanged(altBlue);
+        if(m_AltColorRect.contains(ev->pos())){
+            emit redChanged(m_AltRed);
+            emit greenChanged(m_AltGreen);
+            emit blueChanged(m_AltBlue);
         }
-        if(colorRangeTri.contains(ev->pos())){
+        if(m_ColorRangeTri.contains(ev->pos())){
             //set the color
-            preciseColor = ev->pos();
+            m_PreciseColor = ev->pos();
             QColor newColor = getColorFromPoint(ev->pos());
-            actualRed = newColor.red();
-            actualGreen = newColor.green();
-            actualBlue = newColor.blue();
-            emit redChanged(actualRed);
-            emit greenChanged(actualGreen);
-            emit blueChanged(actualBlue);
-            emit colorChanged(QColor(actualRed, actualGreen, actualBlue));
+            m_ActualRed = newColor.red();
+            m_ActualGreen = newColor.green();
+            m_ActualBlue = newColor.blue();
+            emit redChanged(m_ActualRed);
+            emit greenChanged(m_ActualGreen);
+            emit blueChanged(m_ActualBlue);
+            emit colorChanged(QColor(m_ActualRed, m_ActualGreen, m_ActualBlue));
         }
-        if(!mouseDown && !colorRangeTri.contains(ev->pos())) mouseDown = true;
-        if(mouseDown){
+        if(!m_MouseDown && !m_ColorRangeTri.contains(ev->pos())) m_MouseDown = true;
+        if(m_MouseDown){
             QPoint centerPoint(175, 100);
             QPoint dPoint = centerPoint - ev->pos();
-            rotationAngle = atan2(dPoint.x(), dPoint.y());
-            rotationAngle = rotationAngle * (180.0 / M_PI);
+            m_RotationAngle = atan2(dPoint.x(), dPoint.y());
+            m_RotationAngle = m_RotationAngle * (180.0 / M_PI);
             processBaseMovePoint();
         }
     }
     if(ev->button() == Qt::RightButton){
         int swapRed = 0, swapGreen = 0, swapBlue = 0;
-        swapRed = actualRed;
-        swapGreen = actualGreen;
-        swapBlue = actualBlue;
-        actualRed = altRed;
-        actualGreen = altGreen;
-        actualBlue = altBlue;
-        altRed = swapRed;
-        altGreen = swapGreen;
-        altBlue = swapBlue;
-        emit redChanged(actualRed);
-        emit greenChanged(actualGreen);
-        emit blueChanged(actualBlue);
-        emit colorChanged(QColor(actualRed, actualGreen, actualBlue));
+        swapRed = m_ActualRed;
+        swapGreen = m_ActualGreen;
+        swapBlue = m_ActualBlue;
+        m_ActualRed = m_AltRed;
+        m_ActualGreen = m_AltGreen;
+        m_ActualBlue = m_AltBlue;
+        m_AltRed = swapRed;
+        m_AltGreen = swapGreen;
+        m_AltBlue = swapBlue;
+        emit redChanged(m_ActualRed);
+        emit greenChanged(m_ActualGreen);
+        emit blueChanged(m_ActualBlue);
+        emit colorChanged(QColor(m_ActualRed, m_ActualGreen, m_ActualBlue));
     }
     if(ev->button() == Qt::MidButton){
-        toggleAlt =! toggleAlt;
-        if(toggleAlt){
-            QColor newColor = getColorFromPoint(altBasePoint);
-            primaryRed = newColor.red();
-            primaryGreen = newColor.green();
-            primaryBlue = newColor.blue();
-            rotationAngle+= 180.0f;
+        m_toggleAlt =! m_toggleAlt;
+        if(m_toggleAlt){
+            QColor newColor = getColorFromPoint(m_AltBasePoint);
+            m_PrimaryRed = newColor.red();
+            m_PrimaryGreen = newColor.green();
+            m_PrimaryBlue = newColor.blue();
+            m_RotationAngle+= 180.0f;
         }else{
-            QColor newColor = getColorFromPoint(primaryBasePoint);
-            primaryRed = newColor.red();
-            primaryGreen = newColor.green();
-            primaryBlue = newColor.blue();
-            rotationAngle+= 180.0f;
+            QColor newColor = getColorFromPoint(m_PrimaryBasePoint);
+            m_PrimaryRed = newColor.red();
+            m_PrimaryGreen = newColor.green();
+            m_PrimaryBlue = newColor.blue();
+            m_RotationAngle+= 180.0f;
         }
     }
     repaint();
@@ -1615,8 +1630,8 @@ void ColorWheel::paintEvent(QPaintEvent *e){
     painter.drawEllipse(25, 0, 200, 200);
 
     QPoint ctrPoint(125, 100);
-    QPoint pbp = QPoint(primaryBasePoint.x(), primaryBasePoint.y());
-    QPoint abp = QPoint(altBasePoint.x(), altBasePoint.y());
+    QPoint pbp = QPoint(m_PrimaryBasePoint.x(), m_PrimaryBasePoint.y());
+    QPoint abp = QPoint(m_AltBasePoint.x(), m_AltBasePoint.y());
 
     QLine line;
     line.setP1(QPoint(125,23));
@@ -1624,7 +1639,7 @@ void ColorWheel::paintEvent(QPaintEvent *e){
     painter.setPen(Qt::black);
     painter.setBrush(Qt::black);
     painter.translate(ctrPoint);
-    painter.rotate(-rotationAngle);
+    painter.rotate(-m_RotationAngle);
     painter.translate(-ctrPoint);
     painter.drawLine(line);
     painter.resetTransform();
@@ -1638,17 +1653,17 @@ void ColorWheel::paintEvent(QPaintEvent *e){
     painter.drawEllipse(ctrPoint, 75, 75);
 
     //Color Rect
-    QColor primaryColor(primaryRed, primaryGreen, primaryBlue);
-    QColor altColor(altRed, altGreen, altBlue);
+    QColor primaryColor(m_PrimaryRed, m_PrimaryGreen, m_PrimaryBlue);
+    QColor altColor(m_AltRed, m_AltGreen, m_AltBlue);
     painter.setPen(Qt::black);
     painter.setBrush(altColor);
-    painter.drawRect(altColorRect);
-    QColor actualColor(actualRed, actualGreen, actualBlue);
+    painter.drawRect(m_AltColorRect);
+    QColor actualColor(m_ActualRed, m_ActualGreen, m_ActualBlue);
     painter.setBrush(actualColor);
-    painter.drawRect(primaryColorRect);
+    painter.drawRect(m_PrimaryColorRect);
 
     QConicalGradient colorGrad;
-    colorGrad.setCenter(centerRectPoint);
+    colorGrad.setCenter(m_CenterRectPoint);
     colorGrad.setAngle(90);
     //colorGrad.setColorAt(0, Qt::white);
     colorGrad.setColorAt(0.0, primaryColor);
@@ -1657,35 +1672,35 @@ void ColorWheel::paintEvent(QPaintEvent *e){
     colorGrad.setColorAt(1.0, primaryColor);
 
     painter.setBrush(colorGrad);
-    painter.translate(centerRectPoint);
-    painter.rotate(-rotationAngle);
-    painter.translate(-centerRectPoint);
-    painter.drawPath(colorRangeTri);
+    painter.translate(m_CenterRectPoint);
+    painter.rotate(-m_RotationAngle);
+    painter.translate(-m_CenterRectPoint);
+    painter.drawPath(m_ColorRangeTri);
     painter.resetTransform();
     painter.end();
 }
 
 void ColorWheel::mouseMoveEvent(QMouseEvent *e){
-    if(mouseDown){
+    if(m_MouseDown){
         QPoint centerPoint(175, 100);
         QPoint dPoint = centerPoint - e->pos();
-        rotationAngle = atan2(dPoint.x(), dPoint.y());
-        rotationAngle = rotationAngle * (180.0 / M_PI);
-        qDebug() << "Rotation Angle: " << rotationAngle << endl;
+        m_RotationAngle = atan2(dPoint.x(), dPoint.y());
+        m_RotationAngle = m_RotationAngle * (180.0 / M_PI);
+        qDebug() << "Rotation Angle: " << m_RotationAngle << endl;
         processBaseMovePoint();
 
         //Adjust the primary color
-        if(!toggleAlt){
-            QColor color = getColorFromPoint(primaryBasePoint);
-            primaryRed = color.red();
-            primaryGreen = color.green();
-            primaryBlue = color.blue();
+        if(!m_toggleAlt){
+            QColor color = getColorFromPoint(m_PrimaryBasePoint);
+            m_PrimaryRed = color.red();
+            m_PrimaryGreen = color.green();
+            m_PrimaryBlue = color.blue();
         }else{
-            QColor color = getColorFromPoint(altBasePoint);
-            primaryRed = color.red();
-            primaryGreen = color.green();
-            primaryBlue = color.blue();
-            rotationAngle += 180.0f;
+            QColor color = getColorFromPoint(m_AltBasePoint);
+            m_PrimaryRed = color.red();
+            m_PrimaryGreen = color.green();
+            m_PrimaryBlue = color.blue();
+            m_RotationAngle += 180.0f;
         }
     }
     repaint();
@@ -1693,21 +1708,21 @@ void ColorWheel::mouseMoveEvent(QMouseEvent *e){
 
 void ColorWheel::mouseReleaseEvent(QMouseEvent *ev){
     Q_UNUSED(ev)
-    if(mouseDown){
-        mouseDown = false;
+    if(m_MouseDown){
+        m_MouseDown = false;
     }
 }
 
 void ColorWheel::processBaseMovePoint(){
     QTransform transform;
     QPoint ctrPoint(125, 100);
-    primaryBasePoint = QPoint(125, 15);
-    altBasePoint = QPoint(125, 185);
+    m_PrimaryBasePoint = QPoint(125, 15);
+    m_AltBasePoint = QPoint(125, 185);
     transform.translate(ctrPoint.x(), ctrPoint.y());
-    transform.rotate(-rotationAngle);
+    transform.rotate(-m_RotationAngle);
     transform.translate(-ctrPoint.x(), -ctrPoint.y());
-    primaryBasePoint = transform.map(primaryBasePoint);
-    altBasePoint = transform.map(altBasePoint);
+    m_PrimaryBasePoint = transform.map(m_PrimaryBasePoint);
+    m_AltBasePoint = transform.map(m_AltBasePoint);
 }
 
 
@@ -1761,7 +1776,22 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
 
     m_compositionMode = new QComboBox(this);
     m_compositionMode->addItem("Normal");
+    m_compositionMode->insertSeparator(1);
+    m_compositionMode->addItem("Plus");
     m_compositionMode->addItem("Multiply");
+    m_compositionMode->insertSeparator(4);
+    m_compositionMode->addItem("Screen");
+    m_compositionMode->addItem("Overlay");
+    m_compositionMode->insertSeparator(7);
+    m_compositionMode->addItem("Darken");
+    m_compositionMode->addItem("Lighten");
+    m_compositionMode->addItem("Color Dodge");
+    m_compositionMode->addItem("Color Burn");
+    m_compositionMode->addItem("Hard Light");
+    m_compositionMode->addItem("Soft Light");
+    m_compositionMode->insertSeparator(14);
+    m_compositionMode->addItem("Difference");
+    m_compositionMode->addItem("Exclusion");
 
     m_layerManager = new QTreeWidget(this);
     m_layerManager->setSelectionMode(QTreeWidget::ExtendedSelection);
