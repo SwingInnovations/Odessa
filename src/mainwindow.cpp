@@ -137,6 +137,7 @@ MainWindow::MainWindow(QWidget *parent)
     selectAllAct->setText("&Select All");
     deselectAct = new QAction(this);
     deselectAct->setText("&Deselect");
+    convertSelToStenAct = new QAction("Convert to Stencil", this);
 
     preferenceAct = new QAction("Preferences", this);
     preferenceAct->setIcon(QIcon(":/icon/resource/settings_lite.png"));
@@ -199,6 +200,8 @@ MainWindow::MainWindow(QWidget *parent)
     selectMenu->addAction(selectRegionAct);
     selectMenu->addAction(selectAllAct);
     selectMenu->addAction(deselectAct);
+    selectMenu->addSeparator();
+    selectMenu->addAction(convertSelToStenAct);
 
     debugWinAct = new QAction("Debug", this);
 
@@ -542,5 +545,9 @@ void MainWindow::writeSettings(){
     qDebug()<<"Project Path" << projectPath+"/Brush/" << endl;
     settings.setValue("projectPath", projectPath);
     settings.setValue("windowGeom", this->geometry());
+}
+
+void MainWindow::selectToStencil(){
+    //Convert Selection to stencil
 }
 

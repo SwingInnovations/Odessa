@@ -1949,6 +1949,8 @@ void LayerDockWidget::updateLayer(QTreeWidgetItem *itm, int i){
         qDebug() << "Cannot uncheck the noncheckable." << endl;
     }
 
+    qDebug() << "Opacity: " << opacity << endl;
+
     emit compositionModeChanged(itm->data(0, Qt::UserRole + 4).toInt());
     emit opacityChanged(opacity);
     emit layerChanged(itm->data(i, Qt::UserRole + 1).toInt());

@@ -58,6 +58,7 @@ private slots:
     void about();
     void readSettings();
     void writeSettings();
+    void selectToStencil();
 private:
     void scaleImage(double);
     void adjustScrollBar(QScrollBar* scrollBar, double factor);
@@ -101,6 +102,7 @@ private:
     QAction *selectRegionAct;
     QAction *selectAllAct;
     QAction *deselectAct;
+    QAction *convertSelToStenAct;
 
     //show dock widgets
     QAction *showBrushDockWinAct;
