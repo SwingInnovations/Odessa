@@ -10,6 +10,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_ShiftEnabled = false;
 
     m_CurrentIndex = 0;
+    m_LastIndex = -1;
     m_CurrentFrame = 0;
 
     m_RedVal = 0;
@@ -64,6 +65,7 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_keyEntry[1] = -1;
 
     m_useCustomCombo = false;
+
 }
 
 void Editor::setHistoyStep(int h){
@@ -488,6 +490,7 @@ void Editor::addLayer()
 }
 
 void Editor::setLayerIndex(int i){
+    m_LastIndex = m_CurrentIndex;
     if(i >= 1){ m_CurrentIndex = i+1; }else{ m_CurrentIndex = 1; }
     emit currentIndexChanged(m_CurrentIndex);
     update();

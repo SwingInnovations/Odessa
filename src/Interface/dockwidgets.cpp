@@ -1938,8 +1938,12 @@ void LayerDockWidget::updateLayer(QTreeWidgetItem *itm, int i){
     int opacity = itm->data(0, Qt::UserRole + 3).toInt();
 
     m_compositionMode->setCurrentIndex(itm->data(0, Qt::UserRole + 4).toInt());
+    m_opacitySlider->blockSignals(true);
     m_opacitySlider->setValue(opacity);
+    m_opacitySlider->blockSignals(false);
+    m_opacitySpinbox->blockSignals(true);
     m_opacitySpinbox->setValue(itm->data(0, Qt::UserRole + 3).toInt());
+    m_opacitySpinbox->blockSignals(false);
 
     if(itm->checkState(i) == Qt::Unchecked){
         emit toggleLayerVisible(false);
@@ -1952,7 +1956,6 @@ void LayerDockWidget::updateLayer(QTreeWidgetItem *itm, int i){
     qDebug() << "Opacity: " << opacity << endl;
 
     emit compositionModeChanged(itm->data(0, Qt::UserRole + 4).toInt());
-    emit opacityChanged(opacity);
     emit layerChanged(itm->data(i, Qt::UserRole + 1).toInt());
 }
 

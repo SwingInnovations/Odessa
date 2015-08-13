@@ -218,6 +218,7 @@ private:
 
     int m_CurrentFrame;
     int m_CurrentIndex;
+    int m_LastIndex;
     QVector<Layer*> m_Layers;
 
     ToolType m_ToolType;
