@@ -326,6 +326,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_Editor, SIGNAL(brushToolSelected()), SLOT(assignBrushTool()));
     connect(m_Editor, SIGNAL(eraserToolSelected()), SLOT(assignEraserTool()));
     connect(m_Editor, SIGNAL(cursorToolSelected()), SLOT(assignCursorTool()));
+    connect(m_Editor, SIGNAL(layerPreviewChanged(int,QPixmap)), layerDockWidget, SLOT(updateLayerPreview(int,QPixmap)));
     connect(eyeDropperTool, SIGNAL(triggered()), SLOT(assignEyeDropperTool()));
     connect(eyeDropper, SIGNAL(activated()), SLOT(assignEyeDropperTool()));
     connect(debugWinAct, SIGNAL(triggered()), SLOT(showDebugWin()));

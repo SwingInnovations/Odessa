@@ -1797,17 +1797,7 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     m_layerManager->setSelectionMode(QTreeWidget::ExtendedSelection);
     m_layerManager->sortItems(0, Qt::DescendingOrder);
     m_layerManager->setDragEnabled(true);
-    QTreeWidgetItem* itm = new QTreeWidgetItem();
-    itm->setText(0, "Background");
-    itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable);
-    itm->setSelected(false);
-    itm->setData(0, Qt::UserRole + 1, QVariant(m_layerCount));
-    itm->setData(0, Qt::UserRole + 2, QVariant(0));
-    itm->setData(0, Qt::UserRole + 3, QVariant(100));
-    itm->setData(0, Qt::UserRole + 4, QVariant(0));
-    itm->setSelected(true);
-    itm->setCheckState(0, Qt::Checked);
-    m_layerManager->addTopLevelItem(itm);
+    m_layerManager->setIconSize(QSize(96, 64));
 
     QHBoxLayout* compLayout = new QHBoxLayout;
     compLayout->addWidget(m_compositionMode);
@@ -1859,7 +1849,6 @@ void LayerDockWidget::reset(){
 
 void LayerDockWidget::addLayer(){
     m_layerCount++;
-    QVariant layerCount(m_layerCount);
     QTreeWidgetItem* itm = new QTreeWidgetItem();
     itm->setText(0, "Layer" + QString::number(m_layerCount));
     itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled);
@@ -1868,6 +1857,14 @@ void LayerDockWidget::addLayer(){
     itm->setData(0, Qt::UserRole + 2, QVariant(0));
     itm->setData(0, Qt::UserRole + 3, QVariant(100));
     itm->setData(0, Qt::UserRole + 4, QVariant(0));
+
+    m_opacitySlider->blockSignals(true);
+    m_opacitySpinbox->blockSignals(true);
+    m_opacitySlider->setValue(100);
+    m_opacitySpinbox->setValue(100);
+    m_opacitySlider->blockSignals(false);
+    m_opacitySlider->blockSignals(false);
+
     m_layerManager->addTopLevelItem(itm);
     m_layerManager->sortItems(0, Qt::DescendingOrder);
     emit layerAdded();
@@ -1924,8 +1921,10 @@ void LayerDockWidget::updateOpacity(QString o){
 }
 
 void LayerDockWidget::updateLayerPreview(int i, QPixmap pix){
-    QTreeWidgetItem* itm = m_layerManager->currentItem();
-    itm->setIcon(0, QIcon(pix));
+    QTreeWidgetItem* itm = m_layerManager->itemAt(0, i);
+    if(itm != NULL){
+        itm->setIcon(i, QIcon(pix));
+    }
 }
 
 void LayerDockWidget::setCompositionMode(int i){

@@ -473,6 +473,7 @@ void Editor::newProject(ProjectInfo &info){
     m_ClipOffsetPoint = QPoint(0, 0);
     emit currentIndexChanged(m_CurrentIndex);
     emit currentFrameChanged(m_CurrentFrame);
+    emit layerPreviewChanged(0, m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
     backup();
     update();
 }
