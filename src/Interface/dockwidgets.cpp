@@ -1799,6 +1799,11 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     m_layerManager->setDragEnabled(true);
     m_layerManager->setIconSize(QSize(96, 64));
 
+    m_addLayerBtn = new QPushButton("[+]", this);
+    m_deleteLayerBtn = new QPushButton("[-]", this);
+    m_groupBtn = new QPushButton("[G]", this);
+    m_ungroupBtn = new QPushButton("[xG]", this);
+
     QHBoxLayout* compLayout = new QHBoxLayout;
     compLayout->addWidget(m_compositionMode);
     compLayout->addWidget(m_layerOptionsBtn);
@@ -1808,10 +1813,17 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     opacityLayout->addWidget(m_opacitySlider);
     opacityLayout->addWidget(m_opacitySpinbox);
 
+    QHBoxLayout* btnLayout = new QHBoxLayout;
+    btnLayout->addWidget(m_addLayerBtn);
+    btnLayout->addWidget(m_deleteLayerBtn);
+    btnLayout->addWidget(m_groupBtn);
+    btnLayout->addWidget(m_ungroupBtn);
+
     QVBoxLayout *layerLayout = new QVBoxLayout;
     layerLayout->addLayout(compLayout);
     layerLayout->addLayout(opacityLayout);
     layerLayout->addWidget(m_layerManager);
+    layerLayout->addLayout(btnLayout);
 
     QWidget *layerDisplay = new QWidget(this);
     layerDisplay->setLayout(layerLayout);
@@ -1824,6 +1836,7 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(m_duplicateLayerAct, SIGNAL(triggered()), SLOT(duplicateLayer()));
     connect(m_opacitySlider, SIGNAL(valueChanged(int)), SLOT(updateOpacity(int)));
     connect(m_opacitySpinbox, SIGNAL(valueChanged(QString)), SLOT(updateOpacity(QString)));
+    connect(m_addLayerBtn, SIGNAL(clicked()), SLOT(addLayer()));
 }
 
 void LayerDockWidget::duplicateLayer(){
@@ -1845,6 +1858,7 @@ void LayerDockWidget::reset(){
     itm->setData(0, Qt::UserRole + 3, QVariant(100));
     itm->setData(0, Qt::UserRole + 4, QVariant(0));
     m_layerManager->addTopLevelItem(itm);
+    m_layerManager->setCurrentItem(itm);
 }
 
 void LayerDockWidget::addLayer(){
@@ -1867,6 +1881,7 @@ void LayerDockWidget::addLayer(){
 
     m_layerManager->addTopLevelItem(itm);
     m_layerManager->sortItems(0, Qt::DescendingOrder);
+    m_layerManager->setCurrentItem(itm);
     emit layerAdded();
 }
 
@@ -1921,7 +1936,7 @@ void LayerDockWidget::updateOpacity(QString o){
 }
 
 void LayerDockWidget::updateLayerPreview(int i, QPixmap pix){
-    QTreeWidgetItem* itm = m_layerManager->itemAt(0, i);
+    QTreeWidgetItem* itm = m_layerManager->currentItem();
     if(itm != NULL){
         itm->setIcon(i, QIcon(pix));
     }

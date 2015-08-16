@@ -306,9 +306,11 @@ void Editor::paintEvent(QPaintEvent *event)
                }
 
                p.drawImage(0, 0, drawnImage);
-               emit layerPreviewChanged(i, QPixmap::fromImage(drawnImage));
            }
         }
+
+        emit layerPreviewChanged(0, m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+
         p.end();
         painter.drawPixmap(0, 0, drawnPixmap);
         setPixmap(drawnPixmap);
@@ -493,6 +495,7 @@ void Editor::addLayer()
 void Editor::setLayerIndex(int i){
     m_LastIndex = m_CurrentIndex;
     if(i >= 1){ m_CurrentIndex = i+1; }else{ m_CurrentIndex = 1; }
+    emit layerPreviewChanged(0, m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
     emit currentIndexChanged(m_CurrentIndex);
     update();
 }

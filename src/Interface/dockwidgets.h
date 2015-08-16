@@ -515,6 +515,11 @@ private:
     QAction* m_deleteLayerAct;
     QAction* m_groupAct;
     QAction* m_ungroupAct;
+
+    QPushButton* m_addLayerBtn;
+    QPushButton* m_deleteLayerBtn;
+    QPushButton* m_groupBtn;
+    QPushButton* m_ungroupBtn;
 };
 
 class DefaultToolPanel : public QWidget{
