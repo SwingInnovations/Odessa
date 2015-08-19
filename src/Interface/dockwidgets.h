@@ -480,6 +480,7 @@ public:
     virtual ~LayerDockWidget();
 signals:
     void layerAdded();
+    void layerRemoved(int); //emits the index of the layer that was removed
     void layerChanged(QTreeWidgetItem*,int);
     void layerChanged(int);
     void toggleLayerVisible(bool);
@@ -489,6 +490,7 @@ public slots:
     void reset();
     void setCompositionMode(int);
     void addLayer();
+    void removeLayer();
     void duplicateLayer();
     void groupLayers();
     void ungroupLayers();

@@ -1797,7 +1797,7 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     m_layerManager->setSelectionMode(QTreeWidget::ExtendedSelection);
     m_layerManager->sortItems(0, Qt::DescendingOrder);
     m_layerManager->setDragEnabled(true);
-    m_layerManager->setIconSize(QSize(96, 64));
+    m_layerManager->setIconSize(QSize(72, 40));
 
     m_addLayerBtn = new QPushButton("[+]", this);
     m_deleteLayerBtn = new QPushButton("[-]", this);
@@ -1837,6 +1837,7 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(m_opacitySlider, SIGNAL(valueChanged(int)), SLOT(updateOpacity(int)));
     connect(m_opacitySpinbox, SIGNAL(valueChanged(QString)), SLOT(updateOpacity(QString)));
     connect(m_addLayerBtn, SIGNAL(clicked()), SLOT(addLayer()));
+    connect(m_groupBtn, SIGNAL(clicked(bool)), SLOT(groupLayers()));
 }
 
 void LayerDockWidget::duplicateLayer(){
@@ -1867,10 +1868,10 @@ void LayerDockWidget::addLayer(){
     itm->setText(0, "Layer" + QString::number(m_layerCount));
     itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled);
     itm->setCheckState(0, Qt::Checked);
-    itm->setData(0, Qt::UserRole + 1, QVariant(m_layerCount));
-    itm->setData(0, Qt::UserRole + 2, QVariant(0));
-    itm->setData(0, Qt::UserRole + 3, QVariant(100));
-    itm->setData(0, Qt::UserRole + 4, QVariant(0));
+    itm->setData(0, Qt::UserRole + 1, QVariant(m_layerCount)); // Corresponding layer assignment
+    itm->setData(0, Qt::UserRole + 2, QVariant(0)); //visibility
+    itm->setData(0, Qt::UserRole + 3, QVariant(100)); // Opacity
+    itm->setData(0, Qt::UserRole + 4, QVariant(0)); //Composition mode
 
     m_opacitySlider->blockSignals(true);
     m_opacitySpinbox->blockSignals(true);
@@ -1883,6 +1884,10 @@ void LayerDockWidget::addLayer(){
     m_layerManager->sortItems(0, Qt::DescendingOrder);
     m_layerManager->setCurrentItem(itm);
     emit layerAdded();
+}
+
+void LayerDockWidget::removeLayer(){
+
 }
 
 void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent){
@@ -1901,18 +1906,28 @@ void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent){
 
 void LayerDockWidget::groupLayers(){
     QTreeWidgetItem* grpFolder = new QTreeWidgetItem(m_layerManager);
-    for(int i = 0; i < m_layerManager->topLevelItemCount(); i++){
-        QTreeWidgetItem* itm = m_layerManager->topLevelItem(i);
-        if(itm->isSelected()){
-            grpFolder->addChild(itm);
-            m_layerManager->removeItemWidget(itm, 0);
-        }
-    }
     grpFolder->setText(0, "Group");
-    grpFolder->setFlags(grpFolder->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable);
+    grpFolder->setFlags(grpFolder->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsUserTristate);
+//    for(int i = 0; i < m_layerManager->topLevelItemCount(); i++){
+//        QTreeWidgetItem* itm = m_layerManager->topLevelItem(i);
+//        if(itm->isSelected()){
+//            grpFolder->addChild(itm);
+//            m_layerManager->removeItemWidget(itm, 0);
+//        }
+//    }
+
+    for(int i = 0; i < m_layerManager->selectedItems().size(); i++){
+        grpFolder->addChild(m_layerManager->selectedItems().at(i));
+    }
+
+    foreach (QTreeWidgetItem* itm, m_layerManager->selectedItems()) {
+       delete itm;
+    }
+
     grpFolder->setExpanded(true);
     m_layerManager->addTopLevelItem(grpFolder);
     m_layerManager->sortItems(0, Qt::DescendingOrder);
+    m_layerManager->expandItem(grpFolder);
 }
 
 void LayerDockWidget::ungroupLayers(){
