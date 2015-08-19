@@ -296,17 +296,20 @@ void Editor::paintEvent(QPaintEvent *event)
         QSize imageSize = drawnPixmap.size();
         QPainter p(&drawnPixmap);
         for(int i = 0; i < m_Layers.size(); i++){
-           if(m_Layers.at(i)->getFrame(m_CurrentFrame-1)->isVisible()){
-               m_Layers.at(i)->getFrame(m_CurrentFrame-1)->paintImage(painter);
-               QImage drawnImage = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap().toImage();
-               drawnImage.convertToFormat(QImage::Format_ARGB32, Qt::AutoColor);
-               if(i > 0){
-                   p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-                   p.setOpacity((qreal)m_Layers.at(i)->getOpacity()/100.0);
-               }
+           if(m_Layers.at(i)->isVisible()){
+               if(m_Layers.at(i)->getFrame(m_CurrentFrame-1)->isVisible()){
+                   m_Layers.at(i)->getFrame(m_CurrentFrame-1)->paintImage(painter);
+                   QImage drawnImage = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap().toImage();
+                   drawnImage.convertToFormat(QImage::Format_ARGB32, Qt::AutoColor);
+                   if(i > 0){
+                       p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+                       p.setOpacity((qreal)m_Layers.at(i)->getOpacity()/100.0);
+                   }
 
-               p.drawImage(0, 0, drawnImage);
+                   p.drawImage(0, 0, drawnImage);
+               }
            }
+
         }
 
         emit layerPreviewChanged(0, m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
@@ -517,7 +520,11 @@ void Editor::setLayerCompositionMode(int c){
 }
 
 void Editor::setLayerVisible(bool val){
-    if(!m_Layers.empty()){ m_Layers.at(m_CurrentIndex-1)->setVisible(val); }
+    qDebug() << "Changing layer visibility" << endl;
+    if(!m_Layers.empty()){
+        m_Layers.at(m_CurrentIndex-1)->setVisible(val);
+        qDebug() << "Visibility: " << val << endl;
+    }
     update();
 }
 
