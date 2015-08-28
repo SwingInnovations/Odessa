@@ -182,6 +182,7 @@ public:
     void setStencilPixmap(QPixmap);
     void activateUsePressureWidth(bool);
     void generateStrokePreview();
+    int getSelectedIndex();
 signals:
     void loadStencilTriggered();
     void loadBrushTriggered();
@@ -193,6 +194,7 @@ signals:
     void brushLibIndexChanged(int);
     void brushNameChanged(QString);
 public slots:
+    void deleteSelected(int index);
     void updateLoadStencil(){emit loadStencilTriggered();}
     void updateLoadBrush(){emit loadBrushTriggered();}
     void updateLoadBrushSet(){emit loadBrushSetTriggered();}
@@ -472,6 +474,27 @@ public:
     virtual ~TimelineDockWidget();
 };
 
+class LayerPanel : public QTreeWidget{
+public:
+    LayerPanel(QWidget *parent = 0) : QTreeWidget(parent){
+        setSelectionMode(QTreeWidget::ExtendedSelection);
+        sortItems(0, Qt::DescendingOrder);
+        setDragEnabled(true);
+        setDragDropMode(QAbstractItemView::InternalMove);
+        setIconSize(QSize(72, 40));
+    }
+
+protected:
+    virtual void dropEvent(QDropEvent* event){
+        QModelIndex dropIndex = indexAt(event->pos());
+        if(!dropIndex.isValid()){
+            return;
+        }
+
+        QTreeWidget::dropEvent(event);
+    }
+};
+
 class LayerDockWidget : public QDockWidget
 {
     Q_OBJECT
@@ -497,6 +520,7 @@ public slots:
     void updateOpacity(int);
     void updateOpacity(QString);
     void addChildLayer(QTreeWidgetItem* parent);
+    void addChildLayer(QTreeWidgetItem *parent, QString childName);
     void updateLayerPreview(int, QPixmap);
 private slots:
     void updateLayer(QTreeWidgetItem*, int);
@@ -505,7 +529,7 @@ private slots:
 private:
     int m_layerCount;
     QComboBox* m_compositionMode;
-    QTreeWidget* m_layerManager;
+    LayerPanel* m_layerManager;
     QToolButton* m_layerOptionsBtn;
     QLabel* m_opacityLbl;
     QSlider* m_opacitySlider;

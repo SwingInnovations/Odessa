@@ -698,6 +698,21 @@ void GeneralBrushWidget::addBrush(Brush brush){
     m_BrushIndex->addItem(itm);
 }
 
+int GeneralBrushWidget::getSelectedIndex(){
+   for(int i = 0; i < m_BrushIndex->count(); i++){
+       if(m_BrushIndex->item(i)->isSelected()){
+           return i;
+       }
+   }
+   return 0;
+}
+
+void GeneralBrushWidget::deleteSelected(int index){
+    QListWidgetItem* itm = m_BrushIndex->item(index);
+    m_BrushIndex->removeItemWidget(itm);
+    itm = nullptr;
+}
+
 void GeneralBrushWidget::updateStencil(QPixmap pixmap){
     int targetWidth = m_StencilPreview.width();
     int targetHeight = m_StencilPreview.height();
@@ -1793,11 +1808,11 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     m_compositionMode->addItem("Difference");
     m_compositionMode->addItem("Exclusion");
 
-    m_layerManager = new QTreeWidget(this);
-    m_layerManager->setSelectionMode(QTreeWidget::ExtendedSelection);
-    m_layerManager->sortItems(0, Qt::DescendingOrder);
-    m_layerManager->setDragEnabled(true);
-    m_layerManager->setIconSize(QSize(72, 40));
+    m_layerManager = new LayerPanel(this);
+//    m_layerManager->setSelectionMode(QTreeWidget::ExtendedSelection);
+//    m_layerManager->sortItems(0, Qt::DescendingOrder);
+//    m_layerManager->setDragEnabled(true);
+//    m_layerManager->setIconSize(QSize(72, 40));
 
     m_addLayerBtn = new QPushButton("[+]", this);
     m_deleteLayerBtn = new QPushButton("[-]", this);
@@ -1858,6 +1873,7 @@ void LayerDockWidget::reset(){
     itm->setData(0, Qt::UserRole + 2, QVariant(0));
     itm->setData(0, Qt::UserRole + 3, QVariant(100));
     itm->setData(0, Qt::UserRole + 4, QVariant(0));
+    itm->setData(0, Qt::UserRole + 5, QVariant(false));
     m_layerManager->addTopLevelItem(itm);
     m_layerManager->setCurrentItem(itm);
 }
@@ -1872,7 +1888,7 @@ void LayerDockWidget::addLayer(){
     itm->setData(0, Qt::UserRole + 2, QVariant(0)); //visibility
     itm->setData(0, Qt::UserRole + 3, QVariant(100)); // Opacity
     itm->setData(0, Qt::UserRole + 4, QVariant(0)); //Composition mode
-
+    itm->setData(0, Qt::UserRole + 5, QVariant(false)); //Determine if a layer or not
     m_opacitySlider->blockSignals(true);
     m_opacitySpinbox->blockSignals(true);
     m_opacitySlider->setValue(100);
@@ -1887,7 +1903,15 @@ void LayerDockWidget::addLayer(){
 }
 
 void LayerDockWidget::removeLayer(){
-
+    foreach(QTreeWidgetItem* itm , m_layerManager->selectedItems()){
+        if(itm->isSelected()){
+            int index = itm->data(0, Qt::UserRole + 1).toInt();
+            if(index > 0){
+                delete itm;
+                emit layerRemoved(index);
+            }
+        }
+    }
 }
 
 void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent){
@@ -1904,6 +1928,19 @@ void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent){
     parent->sortChildren(0, Qt::DescendingOrder);
 }
 
+void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent, QString childName){
+    m_layerCount++;
+    QTreeWidgetItem* itm = new QTreeWidgetItem;
+    itm->setText(0, childName);
+    itm->setFlags(itm->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsDragEnabled);
+    itm->setCheckState(0, Qt::Checked);
+    itm->setData(0, Qt::UserRole + 1, QVariant(m_layerCount));
+    itm->setData(0, Qt::UserRole + 2, QVariant(0));
+    itm->setData(0, Qt::UserRole + 3, QVariant(100));
+    parent->addChild(itm);
+    parent->sortChildren(0, Qt::DescendingOrder);
+}
+
 void LayerDockWidget::groupLayers(){
     QTreeWidgetItem* grpFolder = new QTreeWidgetItem(m_layerManager);
     grpFolder->setText(0, "Group");
@@ -1916,22 +1953,36 @@ void LayerDockWidget::groupLayers(){
 //        }
 //    }
 
+    QList<QPixmap> icons;
+    QPixmap mainIcon;
+
     for(int i = 0; i < m_layerManager->selectedItems().size(); i++){
         grpFolder->addChild(m_layerManager->selectedItems().at(i));
+        icons.push_back(m_layerManager->selectedItems().at(i)->icon(0).pixmap(QSize(72, 40)));
     }
+
+    QPainter p(&mainIcon);
+    for(int i = 0; i < icons.size(); i++){
+        p.drawPixmap(0, 0, icons.at(i));
+    }
+
+    grpFolder->setIcon(0, QIcon(mainIcon));
 
     foreach (QTreeWidgetItem* itm, m_layerManager->selectedItems()) {
        delete itm;
     }
 
     grpFolder->setExpanded(true);
-    m_layerManager->addTopLevelItem(grpFolder);
     m_layerManager->sortItems(0, Qt::DescendingOrder);
     m_layerManager->expandItem(grpFolder);
 }
 
 void LayerDockWidget::ungroupLayers(){
+    QTreeWidgetItem* grp = nullptr;
+    grp = m_layerManager->selectedItems().at(0);
+    if(grp->data(0, Qt::UserRole + 5).toBool()){
 
+    }
 }
 
 void LayerDockWidget::updateOpacity(int o){
@@ -2500,7 +2551,8 @@ PrimitivePanel::PrimitivePanel(QWidget *parent) : QWidget(parent){
 
     m_PointCountLbl = new QLabel("Vertices: ", this);
     m_PointSB = new QSpinBox(this);
-    m_PointSB->setRange(0, 100);
+    m_PointSB->setValue(3);
+    m_PointSB->setRange(3, 100);
 
     QHBoxLayout* pointLayout = new QHBoxLayout;
     pointLayout->addWidget(m_PointCountLbl);

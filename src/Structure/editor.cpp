@@ -495,6 +495,12 @@ void Editor::addLayer()
     }
 }
 
+void Editor::deleteLayer(int index){
+    if(!m_Layers.isEmpty()){
+
+    }
+}
+
 void Editor::setLayerIndex(int i){
     m_LastIndex = m_CurrentIndex;
     if(i >= 1){ m_CurrentIndex = i+1; }else{ m_CurrentIndex = 1; }
@@ -762,6 +768,9 @@ void Editor::backup()
     if(!m_Layers.isEmpty())
     {
         backup(m_CurrentIndex-1, m_CurrentFrame-1);
+        qDebug() << "Backed up a step. " <<
+                    "History Limit: " << m_HistorySteps <<
+                    " History Size: " << m_HistoryStack.size();
     }
 }
 
