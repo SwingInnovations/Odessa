@@ -32,5 +32,7 @@
         <file>resource/icon.png</file>
         <file>resource/default.png</file>
         <file>resource/airStencil.png</file>
+        <file>resource/minus_lite.png</file>
+        <file>resource/plus_lite.png</file>
     </qresource>
 </RCC>

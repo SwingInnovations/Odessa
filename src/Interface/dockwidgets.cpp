@@ -1814,8 +1814,10 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
 //    m_layerManager->setDragEnabled(true);
 //    m_layerManager->setIconSize(QSize(72, 40));
 
-    m_addLayerBtn = new QPushButton("[+]", this);
-    m_deleteLayerBtn = new QPushButton("[-]", this);
+    m_addLayerBtn = new QPushButton(this);
+    m_addLayerBtn->setIcon(QPixmap(":/icon/resource/plus_lite.png"));
+    m_deleteLayerBtn = new QPushButton(this);
+    m_deleteLayerBtn->setIcon(QPixmap(":/icon/resource/minus_lite.png"));
     m_groupBtn = new QPushButton("[G]", this);
     m_ungroupBtn = new QPushButton("[xG]", this);
 
@@ -1829,6 +1831,7 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     opacityLayout->addWidget(m_opacitySpinbox);
 
     QHBoxLayout* btnLayout = new QHBoxLayout;
+    btnLayout->setSpacing(0);
     btnLayout->addWidget(m_addLayerBtn);
     btnLayout->addWidget(m_deleteLayerBtn);
     btnLayout->addWidget(m_groupBtn);

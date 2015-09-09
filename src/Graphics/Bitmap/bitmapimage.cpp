@@ -153,7 +153,7 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
     /* Automatically adjust the incrementing value */
     for(qreal i = 0.0; i < 1.0; i+= inc){
         QPointF point = path.pointAtPercent(i) / m_ScaleFactor;
-        painter.drawPixmap(QPoint(point.x() - stencil.width()/2, point.y() - stencil.width()/2), stencil); // Not working
+        painter.drawPixmap(QPoint(point.x() - stencil.width()/2, point.y() - stencil.width()/2), stencil);
     }
 
     /*-Old Method-*/
