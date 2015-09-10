@@ -65,7 +65,12 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     m_keyEntry[1] = -1;
 
     m_useCustomCombo = false;
+    m_tCursorBlinker = new QTimer(this);
+    m_tCursorBlinker->setInterval(500);
+    m_tCursorBlinker->start();
+    m_tCursorBlink = false;
 
+    connect(m_tCursorBlinker, SIGNAL(timeout()), SLOT(alternateTBlinker()));
 }
 
 void Editor::setHistoyStep(int h){
@@ -440,6 +445,7 @@ void Editor::keyPressEvent(QKeyEvent *e){
             m_textCursor.insertText(e->text(), m_fmt);
             m_textCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
         }
+        m_textDocument->adjustSize();
     }
     update();
 }
@@ -938,14 +944,30 @@ void Editor::commitChanges(){
     }
 }
 
+void Editor::alternateTBlinker(){
+    m_tCursorBlink =! m_tCursorBlink;
+}
+
 QPixmap Editor::generateTextPixmap(){
     QPixmap ret(m_textDocument->size().toSize());
+    qDebug() << "Text Document size: " << ret.size() << endl;
     ret.fill(Qt::transparent);
+
+    QTextEdit* tempEdit = new QTextEdit(this);
+    tempEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    tempEdit->setDocument(m_textDocument);
+    QRect temp = tempEdit->cursorRect(m_textCursor);
+    delete tempEdit;
+    tempEdit = 0;
 
     QPainter p(&ret);
     p.setPen(Qt::black);
     p.setBrush(Qt::black);
     m_textDocument->drawContents(&p, ret.rect());
+    if(m_tCursorBlink){
+        p.drawRect(temp);
+    }
+
     p.end();
 
     update();

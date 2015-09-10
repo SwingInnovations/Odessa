@@ -16,6 +16,7 @@
 #include <QFontMetrics>
 #include <QTextCursor>
 #include <QTextDocument>
+#include <QTextEdit>
 #include <QTimer>
 
 #include "../Interface/dialogwindows.h"
@@ -173,6 +174,8 @@ public slots:
     void setClipOffsetX(int);
     void setClipOffsetY(int);
     void useWorldTransform(bool);
+
+    void alternateTBlinker();
 private:
     /*-Control mode, for use with either full view of sprite sheet or normal use
      *  0 - Normal mode
@@ -254,6 +257,9 @@ private:
     QTextDocument *m_textDocument;
     QTextCursor m_textCursor;
     QTextCharFormat m_fmt;
+
+    QTimer *m_tCursorBlinker;
+    bool m_tCursorBlink;
 
     bool m_ClipWorldTransform;
     QPoint m_ClipOffsetPoint;
