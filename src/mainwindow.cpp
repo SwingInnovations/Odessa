@@ -4,7 +4,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     readSettings();
-    if(projectPath.isEmpty()){
+    if(m_projectPath.isEmpty()){
         QMessageBox projectMsgBx;
         projectMsgBx.setText("No Project Path set");
         projectMsgBx.setInformativeText("You must set a project path.");
@@ -13,13 +13,13 @@ MainWindow::MainWindow(QWidget *parent)
         int ret = projectMsgBx.exec();
         switch(ret){
             case QMessageBox::Ok:
-                projectPath = QFileDialog::getExistingDirectory(this, "Set Project Path", QDir::currentPath());
+                m_projectPath = QFileDialog::getExistingDirectory(this, "Set Project Path", QDir::currentPath());
                 break;
         default:
             break;
         }
     }else{
-        QDir dir(projectPath);
+        QDir dir(m_projectPath);
         dir.mkpath("Brush");
     }
     
@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
     prefDialog = new OdessaPrefDialog();
     brushDockWidget = new BrushDockWidget(this);
     brushDockWidget->setWindowTitle("Brush");
-    brushDockWidget->setDirectory(projectPath+"/Brush/");
+    brushDockWidget->setDirectory(m_projectPath+"/Brush/");
     brushDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     m_Editor->setBrush(brushDockWidget->getStartBrush());
 
@@ -254,6 +254,7 @@ MainWindow::MainWindow(QWidget *parent)
     mStatBar->addAction(zoomOutAct);
 
     connect(m_newAct, SIGNAL(triggered()), SLOT(showNewDocWin()));
+    connect(m_openAct, SIGNAL(triggered()), SLOT(openProject()));
     connect(preferenceAct, SIGNAL(triggered()),SLOT(showPrefWin()));
     connect(undoAct, SIGNAL(triggered()), m_Editor, SLOT(undo()));
     connect(redoAct, SIGNAL(triggered()), m_Editor, SLOT(redo()));
@@ -350,6 +351,28 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     writeSettings();
+}
+
+void MainWindow::openProject(){
+    QString fileName = QFileDialog::getOpenFileName(this, "Open Project", m_projectPath);
+    if(fileName.isNull()){
+        QMessageBox msgBox(this);
+        msgBox.exec();
+    }
+    //Open File if it is legitimate
+
+}
+
+void MainWindow::saveProjectAs(){
+    QString fileName = QFileDialog::getSaveFileName(this, "Save Project", m_projectPath);
+    if(fileName.isNull()){
+        QMessageBox msgBox(this);
+        msgBox.exec();
+    }
+}
+
+void MainWindow::saveProject(){
+
 }
 
 void MainWindow::showNewDocWin()
@@ -483,7 +506,7 @@ void MainWindow::assignCursorTool(){
 }
 
 void MainWindow::setProjectPath(QString val){
-    projectPath = val;
+    m_projectPath = val;
 }
 
 void MainWindow::zoomIn()
@@ -537,14 +560,14 @@ void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
 
 void MainWindow::readSettings(){
     QSettings settings("SwingInnovations", "Odessa");
-    projectPath = settings.value("projectPath").toString();
+    m_projectPath = settings.value("projectPath").toString();
     setGeometry(settings.value("windowGeom").toRect());
 }
 
 void MainWindow::writeSettings(){
     QSettings settings("SwingInnovations", "Odessa");
-    qDebug()<<"Project Path" << projectPath+"/Brush/" << endl;
-    settings.setValue("projectPath", projectPath);
+    qDebug()<<"Project Path" << m_projectPath+"/Brush/" << endl;
+    settings.setValue("projectPath", m_projectPath);
     settings.setValue("windowGeom", this->geometry());
 }
 

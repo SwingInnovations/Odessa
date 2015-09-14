@@ -53,6 +53,9 @@ private slots:
     void exportSelection();
     void newProject(ProjectInfo&);
     void setProjectPath(QString);
+    void openProject();
+    void saveProjectAs();
+    void saveProject();
     void zoomIn();
     void zoomOut();
     void about();

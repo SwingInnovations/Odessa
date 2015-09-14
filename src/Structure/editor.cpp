@@ -950,11 +950,12 @@ void Editor::alternateTBlinker(){
 
 QPixmap Editor::generateTextPixmap(){
     QPixmap ret(m_textDocument->size().toSize());
-    qDebug() << "Text Document size: " << ret.size() << endl;
+    qDebug() << "Text Document size: " << m_textDocument->pageSize().width() << endl;
     ret.fill(Qt::transparent);
 
     QTextEdit* tempEdit = new QTextEdit(this);
     tempEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    tempEdit->setFixedSize(500, 500);
     tempEdit->setDocument(m_textDocument);
     QRect temp = tempEdit->cursorRect(m_textCursor);
     delete tempEdit;
