@@ -24,7 +24,7 @@ inline QDataStream &operator <<(QDataStream &out, const Brush &brush){
 
 inline QDataStream &operator >>(QDataStream &in, Brush &brush){
     brush = Brush();
-    in >> brush.sWidth >> brush.sHeight >> brush.mHardness >> brush.mRotate >> brush.mSpacing >> brush.mStencil >> brush.m_Name;
+    in >> brush.s_Width >> brush.s_Height >> brush.m_hardness >> brush.m_rotate >> brush.m_Spacing >> brush.m_Stencil >> brush.m_Name;
     return in;
 }
 

@@ -66,97 +66,96 @@ private:
     void scaleImage(double);
     void adjustScrollBar(QScrollBar* scrollBar, double factor);
 
-    double scaleFactor = 1.0;
+    double m_scaleFactor = 1.0;
 
     Editor *m_Editor;
-    OdessaNewDocDialog *newDialogWin;
-    OdessaPrefDialog *prefDialog;
-    BrushDockWidget *brushDockWidget;
-    ColorDockWidget *colorDockWidget;
-    TimelineDockWidget *timelineDockWidget;
-    DebugWindow *debugWin;
-    LayerDockWidget *layerDockWidget;
-    ToolsPanel* toolPanelWidget;
+    OdessaNewDocDialog *m_newDiag;
+    OdessaPrefDialog *m_prefDiag;
+    BrushDockWidget *m_brushDock;
+    ColorDockWidget *m_colorDock;
+    TimelineDockWidget *m_timeDock;
+    DebugWindow *m_debugWin;
+    LayerDockWidget *m_layerDock;
+    ToolsPanel* m_toolPanel;
 
-    bool isModified;
+    bool m_isModified;
 
-    QAction *addLayerAct;
+    QAction *m_addLayerAct;
     /*-File Menu-*/
     QAction *m_newAct;
     QAction *m_openAct;
     QAction *m_saveAct;
     QAction *m_saveAsAct;
-    QMenu *exportMenu;
-    QAction *exportSelectionAct;
-    QAction *exportImgAct;
-    QAction *exportSpriteSheetAct;
-    QAction *exportImgSeqAct;
-    QAction *exportAnimAct;
-    QAction *closeAct;
+    QMenu *m_exportMenu;
+    QAction *m_exportSelAct;
+    QAction *m_exportImgAct;
+    QAction *m_exportSSAct;
+    QAction *m_exportImgSeqAct;
+    QAction *m_exportAnimAct;
+    QAction *m_closeAct;
 
     //edit menu actions
-    QAction *undoAct;
-    QAction *redoAct;
-    QAction *cutAct;
-    QAction *copyAct;
-    QAction *pasteAct;
+    QAction *m_undoAct;
+    QAction *m_redoAct;
+    QAction *m_cutAct;
+    QAction *m_copyAct;
+    QAction *m_pasteAct;
 
     //select menu actions
-    QAction *selectRegionAct;
-    QAction *selectAllAct;
-    QAction *deselectAct;
-    QAction *convertSelToStenAct;
+    QAction *m_selRegionAct;
+    QAction *m_selAllAct;
+    QAction *m_deSelAct;
+    QAction *m_convertToStenAct;
 
     //show dock widgets
-    QAction *showBrushDockWinAct;
-    QAction *showColorDockWinAct;
-    QAction *showTimeDockWinAct;
-    QAction *showLayersDockAct;
-    QAction *showToolsDockAct;
-    QAction *preferenceAct;
+    QAction *m_showBrushDockWinAct;
+    QAction *m_showColorDockWinAct;
+    QAction *m_showTimeDockWinAct;
+    QAction *m_showLayersDockAct;
+    QAction *m_showToolsDockAct;
+    QAction *m_preferenceAct;
 
     //Transform stuff
-    QAction *translateAct;
-    QAction *rotateAct;
-    QAction *scaleAct;
+    QAction *m_translateAct;
+    QAction *m_rotateAct;
+    QAction *m_scaleAct;
 
     //basic Tools
-    QAction *cursorTool;
-    QAction *brushTool;
-    QAction *eraserTool;
-    QAction *textTool;
-    QAction *primitiveTool;
-    QAction *eyeDropperTool;
-    QAction *fillTool;
+    QAction *m_cursorTool;
+    QAction *m_brushTool;
+    QAction *m_eraserTool;
+    QAction *m_textTool;
+    QAction *m_primTool;
+    QAction *m_eyedropTool;
+    QAction *m_fillTool;
 
-    QShortcut* eyeDropper;
+    QShortcut* m_eyeDropper;
 
-    QAction *sendFeedbackAct;
-    QAction *updateAct;
-    QAction *aboutAct;
+    QAction *m_sendFeedbackAct;
+    QAction *m_updateAct;
+    QAction *m_aboutAct;
 
-    QMenu *fileMenu;
-    QMenu *editMenu;
-    QMenu *selectMenu;
-    QMenu *viewMenu;
-    QMenu *dockWinMenu;
-    QMenu *helpMenu;
+    QMenu *m_fileMenu;
+    QMenu *m_editMenu;
+    QMenu *m_selectMenu;
+    QMenu *m_viewMenu;
+    QMenu *m_dockWinMenu;
+    QMenu *m_helpMenu;
 
-    QScrollArea *imageArea;
+    QScrollArea *m_workArea;
+    QToolBar* m_toolBar;
+    QComboBox* m_toolQuickSelect;
 
-    QToolBar* toolBar;
-    QComboBox* mToolQuickSelect;
+    QStatusBar* m_StatBar;
+    QLabel* m_activeToolLabel;
+    QSlider* m_zoomSlider;
+    QAction* m_zoomInAct;
+    QAction* m_zoomOutAct;
+    QAction* m_resetZoomAct;
 
-    QStatusBar* mStatBar;
-    QLabel* activeToolLabel;
-    QSlider* zoomSlider;
-    QAction* zoomInAct;
-    QAction* zoomOutAct;
-    QAction* resetZoomAct;
+    QAction* m_showDebugWinAct;
 
-    QAction* debugWinAct;
-
-    QString projectPath;
+    QString m_projectPath;
 };
 
 #endif // MAINWINDOW_H

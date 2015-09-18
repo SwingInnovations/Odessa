@@ -9,7 +9,7 @@ Primitive::Primitive()
 }
 
 Primitive::Primitive(Brush& brush){
-    mHardness = brush.getHardness();
+    m_hardness = brush.getHardness();
 }
 
 Primitive::Primitive(int width, int height){

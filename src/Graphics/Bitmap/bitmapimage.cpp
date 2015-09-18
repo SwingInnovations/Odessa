@@ -3,7 +3,7 @@
 BitmapImage::BitmapImage()
 {
     m_Image = NULL;
-    visible = true;
+    m_visible = true;
     m_ScaleFactor = 1.0;
     qDebug() << "Image drawn!" << endl;
     m_ScaleFactorInv = 1.0;
@@ -13,33 +13,33 @@ BitmapImage::BitmapImage()
 BitmapImage::BitmapImage(const BitmapImage &image)
 {
     m_pixmap = image.m_pixmap;
-    boundaries = image.boundaries;
+    m_boundaries = image.m_boundaries;
     m_Color = image.m_Color;
     m_ScaleFactor = 1.0;
     m_ScaleFactorInv = 1.0;
-    visible = true;
+    m_visible = true;
     m_inc = 0.01;
 }
 
 BitmapImage::BitmapImage(Object *parent, QRect boundaries, QColor color)
 {
     myParent = parent;
-    this->boundaries = boundaries;
+    this->m_boundaries = boundaries;
     m_Image = new QImage(boundaries.size(), QImage::Format_ARGB32_Premultiplied);
     m_Image->fill(color.rgba());
     m_ScaleFactor = 1.0;
     m_ScaleFactorInv = 1.0;
-    visible = true;
+    m_visible = true;
     m_inc = 0.01;
 }
 
 BitmapImage::BitmapImage(Object *parent, QRect boundaries, QImage image)
 {
     myParent = parent;
-    this->boundaries = boundaries;
+    this->m_boundaries = boundaries;
     m_Image = new QImage(image);
     if(m_Image->width() != boundaries.width() && m_Image->height() != boundaries.height()) qDebug() << "Error 0001: Failed to load Image" << endl;
-    visible = true;
+    m_visible = true;
     m_ScaleFactor = 1.0;
     m_ScaleFactorInv = 1.0;
     m_inc = 0.01;
@@ -47,7 +47,7 @@ BitmapImage::BitmapImage(Object *parent, QRect boundaries, QImage image)
 
 BitmapImage::BitmapImage(QRect boundaries, QColor color)
 {
-    this->boundaries = boundaries;
+    this->m_boundaries = boundaries;
     QPixmap temp(boundaries.width(), boundaries.height());
     temp.fill(color);
     QPainter painter(&temp);
@@ -57,7 +57,7 @@ BitmapImage::BitmapImage(QRect boundaries, QColor color)
     }
     painter.end();
     m_pixmap = temp;
-    visible = true;
+    m_visible = true;
     m_ScaleFactor = 1.0;
     m_ScaleFactorInv = 1.0;
     m_inc = 0.01;
@@ -65,9 +65,9 @@ BitmapImage::BitmapImage(QRect boundaries, QColor color)
 
 BitmapImage::BitmapImage(QRect boundaries, QPixmap pixMap)
 {
-    this->boundaries = boundaries;
+    this->m_boundaries = boundaries;
     m_pixmap = pixMap;
-    visible = true;
+    m_visible = true;
     m_ScaleFactor = 1.0;
     m_ScaleFactorInv = 1.0;
     m_inc = 0.01;

@@ -28,8 +28,8 @@ Layer::Layer(LayerType type, int index, int width, int height)
     m_currentIndex = index;
     if(m_LayerType == Bitmap)
     {
-        mWidth = width;
-        mHeight = height;
+        m_Width = width;
+        m_Height = height;
     }
     setFocus(true);
 }
@@ -81,7 +81,7 @@ Layer::Layer(LayerType type, int width, int height, QColor col){
 
 void Layer::createFrame()
 {
-    QRect size(0, 0, mWidth, mHeight);
+    QRect size(0, 0, m_Width, m_Height);
     QColor color;
     if(frame.size() == 0){
         color = QColor(Qt::white);

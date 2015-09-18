@@ -20,14 +20,14 @@ public:
 
     Brush();
 
-    void setBrush(QBrush brush){ myBrush = brush; }
+    void setBrush(QBrush brush){ m_Brush = brush; }
     void setPen(QPen pen){ myPen = pen; }
-    void SetStencil(QPixmap pixmap){ mStencil = pixmap; }
-    void setColor(QColor color){ myColor = color; myBrush.setColor(myColor); myPen.setColor(myColor); }
+    void SetStencil(QPixmap pixmap){ m_Stencil = pixmap; }
+    void setColor(QColor color){ m_Color = color; m_Brush.setColor(m_Color); myPen.setColor(m_Color); }
     void setWidth(int val){
         //mSize = val + (mTSize * m_PressureVal);
-        mSize = val;
-        myPen.setWidth(mSize); }
+        m_size = val;
+        myPen.setWidth(m_size); }
     void SetName(QString name){
         m_Name = name;
     }
@@ -35,13 +35,11 @@ public:
     void generatePixmap();
 
     void setWidth(qreal val){
-        mSize = val + (mTSize * m_PressureVal );
-        myPen.setWidthF(mSize);
+        m_size = val + (m_TSize * m_PressureVal );
+        myPen.setWidthF(m_size);
     }
 
-    void setSpacing(int val){
-        mSpacing = val;
-    }
+    void setSpacing(int val){   m_Spacing = val; }
 
     void setPressureVal(qreal val)
     {
@@ -59,78 +57,78 @@ public:
     }
 
     void setSWidth(int val){
-        sWidth = val;
+        s_Width = val;
     }
 
     void setSHeight(int val){
-        sHeight = val;
+        s_Height = val;
     }
 
-    void SetRotate(int val){mRotate = val;}
+    void SetRotate(int val){m_rotate = val;}
 
     void setToolType(int);
 
-    int getHardness()const{return mHardness;}
-    int getRotate()const{return mRotate;}
-    void setOpacity(int val){mOpacity = val;}
-    void setTransferSize(int val){mTSize = val;}
-    void setTransferOpacity(int val){mTOpacity = val;}
+    int getHardness()const{return m_hardness;}
+    int getRotate()const{return m_rotate;}
+    void setOpacity(int val){m_Opacity = val;}
+    void setTransferSize(int val){m_TSize = val;}
+    void setTransferOpacity(int val){m_TOpacity = val;}
 
     qreal getPressureVal(){return m_PressureVal;}
 
     void setPressure(bool val){ m_Pressure = val; }
-    void setHardness(int val){ mHardness = val; }
+    void setHardness(int val){ m_hardness = val; }
 
-    void setBrushShape(BrushShape shape){ brushShape = shape; }
+    void setBrushShape(BrushShape shape){ m_brushShape = shape; }
     bool isType(int);
 
     //color Centric
-    void setRed(int val){myColor.setRed(val);}
-    void setGreen(int val){myColor.setGreen(val);}
-    void setBlue(int val){myColor.setBlue(val);}
+    void setRed(int val){m_Color.setRed(val);}
+    void setGreen(int val){m_Color.setGreen(val);}
+    void setBlue(int val){m_Color.setBlue(val);}
 
     QPen getPen()const{return myPen;}
-    QBrush getBrush()const{ return myBrush; }
-    QColor getColor()const{ return myColor; }
+    QBrush getBrush()const{ return m_Brush; }
+    QColor getColor()const{ return m_Color; }
 
     QString getName()const{return m_Name;}
 
-    int getSWidth()const{return sWidth;}
-    int getSHeight()const{return sHeight;}
-    int getSpacing()const{return mSpacing;}
-    int getSize()const{return mSize;}
-    int getTransferSize()const{return mSize + mTSize;}
-    int getTransferOpacity()const{return mOpacity + mTOpacity;}
-    int getOpacity()const{return mOpacity;}
-    QPixmap getStencil()const{return mStencil;}
+    int getSWidth()const{return s_Width;}
+    int getSHeight()const{return s_Height;}
+    int getSpacing()const{return m_Spacing;}
+    int getSize()const{return m_size;}
+    int getTransferSize()const{return m_size + m_TSize;}
+    int getTransferOpacity()const{return m_Opacity + m_TOpacity;}
+    int getOpacity()const{return m_Opacity;}
+    QPixmap getStencil()const{return m_Stencil;}
 
     /*-Variables-*/
 
-    BrushShape brushShape;
+    BrushShape m_brushShape;
     QString m_Name;
 
     QPen myPen;
-    QBrush myBrush;
-    QColor myColor;
+    QBrush m_Brush;
+    QColor m_Color;
 
     bool m_Pressure;
-    int mHardness;
-    unsigned int mSize;
-    int mOpacity;//responsible for Opacity
-    int mSpacing;
+    int m_hardness;
+    unsigned int m_size;
+    int m_Opacity;//responsible for Opacity
+    int m_Spacing;
 
-    int sWidth, sHeight;
+    int s_Width, s_Height;
 
-    unsigned int mTSize;
-    unsigned int mTOpacity;
+    unsigned int m_TSize;
+    unsigned int m_TOpacity;
 
-    int mRotate;
+    int m_rotate;
 
     qreal m_PressureVal;
     qreal m_xTilt;
     qreal m_yTilt;
 
-    QPixmap mStencil;
+    QPixmap m_Stencil;
 
     int m_toolType;
 };

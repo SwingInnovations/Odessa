@@ -1,29 +1,29 @@
 #include "brush.h"
 
-Brush::Brush() : mHardness(0),
-    mSize(0),
-    mOpacity(0),
-    mSpacing(1),
-    sWidth(0),
-    sHeight(0),
-    mRotate(0),
-    mTSize(0),
-    mTOpacity(0)
+Brush::Brush() : m_hardness(0),
+    m_size(0),
+    m_Opacity(0),
+    m_Spacing(1),
+    s_Width(0),
+    s_Height(0),
+    m_rotate(0),
+    m_TSize(0),
+    m_TOpacity(0)
 {
-    myBrush = QBrush();
+    m_Brush = QBrush();
     myPen = QPen();
     myPen.setCapStyle(Qt::RoundCap);
     m_Name = "";
     m_toolType = 0;
-    mStencil = QPixmap();
-    myColor = QColor(Qt::black);
-    brushShape = CIRCLE_SHAPE;
+    m_Stencil = QPixmap();
+    m_Color = QColor(Qt::black);
+    m_brushShape = CIRCLE_SHAPE;
 }
 
 void Brush::generatePixmap(){
-    QPoint midPoint(sWidth/2, sHeight/2);
-    mStencil = QPixmap(sWidth, sHeight);
-    mStencil.fill(Qt::transparent);
+    QPoint midPoint(s_Width/2, s_Height/2);
+    m_Stencil = QPixmap(s_Width, s_Height);
+    m_Stencil.fill(Qt::transparent);
     qreal hardness = 78 * getHardness()/100;
     QRadialGradient radGrad(midPoint, midPoint.x());
     radGrad.setColorAt(midPoint.x(), Qt::black);

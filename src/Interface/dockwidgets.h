@@ -85,6 +85,8 @@ signals:
     void brushStencilPathChanged(QString);
     void stencilBaseShapeChanged(BrushShape);
     void brushPressureActive(bool);
+public slots:
+    void setStencil(QPixmap);
 private slots:
     void setCurrentIndex(int);
     void updateSize(int);
@@ -243,6 +245,7 @@ public:
     void TempSave(QPixmap);
     QString GetDir(){return this->m_Dir;}
     QPixmap GetPixmap(){return m_StencilPreview;}
+    void setStencil(QPixmap);
     void setBrushSettings(Brush);
     QPixmap GeneratePixmap();
 protected:

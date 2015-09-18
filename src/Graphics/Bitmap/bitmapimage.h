@@ -25,15 +25,15 @@ class Object;
 public:
     BitmapImage();
     BitmapImage(const BitmapImage &image);
-    BitmapImage(Object* parent, QRect boundaries, QColor color);
-    BitmapImage(Object* parent, QRect boundaries, QImage image);
-    BitmapImage(QRect boundaries, QColor color);
-    BitmapImage(QRect boundaries, QPixmap pixMap);
+    BitmapImage(Object* parent, QRect m_boundaries, QColor color);
+    BitmapImage(Object* parent, QRect m_boundaries, QImage image);
+    BitmapImage(QRect m_boundaries, QColor color);
+    BitmapImage(QRect m_boundaries, QPixmap pixMap);
 
-    void setBoundaries(const QRect& bounds){this->boundaries = bounds;}
+    void setBoundaries(const QRect& bounds){this->m_boundaries = bounds;}
 
     void setPixmap(QPixmap pixmap){m_pixmap = pixmap;}
-    void setVisible(bool val){visible = val;}
+    void setVisible(bool val){m_visible = val;}
 
     void setClipboardPixmap(QPixmap, QRect);
     void setClipboardPixmap(QPixmap, QPoint);
@@ -52,7 +52,7 @@ public:
 
     void fillImage(QPoint point, Brush brush);
     void fillRecurs(QPoint pos, QImage& img, QRgb oldColor, QRgb newColor);
-    bool isVisible(){return visible;}
+    bool isVisible(){return m_visible;}
 
     void scale(double s);
 
@@ -67,26 +67,26 @@ public:
         p.end();
     }
 
-    BitmapImage copy(){return BitmapImage(boundaries, m_pixmap);}
+    BitmapImage copy(){return BitmapImage(m_boundaries, m_pixmap);}
     BitmapImage copy(QRect bounds){
         BitmapImage ret(*this);
         QPixmap map = m_pixmap.copy(bounds);
         ret.setPixmap(map);
-        ret.setBoundaries(QRect(boundaries.x(), boundaries.y(), map.width(), map.height()));
+        ret.setBoundaries(QRect(m_boundaries.x(), m_boundaries.y(), map.width(), map.height()));
         return ret;
     }
 
     QImage *getImage(){return m_Image;}
-    QPixmap getPixmap(){return m_pixmap.scaled(m_ScaleFactor * boundaries.size(), Qt::KeepAspectRatio, Qt::FastTransformation);}
+    QPixmap getPixmap(){return m_pixmap.scaled(m_ScaleFactor * m_boundaries.size(), Qt::KeepAspectRatio, Qt::FastTransformation);}
     QPixmap getCompositeImage();
 
-    QPoint getTopLeft(){return boundaries.topLeft();}
-    QPoint getTopRight(){ return boundaries.topRight(); }
-    QPoint getBottomLeft(){ return boundaries.bottomLeft(); }
-    QPoint getBottomRight(){ return boundaries.bottomRight(); }
+    QPoint getTopLeft(){return m_boundaries.topLeft();}
+    QPoint getTopRight(){ return m_boundaries.topRight(); }
+    QPoint getBottomLeft(){ return m_boundaries.bottomLeft(); }
+    QPoint getBottomRight(){ return m_boundaries.bottomRight(); }
 
     QColor getColor(){ return m_Color; }
-    QPoint getOffset(){return offset;}
+    QPoint getOffset(){return m_offset;}
 protected:
     Object *myParent;
 
@@ -96,13 +96,13 @@ private:
 
     QString calcMid(QPointF, QPointF, qreal);
     QString getInc(QPointF, QPointF);
-    QPoint offset;
-    bool visible;
+    QPoint m_offset;
+    bool m_visible;
     qreal m_inc;
     QPixmap m_pixmap;
     QImage *m_Image;
-    QRect boundaries;
-    QRect modifiedRect;
+    QRect m_boundaries;
+    QRect m_modifiedRect;
     QColor m_Color;
     double m_ScaleFactor;
     double m_ScaleFactorInv;

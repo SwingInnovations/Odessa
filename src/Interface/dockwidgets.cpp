@@ -388,6 +388,10 @@ void BrushDockWidget::setCurrentIndex(int val){
     emit brushStencilChanged(m_ActualBrushList.at(m_CurrentBrushIndex).getStencil());
 }
 
+void BrushDockWidget::setStencil(QPixmap pix){
+    m_StencilWidget->setStencil(pix);
+}
+
 void BrushDockWidget::loadStencilAct(){
     qDebug()<<"Loading Stencil" << endl;
     QString filePath = QFileDialog::getOpenFileName(this, "Open Stencil", QDir::currentPath());
@@ -986,6 +990,11 @@ void CustomBrushWidget::updateStencilTexture(){
     m_TextureFileLE->setText(fileName);
 }
 
+void CustomBrushWidget::setStencil(QPixmap pix){
+    pix = pix.scaled(160, 160);
+
+}
+
 void CustomBrushWidget::updateStencilWidth(int val){
    m_WidthLE->setText(QString::number(val));
    emit StencilWidthChanged(val);
@@ -1048,8 +1057,8 @@ void CustomBrushWidget::updateStencilTextureLE(QString val){
 }
 
 void CustomBrushWidget::setBrushSettings(Brush b){
-    m_WidthSlider->setValue(b.sWidth);
-    m_HeightSlider->setValue(b.sHeight);
+    m_WidthSlider->setValue(b.s_Width);
+    m_HeightSlider->setValue(b.s_Height);
     m_HardnessSlider->setValue(b.getHardness());
     m_RotateSlider->setValue(b.getRotate());
     update();

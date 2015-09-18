@@ -29,61 +29,61 @@ MainWindow::MainWindow(QWidget *parent)
     m_Editor->setFocusPolicy(Qt::ClickFocus);
     m_Editor->setScaledContents(true);
 
-    imageArea = new QScrollArea(this);
-    imageArea->setAlignment(Qt::AlignCenter);
-    imageArea->setWidget(m_Editor);
-    setCentralWidget(imageArea);
+    m_workArea = new QScrollArea(this);
+    m_workArea->setAlignment(Qt::AlignCenter);
+    m_workArea->setWidget(m_Editor);
+    setCentralWidget(m_workArea);
 
     m_Editor->setStyleSheet("background-color: rgb(53, 53, 53);");
 
-    toolBar = this->addToolBar("Tools");
-    toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::TopToolBarArea);
+    m_toolBar = this->addToolBar("Tools");
+    m_toolBar->setAllowedAreas(Qt::LeftToolBarArea | Qt::TopToolBarArea);
 
-    newDialogWin = new OdessaNewDocDialog();
-    prefDialog = new OdessaPrefDialog();
-    brushDockWidget = new BrushDockWidget(this);
-    brushDockWidget->setWindowTitle("Brush");
-    brushDockWidget->setDirectory(m_projectPath+"/Brush/");
-    brushDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    m_Editor->setBrush(brushDockWidget->getStartBrush());
+    m_newDiag = new OdessaNewDocDialog();
+    m_prefDiag = new OdessaPrefDialog();
+    m_brushDock = new BrushDockWidget(this);
+    m_brushDock->setWindowTitle("Brush");
+    m_brushDock->setDirectory(m_projectPath+"/Brush/");
+    m_brushDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    m_Editor->setBrush(m_brushDock->getStartBrush());
 
-    colorDockWidget = new ColorDockWidget(this);
-    colorDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    m_colorDock = new ColorDockWidget(this);
+    m_colorDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
-    timelineDockWidget = new TimelineDockWidget(this);
-    timelineDockWidget->setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
-    timelineDockWidget->setVisible(false);
+    m_timeDock = new TimelineDockWidget(this);
+    m_timeDock->setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+    m_timeDock->setVisible(false);
 
-    layerDockWidget = new LayerDockWidget(this);
-    layerDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    m_layerDock = new LayerDockWidget(this);
+    m_layerDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
-    debugWin = new DebugWindow();
-    debugWin->setModal(false);
+    m_debugWin = new DebugWindow();
+    m_debugWin->setModal(false);
 
-    toolPanelWidget = new ToolsPanel(this);
-    toolPanelWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    toolPanelWidget->setVisible(false);
-    cursorTool = new QAction("Cursor", this);
-    cursorTool->setShortcut(QKeySequence(Qt::Key_Escape));
-    brushTool = new QAction(this);
-    brushTool->setText("Brush");
-    brushTool->setIcon(QPixmap(":/icon/resource/brush_lite.png"));
-    eraserTool = new QAction(this);
-    eraserTool->setText("Eraser");
-    eraserTool->setIcon(QPixmap(":/icon/resource/eraser_lite.png"));
-    textTool = new QAction(this);
-    textTool->setText("Text");
-    textTool->setIcon(QPixmap(":icon/resource/Text_lite.png"));
-    primitiveTool = new QAction(this);
-    primitiveTool->setText("Primitive");
-    primitiveTool->setIcon(QPixmap(":icon/resource/primitive_lite.png"));
-    eyeDropperTool = new QAction(this);
-    eyeDropperTool->setText("EyeDropper");
-    eyeDropperTool->setIcon(QPixmap(":/icon/resource/eyeDropper.png"));
-    fillTool = new QAction("Fill", this);
-    fillTool->setIcon(QPixmap(":/icon/resource/fill_lite.png"));
+    m_toolPanel = new ToolsPanel(this);
+    m_toolPanel->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    m_toolPanel->setVisible(false);
+    m_cursorTool = new QAction("Cursor", this);
+    m_cursorTool->setShortcut(QKeySequence(Qt::Key_Escape));
+    m_brushTool = new QAction(this);
+    m_brushTool->setText("Brush");
+    m_brushTool->setIcon(QPixmap(":/icon/resource/brush_lite.png"));
+    m_eraserTool = new QAction(this);
+    m_eraserTool->setText("Eraser");
+    m_eraserTool->setIcon(QPixmap(":/icon/resource/eraser_lite.png"));
+    m_textTool = new QAction(this);
+    m_textTool->setText("Text");
+    m_textTool->setIcon(QPixmap(":icon/resource/Text_lite.png"));
+    m_primTool = new QAction(this);
+    m_primTool->setText("Primitive");
+    m_primTool->setIcon(QPixmap(":icon/resource/primitive_lite.png"));
+    m_eyedropTool = new QAction(this);
+    m_eyedropTool->setText("EyeDropper");
+    m_eyedropTool->setIcon(QPixmap(":/icon/resource/eyeDropper.png"));
+    m_fillTool = new QAction("Fill", this);
+    m_fillTool->setIcon(QPixmap(":/icon/resource/fill_lite.png"));
 
-    scaleFactor = 1.0;
+    m_scaleFactor = 1.0;
 
     /*-File Menu Actions-*/
     m_newAct = new QAction("&New", this);
@@ -96,255 +96,255 @@ MainWindow::MainWindow(QWidget *parent)
     m_saveAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
     m_saveAsAct = new QAction("&Save As...", this);
     m_saveAsAct->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
-    exportImgAct = new QAction("&Image", this);
-    exportSelectionAct = new QAction("&Selection", this);
-    exportSpriteSheetAct = new QAction("&Sprite Sheet", this);
-    exportImgSeqAct = new QAction("&Sequence", this);
-    exportAnimAct = new QAction("&Animation", this);
-    aboutAct = new QAction("&About", this);
-    closeAct = new QAction("&Close", this);
-    closeAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
+    m_exportImgAct = new QAction("&Image", this);
+    m_exportSelAct = new QAction("&Selection", this);
+    m_exportSSAct = new QAction("&Sprite Sheet", this);
+    m_exportImgSeqAct = new QAction("&Sequence", this);
+    m_exportAnimAct = new QAction("&Animation", this);
+    m_aboutAct = new QAction("&About", this);
+    m_closeAct = new QAction("&Close", this);
+    m_closeAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
 
     //edit Actions
-    undoAct = new QAction(this);
-    undoAct->setText("&Undo");
-    undoAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
-    undoAct->setIcon(QPixmap(":icon/resource/undo_lite.png"));
-    redoAct = new QAction(this);
-    redoAct->setText("&Redo");
-    redoAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Y));
-    redoAct->setIcon(QPixmap(":icon/resource/redo_lite.png"));
-    cutAct = new QAction(this);
-    cutAct->setText("&Cut");
-    cutAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_X));
-    copyAct = new QAction(this);
-    copyAct->setText("&Copy");
-    copyAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_C));
-    pasteAct = new QAction(this);
-    pasteAct->setText("&Paste");
-    pasteAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_V));
+    m_undoAct = new QAction(this);
+    m_undoAct->setText("&Undo");
+    m_undoAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
+    m_undoAct->setIcon(QPixmap(":icon/resource/undo_lite.png"));
+    m_redoAct = new QAction(this);
+    m_redoAct->setText("&Redo");
+    m_redoAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Y));
+    m_redoAct->setIcon(QPixmap(":icon/resource/redo_lite.png"));
+    m_cutAct = new QAction(this);
+    m_cutAct->setText("&Cut");
+    m_cutAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_X));
+    m_copyAct = new QAction(this);
+    m_copyAct->setText("&Copy");
+    m_copyAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_C));
+    m_pasteAct = new QAction(this);
+    m_pasteAct->setText("&Paste");
+    m_pasteAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_V));
 
-    sendFeedbackAct = new QAction(this);
-    sendFeedbackAct->setText("&Send Feedback");
+    m_sendFeedbackAct = new QAction(this);
+    m_sendFeedbackAct->setText("&Send Feedback");
 
-    updateAct = new QAction(this);
-    updateAct->setText("&Check for updates...");
+    m_updateAct = new QAction(this);
+    m_updateAct->setText("&Check for updates...");
 
     //Select Menu
-    selectRegionAct = new QAction(this);
-    selectRegionAct->setText("&Select Region");
-    selectAllAct = new QAction(this);
-    selectAllAct->setText("&Select All");
-    deselectAct = new QAction(this);
-    deselectAct->setText("&Deselect");
-    convertSelToStenAct = new QAction("Convert to Stencil", this);
+    m_selRegionAct = new QAction(this);
+    m_selRegionAct->setText("&Select Region");
+    m_selAllAct = new QAction(this);
+    m_selAllAct->setText("&Select All");
+    m_deSelAct = new QAction(this);
+    m_deSelAct->setText("&Deselect");
+    m_convertToStenAct = new QAction("Convert to Stencil", this);
 
-    preferenceAct = new QAction("Preferences", this);
-    preferenceAct->setIcon(QIcon(":/icon/resource/settings_lite.png"));
-    showBrushDockWinAct = new QAction("Show BrushDock", this);
-    showBrushDockWinAct->setCheckable(true);
-    showBrushDockWinAct->setChecked(true);
-    showColorDockWinAct = new QAction("Color", this);
-    showColorDockWinAct->setCheckable(true);
-    showColorDockWinAct->setChecked(true);
-    showTimeDockWinAct = new QAction("Timeline", this);
-    showTimeDockWinAct->setCheckable(true);
-    showToolsDockAct = new QAction("Tools", this);
-    showToolsDockAct->setCheckable(true);
-    showToolsDockAct->setChecked(false);
-    zoomInAct = new QAction("&Zoom In",this);
-    zoomInAct->setShortcut(QKeySequence::ZoomIn);
-    zoomInAct->setIcon(QIcon(":/icon/resource/zoom_In_lite.png"));
-    zoomOutAct = new QAction("&Zoom Out", this);
-    zoomOutAct->setShortcut(QKeySequence(QKeySequence::ZoomOut));
-    zoomOutAct->setIcon(QIcon(":/icon/resource/zoom_Out_lite.png"));
-    resetZoomAct = new QAction("&Reset Zoom", this);
-    resetZoomAct->setShortcut(QKeySequence(Qt::Key_Home));
+    m_preferenceAct = new QAction("Preferences", this);
+    m_preferenceAct->setIcon(QIcon(":/icon/resource/settings_lite.png"));
+    m_showBrushDockWinAct = new QAction("Show BrushDock", this);
+    m_showBrushDockWinAct->setCheckable(true);
+    m_showBrushDockWinAct->setChecked(true);
+    m_showColorDockWinAct = new QAction("Color", this);
+    m_showColorDockWinAct->setCheckable(true);
+    m_showColorDockWinAct->setChecked(true);
+    m_showTimeDockWinAct = new QAction("Timeline", this);
+    m_showTimeDockWinAct->setCheckable(true);
+    m_showToolsDockAct = new QAction("Tools", this);
+    m_showToolsDockAct->setCheckable(true);
+    m_showToolsDockAct->setChecked(false);
+    m_zoomInAct = new QAction("&Zoom In",this);
+    m_zoomInAct->setShortcut(QKeySequence::ZoomIn);
+    m_zoomInAct->setIcon(QIcon(":/icon/resource/zoom_In_lite.png"));
+    m_zoomOutAct = new QAction("&Zoom Out", this);
+    m_zoomOutAct->setShortcut(QKeySequence(QKeySequence::ZoomOut));
+    m_zoomOutAct->setIcon(QIcon(":/icon/resource/zoom_Out_lite.png"));
+    m_resetZoomAct = new QAction("&Reset Zoom", this);
+    m_resetZoomAct->setShortcut(QKeySequence(Qt::Key_Home));
 
-    translateAct = new QAction("&Translate", this);
-    rotateAct = new QAction("&Rotate", this);
-    scaleAct = new QAction("&Scale", this);
+    m_translateAct = new QAction("&Translate", this);
+    m_rotateAct = new QAction("&Rotate", this);
+    m_scaleAct = new QAction("&Scale", this);
 
-    fileMenu = this->menuBar()->addMenu("&File");
-    fileMenu->addAction(m_newAct);
-    fileMenu->addAction(m_openAct);
-    fileMenu->addAction(m_saveAct);
-    fileMenu->addAction(m_saveAsAct);
-    fileMenu->addSeparator();
-    exportMenu = new QMenu("&Export", this);
-    exportMenu->addAction(exportImgAct);
-    exportMenu->addAction(exportSelectionAct);
-    exportMenu->addAction(exportSpriteSheetAct);
-    exportMenu->addAction(exportImgSeqAct);
-    exportMenu->addAction(exportAnimAct);
-    fileMenu->addMenu(exportMenu);
-    fileMenu->addSeparator();
-    fileMenu->addAction(closeAct);
+    m_fileMenu = this->menuBar()->addMenu("&File");
+    m_fileMenu->addAction(m_newAct);
+    m_fileMenu->addAction(m_openAct);
+    m_fileMenu->addAction(m_saveAct);
+    m_fileMenu->addAction(m_saveAsAct);
+    m_fileMenu->addSeparator();
+    m_exportMenu = new QMenu("&Export", this);
+    m_exportMenu->addAction(m_exportImgAct);
+    m_exportMenu->addAction(m_exportSelAct);
+    m_exportMenu->addAction(m_exportSSAct);
+    m_exportMenu->addAction(m_exportImgSeqAct);
+    m_exportMenu->addAction(m_exportAnimAct);
+    m_fileMenu->addMenu(m_exportMenu);
+    m_fileMenu->addSeparator();
+    m_fileMenu->addAction(m_closeAct);
 
     //edit Menu
-    editMenu = this->menuBar()->addMenu("&Edit");
-    editMenu->addAction(undoAct);
-    editMenu->addAction(redoAct);
-    editMenu->addSeparator();
-    editMenu->addAction(cutAct);
-    editMenu->addAction(copyAct);
-    editMenu->addAction(pasteAct);
-    editMenu->addSeparator();
-    QMenu* transform = editMenu->addMenu("&Transform");
-    transform->addAction(translateAct);
-    transform->addAction(rotateAct);
-    transform->addAction(scaleAct);
+    m_editMenu = this->menuBar()->addMenu("&Edit");
+    m_editMenu->addAction(m_undoAct);
+    m_editMenu->addAction(m_redoAct);
+    m_editMenu->addSeparator();
+    m_editMenu->addAction(m_cutAct);
+    m_editMenu->addAction(m_copyAct);
+    m_editMenu->addAction(m_pasteAct);
+    m_editMenu->addSeparator();
+    QMenu* transform = m_editMenu->addMenu("&Transform");
+    transform->addAction(m_translateAct);
+    transform->addAction(m_rotateAct);
+    transform->addAction(m_scaleAct);
 
     //select Menu
-    selectMenu = this->menuBar()->addMenu("&Select");
-    selectMenu->addAction(selectRegionAct);
-    selectMenu->addAction(selectAllAct);
-    selectMenu->addAction(deselectAct);
-    selectMenu->addSeparator();
-    selectMenu->addAction(convertSelToStenAct);
+    m_selectMenu = this->menuBar()->addMenu("&Select");
+    m_selectMenu->addAction(m_selRegionAct);
+    m_selectMenu->addAction(m_selAllAct);
+    m_selectMenu->addAction(m_deSelAct);
+    m_selectMenu->addSeparator();
+    m_selectMenu->addAction(m_convertToStenAct);
 
-    debugWinAct = new QAction("Debug", this);
+    m_showDebugWinAct = new QAction("Debug", this);
 
-    viewMenu = this->menuBar()->addMenu("&View");
-    viewMenu->addAction(zoomInAct);
-    viewMenu->addAction(zoomOutAct);
-    viewMenu->addAction(resetZoomAct);
-    viewMenu->addSeparator();
-    dockWinMenu = viewMenu->addMenu("Dock Windows");
-    dockWinMenu->addAction(showBrushDockWinAct);
-    dockWinMenu->addAction(showColorDockWinAct);
-    dockWinMenu->addAction(showTimeDockWinAct);
-    dockWinMenu->addAction(showToolsDockAct);
-    viewMenu->addSeparator();
-    viewMenu->addAction(preferenceAct);
+    m_viewMenu = this->menuBar()->addMenu("&View");
+    m_viewMenu->addAction(m_zoomInAct);
+    m_viewMenu->addAction(m_zoomOutAct);
+    m_viewMenu->addAction(m_resetZoomAct);
+    m_viewMenu->addSeparator();
+    m_dockWinMenu = m_viewMenu->addMenu("Dock Windows");
+    m_dockWinMenu->addAction(m_showBrushDockWinAct);
+    m_dockWinMenu->addAction(m_showColorDockWinAct);
+    m_dockWinMenu->addAction(m_showTimeDockWinAct);
+    m_dockWinMenu->addAction(m_showToolsDockAct);
+    m_viewMenu->addSeparator();
+    m_viewMenu->addAction(m_preferenceAct);
 
     //Help Menu
-    helpMenu = this->menuBar()->addMenu("&Help");
-    helpMenu->addAction(sendFeedbackAct);
-    helpMenu->addAction(debugWinAct);
+    m_helpMenu = this->menuBar()->addMenu("&Help");
+    m_helpMenu->addAction(m_sendFeedbackAct);
+    m_helpMenu->addAction(m_showDebugWinAct);
 #ifdef Q_OS_WIN32
-    helpMenu->addAction(updateAct);
+    m_helpMenu->addAction(m_updateAct);
 #endif
-    helpMenu->addSeparator();
-    helpMenu->addAction(aboutAct);
+    m_helpMenu->addSeparator();
+    m_helpMenu->addAction(m_aboutAct);
 
-    eyeDropper = new QShortcut(QKeySequence(Qt::ALT), this);
+    m_eyeDropper = new QShortcut(QKeySequence(Qt::ALT), this);
 
-    toolBar->addAction(undoAct);
-    toolBar->addAction(redoAct);
-    toolBar->addSeparator();
-    toolBar->addAction(eyeDropperTool);
-    toolBar->addAction(brushTool);
-    toolBar->addAction(eraserTool);
-    toolBar->addAction(textTool);
-    toolBar->addAction(primitiveTool);
-    toolBar->addAction(fillTool);
-    toolBar->addSeparator();
-    toolBar->addAction(zoomInAct);
-    toolBar->addAction(zoomOutAct);
-    toolBar->addSeparator();
-    toolBar->addAction(preferenceAct);
+    m_toolBar->addAction(m_undoAct);
+    m_toolBar->addAction(m_redoAct);
+    m_toolBar->addSeparator();
+    m_toolBar->addAction(m_eyedropTool);
+    m_toolBar->addAction(m_brushTool);
+    m_toolBar->addAction(m_eraserTool);
+    m_toolBar->addAction(m_textTool);
+    m_toolBar->addAction(m_primTool);
+    m_toolBar->addAction(m_fillTool);
+    m_toolBar->addSeparator();
+    m_toolBar->addAction(m_zoomInAct);
+    m_toolBar->addAction(m_zoomOutAct);
+    m_toolBar->addSeparator();
+    m_toolBar->addAction(m_preferenceAct);
 
-    mStatBar = this->statusBar();
-    this->setStatusBar(mStatBar);
-    activeToolLabel = new QLabel(this);
-    activeToolLabel->setText("Odessa");
-    mStatBar->addWidget(activeToolLabel);
-    mStatBar->addAction(zoomInAct);
-    mStatBar->addAction(zoomOutAct);
+    m_StatBar = this->statusBar();
+    this->setStatusBar(m_StatBar);
+    m_activeToolLabel = new QLabel(this);
+    m_activeToolLabel->setText("Odessa");
+    m_StatBar->addWidget(m_activeToolLabel);
+    m_StatBar->addAction(m_zoomInAct);
+    m_StatBar->addAction(m_zoomOutAct);
 
     connect(m_newAct, SIGNAL(triggered()), SLOT(showNewDocWin()));
     connect(m_openAct, SIGNAL(triggered()), SLOT(openProject()));
-    connect(preferenceAct, SIGNAL(triggered()),SLOT(showPrefWin()));
-    connect(undoAct, SIGNAL(triggered()), m_Editor, SLOT(undo()));
-    connect(redoAct, SIGNAL(triggered()), m_Editor, SLOT(redo()));
-    connect(copyAct, SIGNAL(triggered()), m_Editor, SLOT(copy()));
-    connect(cutAct, SIGNAL(triggered()), m_Editor, SLOT(cut()));
-    connect(pasteAct, SIGNAL(triggered()), m_Editor, SLOT(paste()));
-    connect(selectRegionAct, SIGNAL(triggered()), SLOT(assignRectSelectTool()));
-    connect(deselectAct, SIGNAL(triggered()), SLOT(assignDeselectTool()));
-    connect(cursorTool, SIGNAL(triggered()), SLOT(assignCursorTool()));
-    connect(brushTool, SIGNAL(triggered()), SLOT(assignBrushTool()));
-    connect(eraserTool, SIGNAL(triggered()), SLOT(assignEraserTool()));
-    connect(textTool, SIGNAL(triggered()), SLOT(assignTextTool()));
-    connect(translateAct, SIGNAL(triggered()), SLOT(assignTransformTool()));
-    connect(rotateAct, SIGNAL(triggered()), SLOT(assignTransformTool()));
-    connect(scaleAct, SIGNAL(triggered()), SLOT(assignTransformTool()));
-    connect(primitiveTool, SIGNAL(triggered()), SLOT(assignPrimitiveTool()));
-    connect(newDialogWin, SIGNAL(newProject(ProjectInfo&)), m_Editor, SLOT(newProject(ProjectInfo&)));
-    connect(newDialogWin, SIGNAL(newProject(ProjectInfo&)), SLOT(newProject(ProjectInfo&)));
-    connect(prefDialog, SIGNAL(projectPathChanged(QString)), SLOT(setProjectPath(QString)));
-    connect(prefDialog, SIGNAL(historyStepsChanged(int)), m_Editor, SLOT(setHistoyStep(int)));
-    connect(exportImgAct, SIGNAL(triggered()), SLOT(exportImage()));
-    connect(exportSelectionAct, SIGNAL(triggered()), SLOT(exportSelection()));
-    connect(zoomInAct, SIGNAL(triggered()), SLOT(zoomIn()));
-    connect(zoomOutAct, SIGNAL(triggered()), SLOT(zoomOut()));
-    connect(resetZoomAct, SIGNAL(triggered()), m_Editor, SLOT(resetScale()));
-    connect(showBrushDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowBrushDock(bool)));
-    connect(showColorDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowColorDock(bool)));
-    connect(showTimeDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowTimelineDock(bool)));
-    connect(showToolsDockAct, SIGNAL(toggled(bool)), SLOT(toggleShowToolsDock(bool)));
-    connect(brushDockWidget, SIGNAL(brushSizeChanged(int)), m_Editor, SLOT(setBrushSize(int)));
-    connect(brushDockWidget, SIGNAL(brushOpacityChanged(int)), m_Editor, SLOT(setOpacity(int)));
-    connect(brushDockWidget, SIGNAL(brushStencilChanged(QPixmap)), m_Editor, SLOT(setBrushStencil(QPixmap)));
-    connect(brushDockWidget, SIGNAL(brushSpacingChanged(int)), m_Editor, SLOT(setBrushSpacing(int)));
-    connect(brushDockWidget, SIGNAL(brushTransferSizeChanged(int)), m_Editor, SLOT(setSizeTransfer(int)));
-    connect(brushDockWidget, SIGNAL(brushTransferOpacityChanged(int)), m_Editor, SLOT(setOpacityTransfer(int)));
-    connect(colorDockWidget, SIGNAL(redChanged(int)), m_Editor, SLOT(setRedValue(int)));
-    connect(colorDockWidget, SIGNAL(greenChanged(int)), m_Editor, SLOT(setGreenValue(int)));
-    connect(colorDockWidget, SIGNAL(blueChanged(int)), m_Editor, SLOT(setBlueValue(int)));
-    connect(layerDockWidget, SIGNAL(layerAdded()), m_Editor, SLOT(addLayer()));
-    connect(layerDockWidget, SIGNAL(layerChanged(int)), m_Editor, SLOT(setLayerIndex(int)));
-    connect(layerDockWidget, SIGNAL(opacityChanged(int)), m_Editor, SLOT(setLayerOpacity(int)));
-    connect(layerDockWidget, SIGNAL(toggleLayerVisible(bool)), m_Editor, SLOT(setLayerVisible(bool)));
-    connect(toolPanelWidget, SIGNAL(useWorldTransform(bool)), m_Editor, SLOT(useWorldTransform(bool)));
-    connect(toolPanelWidget, SIGNAL(translateChanged(int,int)), m_Editor, SLOT(setClipTranslate(int,int)));
-    connect(toolPanelWidget, SIGNAL(rotateChanged(int)), m_Editor, SLOT(setClipRotate(int)));
-    connect(toolPanelWidget, SIGNAL(scaleChanged(int,int)), m_Editor, SLOT(setClipScale(int,int)));
-    connect(toolPanelWidget, SIGNAL(actionCommitted()), m_Editor, SLOT(commitChanges()));
-    connect(toolPanelWidget, SIGNAL(fontChanged(QFont)), m_Editor, SLOT(setFont(QFont)));
-    connect(toolPanelWidget, SIGNAL(fontSizeChanged(int)), m_Editor, SLOT(setFontSize(int)));
-    connect(toolPanelWidget, SIGNAL(fontBoldChanged(bool)), m_Editor, SLOT(setBold(bool)));
-    connect(toolPanelWidget, SIGNAL(fontItalicChanged(bool)), m_Editor, SLOT(setItalic(bool)));
-    connect(toolPanelWidget, SIGNAL(fontUnderlineChanged(bool)), m_Editor, SLOT(setUnderline(bool)));
-    connect(m_Editor, SIGNAL(brushSizeChanged(int)), brushDockWidget, SLOT(updateSize(int)));
-    connect(m_Editor, SIGNAL(brushOpacityChanged(int)), brushDockWidget, SLOT(updateOpacity(int)));
-    connect(m_Editor, SIGNAL(redChanged(int)), colorDockWidget, SLOT(updateRed(int)));
-    connect(m_Editor, SIGNAL(greenChanged(int)), colorDockWidget, SLOT(updateGreen(int)));
-    connect(m_Editor, SIGNAL(blueChanged(int)), colorDockWidget, SLOT(updateBlue(int)));
-    connect(m_Editor, SIGNAL(clipTranslateChanged(int,int)), toolPanelWidget, SLOT(updateTranslate(int,int)));
-    connect(m_Editor, SIGNAL(clipRotateChanged(int)), toolPanelWidget, SLOT(updateRotate(int)));
-    connect(m_Editor, SIGNAL(clipScaleChanged(int,int)), toolPanelWidget, SLOT(updateScale(int,int)));
-    connect(m_Editor, SIGNAL(toolChanged(int)), toolPanelWidget, SLOT(setMode(int)));
-    connect(m_Editor, SIGNAL(boldToggled()), toolPanelWidget, SLOT(toggleBold()));
-    connect(m_Editor, SIGNAL(italicToggled()), toolPanelWidget, SLOT(toggleItalic()));
-    connect(m_Editor, SIGNAL(underlineToggled()), toolPanelWidget, SLOT(toggleUnderline()));
-    connect(m_Editor, SIGNAL(mousePositionChanged(QPoint)), debugWin, SLOT(updateMousePosition(QPoint)));
-    connect(m_Editor, SIGNAL(brushPressureChanged(qreal)), debugWin, SLOT(updateActualPressure(qreal)));
-    connect(m_Editor, SIGNAL(currentIndexChanged(int)), debugWin, SLOT(updateCurrentIndex(int)));
-    connect(m_Editor, SIGNAL(currentFrameChanged(int)), debugWin, SLOT(updateCurrentFrame(int)));
-    connect(m_Editor, SIGNAL(curToolPressureChanged(qreal)), debugWin, SLOT(updateActualPressure(qreal)));
+    connect(m_preferenceAct, SIGNAL(triggered()),SLOT(showPrefWin()));
+    connect(m_undoAct, SIGNAL(triggered()), m_Editor, SLOT(undo()));
+    connect(m_redoAct, SIGNAL(triggered()), m_Editor, SLOT(redo()));
+    connect(m_copyAct, SIGNAL(triggered()), m_Editor, SLOT(copy()));
+    connect(m_cutAct, SIGNAL(triggered()), m_Editor, SLOT(cut()));
+    connect(m_pasteAct, SIGNAL(triggered()), m_Editor, SLOT(paste()));
+    connect(m_selRegionAct, SIGNAL(triggered()), SLOT(assignRectSelectTool()));
+    connect(m_deSelAct, SIGNAL(triggered()), SLOT(assignDeselectTool()));
+    connect(m_cursorTool, SIGNAL(triggered()), SLOT(assignCursorTool()));
+    connect(m_brushTool, SIGNAL(triggered()), SLOT(assignBrushTool()));
+    connect(m_eraserTool, SIGNAL(triggered()), SLOT(assignEraserTool()));
+    connect(m_textTool, SIGNAL(triggered()), SLOT(assignTextTool()));
+    connect(m_translateAct, SIGNAL(triggered()), SLOT(assignTransformTool()));
+    connect(m_rotateAct, SIGNAL(triggered()), SLOT(assignTransformTool()));
+    connect(m_scaleAct, SIGNAL(triggered()), SLOT(assignTransformTool()));
+    connect(m_primTool, SIGNAL(triggered()), SLOT(assignPrimitiveTool()));
+    connect(m_newDiag, SIGNAL(newProject(ProjectInfo&)), m_Editor, SLOT(newProject(ProjectInfo&)));
+    connect(m_newDiag, SIGNAL(newProject(ProjectInfo&)), SLOT(newProject(ProjectInfo&)));
+    connect(m_prefDiag, SIGNAL(projectPathChanged(QString)), SLOT(setProjectPath(QString)));
+    connect(m_prefDiag, SIGNAL(historyStepsChanged(int)), m_Editor, SLOT(setHistoyStep(int)));
+    connect(m_exportImgAct, SIGNAL(triggered()), SLOT(exportImage()));
+    connect(m_exportSelAct, SIGNAL(triggered()), SLOT(exportSelection()));
+    connect(m_zoomInAct, SIGNAL(triggered()), SLOT(zoomIn()));
+    connect(m_zoomOutAct, SIGNAL(triggered()), SLOT(zoomOut()));
+    connect(m_resetZoomAct, SIGNAL(triggered()), m_Editor, SLOT(resetScale()));
+    connect(m_showBrushDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowBrushDock(bool)));
+    connect(m_showColorDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowColorDock(bool)));
+    connect(m_showTimeDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowTimelineDock(bool)));
+    connect(m_showToolsDockAct, SIGNAL(toggled(bool)), SLOT(toggleShowToolsDock(bool)));
+    connect(m_brushDock, SIGNAL(brushSizeChanged(int)), m_Editor, SLOT(setBrushSize(int)));
+    connect(m_brushDock, SIGNAL(brushOpacityChanged(int)), m_Editor, SLOT(setOpacity(int)));
+    connect(m_brushDock, SIGNAL(brushStencilChanged(QPixmap)), m_Editor, SLOT(setBrushStencil(QPixmap)));
+    connect(m_brushDock, SIGNAL(brushSpacingChanged(int)), m_Editor, SLOT(setBrushSpacing(int)));
+    connect(m_brushDock, SIGNAL(brushTransferSizeChanged(int)), m_Editor, SLOT(setSizeTransfer(int)));
+    connect(m_brushDock, SIGNAL(brushTransferOpacityChanged(int)), m_Editor, SLOT(setOpacityTransfer(int)));
+    connect(m_colorDock, SIGNAL(redChanged(int)), m_Editor, SLOT(setRedValue(int)));
+    connect(m_colorDock, SIGNAL(greenChanged(int)), m_Editor, SLOT(setGreenValue(int)));
+    connect(m_colorDock, SIGNAL(blueChanged(int)), m_Editor, SLOT(setBlueValue(int)));
+    connect(m_layerDock, SIGNAL(layerAdded()), m_Editor, SLOT(addLayer()));
+    connect(m_layerDock, SIGNAL(layerChanged(int)), m_Editor, SLOT(setLayerIndex(int)));
+    connect(m_layerDock, SIGNAL(opacityChanged(int)), m_Editor, SLOT(setLayerOpacity(int)));
+    connect(m_layerDock, SIGNAL(toggleLayerVisible(bool)), m_Editor, SLOT(setLayerVisible(bool)));
+    connect(m_toolPanel, SIGNAL(useWorldTransform(bool)), m_Editor, SLOT(useWorldTransform(bool)));
+    connect(m_toolPanel, SIGNAL(translateChanged(int,int)), m_Editor, SLOT(setClipTranslate(int,int)));
+    connect(m_toolPanel, SIGNAL(rotateChanged(int)), m_Editor, SLOT(setClipRotate(int)));
+    connect(m_toolPanel, SIGNAL(scaleChanged(int,int)), m_Editor, SLOT(setClipScale(int,int)));
+    connect(m_toolPanel, SIGNAL(actionCommitted()), m_Editor, SLOT(commitChanges()));
+    connect(m_toolPanel, SIGNAL(fontChanged(QFont)), m_Editor, SLOT(setFont(QFont)));
+    connect(m_toolPanel, SIGNAL(fontSizeChanged(int)), m_Editor, SLOT(setFontSize(int)));
+    connect(m_toolPanel, SIGNAL(fontBoldChanged(bool)), m_Editor, SLOT(setBold(bool)));
+    connect(m_toolPanel, SIGNAL(fontItalicChanged(bool)), m_Editor, SLOT(setItalic(bool)));
+    connect(m_toolPanel, SIGNAL(fontUnderlineChanged(bool)), m_Editor, SLOT(setUnderline(bool)));
+    connect(m_Editor, SIGNAL(brushSizeChanged(int)), m_brushDock, SLOT(updateSize(int)));
+    connect(m_Editor, SIGNAL(brushOpacityChanged(int)), m_brushDock, SLOT(updateOpacity(int)));
+    connect(m_Editor, SIGNAL(redChanged(int)), m_colorDock, SLOT(updateRed(int)));
+    connect(m_Editor, SIGNAL(greenChanged(int)), m_colorDock, SLOT(updateGreen(int)));
+    connect(m_Editor, SIGNAL(blueChanged(int)), m_colorDock, SLOT(updateBlue(int)));
+    connect(m_Editor, SIGNAL(clipTranslateChanged(int,int)), m_toolPanel, SLOT(updateTranslate(int,int)));
+    connect(m_Editor, SIGNAL(clipRotateChanged(int)), m_toolPanel, SLOT(updateRotate(int)));
+    connect(m_Editor, SIGNAL(clipScaleChanged(int,int)), m_toolPanel, SLOT(updateScale(int,int)));
+    connect(m_Editor, SIGNAL(toolChanged(int)), m_toolPanel, SLOT(setMode(int)));
+    connect(m_Editor, SIGNAL(boldToggled()), m_toolPanel, SLOT(toggleBold()));
+    connect(m_Editor, SIGNAL(italicToggled()), m_toolPanel, SLOT(toggleItalic()));
+    connect(m_Editor, SIGNAL(underlineToggled()), m_toolPanel, SLOT(toggleUnderline()));
+    connect(m_Editor, SIGNAL(mousePositionChanged(QPoint)), m_debugWin, SLOT(updateMousePosition(QPoint)));
+    connect(m_Editor, SIGNAL(brushPressureChanged(qreal)), m_debugWin, SLOT(updateActualPressure(qreal)));
+    connect(m_Editor, SIGNAL(currentIndexChanged(int)), m_debugWin, SLOT(updateCurrentIndex(int)));
+    connect(m_Editor, SIGNAL(currentFrameChanged(int)), m_debugWin, SLOT(updateCurrentFrame(int)));
+    connect(m_Editor, SIGNAL(curToolPressureChanged(qreal)), m_debugWin, SLOT(updateActualPressure(qreal)));
     connect(m_Editor, SIGNAL(brushToolSelected()), SLOT(assignBrushTool()));
     connect(m_Editor, SIGNAL(eraserToolSelected()), SLOT(assignEraserTool()));
     connect(m_Editor, SIGNAL(cursorToolSelected()), SLOT(assignCursorTool()));
-    connect(m_Editor, SIGNAL(layerPreviewChanged(int,QPixmap)), layerDockWidget, SLOT(updateLayerPreview(int,QPixmap)));
-    connect(eyeDropperTool, SIGNAL(triggered()), SLOT(assignEyeDropperTool()));
-    connect(eyeDropper, SIGNAL(activated()), SLOT(assignEyeDropperTool()));
-    connect(debugWinAct, SIGNAL(triggered()), SLOT(showDebugWin()));
-    connect(fillTool, SIGNAL(triggered()), SLOT(assignFillTool()));
-    connect(sendFeedbackAct, SIGNAL(triggered()), SLOT(sendFeedBack()));
-    connect(aboutAct, SIGNAL(triggered()), SLOT(about()));
-    connect(closeAct, SIGNAL(triggered()), SLOT(close()));
+    connect(m_Editor, SIGNAL(layerPreviewChanged(int,QPixmap)), m_layerDock, SLOT(updateLayerPreview(int,QPixmap)));
+    connect(m_eyedropTool, SIGNAL(triggered()), SLOT(assignEyeDropperTool()));
+    connect(m_eyeDropper, SIGNAL(activated()), SLOT(assignEyeDropperTool()));
+    connect(m_showDebugWinAct, SIGNAL(triggered()), SLOT(showDebugWin()));
+    connect(m_fillTool, SIGNAL(triggered()), SLOT(assignFillTool()));
+    connect(m_sendFeedbackAct, SIGNAL(triggered()), SLOT(sendFeedBack()));
+    connect(m_aboutAct, SIGNAL(triggered()), SLOT(about()));
+    connect(m_closeAct, SIGNAL(triggered()), SLOT(close()));
 
-    addDockWidget(Qt::RightDockWidgetArea, brushDockWidget);
-    addDockWidget(Qt::RightDockWidgetArea, colorDockWidget);
-    tabifyDockWidget(brushDockWidget, colorDockWidget);
-    addDockWidget(Qt::BottomDockWidgetArea, timelineDockWidget);
-    addDockWidget(Qt::RightDockWidgetArea, layerDockWidget);
-    addDockWidget(Qt::RightDockWidgetArea, toolPanelWidget);
-    tabifyDockWidget(layerDockWidget, toolPanelWidget);
+    addDockWidget(Qt::RightDockWidgetArea, m_brushDock);
+    addDockWidget(Qt::RightDockWidgetArea, m_colorDock);
+    tabifyDockWidget(m_brushDock, m_colorDock);
+    addDockWidget(Qt::BottomDockWidgetArea, m_timeDock);
+    addDockWidget(Qt::RightDockWidgetArea, m_layerDock);
+    addDockWidget(Qt::RightDockWidgetArea, m_toolPanel);
+    tabifyDockWidget(m_layerDock, m_toolPanel);
 
-    isModified = false;
+    m_isModified = false;
     resize(1024,768);
 }
 
@@ -377,12 +377,12 @@ void MainWindow::saveProject(){
 
 void MainWindow::showNewDocWin()
 {
-    newDialogWin->exec();
+    m_newDiag->exec();
 }
 
 void MainWindow::showPrefWin()
 {
-    prefDialog->exec();
+    m_prefDiag->exec();
 }
 
 void MainWindow::about()
@@ -394,24 +394,24 @@ void MainWindow::about()
 }
 
 void MainWindow::newProject(ProjectInfo &info){
-    layerDockWidget->reset();
+    m_layerDock->reset();
     if(info.getType() != 2){
-        showTimeDockWinAct->setChecked(false);
-        timelineDockWidget->close();
+        m_showTimeDockWinAct->setChecked(false);
+        m_timeDock->close();
     }
 }
 
 void MainWindow::changeStatusMessage(QString message){
-   activeToolLabel->setText(message);
+   m_activeToolLabel->setText(message);
 }
 
 void MainWindow::toggleShowBrushDock(bool val)
 {
     if(val)
     {
-        brushDockWidget->show();
+        m_brushDock->show();
     }else{
-        brushDockWidget->close();
+        m_brushDock->close();
     }
 }
 
@@ -419,9 +419,9 @@ void MainWindow::toggleShowColorDock(bool val)
 {
     if(val)
     {
-        colorDockWidget->show();
+        m_colorDock->show();
     }else{
-        colorDockWidget->close();
+        m_colorDock->close();
     }
 }
 
@@ -429,50 +429,50 @@ void MainWindow::toggleShowTimelineDock(bool val)
 {
     if(val)
     {
-        timelineDockWidget->show();
+        m_timeDock->show();
     }else{
-        timelineDockWidget->hide();
+        m_timeDock->hide();
     }
 }
 
 void MainWindow::toggleShowToolsDock(bool s){
-    toolPanelWidget->setVisible(s);
+    m_toolPanel->setVisible(s);
 }
 
 void MainWindow::assignBrushTool()
 {
     m_Editor->setBrush(Editor::BRUSH_TOOL);
     changeStatusMessage("Current Tool: Brush");
-    debugWin->updateCurrentTool("Brush");
+    m_debugWin->updateCurrentTool("Brush");
 }
 
 void MainWindow::assignEraserTool()
 {
     m_Editor->setBrush(Editor::ERASER_TOOL);
     changeStatusMessage("Current Tool: Eraser");
-    debugWin->updateCurrentTool("Eraser");
+    m_debugWin->updateCurrentTool("Eraser");
 }
 
 void MainWindow::assignTextTool()
 {
     m_Editor->setBrush(Editor::TEXT_TOOL);
     changeStatusMessage("Current Tool: Text");
-    debugWin->updateCurrentTool("Text");
-    if(toolPanelWidget->isHidden()) toolPanelWidget->show();
+    m_debugWin->updateCurrentTool("Text");
+    if(m_toolPanel->isHidden()) m_toolPanel->show();
 }
 
 void MainWindow::assignPrimitiveTool()
 {
     m_Editor->setBrush(Editor::PRIMITIVE_TOOL);
     changeStatusMessage("Current Tool: Primitive");
-    debugWin->updateCurrentTool("Primitive");
-    if(toolPanelWidget->isHidden()) toolPanelWidget->show();
+    m_debugWin->updateCurrentTool("Primitive");
+    if(m_toolPanel->isHidden()) m_toolPanel->show();
 }
 
 void MainWindow::assignFillTool(){
     m_Editor->setBrush(Editor::FILL_TOOL);
     changeStatusMessage("Current Tool: Fill");
-    debugWin->updateCurrentTool("Fill");
+    m_debugWin->updateCurrentTool("Fill");
 }
 
 void MainWindow::assignDeselectTool(){
@@ -482,13 +482,13 @@ void MainWindow::assignDeselectTool(){
 void MainWindow::assignTransformTool(){
     m_Editor->setBrush(Editor::TRANSFORM_TRANSLATE);
     changeStatusMessage("Current Tool: Transform");
-    debugWin->updateCurrentTool("Transform");
-    if(toolPanelWidget->isHidden()) toolPanelWidget->show();
+    m_debugWin->updateCurrentTool("Transform");
+    if(m_toolPanel->isHidden()) m_toolPanel->show();
 }
 
 void MainWindow::assignRectSelectTool(){
     changeStatusMessage("Current Tool: Select");
-    debugWin->updateCurrentTool("Select");
+    m_debugWin->updateCurrentTool("Select");
     m_Editor->setBrush(Editor::RECT_SELECT_TOOL);
 }
 
@@ -496,13 +496,13 @@ void MainWindow::assignEyeDropperTool()
 {
     changeStatusMessage("Current Tool: Eyedropper");
     m_Editor->setBrush(Editor::EYEDROPPER_TOOL);
-    debugWin->updateCurrentTool("Eye Dropper");
+    m_debugWin->updateCurrentTool("Eye Dropper");
 }
 
 void MainWindow::assignCursorTool(){
     changeStatusMessage("Current Tool: Cursor");
     m_Editor->setBrush(Editor::CURSOR_TOOL);
-    debugWin->updateCurrentTool("Cursor");
+    m_debugWin->updateCurrentTool("Cursor");
 }
 
 void MainWindow::setProjectPath(QString val){
@@ -511,21 +511,22 @@ void MainWindow::setProjectPath(QString val){
 
 void MainWindow::zoomIn()
 {
-    scaleFactor += 0.1;
-    scaleImage(scaleFactor);
+    m_scaleFactor += 0.1;
+    scaleImage(m_scaleFactor);
 }
 
 void MainWindow::zoomOut()
 {
-    scaleFactor -= 0.1;
-    scaleImage(scaleFactor);
+    m_scaleFactor -= 0.1;
+    scaleImage(m_scaleFactor);
 }
 
 void MainWindow::exportImage(){
     QString saveName = QFileDialog::getSaveFileName(this, "Save File.", QDir::currentPath(), ".png");
     QImage pix = m_Editor->pixmap()->toImage();
-    pix.setDotsPerMeterX(m_Editor->getProjectInfo().getDPI());
-    pix.setDotsPerMeterY(m_Editor->getProjectInfo().getDPI());
+    int DPI = m_Editor->getProjectInfo().getDPI();
+    pix.setDotsPerMeterX(DPI);
+    pix.setDotsPerMeterY(DPI);
     pix.save(saveName);
 }
 
@@ -544,13 +545,13 @@ void MainWindow::sendFeedBack(){
 void MainWindow::scaleImage(double val)
 {
     Q_ASSERT(m_Editor->pixmap());
-    m_Editor->scale(scaleFactor);
-    adjustScrollBar(imageArea->horizontalScrollBar(), val);
-    adjustScrollBar(imageArea->verticalScrollBar(), val);
+    m_Editor->scale(m_scaleFactor);
+    adjustScrollBar(m_workArea->horizontalScrollBar(), val);
+    adjustScrollBar(m_workArea->verticalScrollBar(), val);
 }
 
 void MainWindow::showDebugWin(){
-    debugWin->show();
+    m_debugWin->show();
 }
 
 void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
@@ -561,7 +562,7 @@ void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
 void MainWindow::readSettings(){
     QSettings settings("SwingInnovations", "Odessa");
     m_projectPath = settings.value("projectPath").toString();
-    setGeometry(settings.value("windowGeom").toRect());
+    this->setGeometry(settings.value("windowGeom").toRect());
 }
 
 void MainWindow::writeSettings(){
@@ -573,5 +574,9 @@ void MainWindow::writeSettings(){
 
 void MainWindow::selectToStencil(){
     //Convert Selection to stencil
+    QPixmap pix = m_Editor->getSelectionPixmap();
+    if(!pix.isNull()){
+
+    }
 }
 

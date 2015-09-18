@@ -47,7 +47,7 @@ private:
     LayerType m_LayerType;
     int m_currentIndex;
     int mFrameIndex;
-    int mWidth, mHeight;
+    int m_Width, m_Height;
     int m_Opacity;
     int m_CompositionMode;
     bool m_Visible;

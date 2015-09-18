@@ -445,6 +445,7 @@ void Editor::keyPressEvent(QKeyEvent *e){
             m_textCursor.insertText(e->text(), m_fmt);
             m_textCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::MoveAnchor);
         }
+        qDebug() << "Adjusting size of document" << endl;
         m_textDocument->adjustSize();
     }
     update();
@@ -949,27 +950,27 @@ void Editor::alternateTBlinker(){
 }
 
 QPixmap Editor::generateTextPixmap(){
-    QPixmap ret(m_textDocument->size().toSize());
-    qDebug() << "Text Document size: " << m_textDocument->pageSize().width() << endl;
-    ret.fill(Qt::transparent);
 
     QTextEdit* tempEdit = new QTextEdit(this);
     tempEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    tempEdit->setFixedSize(500, 500);
     tempEdit->setDocument(m_textDocument);
+    QPixmap ret(m_textDocument->size().toSize());
+    qDebug() << "Text Document size: " << m_textDocument->pageSize().width() << endl;
+    ret.fill(Qt::transparent);
     QRect temp = tempEdit->cursorRect(m_textCursor);
-    delete tempEdit;
-    tempEdit = 0;
 
     QPainter p(&ret);
     p.setPen(Qt::black);
     p.setBrush(Qt::black);
-    m_textDocument->drawContents(&p, ret.rect());
+    tempEdit->document()->drawContents(&p, ret.rect());
     if(m_tCursorBlink){
         p.drawRect(temp);
     }
 
     p.end();
+    delete tempEdit;
+    tempEdit = 0;
+
 
     update();
     return ret;
