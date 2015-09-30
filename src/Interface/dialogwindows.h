@@ -134,12 +134,15 @@ class OdessaPrefDialog : public QDialog
 public:
     OdessaPrefDialog();
     ~OdessaPrefDialog();
+    void setProjectPath(QString);
 signals:
     void projectPathChanged(QString);
+
     void historyStepsChanged(int);
     void uiScaleChanged(double);
 public slots:
     void updateProjectPath(QString);
+    void updateHistoryLimit(int);
     void applyChanges();
     void okChanges();
 private:
@@ -157,6 +160,7 @@ class GeneralPrefPage : public QWidget
 public:
     GeneralPrefPage(QWidget* parent = 0);
     void applyChanges();
+        void setProjectPath(QString);
     ~GeneralPrefPage();
 signals:
     void projectPathChanged(QString);
@@ -203,6 +207,8 @@ public slots:
     void updateToolPressure(qreal);
     void updateCurrentIndex(int);
     void updateCurrentFrame(int);
+    void updateHistoryLimit(int);
+    void updateHistoryStack(int);
 private:
     QTableWidget* m_dataView;
     QPushButton* m_closeBtn;

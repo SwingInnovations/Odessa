@@ -73,8 +73,10 @@ Editor::Editor(QWidget *parent):QLabel(parent)
     connect(m_tCursorBlinker, SIGNAL(timeout()), SLOT(alternateTBlinker()));
 }
 
-void Editor::setHistoyStep(int h){
+void Editor::setHistoryLimit(int h){
     m_HistorySteps = h;
+    qDebug() << "Changed the history limit. " << endl;
+    emit historyLimitChanged(m_HistorySteps);
 }
 
 QPixmap Editor::getSelectionPixmap(){
@@ -775,9 +777,7 @@ void Editor::backup()
     if(!m_Layers.isEmpty())
     {
         backup(m_CurrentIndex-1, m_CurrentFrame-1);
-        qDebug() << "Backed up a step. " <<
-                    "History Limit: " << m_HistorySteps <<
-                    " History Size: " << m_HistoryStack.size();
+        emit historySizeChanged(m_HistoryStack.size());
     }
 }
 
@@ -816,7 +816,7 @@ void Editor::backup(int backupLayer, int backupFrame)
 {
     while(m_HistoryStack.size() > m_HistorySteps && m_HistoryStack.size() > 0)
     {
-        delete m_HistoryStack.takeLast();
+        m_HistoryStack.removeFirst();
     }
     BitmapHistoryStack* element = new BitmapHistoryStack();
     element->m_Layer = backupLayer;
@@ -846,7 +846,7 @@ void Editor::redo()
         if(m_BackupIndex > -1 && m_BackupIndex < m_HistoryStack.size() -1)
         {
             m_BackupIndex++;
-            HistoryStack* lastElement = m_HistoryStack[m_BackupIndex];
+            HistoryStack* lastElement = m_HistoryStack.last();
             BitmapHistoryStack* lastBitmapHist = (BitmapHistoryStack*)lastElement;
             m_Layers.at(lastBitmapHist->m_Layer)->getFrame(lastBitmapHist->m_Frame)->setPixmap(lastBitmapHist->m_Bitmap.getPixmap());
         }

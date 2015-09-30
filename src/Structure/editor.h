@@ -110,6 +110,9 @@ signals:
     void toolChanged(int);
     void commitAction();
 
+    void historyLimitChanged(int);
+    void historySizeChanged(int);
+
 protected:
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
@@ -142,7 +145,7 @@ public slots:
     void copy();
     void paste();
 
-    void setHistoyStep(int);
+    void setHistoryLimit(int);
 
     void scale(double scaleVal);
     void resetScale();

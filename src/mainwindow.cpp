@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     m_newDiag = new OdessaNewDocDialog();
     m_prefDiag = new OdessaPrefDialog();
+    m_prefDiag->setProjectPath(m_projectPath);
     m_brushDock = new BrushDockWidget(this);
     m_brushDock->setWindowTitle("Brush");
     m_brushDock->setDirectory(m_projectPath+"/Brush/");
@@ -284,6 +285,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_showColorDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowColorDock(bool)));
     connect(m_showTimeDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowTimelineDock(bool)));
     connect(m_showToolsDockAct, SIGNAL(toggled(bool)), SLOT(toggleShowToolsDock(bool)));
+    connect(m_prefDiag, SIGNAL(historyStepsChanged(int)), m_Editor, SLOT(setHistoryLimit(int)));
     connect(m_brushDock, SIGNAL(brushSizeChanged(int)), m_Editor, SLOT(setBrushSize(int)));
     connect(m_brushDock, SIGNAL(brushOpacityChanged(int)), m_Editor, SLOT(setOpacity(int)));
     connect(m_brushDock, SIGNAL(brushStencilChanged(QPixmap)), m_Editor, SLOT(setBrushStencil(QPixmap)));
@@ -324,6 +326,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_Editor, SIGNAL(currentIndexChanged(int)), m_debugWin, SLOT(updateCurrentIndex(int)));
     connect(m_Editor, SIGNAL(currentFrameChanged(int)), m_debugWin, SLOT(updateCurrentFrame(int)));
     connect(m_Editor, SIGNAL(curToolPressureChanged(qreal)), m_debugWin, SLOT(updateActualPressure(qreal)));
+    connect(m_Editor, SIGNAL(historyLimitChanged(int)), m_debugWin, SLOT(updateHistoryLimit(int)));
+    connect(m_Editor, SIGNAL(historySizeChanged(int)), m_debugWin, SLOT(updateHistoryStack(int)));
     connect(m_Editor, SIGNAL(brushToolSelected()), SLOT(assignBrushTool()));
     connect(m_Editor, SIGNAL(eraserToolSelected()), SLOT(assignEraserTool()));
     connect(m_Editor, SIGNAL(cursorToolSelected()), SLOT(assignCursorTool()));
@@ -562,14 +566,14 @@ void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
 void MainWindow::readSettings(){
     QSettings settings("SwingInnovations", "Odessa");
     m_projectPath = settings.value("projectPath").toString();
-    this->setGeometry(settings.value("windowGeom").toRect());
+    restoreGeometry(settings.value("windowGeom").toByteArray());
 }
 
 void MainWindow::writeSettings(){
     QSettings settings("SwingInnovations", "Odessa");
     qDebug()<<"Project Path" << m_projectPath+"/Brush/" << endl;
     settings.setValue("projectPath", m_projectPath);
-    settings.setValue("windowGeom", this->geometry());
+    settings.setValue("windowGeom", saveGeometry());
 }
 
 void MainWindow::selectToStencil(){

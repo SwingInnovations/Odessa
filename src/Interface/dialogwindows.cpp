@@ -285,9 +285,18 @@ OdessaPrefDialog::OdessaPrefDialog()
     setLayout(mainLayout);
 
     connect(genPref, SIGNAL(projectPathChanged(QString)), SLOT(updateProjectPath(QString)));
+    connect(genPref, SIGNAL(historyStepsChanged(int)), SLOT(updateHistoryLimit(int)));
     connect(m_OkButton, SIGNAL(clicked()), SLOT(okChanges()));
     connect(m_ApplyButton, SIGNAL(clicked()), SLOT(applyChanges()));
     connect(m_CancelButton, SIGNAL(clicked()), SLOT(close()));
+}
+
+void OdessaPrefDialog::setProjectPath(QString path){
+    genPref->setProjectPath(path);
+}
+
+void OdessaPrefDialog::updateHistoryLimit(int limit){
+    emit historyStepsChanged(limit);
 }
 
 void OdessaPrefDialog::updateProjectPath(QString val){
@@ -372,11 +381,22 @@ GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
     connect(m_ScaleComboBox, SIGNAL(currentIndexChanged(QString)), SLOT(updateUIScale(QString)));
 }
 
+void GeneralPrefPage::setProjectPath(QString path){
+    mProjectPathLE->setText(path);
+    mProjectPathLE->setAlignment(Qt::AlignLeft);
+}
+
 void GeneralPrefPage::changeProjectPath(){
+    QString oldPath = mProjectPathLE->text();
     QString filePath = QFileDialog::getExistingDirectory(this, "Set Project Path: ", QDir::currentPath());
-    mProjectPathLE->setText(filePath);
-    mProjectPathLE->home(false);
-    emit projectPathChanged(filePath);
+    if(filePath.length() < 1){
+        mProjectPathLE->setText(oldPath);
+    }else{
+        mProjectPathLE->setText(filePath);
+        mProjectPathLE->home(false);
+    }
+
+    emit projectPathChanged(mProjectPathLE->text());
 }
 
 void GeneralPrefPage::changeHistorySteps(int val){
@@ -391,6 +411,7 @@ void GeneralPrefPage::updateUIScale(QString num){
 }
 
 void GeneralPrefPage::applyChanges(){
+    emit historyStepsChanged(mStepsBox->value());
     QSettings settings("SwingInnovations", "Odessa");
     settings.setValue("theme", m_ThemeCombobox->currentText());
     settings.setValue("ui_scale", ui_scale);
@@ -465,7 +486,7 @@ DebugWindow::DebugWindow(){
     m_dataView = new QTableWidget(this);
     m_dataView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_dataView->setColumnCount(2);
-    m_dataView->setRowCount(7);
+    m_dataView->setRowCount(9);
     m_dataView->setHorizontalHeaderLabels(QString("Item;Value").split(';'));
     m_dataView->setItem(0, 0, new QTableWidgetItem("Mouse X: "));
     m_dataView->setItem(0, 1, new QTableWidgetItem("0"));
@@ -481,6 +502,10 @@ DebugWindow::DebugWindow(){
     m_dataView->setItem(5, 1, new QTableWidgetItem("0"));
     m_dataView->setItem(6, 0, new QTableWidgetItem("Brush Reported Pressure: "));
     m_dataView->setItem(6, 1, new QTableWidgetItem("0"));
+    m_dataView->setItem(7, 0, new QTableWidgetItem("History Limit: "));
+    m_dataView->setItem(7, 1, new QTableWidgetItem("24"));
+    m_dataView->setItem(8, 0, new QTableWidgetItem("Size of history stack: "));
+    m_dataView->setItem(8, 1, new QTableWidgetItem("0"));
     m_dataView->resizeColumnsToContents();
 
     m_dataView->item(0, 1)->setTextAlignment(Qt::AlignRight);
@@ -490,6 +515,8 @@ DebugWindow::DebugWindow(){
     m_dataView->item(4, 1)->setTextAlignment(Qt::AlignRight);
     m_dataView->item(5, 1)->setTextAlignment(Qt::AlignRight);
     m_dataView->item(6, 1)->setTextAlignment(Qt::AlignRight);
+    m_dataView->item(7, 1)->setTextAlignment(Qt::AlignRight);
+    m_dataView->item(8, 1)->setTextAlignment(Qt::AlignRight);
 
     m_closeBtn = new QPushButton("&Close", this);
 
@@ -531,6 +558,16 @@ void DebugWindow::updateCurrentIndex(int index){
 void DebugWindow::updateCurrentFrame(int frame){
     m_dataView->item(5, 1)->setText(QString::number(frame));
     m_dataView->item(5, 1)->setTextAlignment(Qt::AlignRight);
+}
+
+void DebugWindow::updateHistoryLimit(int limit){
+    m_dataView->item(7, 1)->setText(QString::number(limit));
+    m_dataView->item(7, 1)->setTextAlignment(Qt::AlignRight);
+}
+
+void DebugWindow::updateHistoryStack(int stackSize){
+    m_dataView->item(8, 1)->setText(QString::number(stackSize));
+    m_dataView->item(8, 1)->setTextAlignment(Qt::AlignRight);
 }
 
 DebugWindow::~DebugWindow(){
