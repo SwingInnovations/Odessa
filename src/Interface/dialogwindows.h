@@ -22,9 +22,12 @@
 #include <QCheckBox>
 #include <QTableView>
 #include <QTableWidget>
+#include <QSplitter>
 
 //handle the dialog windows
 class GeneralPrefPage;
+class AnimationPrefPage;
+class SpriteSheetPrefPage;
 //Project Info
 class ProjectInfo
 {
@@ -148,7 +151,10 @@ public slots:
 private:
     QListWidget* m_ContentWidget;
     QStackedWidget* pagesWidget;
+    QSplitter* splitView;
     GeneralPrefPage* genPref;
+    AnimationPrefPage* animPref;
+    SpriteSheetPrefPage* spritePref;
     QPushButton* m_OkButton;
     QPushButton* m_ApplyButton;
     QPushButton* m_CancelButton;
@@ -192,6 +198,30 @@ private:
     QCheckBox* m_HardwareAccChk;
 
     double ui_scale = 1.0;
+};
+
+class AnimationPrefPage : public QWidget{
+public:
+    AnimationPrefPage(QWidget* parent = 0);
+private:
+    void initGui();
+    QLabel* m_totalFramesLbl;
+    QSpinBox* m_totalFramesSB;
+
+    QLabel* m_fpsLbl;
+    QSpinBox* m_fpsSB;
+};
+
+class SpriteSheetPrefPage : public QWidget{
+public:
+    SpriteSheetPrefPage(QWidget* parent = 0);
+private:
+    void initGui();
+    QLabel* m_rowCntLbl;
+    QSpinBox* m_rowCntSB;
+
+    QLabel* m_colCntLbl;
+    QSpinBox* m_colCntSB;
 };
 
 class DebugWindow : public QDialog{

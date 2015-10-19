@@ -15,8 +15,7 @@ int main(int argc, char *argv[])
     QSettings settings("SwingInnovations", "Odessa");
     QPalette palette;
     QString theme = settings.value("theme").toString();
-    QString target = "light";
-    if(theme != target){
+    if(theme == "Dark"){
         palette.setColor(QPalette::Window, QColor(53,53,53));
         palette.setColor(QPalette::WindowText, Qt::white);
         palette.setColor(QPalette::Base, QColor(15,15,15));

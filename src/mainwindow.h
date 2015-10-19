@@ -28,7 +28,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+    void setUseDark(bool v);
 private slots:
     void sendFeedBack();
     void assignBrushTool();
@@ -67,6 +67,7 @@ private:
     void adjustScrollBar(QScrollBar* scrollBar, double factor);
 
     double m_scaleFactor = 1.0;
+    bool m_useDark;
 
     Editor *m_Editor;
     OdessaNewDocDialog *m_newDiag;

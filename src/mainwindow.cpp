@@ -4,12 +4,14 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
     readSettings();
+    m_useDark = true;
     if(m_projectPath.isEmpty()){
         QMessageBox projectMsgBx;
         projectMsgBx.setText("No Project Path set");
         projectMsgBx.setInformativeText("You must set a project path.");
         projectMsgBx.setStandardButtons(QMessageBox::Ok);
         projectMsgBx.setDefaultButton(QMessageBox::Ok);
+        resize(1024, 768);
         int ret = projectMsgBx.exec();
         switch(ret){
             case QMessageBox::Ok:
@@ -349,7 +351,10 @@ MainWindow::MainWindow(QWidget *parent)
     tabifyDockWidget(m_layerDock, m_toolPanel);
 
     m_isModified = false;
-    resize(1024,768);
+}
+
+void MainWindow::setUseDark(bool v){
+    m_useDark = v;
 }
 
 MainWindow::~MainWindow()

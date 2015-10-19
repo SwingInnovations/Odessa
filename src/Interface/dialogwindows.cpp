@@ -248,9 +248,17 @@ OdessaPrefDialog::OdessaPrefDialog()
     m_ContentWidget->setMaximumWidth(128);
 
     genPref = new GeneralPrefPage(this);
+    animPref = new AnimationPrefPage(this);
+    spritePref = new SpriteSheetPrefPage(this);
 
     pagesWidget = new QStackedWidget(this);
     pagesWidget->addWidget(genPref);
+    pagesWidget->addWidget(animPref);
+    pagesWidget->addWidget(spritePref);
+
+    splitView = new QSplitter(this);
+    splitView->addWidget(m_ContentWidget);
+    splitView->addWidget(pagesWidget);
 
     m_OkButton = new QPushButton("Ok", this);
     m_ApplyButton = new QPushButton("Apply", this);
@@ -268,24 +276,22 @@ OdessaPrefDialog::OdessaPrefDialog()
     spriteItem->setText("Sprite Sheet");
     spriteItem->setTextAlignment(Qt::AlignHCenter);
 
-    QHBoxLayout* contentLayout = new QHBoxLayout;
-    contentLayout->addWidget(m_ContentWidget);
-    contentLayout->addWidget(pagesWidget);
-
     QHBoxLayout* buttonLayout = new QHBoxLayout;
+    buttonLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
     buttonLayout->addSpacing(this->width()/3);
     buttonLayout->addWidget(m_OkButton);
     buttonLayout->addWidget(m_ApplyButton);
     buttonLayout->addWidget(m_CancelButton);
 
     QVBoxLayout* mainLayout = new QVBoxLayout;
-    mainLayout->addLayout(contentLayout);
+    mainLayout->addWidget(splitView);
     mainLayout->addLayout(buttonLayout);
 
     setLayout(mainLayout);
 
     connect(genPref, SIGNAL(projectPathChanged(QString)), SLOT(updateProjectPath(QString)));
     connect(genPref, SIGNAL(historyStepsChanged(int)), SLOT(updateHistoryLimit(int)));
+    connect(m_ContentWidget, SIGNAL(currentRowChanged(int)), pagesWidget, SLOT(setCurrentIndex(int)));
     connect(m_OkButton, SIGNAL(clicked()), SLOT(okChanges()));
     connect(m_ApplyButton, SIGNAL(clicked()), SLOT(applyChanges()));
     connect(m_CancelButton, SIGNAL(clicked()), SLOT(close()));
@@ -326,6 +332,14 @@ GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
     m_ThemeCombobox = new QComboBox(this);
     m_ThemeCombobox->addItem("Dark");
     m_ThemeCombobox->addItem("Light");
+
+    QString styleChoice = settings.value("theme").toString();
+    if(styleChoice == "Dark"){
+        m_ThemeCombobox->setCurrentIndex(0);
+    }else{
+        m_ThemeCombobox->setCurrentIndex(1);
+    }
+
     QHBoxLayout* themeGrp = new QHBoxLayout;
     themeGrp->addWidget(m_ThemeLbl);
     themeGrp->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
@@ -420,6 +434,73 @@ void GeneralPrefPage::applyChanges(){
 GeneralPrefPage::~GeneralPrefPage()
 {
 
+}
+
+AnimationPrefPage::AnimationPrefPage(QWidget *parent) : QWidget(parent){
+    initGui();
+}
+
+void AnimationPrefPage::initGui(){
+    m_totalFramesLbl = new QLabel("Total FPS: ", this);
+    m_totalFramesSB = new QSpinBox(this);
+    m_totalFramesSB->setMaximum(1000000);
+    m_totalFramesSB->setMinimum(1);
+    m_totalFramesSB->setValue(240);
+
+    m_fpsLbl = new QLabel("Frames Per Second (FPS): ", this);
+    m_fpsSB = new QSpinBox(this);
+    m_fpsSB->setMinimum(1);
+    m_fpsSB->setMaximum(120);
+    m_fpsSB->setValue(24);
+
+    QHBoxLayout* totalFramesLayout = new QHBoxLayout;
+    totalFramesLayout->addWidget(m_totalFramesLbl);
+    totalFramesLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+    totalFramesLayout->addWidget(m_totalFramesSB);
+
+    QHBoxLayout* fpsLayout = new QHBoxLayout;
+    fpsLayout->addWidget(m_fpsLbl);
+    fpsLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+    fpsLayout->addWidget(m_fpsSB);
+
+    QVBoxLayout* centralLayout = new QVBoxLayout;
+    centralLayout->addLayout(totalFramesLayout);
+    centralLayout->addLayout(fpsLayout);
+    centralLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    setLayout(centralLayout);
+}
+
+SpriteSheetPrefPage::SpriteSheetPrefPage(QWidget *parent) : QWidget(parent){
+    initGui();
+}
+
+void SpriteSheetPrefPage::initGui(){
+    m_rowCntLbl = new QLabel("Row Cell Count: ", this);
+    m_rowCntSB = new QSpinBox(this);
+    m_rowCntSB->setValue(0);
+    m_rowCntSB->setMinimum(1);
+
+    m_colCntLbl = new QLabel("Column Cell Count: ", this);
+    m_colCntSB = new QSpinBox(this);
+    m_colCntSB->setValue(0);
+    m_colCntSB->setMinimum(1);
+
+    QHBoxLayout* rowLayout = new QHBoxLayout;
+    rowLayout->addWidget(m_rowCntLbl);
+    rowLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+    rowLayout->addWidget(m_rowCntSB);
+
+    QHBoxLayout* colLayout = new QHBoxLayout;
+    colLayout->addWidget(m_colCntLbl);
+    colLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
+    colLayout->addWidget(m_colCntSB);
+
+    QVBoxLayout* centralLayout = new QVBoxLayout;
+    centralLayout->addLayout(rowLayout);
+    centralLayout->addLayout(colLayout);
+    centralLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
+
+    setLayout(centralLayout);
 }
 
 ProjectInfo::ProjectInfo()
