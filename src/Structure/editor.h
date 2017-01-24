@@ -46,7 +46,7 @@ public:
     void restore(Editor*){}
 };
 
-class Editor : public QLabel
+class Editor : public QWidget
 {
     Q_OBJECT
 public:
@@ -78,6 +78,8 @@ public:
             return QSize();
         }
     }
+
+    QPixmap getCurrentImage();
 
 signals:
     void mousePositionChanged(QPoint);

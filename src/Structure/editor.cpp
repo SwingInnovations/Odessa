@@ -1,6 +1,6 @@
 #include "editor.h"
 
-Editor::Editor(QWidget *parent):QLabel(parent)
+Editor::Editor(QWidget *parent):QWidget(parent)
 {
     m_DeviceDown = false;
     m_TabletInUse = false;
@@ -89,6 +89,19 @@ QPixmap Editor::getSelectionPixmap(){
     }else{
         return QPixmap();
     }
+}
+
+QPixmap Editor::getCurrentImage()
+{
+    QPixmap ret;
+    QPainter p(&ret);
+    if(!m_Layers.empty()){
+        for(int i = 0; i < m_Layers.size(); i++){
+            //p.setOpacity(m_Layers[i]->getFrame(m_CurrentFrame - 1)-);
+            p.drawPixmap(0, 0, m_Layers[i]->getFrame(m_CurrentFrame - 1)->getPixmap());
+        }
+    }
+    return ret;
 }
 
 void Editor::mousePressEvent(QMouseEvent *event)
@@ -323,8 +336,8 @@ void Editor::paintEvent(QPaintEvent *event)
 
         p.end();
         painter.drawPixmap(0, 0, drawnPixmap);
-        setPixmap(drawnPixmap);
-        this->resize(imageSize);
+//        setPixmap(drawnPixmap);
+//        this->resize(imageSize);
     }
 
     if(m_SelectActive){
@@ -891,7 +904,7 @@ void Editor::paste(){
         if(!m_ClipboardPresent) m_ClipboardPresent = true;
         if(mimeData->hasImage()){
             m_ClipboardPixmap = QPixmap::fromImage(qvariant_cast<QImage>(mimeData->imageData()));
-            m_ClipOffsetPoint = QPoint( (this->pixmap()->width()/2 - m_ClipboardPixmap.width()/2), (this->pixmap()->height()/2 - m_ClipboardPixmap.height()/2) );
+            m_ClipOffsetPoint = QPoint( (this->getCurrentImage().width()/2 - m_ClipboardPixmap.width()/2), (this->getCurrentImage().height()/2 - m_ClipboardPixmap.height()/2) );
             m_SelectRect = m_ClipboardPixmap.rect();
             setBrush(ToolType::TRANSFORM_TRANSLATE);
         }else if(mimeData->hasText()){

@@ -26,10 +26,10 @@ MainWindow::MainWindow(QWidget *parent)
     }
     
     m_Editor = new Editor(this);
-    m_Editor->setAlignment(Qt::AlignCenter);
+    //m_Editor->setAlignment(Qt::AlignCenter);
     m_Editor->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_Editor->setFocusPolicy(Qt::ClickFocus);
-    m_Editor->setScaledContents(true);
+    //m_Editor->setScaledContents(true);
 
     m_workArea = new QScrollArea(this);
     m_workArea->setAlignment(Qt::AlignCenter);
@@ -532,7 +532,7 @@ void MainWindow::zoomOut()
 
 void MainWindow::exportImage(){
     QString saveName = QFileDialog::getSaveFileName(this, "Save File.", QDir::currentPath(), ".png");
-    QImage pix = m_Editor->pixmap()->toImage();
+    QImage pix = m_Editor->getCurrentImage().toImage();
     int DPI = m_Editor->getProjectInfo().getDPI();
     pix.setDotsPerMeterX(DPI);
     pix.setDotsPerMeterY(DPI);
@@ -553,7 +553,7 @@ void MainWindow::sendFeedBack(){
 
 void MainWindow::scaleImage(double val)
 {
-    Q_ASSERT(m_Editor->pixmap());
+    //Q_ASSERT(m_Editor->pixmap());
     m_Editor->scale(m_scaleFactor);
     adjustScrollBar(m_workArea->horizontalScrollBar(), val);
     adjustScrollBar(m_workArea->verticalScrollBar(), val);

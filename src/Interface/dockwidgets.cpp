@@ -2761,3 +2761,8 @@ PrimitivePanel::~PrimitivePanel(){
 }
 
 
+
+BrushPanel::~BrushPanel()
+{
+
+}
