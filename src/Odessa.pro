@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     Interface/dockwidgets.cpp \
     Structure/brush.cpp \
     Interface/odessa_ui.cpp \
-    Structure/primitive.cpp
+    Structure/primitive.cpp \
+    Structure/gleditor.cpp
 
 HEADERS  += mainwindow.h \
     Graphics/Bitmap/bitmapimage.h \
@@ -39,7 +40,8 @@ HEADERS  += mainwindow.h \
     Structure/brush.h \
     Overloads.h \
     Interface/odessa_ui.h \
-    Structure/primitive.h
+    Structure/primitive.h \
+    Structure/gleditor.h
 
 
 RESOURCES += \

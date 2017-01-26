@@ -312,32 +312,27 @@ void Editor::paintEvent(QPaintEvent *event)
 
     if(!m_Layers.isEmpty())
     {
-        QPixmap drawnPixmap(m_Layers.at(0)->getFrame(0)->getPixmap().size());
-        QSize imageSize = drawnPixmap.size();
+        QSize imageSize(m_Info.getWidth(), m_Info.getHeight());
+        QPixmap drawnPixmap(imageSize);
         QPainter p(&drawnPixmap);
         for(int i = 0; i < m_Layers.size(); i++){
-           if(m_Layers.at(i)->isVisible()){
-               if(m_Layers.at(i)->getFrame(m_CurrentFrame-1)->isVisible()){
-                   m_Layers.at(i)->getFrame(m_CurrentFrame-1)->paintImage(painter);
-                   QImage drawnImage = m_Layers.at(i)->getFrame(m_CurrentFrame-1)->getPixmap().toImage();
-                   drawnImage.convertToFormat(QImage::Format_ARGB32, Qt::AutoColor);
-                   if(i > 0){
-                       p.setCompositionMode(QPainter::CompositionMode_SourceOver);
-                       p.setOpacity((qreal)m_Layers.at(i)->getOpacity()/100.0);
-                   }
-
-                   p.drawImage(0, 0, drawnImage);
-               }
-           }
-
+            if(m_Layers[i]->isVisible() && m_Layers[i]->getFrame(m_CurrentFrame - 1)->isVisible()){
+                m_Layers[i]->getFrame(m_CurrentFrame-1)->paintImage(p);
+                QImage drawnImage = m_Layers[i]->getFrame(m_CurrentFrame-1)->getPixmap().toImage();
+                drawnImage.convertToFormat(QImage::Format_ARGB32, Qt::AutoColor);
+                if(i > 0){
+                    p.setCompositionMode(QPainter::CompositionMode_SourceOver);
+                    p.setOpacity((qreal)m_Layers[i]->getOpacity() / 100.0f);
+                }
+                p.drawImage(0, 0, drawnImage);
+            }
         }
+        p.end();
 
         emit layerPreviewChanged(0, m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
-
-        p.end();
         painter.drawPixmap(0, 0, drawnPixmap);
-//        setPixmap(drawnPixmap);
-//        this->resize(imageSize);
+        painter.end();
+        resize(imageSize);
     }
 
     if(m_SelectActive){
@@ -364,7 +359,7 @@ void Editor::paintEvent(QPaintEvent *event)
         pHandle.setWidth(5);
         painter.setPen(pHandle);
         painter.setBrush(Qt::transparent);
-        //painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
+        painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
         painter.drawEllipse(QCursor::pos(), m_CurrentTool.getSize()/2, m_CurrentTool.getSize()/2);
         painter.drawPixmap(QCursor::pos(), m_CurrentTool.getStencil().scaled(m_CurrentTool.getSize(), m_CurrentTool.getSize()));
         painter.end();
@@ -490,7 +485,7 @@ void Editor::newProject(ProjectInfo &info){
                 m_CurrentIndex = 1;
                 m_CurrentFrame = 1;
                 m_Layers.push_back(new Layer(Layer::Bitmap, info.getWidth(), info.getHeight(), info.getStartColor()));
-                this->resize(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().size());
+                //this->resize(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().size());
                 break;
         default:
             break;
@@ -501,6 +496,7 @@ void Editor::newProject(ProjectInfo &info){
     emit currentIndexChanged(m_CurrentIndex);
     emit currentFrameChanged(m_CurrentFrame);
     emit layerPreviewChanged(0, m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+    resize(info.getWidth(), info.getHeight());
     backup();
     update();
 }
@@ -532,13 +528,8 @@ void Editor::setLayerIndex(int i){
 }
 
 void Editor::setLayerOpacity(int o){
-    qDebug() << "Setting Layer at " << m_CurrentIndex-1 << " Opacity to: " << o << endl;
-
     if(!m_Layers.empty()){
         m_Layers.at(m_CurrentIndex-1)->setOpacity(o);
-    }
-    for(int i = 0; i < m_Layers.size(); i++){
-        qDebug() << "Layer at: " << i << " Opacity: " << m_Layers.at(i)->getOpacity() << endl;
     }
     update();
 }
