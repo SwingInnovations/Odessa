@@ -236,6 +236,16 @@ MainWindow::MainWindow(QWidget *parent)
     m_toolBar->addAction(m_undoAct);
     m_toolBar->addAction(m_redoAct);
     m_toolBar->addSeparator();
+    auto brushOpt = new QToolButton(this);
+    brushOpt->setText("Brush");
+    brushOpt->setAutoRaise(true);
+    auto brushOptMenu = new QMenu(this);
+    brushOptMenu->setTearOffEnabled(true);
+    auto brushOptHandle = new QWidgetAction(this);
+    brushOptHandle->setDefaultWidget(new BrushConfigPanel(this));
+    brushOptMenu->addAction(brushOptHandle);
+    brushOpt->setMenu(brushOptMenu);
+    m_toolBar->addWidget(brushOpt);
     m_toolBar->addAction(m_eyedropTool);
     m_toolBar->addAction(m_brushTool);
     m_toolBar->addAction(m_eraserTool);

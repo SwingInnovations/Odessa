@@ -28,7 +28,9 @@ SOURCES += main.cpp\
     Structure/brush.cpp \
     Interface/odessa_ui.cpp \
     Structure/primitive.cpp \
-    Structure/gleditor.cpp
+    Structure/gleditor.cpp \
+    Interface/panels.cpp \
+    Interface/slideedit.cpp
 
 HEADERS  += mainwindow.h \
     Graphics/Bitmap/bitmapimage.h \
@@ -41,7 +43,9 @@ HEADERS  += mainwindow.h \
     Overloads.h \
     Interface/odessa_ui.h \
     Structure/primitive.h \
-    Structure/gleditor.h
+    Structure/gleditor.h \
+    Interface/panels.h \
+    Interface/slideedit.h
 
 
 RESOURCES += \

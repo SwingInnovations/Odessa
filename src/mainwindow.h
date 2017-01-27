@@ -15,11 +15,13 @@
 #include <QSlider>
 #include <QSettings>
 #include <QDesktopServices>
+#include <QWidgetAction>
 #include <QUrl>
 
 #include "Structure/editor.h"
 #include "Interface/dialogwindows.h"
 #include "Interface/dockwidgets.h"
+#include "Interface/panels.h"
 
 class MainWindow : public QMainWindow
 {
