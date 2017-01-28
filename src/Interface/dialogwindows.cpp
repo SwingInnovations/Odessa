@@ -428,6 +428,7 @@ void GeneralPrefPage::applyChanges(){
     emit historyStepsChanged(mStepsBox->value());
     QSettings settings("SwingInnovations", "Odessa");
     settings.setValue("theme", m_ThemeCombobox->currentText());
+    settings.setValue("HWAcceleration", m_HardwareAccChk->isChecked());
     settings.setValue("ui_scale", ui_scale);
 }
 

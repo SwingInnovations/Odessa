@@ -19,6 +19,7 @@
 #include <QUrl>
 
 #include "Structure/editor.h"
+#include "Structure/gleditor.h"
 #include "Interface/dialogwindows.h"
 #include "Interface/dockwidgets.h"
 #include "Interface/panels.h"
@@ -70,8 +71,10 @@ private:
 
     double m_scaleFactor = 1.0;
     bool m_useDark;
+    bool m_useHWAcceleration;
 
     Editor *m_Editor;
+    GLEditor *m_GLEditor;
     OdessaNewDocDialog *m_newDiag;
     OdessaPrefDialog *m_prefDiag;
     BrushDockWidget *m_brushDock;

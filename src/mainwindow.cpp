@@ -3,6 +3,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    m_useHWAcceleration = false;
     readSettings();
     m_useDark = true;
     if(m_projectPath.isEmpty()){
@@ -236,6 +237,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_toolBar->addAction(m_undoAct);
     m_toolBar->addAction(m_redoAct);
     m_toolBar->addSeparator();
+    /*-Tool Button Hookup-*/
     auto brushOpt = new QToolButton(this);
     brushOpt->setText("Brush");
     brushOpt->setAutoRaise(true);
@@ -563,7 +565,6 @@ void MainWindow::sendFeedBack(){
 
 void MainWindow::scaleImage(double val)
 {
-    //Q_ASSERT(m_Editor->pixmap());
     m_Editor->scale(m_scaleFactor);
     adjustScrollBar(m_workArea->horizontalScrollBar(), val);
     adjustScrollBar(m_workArea->verticalScrollBar(), val);
@@ -581,6 +582,7 @@ void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
 void MainWindow::readSettings(){
     QSettings settings("SwingInnovations", "Odessa");
     m_projectPath = settings.value("projectPath").toString();
+    m_useHWAcceleration = settings.value("HWAcceleration").toBool();
     restoreGeometry(settings.value("windowGeom").toByteArray());
 }
 
