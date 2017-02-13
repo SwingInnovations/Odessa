@@ -27,10 +27,8 @@ MainWindow::MainWindow(QWidget *parent)
     }
     
     m_Editor = new Editor(this);
-    //m_Editor->setAlignment(Qt::AlignCenter);
     m_Editor->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_Editor->setFocusPolicy(Qt::ClickFocus);
-    //m_Editor->setScaledContents(true);
 
     m_workArea = new QScrollArea(this);
     m_workArea->setAlignment(Qt::AlignCenter);
@@ -242,12 +240,19 @@ MainWindow::MainWindow(QWidget *parent)
     brushOpt->setText("Brush");
     brushOpt->setAutoRaise(true);
     auto brushOptMenu = new QMenu(this);
-    brushOptMenu->setTearOffEnabled(true);
+    brushOptMenu->setStyleSheet("background: rgb(53, 53, 53);");
     auto brushOptHandle = new QWidgetAction(this);
     brushOptHandle->setDefaultWidget(new BrushConfigPanel(this));
     brushOptMenu->addAction(brushOptHandle);
     brushOpt->setMenu(brushOptMenu);
     m_toolBar->addWidget(brushOpt);
+    /*-Tool Button End-*/
+    /*-Color Button Start-*/
+    auto colorBtn = new QToolButton(this);
+    colorBtn->setText("Color");
+    //TODO Add Color Panel
+   m_toolBar->addWidget(colorBtn);
+    /*-Color Button End-*/;
     m_toolBar->addAction(m_eyedropTool);
     m_toolBar->addAction(m_brushTool);
     m_toolBar->addAction(m_eraserTool);

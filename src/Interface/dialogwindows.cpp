@@ -351,48 +351,33 @@ GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
     mProjectPathLE->setAlignment(Qt::AlignRight);
     mProjectPathLE->home(false);
     mChangeProjectPathBtn = new QPushButton("...", this);
-    QHBoxLayout* projectPathGrp = new QHBoxLayout;
-    projectPathGrp->addWidget(mProjectPathLbl);
-    projectPathGrp->addWidget(mProjectPathLE);
-    projectPathGrp->addWidget(mChangeProjectPathBtn);
 
     mHistoryLbl = new QLabel("History Steps: ", this);
     mStepsBox = new QSpinBox(this);
     mStepsBox->setValue(24);
-    QHBoxLayout* historyGrp = new QHBoxLayout;
-    historyGrp->addWidget(mHistoryLbl);
-    historyGrp->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-    historyGrp->addWidget(mStepsBox);
-
-    m_ScaleLbl = new QLabel("Scale: ", this);
-    m_ScaleComboBox = new QComboBox(this);
-    m_ScaleComboBox->addItem("100%");
-    m_ScaleComboBox->addItem("125%");
-    m_ScaleComboBox->addItem("150%");
-    QHBoxLayout* scaleLayout = new QHBoxLayout;
-    scaleLayout->addWidget(m_ScaleLbl);
-    scaleLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-    scaleLayout->addWidget(m_ScaleComboBox);
 
     m_HardwareAccLbl = new QLabel("Enable Hardware Acceleration: ", this);
     m_HardwareAccChk = new QCheckBox(this);
-    QHBoxLayout* hardwareAccLayout = new QHBoxLayout;
-    hardwareAccLayout->addWidget(m_HardwareAccLbl);
-    hardwareAccLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed));
-    hardwareAccLayout->addWidget(m_HardwareAccChk);
 
-    QVBoxLayout* masterLayout = new QVBoxLayout;
-    masterLayout->addLayout(themeGrp);
-    masterLayout->addLayout(projectPathGrp);
-    masterLayout->addLayout(historyGrp);
-    masterLayout->addLayout(scaleLayout);
-    masterLayout->addLayout(hardwareAccLayout);
-    masterLayout->addSpacerItem(new QSpacerItem( 0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    auto gridLayout = new QGridLayout;
+    // Theme
+    gridLayout->addWidget(m_ThemeLbl, 0, 0);
+    gridLayout->addWidget(m_ThemeCombobox, 0, 3);
+    gridLayout->addWidget(mProjectPathLbl, 1, 0);
+    gridLayout->addWidget(mProjectPathLE, 1, 1);
+    gridLayout->addWidget(mChangeProjectPathBtn, 1, 3);
+    gridLayout->addWidget(mHistoryLbl, 2, 0);
+    gridLayout->addWidget(mStepsBox, 2, 3);
+    gridLayout->addWidget(m_HardwareAccLbl, 3, 0);
+    gridLayout->addWidget(m_HardwareAccChk, 3, 3);
+
+    auto masterLayout = new QVBoxLayout;
+    masterLayout->addLayout(gridLayout);
+    masterLayout->addSpacerItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     setLayout(masterLayout);
 
     connect(mChangeProjectPathBtn, SIGNAL(clicked()), SLOT(changeProjectPath()));
-    connect(m_ScaleComboBox, SIGNAL(currentIndexChanged(QString)), SLOT(updateUIScale(QString)));
 }
 
 void GeneralPrefPage::setProjectPath(QString path){
@@ -417,19 +402,11 @@ void GeneralPrefPage::changeHistorySteps(int val){
     mStepsBox->setValue(val);
 }
 
-void GeneralPrefPage::updateUIScale(QString num){
-    num = num.remove('%');
-    double scale = num.toDouble()/100.0;
-    ui_scale = scale;
-    emit uiScaleChanged(scale);
-}
-
 void GeneralPrefPage::applyChanges(){
     emit historyStepsChanged(mStepsBox->value());
     QSettings settings("SwingInnovations", "Odessa");
     settings.setValue("theme", m_ThemeCombobox->currentText());
     settings.setValue("HWAcceleration", m_HardwareAccChk->isChecked());
-    settings.setValue("ui_scale", ui_scale);
 }
 
 GeneralPrefPage::~GeneralPrefPage()

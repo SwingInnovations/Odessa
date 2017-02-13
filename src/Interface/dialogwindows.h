@@ -23,6 +23,7 @@
 #include <QTableView>
 #include <QTableWidget>
 #include <QSplitter>
+#include <QGridLayout>
 
 //handle the dialog windows
 class GeneralPrefPage;
@@ -171,11 +172,9 @@ public:
 signals:
     void projectPathChanged(QString);
     void historyStepsChanged(int);
-    void uiScaleChanged(double);
 public slots:
     void changeProjectPath();
     void changeHistorySteps(int);
-    void updateUIScale(QString);
 private:
     /*-Theme-*/
     QLabel* m_ThemeLbl;
@@ -190,14 +189,8 @@ private:
     QLabel* mHistoryLbl;
     QSpinBox* mStepsBox;
 
-    /*-UI Scaling option-*/
-    QLabel* m_ScaleLbl;
-    QComboBox* m_ScaleComboBox;
-
     QLabel* m_HardwareAccLbl;
     QCheckBox* m_HardwareAccChk;
-
-    double ui_scale = 1.0;
 };
 
 class AnimationPrefPage : public QWidget{

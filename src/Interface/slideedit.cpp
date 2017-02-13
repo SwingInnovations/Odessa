@@ -197,7 +197,8 @@ void SlideEdit::paintEvent(QPaintEvent *paintEvent)
     p.setBrush(QBrush(Qt::white));
     p.drawRect(m_handle);
     p.fillRect(m_handle, QBrush(Qt::white));
-    p.setBrush(QBrush(m_foregroundColor));
+    if(this->isEnabled()) p.setBrush(QBrush(m_foregroundColor));
+    else p.setBrush(QColor(128, 128, 128));
     p.drawRect(m_progressed);
 }
 
