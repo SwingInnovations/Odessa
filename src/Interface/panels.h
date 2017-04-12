@@ -39,17 +39,25 @@ signals:
     void brushTransferSizeChanged(int);
     void brushTransferOpacityChanged(int);
 
-private slots:
+public slots:
+    void updateBrushSize(int);
     void updateBrushSize(qreal);
+    void updateBrushOpacity(int);
     void updateBrushOpacity(qreal);
     void updateBrushSpacing(qreal);
     void updateTransferSize(qreal);
     void updateTransferOpacity(qreal);
     void toggleTransferSize(bool);
     void toggleTransferOpacity(bool);
+protected:
+    void paintEvent(QPaintEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 private:
     void initGUI();
     void updateStencilPreview();        //TODO Implement this
+    bool            m_inCustom;
     QLineEdit*      m_nameLE;
     QLabel*         m_StencilPrvwLbl;
     QLabel*         m_StrokePrvwLbl;

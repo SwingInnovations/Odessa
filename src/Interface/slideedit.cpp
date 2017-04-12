@@ -68,7 +68,7 @@ SlideEdit::SlideEdit(QWidget *parent) : QLineEdit(parent)
     m_lockBounds = false;
     m_intStep = false;
 
-    this->setAlignment(Qt::AlignRight);
+    this->setAlignment(Qt::AlignCenter);
 
     this->setContextMenuPolicy(Qt::DefaultContextMenu);
     m_isDown = false;

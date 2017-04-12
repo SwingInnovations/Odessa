@@ -3,12 +3,21 @@
 BrushConfigPanel::BrushConfigPanel(QWidget *parent) : QWidget(parent)
 {
     initGUI();
-    //TODO Hookup signals and slots.
+}
+
+void BrushConfigPanel::updateBrushSize(int value)
+{
+    m_brushSizeSE->setCurrentValue((int)value);
 }
 
 void BrushConfigPanel::updateBrushSize(qreal size)
 {
     emit brushWidthChanged((int)size);
+}
+
+void BrushConfigPanel::updateBrushOpacity(int value)
+{
+    m_opacitySE->setCurrentValue((int)value);
 }
 
 void BrushConfigPanel::updateBrushOpacity(qreal opacity)
@@ -41,8 +50,29 @@ void BrushConfigPanel::toggleTransferOpacity(bool value)
     m_transferOpacitySE->setEnabled(value);
 }
 
+void BrushConfigPanel::paintEvent(QPaintEvent *event)
+{
+
+}
+
+void BrushConfigPanel::mousePressEvent(QMouseEvent *event)
+{
+
+}
+
+void BrushConfigPanel::mouseReleaseEvent(QMouseEvent *event)
+{
+
+}
+
+void BrushConfigPanel::mouseMoveEvent(QMouseEvent *event)
+{
+
+}
+
 void BrushConfigPanel::initGUI()
 {
+    m_inCustom = false;
     /*-Header Stuff-*/
     m_openDockBtn = new QPushButton("Pop..", this);     //Opens Docked Window version of this panel
 

@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
     
     m_Editor = new Editor(this);
+    //m_Editor = new GLEditor(this);
     m_Editor->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_Editor->setFocusPolicy(Qt::ClickFocus);
 
@@ -241,8 +242,9 @@ MainWindow::MainWindow(QWidget *parent)
     brushOpt->setAutoRaise(true);
     auto brushOptMenu = new QMenu(this);
     brushOptMenu->setStyleSheet("background: rgb(53, 53, 53);");
+    m_brushToolPanel = new BrushConfigPanel(this);
     auto brushOptHandle = new QWidgetAction(this);
-    brushOptHandle->setDefaultWidget(new BrushConfigPanel(this));
+    brushOptHandle->setDefaultWidget(m_brushToolPanel);
     brushOptMenu->addAction(brushOptHandle);
     brushOpt->setMenu(brushOptMenu);
     m_toolBar->addWidget(brushOpt);
@@ -305,6 +307,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_showTimeDockWinAct, SIGNAL(toggled(bool)), SLOT(toggleShowTimelineDock(bool)));
     connect(m_showToolsDockAct, SIGNAL(toggled(bool)), SLOT(toggleShowToolsDock(bool)));
     connect(m_prefDiag, SIGNAL(historyStepsChanged(int)), m_Editor, SLOT(setHistoryLimit(int)));
+    connect(m_brushToolPanel, SIGNAL(brushWidthChanged(int)), m_Editor, SLOT(setBrushSize(int)));
+    connect(m_brushToolPanel, SIGNAL(brushOpacityChanged(int)), m_Editor, SLOT(setOpacity(int)));
     connect(m_brushDock, SIGNAL(brushSizeChanged(int)), m_Editor, SLOT(setBrushSize(int)));
     connect(m_brushDock, SIGNAL(brushOpacityChanged(int)), m_Editor, SLOT(setOpacity(int)));
     connect(m_brushDock, SIGNAL(brushStencilChanged(QPixmap)), m_Editor, SLOT(setBrushStencil(QPixmap)));
@@ -328,6 +332,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_toolPanel, SIGNAL(fontBoldChanged(bool)), m_Editor, SLOT(setBold(bool)));
     connect(m_toolPanel, SIGNAL(fontItalicChanged(bool)), m_Editor, SLOT(setItalic(bool)));
     connect(m_toolPanel, SIGNAL(fontUnderlineChanged(bool)), m_Editor, SLOT(setUnderline(bool)));
+    connect(m_Editor, SIGNAL(brushSizeChanged(int)), m_brushToolPanel, SLOT(updateBrushSize(int)));
+    connect(m_Editor, SIGNAL(brushOpacityChanged(int)), m_brushToolPanel, SLOT(updateBrushOpacity(int)));
     connect(m_Editor, SIGNAL(brushSizeChanged(int)), m_brushDock, SLOT(updateSize(int)));
     connect(m_Editor, SIGNAL(brushOpacityChanged(int)), m_brushDock, SLOT(updateOpacity(int)));
     connect(m_Editor, SIGNAL(redChanged(int)), m_colorDock, SLOT(updateRed(int)));
