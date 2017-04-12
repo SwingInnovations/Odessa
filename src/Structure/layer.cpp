@@ -10,6 +10,7 @@ Layer::Layer(LayerType type, int index)
     m_LayerType = type;
     m_currentIndex = index;
     m_Opacity = 100;
+    m_Visible = true;
 
     object = new Object();
 
@@ -26,6 +27,7 @@ Layer::Layer(LayerType type, int index, int width, int height)
     m_Opacity = 100;
     m_LayerType = type;
     m_currentIndex = index;
+    m_Visible = true;
     if(m_LayerType == Bitmap)
     {
         m_Width = width;
@@ -38,6 +40,7 @@ Layer::Layer(LayerType type, int width, int height)
 {
     m_LayerType = type;
     m_Opacity = 100;
+    m_Visible = true;
     if(m_LayerType == Bitmap)
     {
         QRect size(0, 0, width, height);
@@ -60,6 +63,7 @@ Layer::Layer(LayerType type, int width, int height)
 Layer::Layer(LayerType type, int width, int height, QColor col){
     m_LayerType = type;
     m_Opacity = 100;
+    m_Visible = true;
     if(m_LayerType == Bitmap)
     {
         QRect size(0, 0, width, height);

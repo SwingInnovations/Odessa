@@ -307,7 +307,6 @@ void Editor::tabletEvent(QTabletEvent *event)
 void Editor::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-
     /*-Primarily draw the canvas-*/
 
     if(!m_Layers.isEmpty())
@@ -329,58 +328,53 @@ void Editor::paintEvent(QPaintEvent *event)
         }
         p.end();
 
-        emit layerPreviewChanged(0, m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
-        painter.drawPixmap(0, 0, drawnPixmap);
-        painter.end();
+       emit layerPreviewChanged(0, m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+        painter.drawImage(0,0, drawnPixmap.toImage());
         resize(imageSize);
     }
 
-//    if(m_SelectActive){
-//        if(m_AlternatePattern){ painter.setPen(Qt::DotLine); m_AlternatePattern = false; }else{  painter.setPen(Qt::DashDotLine); m_AlternatePattern = true; }
-//        painter.setBrush(Qt::transparent);
-//        painter.drawRect(m_SelectRect);
-//        painter.end();
-//    }
 
-//    if(m_ClipboardPresent){
-//        if(m_ToolType == TEXT_TOOL){
-//            m_ClipboardPixmap = generateTextPixmap();
-//        }
-//        painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-//        if(m_AlternatePattern){ painter.setPen(Qt::DotLine); m_AlternatePattern = false; }else{  painter.setPen(Qt::DashDotLine); m_AlternatePattern = true; }
-//        painter.drawRect(m_ClipOffsetPoint.x(), m_ClipOffsetPoint.y(), m_ClipboardPixmap.rect().width(), m_ClipboardPixmap.rect().height());
-//        painter.drawPixmap(m_ClipOffsetPoint, m_ClipboardPixmap);
-//        painter.end();
-//    }
+    if(m_SelectActive){
+        if(m_AlternatePattern){ painter.setPen(Qt::DotLine); m_AlternatePattern = false; }else{  painter.setPen(Qt::DashDotLine); m_AlternatePattern = true; }
+        painter.setBrush(Qt::transparent);
+        painter.drawRect(m_SelectRect);
+    }
 
-//    if(m_ToolType == BRUSH_TOOL){
-//        painter.setPen(Qt::darkGray);
-//        QPen pHandle = painter.pen();
-//        pHandle.setWidth(5);
-//        painter.setPen(pHandle);
-//        painter.setBrush(Qt::transparent);
-//        painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
-//        painter.drawEllipse(QCursor::pos(), m_CurrentTool.getSize()/2, m_CurrentTool.getSize()/2);
-//        painter.drawPixmap(QCursor::pos(), m_CurrentTool.getStencil().scaled(m_CurrentTool.getSize(), m_CurrentTool.getSize()));
-//        painter.end();
-//        setCursor(QCursor(Qt::CrossCursor));
-//    }else if(m_ToolType == ERASER_TOOL){
-//        setCursor(QCursor(Qt::CrossCursor));
-//        painter.setPen(Qt::darkGray);
-//        painter.setBrush(Qt::transparent);
-//        painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
-//        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize(), m_CurrentTool.getSize()-3);
-//        painter.end();
-//    }else if(m_ToolType == EYEDROPPER_TOOL){
-//        setCursor(QCursor(QPixmap(":/icon/resource/eyeDropper.png"), 0, 0));
-//    }else if(m_ToolType == CURSOR_TOOL){
-//        setCursor(QCursor(Qt::ArrowCursor));
-//    }else if(m_ToolType == PRIMITIVE_TOOL){
-//        painter.setPen(QPen(((Primitive)m_CurrentTool).getLineColor()));
-//        painter.setBrush(QBrush(((Primitive)m_CurrentTool).getFillColor()));
-//        painter.drawPath(((Primitive)m_CurrentTool).getShapePath());
-//        painter.end();
-//    }
+    if(m_ClipboardPresent){
+        if(m_ToolType == TEXT_TOOL){
+            m_ClipboardPixmap = generateTextPixmap();
+        }
+        painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+        if(m_AlternatePattern){ painter.setPen(Qt::DotLine); m_AlternatePattern = false; }else{  painter.setPen(Qt::DashDotLine); m_AlternatePattern = true; }
+        painter.drawRect(m_ClipOffsetPoint.x(), m_ClipOffsetPoint.y(), m_ClipboardPixmap.rect().width(), m_ClipboardPixmap.rect().height());
+        painter.drawPixmap(m_ClipOffsetPoint, m_ClipboardPixmap);
+    }
+
+    if(m_ToolType == BRUSH_TOOL){
+        painter.setPen(Qt::darkGray);
+        QPen pHandle = painter.pen();
+        pHandle.setWidth(5);
+        painter.setPen(pHandle);
+        painter.setBrush(Qt::transparent);
+        painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
+        painter.drawEllipse(QCursor::pos(), m_CurrentTool.getSize()/2, m_CurrentTool.getSize()/2);
+        painter.drawPixmap(QCursor::pos(), m_CurrentTool.getStencil().scaled(m_CurrentTool.getSize(), m_CurrentTool.getSize()));
+        setCursor(QCursor(Qt::CrossCursor));
+    }else if(m_ToolType == ERASER_TOOL){
+        setCursor(QCursor(Qt::CrossCursor));
+        painter.setPen(Qt::darkGray);
+        painter.setBrush(Qt::transparent);
+        painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
+        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize(), m_CurrentTool.getSize()-3);
+    }else if(m_ToolType == EYEDROPPER_TOOL){
+        setCursor(QCursor(QPixmap(":/icon/resource/eyeDropper.png"), 0, 0));
+    }else if(m_ToolType == CURSOR_TOOL){
+        setCursor(QCursor(Qt::ArrowCursor));
+    }else if(m_ToolType == PRIMITIVE_TOOL){
+        painter.setPen(QPen(((Primitive)m_CurrentTool).getLineColor()));
+        painter.setBrush(QBrush(((Primitive)m_CurrentTool).getFillColor()));
+        painter.drawPath(((Primitive)m_CurrentTool).getShapePath());
+    }
 }
 
 QString Editor::addText(int i, QChar c){
@@ -475,8 +469,8 @@ void Editor::newProject(ProjectInfo &info){
     m_Info = info;
     if(!m_Layers.isEmpty()){
         m_Layers.clear();
-        m_CurrentIndex = 0;
-        m_CurrentFrame = 0;
+        m_CurrentIndex = 1;
+        m_CurrentFrame = 1;
     }
 
     if(m_Layers.isEmpty()){
