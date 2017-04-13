@@ -179,13 +179,13 @@ void SlideEdit::paintEvent(QPaintEvent *paintEvent)
     auto ratio = m_currentValue / m_Max;
     auto pX = ratio * this->geometry().width();
 
-    if(pX <= 12) {
+    if(pX <= 4) {
         m_handle.setX(m_Min);
         setCurrentValue(m_Min);
-    }else        m_handle.setX(pX - 12);
+    }else        m_handle.setX(pX - 4);
 
     m_handle.setY(0);
-    m_handle.setWidth(12);
+    m_handle.setWidth(4);
     m_handle.setHeight(this->height());
 
     m_progressed.setX(0);

@@ -19,6 +19,12 @@
 #include <QCheckBox>
 #include <QTabWidget>
 #include <QComboBox>
+#include <QFile>
+#include <QSettings>
+#include <QMessageBox>
+
+#include "../Structure/brush.h"
+#include "../Overloads.h"
 
 #include "slideedit.h"
 
@@ -49,6 +55,13 @@ public slots:
     void updateTransferOpacity(qreal);
     void toggleTransferSize(bool);
     void toggleTransferOpacity(bool);
+
+private slots:
+    void updateCurrentBrushIndex(int newInd);
+    void loadBrushAct();
+    void loadbrushLibAct();
+    void saveBrushAct();
+    void saveBrushLibAct();
 protected:
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
@@ -67,6 +80,7 @@ private:
     SlideEdit*      m_brushSizeSE;
     SlideEdit*      m_opacitySE;
     SlideEdit*      m_spacingSE;
+    QComboBox*      m_drawModeCmbx;
     QCheckBox*      m_transferSizeCB;
     SlideEdit*      m_transferSizeSE;
     QCheckBox*      m_transferOpacityCB;
@@ -83,6 +97,8 @@ private:
     QMenu*          m_OptMenu;
     QAction*        m_LoadBrushLibraryAct;
     QAction*        m_SaveBrushLibraryAct;
+    QAction*        m_LoadBrushAct;
+    QAction*        m_SaveBrushAct;
     QAction*        m_LoadStencilAct;
     QAction*        m_SaveStencilAct;
 
@@ -95,6 +111,29 @@ private:
     QGroupBox*      m_transferWidget;
 
     BrushShape      m_currentBrushShape;
+
+    unsigned int    m_currentBrushIndex;
+
+    QPixmap         m_currentStencil;
+    QPixmap         m_StrokePreview;
+
+    void readSettings();
+    void writeSettings();
+
+    QString m_ProjectPath;
+    QString m_BrushLib;
+
+    Brush loadBrush(QString filePath);
+    void saveBrushLib(QString filePath);
+    QVector<Brush> loadBrushLib(QString filePath);
+
+    void list_addBrush(Brush brush);
+
+
+    //Internal File stuff
+    QVector<Brush> m_TempBrushList;
+    QVector<Brush> m_ActualBrushList;
+    void generateStrokePreview();
 };
 
 class ColorConfigPanel : public QWidget{

@@ -189,6 +189,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
         switch(m_ToolType)
         {
         case BRUSH_TOOL:
+            repaint();
             if(m_DeviceDown)
             {
                 m_MousePath.append(event->pos());
@@ -198,7 +199,6 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                 }
                 emit curToolPressureChanged(m_CurrentTool.getPressureVal());
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
-
             }
             break;
         case ERASER_TOOL:
@@ -221,7 +221,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
         }
         emit mousePositionChanged(event->pos());
     }
-    update();
+    repaint();
 }
 
 void Editor::deselect(){
@@ -351,14 +351,14 @@ void Editor::paintEvent(QPaintEvent *event)
     }
 
     if(m_ToolType == BRUSH_TOOL){
+        qDebug() << "Updating Brush" << endl;
         painter.setPen(Qt::darkGray);
         QPen pHandle = painter.pen();
-        pHandle.setWidth(5);
+        pHandle.setWidth(2);
         painter.setPen(pHandle);
         painter.setBrush(Qt::transparent);
-        painter.drawPoint(this->mapFromGlobal(QCursor::pos()));
-        painter.drawEllipse(QCursor::pos(), m_CurrentTool.getSize()/2, m_CurrentTool.getSize()/2);
-        painter.drawPixmap(QCursor::pos(), m_CurrentTool.getStencil().scaled(m_CurrentTool.getSize(), m_CurrentTool.getSize()));
+        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize()/2, m_CurrentTool.getSize()/2);
+        painter.drawPixmap(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getStencil().scaled(m_CurrentTool.getSize()/3, m_CurrentTool.getSize()/2));
         setCursor(QCursor(Qt::CrossCursor));
     }else if(m_ToolType == ERASER_TOOL){
         setCursor(QCursor(Qt::CrossCursor));
@@ -948,7 +948,6 @@ void Editor::alternateTBlinker(){
 }
 
 QPixmap Editor::generateTextPixmap(){
-
     QTextEdit* tempEdit = new QTextEdit(this);
     tempEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     tempEdit->setDocument(m_textDocument);

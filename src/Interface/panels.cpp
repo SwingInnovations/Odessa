@@ -50,6 +50,19 @@ void BrushConfigPanel::toggleTransferOpacity(bool value)
     m_transferOpacitySE->setEnabled(value);
 }
 
+void BrushConfigPanel::updateCurrentBrushIndex(int newInd)
+{
+    m_currentBrushIndex = newInd;
+    //TODO Update things in Stencil.
+    m_currentStencil = m_ActualBrushList[m_currentBrushIndex].getStencil();
+    auto newStencil = m_ActualBrushList[m_currentBrushIndex].getStencil().toImage();
+    newStencil = newStencil.scaled(80, 89);
+    newStencil.invertPixels();
+    m_StencilPrvwLbl->setPixmap(QPixmap::fromImage(newStencil));
+    m_nameLE->setText(m_ActualBrushList[m_currentBrushIndex].getName());
+    generateStrokePreview();
+}
+
 void BrushConfigPanel::paintEvent(QPaintEvent *event)
 {
 
@@ -72,6 +85,9 @@ void BrushConfigPanel::mouseMoveEvent(QMouseEvent *event)
 
 void BrushConfigPanel::initGUI()
 {
+    readSettings();
+    if(m_BrushLib.isEmpty()) m_BrushLib = m_ProjectPath + "/Brush/default.blib";
+
     m_inCustom = false;
     /*-Header Stuff-*/
     m_openDockBtn = new QPushButton("Pop..", this);     //Opens Docked Window version of this panel
@@ -95,16 +111,15 @@ void BrushConfigPanel::initGUI()
 
     m_LoadBrushLibraryAct = new QAction("Load Library", this);
     m_SaveBrushLibraryAct = new QAction("Save Library", this);
-    m_LoadStencilAct = new QAction("Load Stencil", this);
-    m_SaveStencilAct = new QAction("Save Stencil", this);
+    m_LoadBrushAct = new QAction("Load Brush", this);
+    m_SaveBrushAct = new QAction("Save Brush", this);
 
     m_OptMenu = new QMenu(this);
     m_OptMenu->addAction(m_LoadBrushLibraryAct);
     m_OptMenu->addAction(m_SaveBrushLibraryAct);
     m_OptMenu->addSeparator();
-    m_OptMenu->addAction(m_LoadStencilAct);
-    m_OptMenu->addAction(m_SaveStencilAct);
-
+    m_OptMenu->addAction(m_LoadBrushAct);
+    m_OptMenu->addAction(m_SaveBrushAct);
     m_OtherOptBtn->setMenu(m_OptMenu);
 
     auto listBtnLayout = new QHBoxLayout;
@@ -119,7 +134,9 @@ void BrushConfigPanel::initGUI()
     brushListLayout->addLayout(listBtnLayout);
 
     m_StencilPrvwLbl = new QLabel("Stencil", this);
+    m_StencilPrvwLbl->setMinimumSize(80, 80);
     m_StrokePrvwLbl = new QLabel("Stroke", this);
+    m_StrokePrvwLbl->setMinimumSize(160, 80);
 
     auto sizeLbl = new QLabel("Size: ", this);
     m_brushSizeSE = new SlideEdit(this);
@@ -133,6 +150,13 @@ void BrushConfigPanel::initGUI()
     m_opacitySE->setCurrentValue(100);
     m_opacitySE->useIntegerStep(true);
     m_opacitySE->lockBounds(true);
+
+    auto drawModeLbl = new QLabel("DrawMode: ", this);
+    m_drawModeCmbx = new QComboBox(this);
+    m_drawModeCmbx->addItem("Add");
+    m_drawModeCmbx->addItem("Subtract");
+    m_drawModeCmbx->addItem("Multiply");
+    m_drawModeCmbx->setCurrentIndex(0);
 
     auto spacingLbl = new QLabel("Spacing: ", this);
     m_spacingSE = new SlideEdit(this);
@@ -176,7 +200,9 @@ void BrushConfigPanel::initGUI()
     brushGridLayout->addWidget(m_opacitySE, 2, 1);
     brushGridLayout->addWidget(spacingLbl, 3, 0);
     brushGridLayout->addWidget(m_spacingSE, 3, 1);
-    brushGridLayout->addWidget(m_transferWidget, 4, 0, 1, 0);
+    brushGridLayout->addWidget(drawModeLbl, 4, 0);
+    brushGridLayout->addWidget(m_drawModeCmbx, 4, 1);
+    brushGridLayout->addWidget(m_transferWidget, 6, 0, 1, 0);
 
     auto brushLayout = new QHBoxLayout;
     brushLayout->addLayout(brushListLayout);
@@ -245,6 +271,47 @@ void BrushConfigPanel::initGUI()
 
     setLayout(centralLayout);
 
+    if(!QFile(m_BrushLib).exists()){
+        //generate default
+        m_ActualBrushList.append(Brush());
+        m_ActualBrushList[0].setSWidth(10);
+        m_ActualBrushList[0].setSHeight(10);
+        m_ActualBrushList[0].setSpacing(1);
+        m_ActualBrushList[0].setHardness(100);
+        m_ActualBrushList[0].SetName("Default");
+        QPixmap sten1;
+        sten1.load(":/icon/resource/default.png");
+        m_ActualBrushList[0].SetStencil(sten1);
+        m_ActualBrushList.append(Brush());
+        m_ActualBrushList[1].setSWidth(10);
+        m_ActualBrushList[1].setSHeight(10);
+        m_ActualBrushList[1].setSpacing(1);
+        m_ActualBrushList[1].setHardness(0);
+        m_ActualBrushList[1].SetName("Airbrush");
+        sten1.load(":/icon/resource/airStencil.png");
+        m_ActualBrushList[1].SetStencil(sten1);
+        m_TempBrushList = m_ActualBrushList;
+        saveBrushLib(m_BrushLib);
+    }else{
+        //use loaded data
+        m_ActualBrushList = loadBrushLib(m_BrushLib);
+        for(int i = 0; i < m_ActualBrushList.size(); i++){
+            list_addBrush(m_ActualBrushList[i]);
+        }
+        m_TempBrushList = m_ActualBrushList;
+    }
+    QPixmap firstStencil = m_ActualBrushList[0].getStencil();
+    m_currentStencil = firstStencil;
+    firstStencil = firstStencil.scaled(80, 80);
+    m_StencilPrvwLbl->setMinimumSize(firstStencil.size().width(), firstStencil.size().height());
+    auto img = firstStencil.toImage();
+    img.invertPixels();
+    m_StencilPrvwLbl->setPixmap(QPixmap::fromImage(img));
+    m_nameLE->setText(m_ActualBrushList[0].getName());
+    generateStrokePreview();
+
+    m_currentBrushIndex = 0;
+
     connect(m_transferSizeCB, SIGNAL(clicked(bool)), SLOT(toggleTransferSize(bool)));
     connect(m_transferOpacityCB, SIGNAL(clicked(bool)), SLOT(toggleTransferOpacity(bool)));
     connect(m_brushSizeSE, SIGNAL(valueChanged(qreal)), SLOT(updateBrushSize(qreal)));
@@ -252,9 +319,161 @@ void BrushConfigPanel::initGUI()
     connect(m_spacingSE, SIGNAL(valueChanged(qreal)), SLOT(updateBrushSpacing(qreal)));
     connect(m_transferSizeSE, SIGNAL(valueChanged(qreal)), SLOT(updateTransferSize(qreal)));
     connect(m_transferOpacitySE,SIGNAL(valueChanged(qreal)), SLOT(updateTransferOpacity(qreal)));
+    connect(m_brushListWidget, SIGNAL(currentRowChanged(int)), SLOT(updateCurrentBrushIndex(int)));
+    connect(m_LoadBrushAct, SIGNAL(triggered()), SLOT(loadBrushAct()));
+    connect(m_LoadBrushLibraryAct, SIGNAL(triggered()), SLOT(loadbrushLibAct()));
+    connect(m_SaveBrushAct, SIGNAL(triggered()), SLOT(saveBrushAct()));
+    connect(m_SaveBrushLibraryAct, SIGNAL(triggered()), SLOT(saveBrushLibAct()));
 }
 
+void BrushConfigPanel::readSettings()
+{
+    QSettings settings("SwingInnovations", "Odessa");
+    m_ProjectPath = settings.value("projectPath").toString();
+    m_BrushLib = settings.value("activeBrushLib").toString();
+}
 
+void BrushConfigPanel::writeSettings()
+{
+    QSettings settings("SwingInnovations", "Odessa");
+    settings.setValue("activeBrushLib", m_BrushLib);
+    saveBrushLib(m_BrushLib);
+}
+
+void BrushConfigPanel::loadBrushAct()
+{
+    QString filePath = QFileDialog::getOpenFileName(this, "Open Brush", m_ProjectPath, ".brsh");
+    Brush temp = loadBrush(filePath);
+    m_TempBrushList.append(temp);
+    m_ActualBrushList.append(temp);
+    list_addBrush(temp);
+}
+
+void BrushConfigPanel::loadbrushLibAct()
+{
+    QString filePath = QFileDialog::getOpenFileName(this, "Open Brush Library", m_ProjectPath, "*.blib");
+    QMessageBox msgBox;
+    msgBox.setText("Would you like to load a new brush set or add to existing?");
+    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msgBox.setButtonText(QMessageBox::Ok, "Load new set");
+    msgBox.setButtonText(QMessageBox::Cancel, "Add to existing set");
+    auto newList = loadBrushLib(filePath);
+    switch(msgBox.exec())
+    {
+        case QMessageBox::Ok:
+            m_ActualBrushList = newList;
+            m_BrushLib = filePath;
+            break;
+        case QMessageBox::Cancel:
+            m_ActualBrushList = m_ActualBrushList + newList;
+        break;
+    }
+}
+
+void BrushConfigPanel::saveBrushAct()
+{
+
+}
+
+void BrushConfigPanel::saveBrushLibAct()
+{
+    QString filePath = QFileDialog::getSaveFileName(this, "Save Brush Library", m_ProjectPath, "*.blib");
+    saveBrushLib(filePath);
+}
+
+Brush BrushConfigPanel::loadBrush(QString filePath)
+{
+    Brush ret;
+    int encrypt = 5025;
+    QFile file(filePath);
+    if(!file.open(QFile::ReadOnly)) qDebug() << "Error: Invalid file!" << endl;
+    QDataStream in(&file);
+    in.setVersion(QDataStream::Qt_5_0);
+    in >> encrypt >> ret;
+    file.close();
+    return ret;
+}
+
+void BrushConfigPanel::saveBrushLib(QString filePath)
+{
+    int encrypt = 5025;
+    QFile file(filePath);
+    if(!file.open(QIODevice::WriteOnly)) qDebug() << "Error: Could not open file!" << endl;
+
+    QDataStream out(&file);
+    out.setVersion(QDataStream::Qt_5_0);
+    out << encrypt << m_ActualBrushList;
+    file.flush();
+    file.close();
+}
+
+QVector<Brush> BrushConfigPanel::loadBrushLib(QString filePath)
+{
+    int encrypt = 5025;
+    QVector<Brush> ret;
+    QFile file(filePath);
+    if(!file.open(QIODevice::ReadOnly)) qDebug() <<  "Error: Could not open file!" << endl;
+    QDataStream in(&file);
+    in.setVersion(QDataStream::Qt_5_0);
+    in >> encrypt >> ret;
+    file.close();
+    return ret;
+}
+
+void BrushConfigPanel::list_addBrush(Brush brush)
+{
+    QListWidgetItem* itm = new QListWidgetItem(brush.m_Name);
+    QImage stencilIcon = brush.getStencil().toImage();
+    stencilIcon.invertPixels();
+    itm->setIcon(QPixmap::fromImage(stencilIcon));
+    itm->setFlags(itm->flags() | Qt::ItemIsEditable);
+    m_brushListWidget->addItem(itm);
+}
+
+void BrushConfigPanel::generateStrokePreview()
+{
+    m_StrokePreview = QPixmap(160, 80);
+    m_StrokePreview.fill(Qt::transparent);
+    QPainterPath path;
+    path.moveTo(20, 20);
+    path.cubicTo(QPointF(1.0/3.0 * (double)m_StrokePreview.width(), m_StrokePreview.height()), QPointF(1.0/3.0 * (double)m_StrokePreview.width(), m_StrokePreview.height()), QPointF(m_StrokePreview.width()/2, m_StrokePreview.height()/2));
+    path.cubicTo(QPointF(2.0/3.0 * (double)m_StrokePreview.width(), 0), QPointF(2.0/3.0 * (double)m_StrokePreview.width(), 0), QPointF(m_StrokePreview.width()-20, m_StrokePreview.height() - 20));
+
+    qreal minWidth = 5.0;
+    qreal maxWidth = 10.0;
+
+    QImage stenBase = m_currentStencil.toImage();
+    stenBase.invertPixels(QImage::InvertRgb);
+    stenBase.createAlphaMask();
+    stenBase.convertToFormat(QImage::Format_ARGB32, Qt::AutoColor);
+    QImage stencil(stenBase);
+    stencil.fill(Qt::white);
+    stencil.setAlphaChannel(stenBase);
+    QPixmap fSten = QPixmap::fromImage(stencil.scaled(minWidth, minWidth));
+
+    QPainter p(&m_StrokePreview);
+    p.setPen(Qt::black);
+    p.setBrush(Qt::transparent);
+    qreal bigger = 0.0;
+    for(double i = 0.0; i < 1.0; i+= 0.0001){
+        QPoint drawPoint = path.pointAtPercent(i).toPoint();
+//        if(m_usePressureWidth){
+//            if(i <= 0.5){
+//                bigger = i;
+//            }else{
+//                bigger = -i;
+//            }
+//            fSten = fSten.scaled(minWidth + bigger, minWidth + bigger);
+//             p.drawPixmap(QPoint(drawPoint.x() - fSten.width()/2.0, drawPoint.y() - fSten.height()/2), fSten);
+//        }else{
+//             p.drawPixmap(QPoint(drawPoint.x() - fSten.width()/2.0, drawPoint.y() - fSten.height()/2), fSten);
+//        }
+        p.drawPixmap(QPoint(drawPoint.x() - fSten.width()/2.0, drawPoint.y() - fSten.height()/2), fSten);
+
+    }
+    p.end();
+    m_StrokePrvwLbl->setPixmap(m_StrokePreview);
+}
 
 ColorConfigPanel::ColorConfigPanel(QWidget *parent) : QWidget(parent)
 {
