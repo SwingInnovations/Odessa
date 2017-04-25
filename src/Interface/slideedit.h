@@ -48,6 +48,7 @@ public:
     void lockBounds(bool value){ m_lockBounds = value; }                //TODO - Allow this to update the status of other menu.
     qreal getMin(){ return m_Min; }
     qreal getMax(){ return m_Max; }
+    qreal getValue(){ return m_currentValue; }
 signals:
     void valueChanged(qreal);
 protected:

@@ -86,6 +86,7 @@ void BrushConfigPanel::mouseMoveEvent(QMouseEvent *event)
 void BrushConfigPanel::initGUI()
 {
     readSettings();
+    m_currentBrushShape = CIRCLE;
     if(m_BrushLib.isEmpty()) m_BrushLib = m_ProjectPath + "/Brush/default.blib";
 
     m_inCustom = false;
@@ -153,9 +154,26 @@ void BrushConfigPanel::initGUI()
 
     auto drawModeLbl = new QLabel("DrawMode: ", this);
     m_drawModeCmbx = new QComboBox(this);
-    m_drawModeCmbx->addItem("Add");
-    m_drawModeCmbx->addItem("Subtract");
+    m_drawModeCmbx->addItem("Normal");
+    m_drawModeCmbx->insertSeparator(1);
+    m_drawModeCmbx->addItem("Plus");
     m_drawModeCmbx->addItem("Multiply");
+    m_drawModeCmbx->insertSeparator(4);
+    m_drawModeCmbx->addItem("Screen");
+    m_drawModeCmbx->addItem("Overlay");
+    m_drawModeCmbx->insertSeparator(7);
+    m_drawModeCmbx->addItem("Darken");
+    m_drawModeCmbx->addItem("Lighten");
+    m_drawModeCmbx->insertSeparator(10);
+    m_drawModeCmbx->addItem("Color Dodge");
+    m_drawModeCmbx->addItem("Color Burn");
+    m_drawModeCmbx->insertSeparator(13);
+    m_drawModeCmbx->addItem("Hard Light");
+    m_drawModeCmbx->addItem("Soft Light");
+    m_drawModeCmbx->insertSeparator(16);
+    m_drawModeCmbx->addItem("Difference");
+    m_drawModeCmbx->addItem("Exclusion");
+
     m_drawModeCmbx->setCurrentIndex(0);
 
     auto spacingLbl = new QLabel("Spacing: ", this);
@@ -210,6 +228,9 @@ void BrushConfigPanel::initGUI()
 
     /*-Begin Color Widget-*/
     m_StencilPreviewLbl = new QLabel("Stencil Preview", this);
+    m_stencilPreview = QPixmap(160, 160);
+    m_stencilPreview.fill(Qt::transparent);
+    m_StencilPreviewLbl->setPixmap(m_stencilPreview);
 
     auto stencilWidthLbl = new QLabel("Width: ", this);
     m_StencilWidthSE = new SlideEdit(this);
@@ -235,14 +256,32 @@ void BrushConfigPanel::initGUI()
     m_HardnessSE->useIntegerStep(true);
     m_HardnessSE->lockBounds(true);
 
+    auto rotateLbl = new QLabel("Rotate: ", this);
+    m_RotateSE = new SlideEdit(this);
+    m_RotateSE->setLowerbound(0);
+    m_RotateSE->setUpperBound(360);
+    m_RotateSE->setCurrentValue(0);
+    m_RotateSE->useIntegerStep(true);
+    m_RotateSE->lockBounds(true);
+
+    auto shapeLbl = new QLabel("Shape: ", this);
+    m_StencilShapeCmbx = new QComboBox(this);
+    m_StencilShapeCmbx->addItem("Circle");
+    m_StencilShapeCmbx->addItem("Square");
+    m_StencilShapeCmbx->addItem("Custom");
+
     auto stencilGridLayout =  new QGridLayout;
-    stencilGridLayout->addWidget(m_StencilPreviewLbl, 0, 1, 0, 1, Qt::AlignCenter);
+    stencilGridLayout->addWidget(m_StencilPreviewLbl, 0, 1, Qt::AlignCenter);
     stencilGridLayout->addWidget(stencilWidthLbl, 1, 0);
     stencilGridLayout->addWidget(m_StencilWidthSE, 1, 1);
     stencilGridLayout->addWidget(stencilHeightLbl, 2, 0);
     stencilGridLayout->addWidget(m_StencilHeightSE, 2, 1);
     stencilGridLayout->addWidget(hardnessLbl, 3, 0);
     stencilGridLayout->addWidget(m_HardnessSE, 3, 1);
+    stencilGridLayout->addWidget(rotateLbl, 4, 0);
+    stencilGridLayout->addWidget(m_RotateSE, 4, 1);
+    stencilGridLayout->addWidget(shapeLbl, 5, 0);
+    stencilGridLayout->addWidget(m_StencilShapeCmbx, 5, 1);
 
     QWidget* brushWidget = new QWidget(this);
     brushWidget->setLayout(brushLayout);
@@ -320,10 +359,61 @@ void BrushConfigPanel::initGUI()
     connect(m_transferSizeSE, SIGNAL(valueChanged(qreal)), SLOT(updateTransferSize(qreal)));
     connect(m_transferOpacitySE,SIGNAL(valueChanged(qreal)), SLOT(updateTransferOpacity(qreal)));
     connect(m_brushListWidget, SIGNAL(currentRowChanged(int)), SLOT(updateCurrentBrushIndex(int)));
+    connect(m_StencilWidthSE, SIGNAL(valueChanged(qreal)), SLOT(updateStencilWidth(qreal)));
+    connect(m_StencilHeightSE, SIGNAL(valueChanged(qreal)), SLOT(updateStencilHeight(qreal)));
+    connect(m_HardnessSE, SIGNAL(valueChanged(qreal)), SLOT(updateStencilHardness(qreal)));
+    connect(m_RotateSE, SIGNAL(valueChanged(qreal)), SLOT(updateStencilRotate(qreal)));
+    connect(m_StencilShapeCmbx, SIGNAL(currentIndexChanged(int)), SLOT(updateBrushShape(int)));
     connect(m_LoadBrushAct, SIGNAL(triggered()), SLOT(loadBrushAct()));
     connect(m_LoadBrushLibraryAct, SIGNAL(triggered()), SLOT(loadbrushLibAct()));
     connect(m_SaveBrushAct, SIGNAL(triggered()), SLOT(saveBrushAct()));
     connect(m_SaveBrushLibraryAct, SIGNAL(triggered()), SLOT(saveBrushLibAct()));
+    GenerateStencilPreview();
+}
+
+void BrushConfigPanel::GenerateStencilPreview()
+{
+    int stencilWidth = (m_stencilPreview.width() * m_StencilWidthSE->getValue()/10) / 2;
+    int stencilHeight = (m_stencilPreview.height() * m_StencilHeightSE->getValue()/10) / 2;
+    qreal hardness =(qreal)m_HardnessSE->getValue() / 100.f;
+    QPoint midPoint(m_stencilPreview.width()/2 , m_stencilPreview.height()/2);
+    m_stencilPreview.fill(Qt::transparent);
+    QRadialGradient radGrad(midPoint, m_stencilPreview.width() / 2);
+    radGrad.setColorAt(midPoint.x() / m_stencilPreview.width(), Qt::black);
+    radGrad.setColorAt(0.0, Qt::black);
+    radGrad.setColorAt(hardness, Qt::black);
+    if(hardness == 1.f) radGrad.setColorAt(1.0, Qt::black);
+    else radGrad.setColorAt(1.0f, Qt::transparent);
+
+    QPainter p(&m_stencilPreview);
+    switch(m_currentBrushShape){
+        case CIRCLE:
+            //TODO Implement if texture is present;
+            p.setBrush(radGrad);
+
+            //END TODO
+
+            p.translate(midPoint);
+            p.rotate(m_RotateSE->getValue());
+            p.translate(-midPoint);
+            p.drawEllipse(midPoint, stencilWidth, stencilHeight);
+            break;
+        case SQUARE:
+            int oX = midPoint.x() - stencilWidth;
+            int oY = midPoint.y() - stencilHeight;
+            int dimX = stencilWidth * 2;
+            int dimY = stencilHeight * 2;
+
+            //TODO Implement if texture is present
+            p.setBrush(radGrad);
+            //END TODO
+            p.translate(midPoint);
+            p.rotate(m_RotateSE->getValue());
+            p.translate(-midPoint);
+            p.drawRect(oX, oY, dimX, dimY);
+            break;
+    }
+    m_StencilPreviewLbl->setPixmap(m_stencilPreview);
 }
 
 void BrushConfigPanel::readSettings()
@@ -379,6 +469,45 @@ void BrushConfigPanel::saveBrushLibAct()
 {
     QString filePath = QFileDialog::getSaveFileName(this, "Save Brush Library", m_ProjectPath, "*.blib");
     saveBrushLib(filePath);
+}
+
+void BrushConfigPanel::updateStencilWidth(qreal width)
+{
+    m_TempBrushList[m_currentBrushIndex].s_Width = (int)width;
+    GenerateStencilPreview();
+}
+
+void BrushConfigPanel::updateStencilHeight(qreal height)
+{
+    m_TempBrushList[m_currentBrushIndex].s_Height = (int)height;
+    GenerateStencilPreview();
+}
+
+void BrushConfigPanel::updateStencilHardness(qreal hardness)
+{
+    GenerateStencilPreview();
+}
+
+void BrushConfigPanel::updateStencilRotate(qreal rotate)
+{
+
+    GenerateStencilPreview();
+}
+
+void BrushConfigPanel::updateBrushShape(int index)
+{
+    switch(index){
+    case 0:
+        m_currentBrushShape = CIRCLE;
+        break;
+    case 1:
+        m_currentBrushShape = SQUARE;
+        break;
+    case 3:
+        m_currentBrushShape = CUSTOM;
+        break;
+    }
+    GenerateStencilPreview();
 }
 
 Brush BrushConfigPanel::loadBrush(QString filePath)
@@ -468,6 +597,7 @@ void BrushConfigPanel::generateStrokePreview()
 //        }else{
 //             p.drawPixmap(QPoint(drawPoint.x() - fSten.width()/2.0, drawPoint.y() - fSten.height()/2), fSten);
 //        }
+
         p.drawPixmap(QPoint(drawPoint.x() - fSten.width()/2.0, drawPoint.y() - fSten.height()/2), fSten);
 
     }

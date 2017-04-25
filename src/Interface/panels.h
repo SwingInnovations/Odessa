@@ -62,6 +62,11 @@ private slots:
     void loadbrushLibAct();
     void saveBrushAct();
     void saveBrushLibAct();
+    void updateStencilWidth(qreal);
+    void updateStencilHeight(qreal);
+    void updateStencilHardness(qreal);
+    void updateStencilRotate(qreal);
+    void updateBrushShape(int);
 protected:
     void paintEvent(QPaintEvent *event);
     void mousePressEvent(QMouseEvent *event);
@@ -109,6 +114,7 @@ private:
     SlideEdit*      m_HardnessSE;
     SlideEdit*      m_RotateSE;
     QGroupBox*      m_transferWidget;
+    QComboBox*      m_StencilShapeCmbx;
 
     BrushShape      m_currentBrushShape;
 
@@ -116,6 +122,9 @@ private:
 
     QPixmap         m_currentStencil;
     QPixmap         m_StrokePreview;
+    QPixmap         m_stencilPreview;
+
+    void            GenerateStencilPreview();
 
     void readSettings();
     void writeSettings();
