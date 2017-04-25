@@ -475,23 +475,27 @@ void BrushConfigPanel::updateStencilWidth(qreal width)
 {
     m_TempBrushList[m_currentBrushIndex].s_Width = (int)width;
     GenerateStencilPreview();
+    emit stencilChanged(m_stencilPreview);
 }
 
 void BrushConfigPanel::updateStencilHeight(qreal height)
 {
     m_TempBrushList[m_currentBrushIndex].s_Height = (int)height;
     GenerateStencilPreview();
+    emit stencilChanged(m_stencilPreview);
 }
 
 void BrushConfigPanel::updateStencilHardness(qreal hardness)
 {
     GenerateStencilPreview();
+    emit stencilChanged(m_stencilPreview);
 }
 
 void BrushConfigPanel::updateStencilRotate(qreal rotate)
 {
 
     GenerateStencilPreview();
+    emit stencilChanged(m_stencilPreview);
 }
 
 void BrushConfigPanel::updateBrushShape(int index)

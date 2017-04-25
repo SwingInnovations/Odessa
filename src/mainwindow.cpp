@@ -309,6 +309,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_prefDiag, SIGNAL(historyStepsChanged(int)), m_Editor, SLOT(setHistoryLimit(int)));
     connect(m_brushToolPanel, SIGNAL(brushWidthChanged(int)), m_Editor, SLOT(setBrushSize(int)));
     connect(m_brushToolPanel, SIGNAL(brushOpacityChanged(int)), m_Editor, SLOT(setOpacity(int)));
+    connect(m_brushToolPanel, SIGNAL(stencilChanged(QPixmap)), m_Editor, SLOT(setBrushStencil(QPixmap)));
     connect(m_brushDock, SIGNAL(brushSizeChanged(int)), m_Editor, SLOT(setBrushSize(int)));
     connect(m_brushDock, SIGNAL(brushOpacityChanged(int)), m_Editor, SLOT(setOpacity(int)));
     connect(m_brushDock, SIGNAL(brushStencilChanged(QPixmap)), m_Editor, SLOT(setBrushStencil(QPixmap)));

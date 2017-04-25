@@ -44,6 +44,7 @@ signals:
     void brushSpacingChanged(qreal);
     void brushTransferSizeChanged(int);
     void brushTransferOpacityChanged(int);
+    void stencilChanged(QPixmap);
 
 public slots:
     void updateBrushSize(int);
