@@ -24,6 +24,10 @@
 #include "brush.h"
 #include "primitive.h"
 
+#ifdef Q_OS_WIN
+#include <wingdi.h>
+#endif
+
 class Editor;
 class ProjectInfo;
 
@@ -67,6 +71,8 @@ public:
     void setBrush(Brush b);
     void setBrush(ToolType type);
     int getHistoryStep()const{ return m_HistorySteps; }
+    int getRealWidth()const;
+    int getRealHeight()const;
     ProjectInfo getProjectInfo()const{ return m_Info; }
     QPixmap getSelectionPixmap();
     QSize getPixmapSize(){
@@ -179,6 +185,12 @@ public slots:
     void setClipOffsetY(int);
     void useWorldTransform(bool);
 
+    /**
+     * @brief useWindowsPenAPI
+     * @param flag
+     */
+    void useWindowsPenAPI(bool);
+
     void alternateTBlinker();
 private:
     /*-Control mode, for use with either full view of sprite sheet or normal use
@@ -275,6 +287,13 @@ private:
     bool m_AlternatePattern;
 
     ProjectInfo m_Info;
+
+    int m_realWidth;
+    int m_realHeight;
+#ifdef Q_OS_WIN32
+    bool m_useWinInkAPI = false;
+#endif
+    long m_startTime,m_endTime;
 };
 
 #endif // EDITOR_H

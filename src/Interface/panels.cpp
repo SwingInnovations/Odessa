@@ -609,12 +609,98 @@ void BrushConfigPanel::generateStrokePreview()
     m_StrokePrvwLbl->setPixmap(m_StrokePreview);
 }
 
-ColorConfigPanel::ColorConfigPanel(QWidget *parent) : QWidget(parent)
+ColorConfigPanel::ColorConfigPanel(QWidget *parent, Editor *editor) : QWidget(parent)
+{
+    m_editor = editor;
+    initGui();
+}
+
+ColorConfigPanel::~ColorConfigPanel()
 {
 
 }
 
-ColorConfigPanel::~ColorConfigPanel()
+void ColorConfigPanel::initGui()
+{
+    QHBoxLayout* centralLayout = new QHBoxLayout;
+    m_colorWheel = new ColorWheel(this);
+    centralLayout->addWidget(m_colorWheel);
+    auto colorTabs = new QTabWidget(this);
+
+    QWidget* PalleteTabWidget = new QWidget(this);
+
+
+    //START RGB Widget
+    QWidget* RGBTabWidget = new QWidget(this);
+    m_RSlider = new SlideEdit(this);
+    m_RSlider->setLowerbound(0);
+    m_RSlider->setUpperBound(255);
+    m_RSlider->setCurrentValue(255);
+    m_RSlider->lockBounds(true);
+
+    m_GSlider = new SlideEdit(this);
+    m_GSlider->setLowerbound(0);
+    m_GSlider->setUpperBound(255);
+    m_GSlider->setCurrentValue(255);
+    m_GSlider->lockBounds(true);
+
+    m_BSlider = new SlideEdit(this);
+    m_BSlider->setLowerbound(0);
+    m_BSlider->setUpperBound(255);
+    m_BSlider->setCurrentValue(255);
+    m_BSlider->lockBounds(true);
+
+    QGridLayout* RGBGrid = new QGridLayout;
+    RGBGrid->addWidget(new QLabel("R:", this), 0, 0);
+    RGBGrid->addWidget(m_RSlider, 0, 1);
+    RGBGrid->addWidget(new QLabel("G:", this), 1, 0);
+    RGBGrid->addWidget(m_GSlider, 1, 1);
+    RGBGrid->addWidget(new QLabel("B:", this), 2, 0);
+    RGBGrid->addWidget(m_BSlider, 2, 1);
+
+    RGBTabWidget->setLayout(RGBGrid);
+    //END RGB Widget
+
+    //START HSV Tab
+    QWidget* HSVTabWidget = new QWidget(this);
+    m_HSlider = new SlideEdit(this);
+    m_HSlider->setLowerbound(0);
+    m_HSlider->setUpperBound(255);
+    m_HSlider->setCurrentValue(255);
+    m_HSlider->lockBounds(true);
+
+    m_SSlider = new SlideEdit(this);
+    m_SSlider->setLowerbound(0);
+    m_SSlider->setUpperBound(255);
+    m_SSlider->setCurrentValue(255);
+    m_SSlider->lockBounds(true);
+
+    m_VSlider = new SlideEdit(this);
+    m_VSlider->setLowerbound(0);
+    m_VSlider->setUpperBound(255);
+    m_VSlider->setCurrentValue(255);
+    m_VSlider->lockBounds(true);
+
+    QGridLayout* HSVGrid = new QGridLayout;
+    HSVGrid->addWidget(new QLabel("H: ", this), 0, 0);
+    HSVGrid->addWidget(m_HSlider, 0, 1);
+    HSVGrid->addWidget(new QLabel("S: ", this), 1, 0);
+    HSVGrid->addWidget(m_SSlider, 1, 1);
+    HSVGrid->addWidget(new QLabel("V: ", this), 2, 0);
+    HSVGrid->addWidget(m_VSlider, 2, 1);
+    HSVTabWidget->setLayout(HSVGrid);
+    //END HSVTab
+
+    colorTabs->addTab(PalleteTabWidget, "Pallete");
+    colorTabs->addTab(RGBTabWidget, "RGB");
+    colorTabs->addTab(HSVTabWidget, "HSV");
+
+    centralLayout->addWidget(colorTabs);
+
+    setLayout(centralLayout);
+}
+
+void ColorConfigPanel::readFromLastPallette()
 {
 
 }

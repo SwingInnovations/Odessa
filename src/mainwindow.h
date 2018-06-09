@@ -83,7 +83,9 @@ private:
     DebugWindow *m_debugWin;
     LayerDockWidget *m_layerDock;
     ToolsPanel* m_toolPanel;
+
     BrushConfigPanel* m_brushToolPanel;
+    ColorConfigPanel* m_colorConfigPanel;
 
     bool m_isModified;
 

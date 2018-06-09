@@ -5,7 +5,6 @@ BitmapImage::BitmapImage()
     m_Image = NULL;
     m_visible = true;
     m_ScaleFactor = 1.0;
-    qDebug() << "Image drawn!" << endl;
     m_ScaleFactorInv = 1.0;
     m_inc = 0.01;
 }
@@ -117,45 +116,68 @@ void BitmapImage::paintImage(QPoint point, Brush brush){
 
 void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
 {
-    int brushWidth = brush.getSize() + (brush.getPressureVal() * brush.getTransferSize());
-    brushWidth *= m_ScaleFactor;
-    /*-Prepare Stencil-*/
-    QImage stencilBase = brush.getStencil().toImage();
-    stencilBase.invertPixels(QImage::InvertRgb);
-    stencilBase.createAlphaMask();
-    stencilBase.convertToFormat(QImage::Format_ARGB32, Qt::AutoColor);
-    QImage stencilImage = QImage(stencilBase);
-    QColor color = brush.getColor();
-    color.setAlpha(brush.getOpacity() + (brush.getPressureVal() * brush.getTransferOpacity()));
-    stencilImage.fill(color);
-    stencilImage.setAlphaChannel(stencilBase);
-    QPixmap stencil = QPixmap::fromImage(stencilImage.scaled(brushWidth, brushWidth, Qt::IgnoreAspectRatio, Qt::FastTransformation));
+    //Require at least three points to draw a line.
+    if(pointInfo.length() >= 2){
+        int brushWidth = brush.getSize() + (brush.getPressureVal() * brush.getTransferSize());
+        brushWidth *= m_ScaleFactor;
 
-    QPainter painter(&m_pixmap);
-    painter.setRenderHint(QPainter::Antialiasing);
+        long startTime, endTime;
 
-    /*Calculate incrementation value*/
-    qreal inc = 0.01;
+        startTime = QTime::currentTime().elapsed();
 
-    QPainterPath path;
-    path.moveTo(pointInfo.first());
-    path.lineTo(pointInfo.last());
+        /*-Prepare Stencil-*/
+        QImage stencilBase = brush.getStencil().toImage();
+        stencilBase.invertPixels(QImage::InvertRgb);
+        stencilBase.createAlphaMask();
+        stencilBase.convertToFormat(QImage::Format_ARGB32, Qt::AutoColor);
 
-    inc = getIncrement(pointInfo.first(), pointInfo.last());
-    if(inc == 0){
-        inc = m_inc;
+        QImage stencilImage = QImage(stencilBase);
+        QColor color = brush.getColor();
+        color.setAlpha(brush.getOpacity() + (brush.getPressureVal() * brush.getTransferOpacity()));
+        stencilImage.fill(color);
+        stencilImage.setAlphaChannel(stencilBase);
+        QPixmap stencil = QPixmap::fromImage(stencilImage.scaled(brushWidth, brushWidth, Qt::IgnoreAspectRatio, Qt::FastTransformation));
+
+        endTime = QTime::currentTime().elapsed();
+
+        qDebug() << "Prepared stencil in: " << endTime - startTime << " ms." << endl;
+
+        QPainter painter(&m_pixmap);
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        /*Calculate incrementation value*/
+        qreal inc = 0.01;
+
+        QPainterPath path;
+        path.moveTo(pointInfo.first());
+        //path.lineTo(pointInfo.last());
+
+        qreal a = 0.2f;
+        qreal x = 0.f;
+        qreal y = 0.f;
+        qDebug() << "Point info: " << pointInfo.length() << endl;
+        auto p = pointInfo.first();
+        auto p1 = pointInfo.last();
+        x = p.x() * a + p1.x() * (1-a);
+        y = p.y() * a + p1.y() * (1-a);
+        qDebug() << "x: " << x << " y: " << y << endl;
+        path.lineTo(x, y);
+
+        if (pointInfo.length() == 2) {
+            qDebug() << "Got the right amount of points" << endl;
+        }
+        if (pointInfo.length() > 2) {
+            qDebug() << "Got More points then expected" << endl;
+        }
+
+        for(qreal i = 0.0; i < 1.0; i+= inc){
+            QPointF point = path.pointAtPercent(i) / m_ScaleFactor;
+            painter.drawPixmap(QPoint(point.x() - stencil.width()/2, point.y() - stencil.width()/2), stencil);
+        }
+        painter.end();
     }
-
-    qDebug() << "Reported Increment: " << m_inc << endl;
-
-    inc /= (qreal)brush.getSpacing();
-
     /* Automatically adjust the incrementing value */
-    for(qreal i = 0.0; i < 1.0; i+= inc){
-        QPointF point = path.pointAtPercent(i) / m_ScaleFactor;
-        painter.drawPixmap(QPoint(point.x() - stencil.width()/2, point.y() - stencil.width()/2), stencil);
-    }
-    painter.end();
+
 
     /*-Old Method-*/
 
@@ -171,7 +193,61 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
 //        drawPoint.setX(drawPoint.x() + (xInc / (double)brush.getSpacing() ));
 //        drawPoint.setY(drawPoint.y() + (yInc / (double)brush.getSpacing() ));
 //        painter.drawPixmap(QPoint(drawPoint.x() - stencil.width() / 2, drawPoint.y() - stencil.height()/2) / m_ScaleFactor, stencil);
-//    }
+    //    }
+}
+
+/**
+ * @brief BitmapImage::paintImage
+ * @param points
+ * @param brush
+ */
+void BitmapImage::paintImage(QVector<QPointF> *points, Brush brush)
+{
+    if(points->length() >= 2){
+        int brushWidth = brush.getSize() + (brush.getPressureVal() * brush.getTransferSize());
+        brushWidth *= m_ScaleFactor;
+
+        /*-Prepare Stencil-*/
+        QImage stencilBase = brush.getStencil().toImage();
+        stencilBase.invertPixels(QImage::InvertRgb);
+        stencilBase.createAlphaMask();
+        stencilBase.convertToFormat(QImage::Format_ARGB32, Qt::AutoColor);
+        QImage stencilImage = QImage(stencilBase);
+        QColor color = brush.getColor();
+        color.setAlpha(brush.getOpacity() + (brush.getPressureVal() * brush.getTransferOpacity()));
+        stencilImage.fill(color);
+        stencilImage.setAlphaChannel(stencilBase);
+        QPixmap stencil = QPixmap::fromImage(stencilImage.scaled(brushWidth, brushWidth, Qt::IgnoreAspectRatio, Qt::FastTransformation));
+
+        //Initialize Painter
+        QPainter painter(&m_pixmap);
+        painter.setRenderHint(QPainter::Antialiasing);
+
+        QPainterPath path;
+        path.moveTo(points->first());
+
+        qreal a = 0.2f;
+        qreal x = 0.f;
+        qreal y = 0.f;
+
+        auto p = points->first();
+        auto p1 = points->last();
+        x = p.x() * a + p1.x() * (1-a);
+        y = p.y() * a + p1.y() * (1-a);
+        path.quadTo(points->first(), QPoint(x, y));
+
+        qreal r = (1.0f / path.length()) * brush.getSpacing();
+
+        for(qreal i = 1.0; i <= path.length(); i+= r){
+            QPointF point = path.pointAtPercent(i / path.length()) / m_ScaleFactor;
+            painter.drawPixmap(QPoint(point.x() - stencil.width()/2, point.y() - stencil.width()/2), stencil);
+        }
+
+//        points->clear();
+        points->pop_front();
+        points->push_back(QPoint(x,y));
+        painter.end();
+    }
 }
 
 void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt)
@@ -288,37 +364,6 @@ void BitmapImage::cutImgOp(QRect rect, QColor col){
     p.setPen(QPen(col));
     p.fillRect(rect, col);
     p.end();
-}
-
-qreal BitmapImage::getIncrement(QPointF p1, QPointF p2){
-    qreal ret = calculateMidpoint(p1, p2, 1.0);
-    return ret;
-}
-
-qreal BitmapImage::calculateMidpoint(QPointF p1, QPointF p2, qreal inc){
-    qreal dist = (qreal)sqrt(pow(p2.x() - p1.x(), 2) + pow(p2.y() - p1.y(), 2));
-    QPointF point = p2 + p1;
-    if(dist <= 0.25){
-        m_inc = inc;
-        return inc;
-    }
-    QPointF hP1(p1.x() / 2.0, p1.y() / 2.0);
-    QPointF hP2(p2.x() / 2.0, p2.y() / 2.0);
-    calculateMidpoint(hP1, hP2, inc / 2.0);
-}
-
-QString BitmapImage::getInc(QPointF p1, QPointF p2){
-    return calcMid(p1, p2, 1.0);
-}
-
-QString BitmapImage::calcMid(QPointF p1, QPointF p2, qreal inc){
-    QPointF point = p2 + p1;
-    if(point.manhattanLength() <= 1.0){
-        return QString::number(inc, 10, 10);
-    }
-    QPointF hP1(p1.x()/2.0, p1.y()/2.0);
-    QPointF hP2(p2.x()/2.0, p2.y()/2.0);
-    calcMid(hP1, hP2, inc/2.0);
 }
 
 QPixmap BitmapImage::getCompositeImage()

@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Graphics\Bitmap\bitmapimage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Structure\brush.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\dialogwindows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\dockwidgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Structure\editor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Structure\gleditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Structure\layer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mainwindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Structure\object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\odessa_ui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\panels.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Structure\primitive.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Interface\slideedit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_mainwindow.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_mainwindow.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_editor.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_editor.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_dockwidgets.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_dockwidgets.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_dialogwindows.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_dialogwindows.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_slideedit.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_slideedit.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_panels.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_panels.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_icons.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Overloads.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Bitmap\bitmapimage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Structure\brush.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <CustomBuild Include="Interface\dialogwindows.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Interface\dockwidgets.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Structure\editor.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <ClInclude Include="Structure\gleditor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Structure\layer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <CustomBuild Include="mainwindow.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <ClInclude Include="Structure\object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\odessa_ui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <CustomBuild Include="Interface\panels.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <ClInclude Include="Structure\primitive.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <CustomBuild Include="Interface\slideedit.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="debug\moc_predefs.h.cbt">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="release\moc_predefs.h.cbt">
+      <Filter>Generated Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resource\Text_lite.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\Text_lite.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\airStencil.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\brush_lite.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\brush_lite.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\default.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\eraser_lite.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\eraser_lite.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\eyeDropper.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\eyeDropper.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\fill_lite.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\fill_lite.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\icon.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\icon.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <CustomBuild Include="icons.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <None Include="resource\minus_lite.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\plus_lite.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\primitive_lite.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\primitive_lite.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\redo_lite.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\redo_lite.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\settings_lite.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\settings_lite.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\temp_New.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\temp_New.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\temp_Open.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\temp_Open.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\undo_lite.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\undo_lite.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\zoom_In.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\zoom_In_lite.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\zoom_In_lite.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\zoom_Out.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\zoom_Out_lite.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resource\zoom_Out_lite.svg">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="C:\Users\NDanq\Documents\Project\SwingInnovations\Odessa\src\Odessa_resource.rc" />
+  </ItemGroup>
+</Project>

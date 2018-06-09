@@ -17,6 +17,10 @@
 #include "../../Structure/primitive.h"
 #include "../../Overloads.h"
 
+/**
+ * @brief The BitmapImage class
+ * Handles Anything pertaining to Bitmap Images
+ */
 class BitmapImage
 {
 
@@ -42,6 +46,7 @@ public:
     void paintImage(QPainterPath painterPath, Brush brush); //works
     void paintImage(QPoint point, Brush brush);//Keep
     void paintImage(QVector<QPointF> pointInfo, Brush brush);
+    void paintImage(QVector<QPointF>* points, Brush brush);
     void paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt);//Keep
     void setColor(const QColor color){ m_Color = color; m_Image->fill(m_Color);}
 
@@ -91,21 +96,16 @@ protected:
     Object *myParent;
 
 private:
-    qreal calculateMidpoint(QPointF, QPointF, qreal);
-    qreal getIncrement(QPointF, QPointF);
-
-    QString calcMid(QPointF, QPointF, qreal);
-    QString getInc(QPointF, QPointF);
-    QPoint m_offset;
-    bool m_visible;
-    qreal m_inc;
+    QPoint  m_offset;
+    bool    m_visible;
+    qreal   m_inc;
     QPixmap m_pixmap;
     QImage *m_Image;
-    QRect m_boundaries;
-    QRect m_modifiedRect;
-    QColor m_Color;
-    double m_ScaleFactor;
-    double m_ScaleFactorInv;
+    QRect   m_boundaries;
+    QRect   m_modifiedRect;
+    QColor  m_Color;
+    double  m_ScaleFactor;
+    double  m_ScaleFactorInv;
 
     //handle history
     int m_MaxSizeOfHistory;

@@ -25,6 +25,9 @@
 
 #include "../Structure/brush.h"
 #include "../Overloads.h"
+#include "../Structure/editor.h"
+//TODO Move color wheel to its own widget panel.
+#include "dockwidgets.h"
 
 #include "slideedit.h"
 
@@ -146,10 +149,48 @@ private:
     void generateStrokePreview();
 };
 
-class ColorConfigPanel : public QWidget{
+//Color specific properties
+/**
+ * @brief The ColorCell class
+ * Holds the color, assigns it to active brush in Editor
+ */
+class ColorCell : public QWidget
+{
 public:
-    ColorConfigPanel(QWidget* parent = 0);
+    ColorCell(QWidget* parent = 0, Editor* editor = 0);
+protected:
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+private:
+    Editor* m_editor;
+};
+
+/**
+ * @brief The ColorConfigPanel class
+ * Revamped Color panel
+ */
+class ColorConfigPanel : public QWidget
+{
+    Q_OBJECT
+public:
+    ColorConfigPanel(QWidget* parent = 0, Editor* editor = 0);
     virtual ~ColorConfigPanel();
+private:
+    void initGui();
+    void readFromLastPallette();
+    Editor* m_editor;
+    ColorWheel* m_colorWheel;
+
+    SlideEdit*  m_RSlider;
+    SlideEdit*  m_GSlider;
+    SlideEdit*  m_BSlider;
+
+    SlideEdit*  m_HSlider;
+    SlideEdit*  m_SSlider;
+    SlideEdit*  m_VSlider;
+
+    QString     m_currentPalletString;
+
 };
 
 #endif // PANELS_H

@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Odessa
 TEMPLATE = app
 
-VERSION = 0.0.90
+VERSION = 0.1.0
 QMAKE_TARGET_COMPANY = Swing Innovations
 QMAKE_TARGET_PRODUCT = Odessa
 QMAKE_TARGET_DESCRIPTION = Odessa
@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     Structure/primitive.cpp \
     Structure/gleditor.cpp \
     Interface/panels.cpp \
-    Interface/slideedit.cpp
+    Interface/slideedit.cpp \
+    Structure/Canvas/canvas.cpp
 
 HEADERS  += mainwindow.h \
     Graphics/Bitmap/bitmapimage.h \
@@ -45,7 +46,8 @@ HEADERS  += mainwindow.h \
     Structure/primitive.h \
     Structure/gleditor.h \
     Interface/panels.h \
-    Interface/slideedit.h
+    Interface/slideedit.h \
+    Structure/Canvas/canvas.h
 
 
 RESOURCES += \

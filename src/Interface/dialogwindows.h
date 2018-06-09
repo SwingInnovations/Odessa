@@ -191,6 +191,9 @@ private:
 
     QLabel* m_HardwareAccLbl;
     QCheckBox* m_HardwareAccChk;
+#if defined(_WIN32)
+    QCheckBox* m_useWindowsAPI;
+#endif
 };
 
 class AnimationPrefPage : public QWidget{

@@ -161,7 +161,7 @@ void Editor::mousePressEvent(QMouseEvent *event)
         }
     }
 
-    update();
+    //update();
 }
 
 void Editor::mouseReleaseEvent(QMouseEvent *event)
@@ -171,6 +171,7 @@ void Editor::mouseReleaseEvent(QMouseEvent *event)
     if(m_DeviceDown)
     {
         m_DeviceDown = false;
+        m_MousePath.clear();
     }
 
     if(!m_Layers.empty())
@@ -189,7 +190,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
         switch(m_ToolType)
         {
         case BRUSH_TOOL:
-            repaint();
+            //repaint();
             if(m_DeviceDown)
             {
                 m_MousePath.append(event->pos());
@@ -198,7 +199,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
                     m_MousePath.removeFirst();
                 }
                 emit curToolPressureChanged(m_CurrentTool.getPressureVal());
-                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
+                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(&m_MousePath, m_CurrentTool);
             }
             break;
         case ERASER_TOOL:
@@ -221,7 +222,7 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
         }
         emit mousePositionChanged(event->pos());
     }
-    repaint();
+    update();
 }
 
 void Editor::deselect(){
@@ -249,6 +250,7 @@ void Editor::setBrush(Brush b){
 
 void Editor::tabletEvent(QTabletEvent *event)
 {
+    qDebug() << "Polling Tablet" << endl;
     if(!m_Layers.isEmpty())
     {
         if(!m_CurrentTool.isType(2)){
@@ -351,15 +353,7 @@ void Editor::paintEvent(QPaintEvent *event)
     }
 
     if(m_ToolType == BRUSH_TOOL){
-        qDebug() << "Updating Brush" << endl;
-        painter.setPen(Qt::darkGray);
-        QPen pHandle = painter.pen();
-        pHandle.setWidth(2);
-        painter.setPen(pHandle);
-        painter.setBrush(Qt::transparent);
-        painter.drawEllipse(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getSize()/2, m_CurrentTool.getSize()/2);
-        painter.drawPixmap(this->mapFromGlobal(QCursor::pos()), m_CurrentTool.getStencil().scaled(m_CurrentTool.getSize()/3, m_CurrentTool.getSize()/2));
-        setCursor(QCursor(Qt::CrossCursor));
+        setCursor(QCursor(m_CurrentTool.getStencil().scaled(m_CurrentTool.getSize(), m_CurrentTool.getSize())));
     }else if(m_ToolType == ERASER_TOOL){
         setCursor(QCursor(Qt::CrossCursor));
         painter.setPen(Qt::darkGray);
@@ -479,7 +473,9 @@ void Editor::newProject(ProjectInfo &info){
                 m_CurrentIndex = 1;
                 m_CurrentFrame = 1;
                 m_Layers.push_back(new Layer(Layer::Bitmap, info.getWidth(), info.getHeight(), info.getStartColor()));
-                //this->resize(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().size());
+                m_realWidth = info.getWidth();
+                m_realHeight = info.getHeight();
+                this->resize(m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().size());
                 break;
         default:
             break;
@@ -605,6 +601,16 @@ void Editor::setBrush(ToolType type)
         emit toolChanged(0);
         break;
     }
+}
+
+int Editor::getRealWidth() const
+{
+    return m_realWidth;
+}
+
+int Editor::getRealHeight() const
+{
+    return m_realHeight;
 }
 
 void Editor::setBrushStencil(QPixmap pixmap){
@@ -803,6 +809,7 @@ void Editor::scale(double scaleVal)
     for(int i = 0; i < m_Layers.size(); i++){
         m_Layers.at(i)->getFrame(m_CurrentFrame-1)->scale(m_ScaleFactor);
     }
+    resize(m_realWidth * scaleVal, m_realHeight * scaleVal);
     update();
 }
 
@@ -924,6 +931,13 @@ void Editor::setClipOffsetY(int y){
 
 void Editor::useWorldTransform(bool val){
     m_ClipWorldTransform = val;
+}
+
+void Editor::useWindowsPenAPI(bool val)
+{
+#ifdef Q_OS_WIN
+    m_useWinInkAPI = val;
+#endif
 }
 
 void Editor::commitChanges(){

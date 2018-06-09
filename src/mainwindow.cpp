@@ -243,6 +243,8 @@ MainWindow::MainWindow(QWidget *parent)
     auto brushOptMenu = new QMenu(this);
     brushOptMenu->setStyleSheet("background: rgb(53, 53, 53);");
     m_brushToolPanel = new BrushConfigPanel(this);
+    m_colorConfigPanel = new ColorConfigPanel(this, m_Editor);
+
     auto brushOptHandle = new QWidgetAction(this);
     brushOptHandle->setDefaultWidget(m_brushToolPanel);
     brushOptMenu->addAction(brushOptHandle);
@@ -250,10 +252,16 @@ MainWindow::MainWindow(QWidget *parent)
     m_toolBar->addWidget(brushOpt);
     /*-Tool Button End-*/
     /*-Color Button Start-*/
-    auto colorBtn = new QToolButton(this);
-    colorBtn->setText("Color");
-    //TODO Add Color Panel
-   m_toolBar->addWidget(colorBtn);
+    auto colorOpt = new QToolButton(this);
+    auto colorOptHandle = new QWidgetAction(this);
+    auto colorOptMenu = new QMenu(this);
+
+    colorOpt->setText("Color");
+    colorOptHandle->setDefaultWidget(m_colorConfigPanel);
+    colorOptMenu->addAction(colorOptHandle);
+    colorOptMenu->setStyleSheet("background: rgb(53, 53, 53)");
+    colorOpt->setMenu(colorOptMenu);
+    m_toolBar->addWidget(colorOpt);
     /*-Color Button End-*/;
     m_toolBar->addAction(m_eyedropTool);
     m_toolBar->addAction(m_brushTool);
@@ -283,6 +291,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_copyAct, SIGNAL(triggered()), m_Editor, SLOT(copy()));
     connect(m_cutAct, SIGNAL(triggered()), m_Editor, SLOT(cut()));
     connect(m_pasteAct, SIGNAL(triggered()), m_Editor, SLOT(paste()));
+    connect(brushOptHandle, SIGNAL(triggered()), SLOT(assignBrushTool()));
+    connect(brushOpt, SIGNAL(clicked(bool)), SLOT(assignBrushTool()));
     connect(m_selRegionAct, SIGNAL(triggered()), SLOT(assignRectSelectTool()));
     connect(m_deSelAct, SIGNAL(triggered()), SLOT(assignDeselectTool()));
     connect(m_cursorTool, SIGNAL(triggered()), SLOT(assignCursorTool()));
@@ -393,7 +403,7 @@ void MainWindow::openProject(){
         msgBox.exec();
     }
     //Open File if it is legitimate
-
+    //TODO Implement
 }
 
 void MainWindow::saveProjectAs(){
@@ -474,6 +484,7 @@ void MainWindow::toggleShowToolsDock(bool s){
 
 void MainWindow::assignBrushTool()
 {
+    qDebug() << "Assigned Brush Tool" << endl;
     m_Editor->setBrush(Editor::BRUSH_TOOL);
     changeStatusMessage("Current Tool: Brush");
     m_debugWin->updateCurrentTool("Brush");
@@ -502,7 +513,8 @@ void MainWindow::assignPrimitiveTool()
     if(m_toolPanel->isHidden()) m_toolPanel->show();
 }
 
-void MainWindow::assignFillTool(){
+void MainWindow::assignFillTool()
+{
     m_Editor->setBrush(Editor::FILL_TOOL);
     changeStatusMessage("Current Tool: Fill");
     m_debugWin->updateCurrentTool("Fill");
@@ -512,14 +524,16 @@ void MainWindow::assignDeselectTool(){
 
 }
 
-void MainWindow::assignTransformTool(){
+void MainWindow::assignTransformTool()
+{
     m_Editor->setBrush(Editor::TRANSFORM_TRANSLATE);
     changeStatusMessage("Current Tool: Transform");
     m_debugWin->updateCurrentTool("Transform");
     if(m_toolPanel->isHidden()) m_toolPanel->show();
 }
 
-void MainWindow::assignRectSelectTool(){
+void MainWindow::assignRectSelectTool()
+{
     changeStatusMessage("Current Tool: Select");
     m_debugWin->updateCurrentTool("Select");
     m_Editor->setBrush(Editor::RECT_SELECT_TOOL);
@@ -532,7 +546,8 @@ void MainWindow::assignEyeDropperTool()
     m_debugWin->updateCurrentTool("Eye Dropper");
 }
 
-void MainWindow::assignCursorTool(){
+void MainWindow::assignCursorTool()
+{
     changeStatusMessage("Current Tool: Cursor");
     m_Editor->setBrush(Editor::CURSOR_TOOL);
     m_debugWin->updateCurrentTool("Cursor");
@@ -554,7 +569,8 @@ void MainWindow::zoomOut()
     scaleImage(m_scaleFactor);
 }
 
-void MainWindow::exportImage(){
+void MainWindow::exportImage()
+{
     QString saveName = QFileDialog::getSaveFileName(this, "Save File.", QDir::currentPath(), ".png");
     QImage pix = m_Editor->getCurrentImage().toImage();
     int DPI = m_Editor->getProjectInfo().getDPI();
@@ -563,7 +579,8 @@ void MainWindow::exportImage(){
     pix.save(saveName);
 }
 
-void MainWindow::exportSelection(){
+void MainWindow::exportSelection()
+{
     QString saveName = QFileDialog::getSaveFileName(this, "Save File.", QDir::currentPath(), ".png");
     QImage img = m_Editor->getSelectionPixmap().toImage();
     img.setDotsPerMeterX(m_Editor->getProjectInfo().getDPI());
@@ -571,18 +588,25 @@ void MainWindow::exportSelection(){
     img.save(saveName);
 }
 
-void MainWindow::sendFeedBack(){
+void MainWindow::sendFeedBack()
+{
     QDesktopServices::openUrl(QUrl("mailto:swinginnovations@gmail.com?subject=Odessa-Feedback"));
 }
 
 void MainWindow::scaleImage(double val)
 {
     m_Editor->scale(m_scaleFactor);
+
+    int w = m_Editor->getRealWidth();
+    int h = m_Editor->getRealHeight();
+    m_workArea->resize(m_scaleFactor * w, m_scaleFactor * h);
+    m_workArea->setAlignment(Qt::AlignCenter);
     adjustScrollBar(m_workArea->horizontalScrollBar(), val);
     adjustScrollBar(m_workArea->verticalScrollBar(), val);
 }
 
-void MainWindow::showDebugWin(){
+void MainWindow::showDebugWin()
+{
     m_debugWin->show();
 }
 
@@ -591,21 +615,24 @@ void MainWindow::adjustScrollBar(QScrollBar *scrollBar, double factor)
     scrollBar->setValue(int(factor * scrollBar->value() + ((factor - 1) * scrollBar->pageStep()/2)));
 }
 
-void MainWindow::readSettings(){
+void MainWindow::readSettings()
+{
     QSettings settings("SwingInnovations", "Odessa");
     m_projectPath = settings.value("projectPath").toString();
     m_useHWAcceleration = settings.value("HWAcceleration").toBool();
     restoreGeometry(settings.value("windowGeom").toByteArray());
 }
 
-void MainWindow::writeSettings(){
+void MainWindow::writeSettings()
+{
     QSettings settings("SwingInnovations", "Odessa");
     qDebug()<<"Project Path" << m_projectPath+"/Brush/" << endl;
     settings.setValue("projectPath", m_projectPath);
     settings.setValue("windowGeom", saveGeometry());
 }
 
-void MainWindow::selectToStencil(){
+void MainWindow::selectToStencil()
+{
     //Convert Selection to stencil
     QPixmap pix = m_Editor->getSelectionPixmap();
     if(!pix.isNull()){

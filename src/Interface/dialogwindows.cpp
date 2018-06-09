@@ -359,6 +359,10 @@ GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
     m_HardwareAccLbl = new QLabel("Enable Hardware Acceleration: ", this);
     m_HardwareAccChk = new QCheckBox(this);
 
+#if defined(_WIN32)
+    m_useWindowsAPI = new QCheckBox("Use Windows Pen API", this);
+#endif
+
     auto gridLayout = new QGridLayout;
     // Theme
     gridLayout->addWidget(m_ThemeLbl, 0, 0);
@@ -370,6 +374,9 @@ GeneralPrefPage::GeneralPrefPage(QWidget *parent) : QWidget(parent)
     gridLayout->addWidget(mStepsBox, 2, 3);
     gridLayout->addWidget(m_HardwareAccLbl, 3, 0);
     gridLayout->addWidget(m_HardwareAccChk, 3, 3);
+#if defined(_WIN32)
+    gridLayout->addWidget(m_useWindowsAPI, 4, 0);
+#endif
 
     auto masterLayout = new QVBoxLayout;
     masterLayout->addLayout(gridLayout);
