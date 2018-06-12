@@ -22,12 +22,13 @@
 #include <QFile>
 #include <QSettings>
 #include <QMessageBox>
+#include <QColor>
 
 #include "../Structure/brush.h"
 #include "../Overloads.h"
 #include "../Structure/editor.h"
 //TODO Move color wheel to its own widget panel.
-#include "dockwidgets.h"
+#include "colorwheel.h"
 
 #include "slideedit.h"
 
@@ -157,12 +158,17 @@ private:
 class ColorCell : public QWidget
 {
 public:
-    ColorCell(QWidget* parent = 0, Editor* editor = 0);
+    ColorCell(QColor color, QWidget* parent, Editor* editor = 0);
 protected:
     void mousePressEvent(QMouseEvent *event) override;
-    void mouseReleaseEvent(QMouseEvent *event) override;
 private:
-    Editor* m_editor;
+    Editor*     m_editor;
+    QColor      m_color;
+};
+
+struct ColorPalleteInfo {
+    uint numColors;
+    QColor colors[256];
 };
 
 /**
@@ -175,7 +181,18 @@ class ColorConfigPanel : public QWidget
 public:
     ColorConfigPanel(QWidget* parent = 0, Editor* editor = 0);
     virtual ~ColorConfigPanel();
+signals:
+    void redChanged(int);
+    void greenChanged(int);
+    void blueChanged(int);
+
+private slots:
+    void updateRed(qreal);
+    void updateGreen(qreal);
+    void updateBlue(qreal);
+    void updateColor(QColor);
 private:
+    void updateHSV(QColor);
     void initGui();
     void readFromLastPallette();
     Editor* m_editor;

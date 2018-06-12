@@ -115,7 +115,7 @@ void SlideEdit::setUpperBound(const qreal value)
 
 }
 
-void SlideEdit::setCurrentValue(const qreal value)
+void SlideEdit::setCurrentValue(const qreal value, bool emittable)
 {
     if(!m_intStep) m_currentValue = value;
     else{
@@ -126,7 +126,8 @@ void SlideEdit::setCurrentValue(const qreal value)
         m_Max = value;
     }
     setText(QString::number(m_currentValue));
-    emit valueChanged(m_currentValue);
+
+    if(emittable) emit valueChanged(m_currentValue);
 }
 
 void SlideEdit::mouseMoveEvent(QMouseEvent *event)

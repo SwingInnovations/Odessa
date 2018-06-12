@@ -42,7 +42,7 @@ public:
     SlideEdit(QWidget* parent = 0);
     void setLowerbound(const qreal value);
     void setUpperBound(const qreal value);
-    void setCurrentValue(const qreal value);
+    void setCurrentValue(const qreal value, bool emittable = true);
     void setHighlightColor(QColor color){ m_foregroundColor = color; }
     void useIntegerStep(bool value){ m_intStep = value; }
     void lockBounds(bool value){ m_lockBounds = value; }                //TODO - Allow this to update the status of other menu.
@@ -78,7 +78,6 @@ private:
     QColor  m_foregroundColor;
     QMenu*  m_contextMenu;
     bool    m_intStep;
-
     QAction* m_revertLowerBoundAct;
     QAction* m_revertUpperBoundAct;
     QAction* m_editBoundsAct;

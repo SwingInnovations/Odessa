@@ -1,4 +1,5 @@
 #include "panels.h"
+#include "panels.h"
 
 BrushConfigPanel::BrushConfigPanel(QWidget *parent) : QWidget(parent)
 {
@@ -609,6 +610,27 @@ void BrushConfigPanel::generateStrokePreview()
     m_StrokePrvwLbl->setPixmap(m_StrokePreview);
 }
 
+ColorCell::ColorCell(QColor color, QWidget *parent, Editor *editor) : QWidget(parent)
+{
+    m_color = color;
+    m_editor = editor;
+}
+
+void ColorCell::mousePressEvent(QMouseEvent *event)
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        //Assign color to editor
+        return;
+    }
+
+    if(event->button() == Qt::RightButton)
+    {
+        //Assign color from editor
+    }
+}
+
+
 ColorConfigPanel::ColorConfigPanel(QWidget *parent, Editor *editor) : QWidget(parent)
 {
     m_editor = editor;
@@ -620,15 +642,66 @@ ColorConfigPanel::~ColorConfigPanel()
 
 }
 
+void ColorConfigPanel::updateRed(qreal newRed)
+{
+    m_colorWheel->setRed((int)newRed);
+    updateHSV(m_colorWheel->getColor());
+}
+
+void ColorConfigPanel::updateGreen(qreal newGreen)
+{
+    m_colorWheel->setGreen((int)newGreen);
+    updateHSV(m_colorWheel->getColor());
+}
+
+void ColorConfigPanel::updateBlue(qreal newBlue)
+{
+    m_colorWheel->setBlue((int)newBlue);
+    updateHSV(m_colorWheel->getColor());
+}
+
+//Updating from color wheel
+void ColorConfigPanel::updateColor(QColor incomingColor)
+{
+    m_RSlider->setCurrentValue(incomingColor.red(), false);
+    m_GSlider->setCurrentValue(incomingColor.green(), false);
+    m_BSlider->setCurrentValue(incomingColor.blue(), false);
+    updateHSV(incomingColor);
+}
+
+void ColorConfigPanel::updateHSV(QColor incomingColor)
+{
+    int h, s, v;
+    incomingColor.getHsv(&h, &s, &v);
+    m_HSlider->setCurrentValue(h, false);
+    m_SSlider->setCurrentValue(s, false);
+    m_VSlider->setCurrentValue(v, false);
+}
+
 void ColorConfigPanel::initGui()
 {
     QHBoxLayout* centralLayout = new QHBoxLayout;
+
+    QVBoxLayout* colorWheelLayout = new QVBoxLayout;
     m_colorWheel = new ColorWheel(this);
-    centralLayout->addWidget(m_colorWheel);
+    auto pix = m_colorWheel->pixmap();
+    pix->scaled(300, 300);
+    m_colorWheel->setPixmap(*pix);
+
+    QPushButton* triangleBtn = new QPushButton("Triangle", this);   //TODO Implement this
+    QPushButton* squareBtn = new QPushButton("Square", this);       //TODO Implement this
+
+    QHBoxLayout* shapeBtnLayout = new QHBoxLayout;
+    shapeBtnLayout->addWidget(triangleBtn);
+    shapeBtnLayout->addWidget(squareBtn);
+
+    colorWheelLayout->addWidget(m_colorWheel);
+    colorWheelLayout->addLayout(shapeBtnLayout);
+
+    centralLayout->addLayout(colorWheelLayout);
     auto colorTabs = new QTabWidget(this);
 
     QWidget* PalleteTabWidget = new QWidget(this);
-
 
     //START RGB Widget
     QWidget* RGBTabWidget = new QWidget(this);
@@ -637,18 +710,21 @@ void ColorConfigPanel::initGui()
     m_RSlider->setUpperBound(255);
     m_RSlider->setCurrentValue(255);
     m_RSlider->lockBounds(true);
+    m_RSlider->useIntegerStep(true);
 
     m_GSlider = new SlideEdit(this);
     m_GSlider->setLowerbound(0);
     m_GSlider->setUpperBound(255);
     m_GSlider->setCurrentValue(255);
     m_GSlider->lockBounds(true);
+    m_GSlider->useIntegerStep(true);
 
     m_BSlider = new SlideEdit(this);
     m_BSlider->setLowerbound(0);
     m_BSlider->setUpperBound(255);
     m_BSlider->setCurrentValue(255);
     m_BSlider->lockBounds(true);
+    m_BSlider->useIntegerStep(true);
 
     QGridLayout* RGBGrid = new QGridLayout;
     RGBGrid->addWidget(new QLabel("R:", this), 0, 0);
@@ -668,18 +744,21 @@ void ColorConfigPanel::initGui()
     m_HSlider->setUpperBound(255);
     m_HSlider->setCurrentValue(255);
     m_HSlider->lockBounds(true);
+    m_HSlider->useIntegerStep(true);
 
     m_SSlider = new SlideEdit(this);
     m_SSlider->setLowerbound(0);
     m_SSlider->setUpperBound(255);
     m_SSlider->setCurrentValue(255);
     m_SSlider->lockBounds(true);
+    m_SSlider->useIntegerStep(true);
 
     m_VSlider = new SlideEdit(this);
     m_VSlider->setLowerbound(0);
     m_VSlider->setUpperBound(255);
     m_VSlider->setCurrentValue(255);
     m_VSlider->lockBounds(true);
+    m_VSlider->useIntegerStep(true);
 
     QGridLayout* HSVGrid = new QGridLayout;
     HSVGrid->addWidget(new QLabel("H: ", this), 0, 0);
@@ -694,13 +773,22 @@ void ColorConfigPanel::initGui()
     colorTabs->addTab(PalleteTabWidget, "Pallete");
     colorTabs->addTab(RGBTabWidget, "RGB");
     colorTabs->addTab(HSVTabWidget, "HSV");
+    int h = colorTabs->contentsRect().height();
+    colorTabs->setFixedWidth(316);
 
     centralLayout->addWidget(colorTabs);
 
     setLayout(centralLayout);
+
+    //TODO, hookup signals and slots
+    connect(m_colorWheel, SIGNAL(colorChanged(QColor)), SLOT(updateColor(QColor)));
+    connect(m_RSlider, SIGNAL(valueChanged(qreal)), SLOT(updateRed(qreal)));
+    connect(m_GSlider, SIGNAL(valueChanged(qreal)), SLOT(updateGreen(qreal)));
+    connect(m_BSlider, SIGNAL(valueChanged(qreal)), SLOT(updateBlue(qreal)));
 }
 
 void ColorConfigPanel::readFromLastPallette()
 {
 
 }
+

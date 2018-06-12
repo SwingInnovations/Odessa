@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     Structure/gleditor.cpp \
     Interface/panels.cpp \
     Interface/slideedit.cpp \
-    Structure/Canvas/canvas.cpp
+    Structure/Canvas/canvas.cpp \
+    Interface/colorwheel.cpp
 
 HEADERS  += mainwindow.h \
     Graphics/Bitmap/bitmapimage.h \
@@ -47,7 +48,8 @@ HEADERS  += mainwindow.h \
     Structure/gleditor.h \
     Interface/panels.h \
     Interface/slideedit.h \
-    Structure/Canvas/canvas.h
+    Structure/Canvas/canvas.h \
+    Interface/colorwheel.h
 
 
 RESOURCES += \
