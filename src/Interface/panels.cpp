@@ -708,21 +708,21 @@ void ColorConfigPanel::initGui()
     m_RSlider = new SlideEdit(this);
     m_RSlider->setLowerbound(0);
     m_RSlider->setUpperBound(255);
-    m_RSlider->setCurrentValue(255);
+    m_RSlider->setCurrentValue(0);
     m_RSlider->lockBounds(true);
     m_RSlider->useIntegerStep(true);
 
     m_GSlider = new SlideEdit(this);
     m_GSlider->setLowerbound(0);
     m_GSlider->setUpperBound(255);
-    m_GSlider->setCurrentValue(255);
+    m_GSlider->setCurrentValue(0);
     m_GSlider->lockBounds(true);
     m_GSlider->useIntegerStep(true);
 
     m_BSlider = new SlideEdit(this);
     m_BSlider->setLowerbound(0);
     m_BSlider->setUpperBound(255);
-    m_BSlider->setCurrentValue(255);
+    m_BSlider->setCurrentValue(0);
     m_BSlider->lockBounds(true);
     m_BSlider->useIntegerStep(true);
 
@@ -742,21 +742,21 @@ void ColorConfigPanel::initGui()
     m_HSlider = new SlideEdit(this);
     m_HSlider->setLowerbound(0);
     m_HSlider->setUpperBound(255);
-    m_HSlider->setCurrentValue(255);
+    m_HSlider->setCurrentValue(0);
     m_HSlider->lockBounds(true);
     m_HSlider->useIntegerStep(true);
 
     m_SSlider = new SlideEdit(this);
     m_SSlider->setLowerbound(0);
     m_SSlider->setUpperBound(255);
-    m_SSlider->setCurrentValue(255);
+    m_SSlider->setCurrentValue(0);
     m_SSlider->lockBounds(true);
     m_SSlider->useIntegerStep(true);
 
     m_VSlider = new SlideEdit(this);
     m_VSlider->setLowerbound(0);
     m_VSlider->setUpperBound(255);
-    m_VSlider->setCurrentValue(255);
+    m_VSlider->setCurrentValue(0);
     m_VSlider->lockBounds(true);
     m_VSlider->useIntegerStep(true);
 

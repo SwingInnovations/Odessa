@@ -61,17 +61,17 @@ QColor ColorWheel::getColor(){
 
 void ColorWheel::setRed(int r){
     m_ActualRed = r;
-    repaint();
+    update();
 }
 
 void ColorWheel::setGreen(int g){
     m_ActualGreen = g;
-    repaint();
+    update();
 }
 
 void ColorWheel::setBlue(int b){
     m_ActualBlue = b;
-    repaint();
+    update();
 }
 
 void ColorWheel::processHSV(QColor col){
