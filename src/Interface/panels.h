@@ -179,7 +179,11 @@ class ColorConfigPanel : public QWidget
 {
     Q_OBJECT
 public:
-    ColorConfigPanel(QWidget* parent = 0, Editor* editor = 0);
+    enum ColorConfigOrientation : char {
+        Vertical,
+        Horizontal
+    };
+    ColorConfigPanel(QWidget* parent = 0, Editor* editor = 0, ColorConfigOrientation orientation = ColorConfigOrientation::Horizontal);
     virtual ~ColorConfigPanel();
 signals:
     void redChanged(int);
@@ -193,7 +197,7 @@ private slots:
     void updateColor(QColor);
 private:
     void updateHSV(QColor);
-    void initGui();
+    void initGui(ColorConfigOrientation orientation);
     void readFromLastPallette();
     Editor* m_editor;
     ColorWheel* m_colorWheel;

@@ -86,6 +86,7 @@ private:
 
     BrushConfigPanel* m_brushToolPanel;
     ColorConfigPanel* m_colorConfigPanel;
+    ColorConfigPanel* m_dockColorConfigPanel;
 
     bool m_isModified;
 

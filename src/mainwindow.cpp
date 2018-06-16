@@ -50,8 +50,11 @@ MainWindow::MainWindow(QWidget *parent)
     m_brushDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     m_Editor->setBrush(m_brushDock->getStartBrush());
 
-    m_colorDock = new ColorDockWidget(this);
-    m_colorDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+    m_dockColorConfigPanel = new ColorConfigPanel(this, m_Editor, ColorConfigPanel::ColorConfigOrientation::Vertical);
+    QDockWidget* colDockWidget = new QDockWidget(this);
+    colDockWidget->setWindowTitle("Color");
+    colDockWidget->setWidget(m_dockColorConfigPanel);
+    colDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 
     m_timeDock = new TimelineDockWidget(this);
     m_timeDock->setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -236,6 +239,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_toolBar->addAction(m_undoAct);
     m_toolBar->addAction(m_redoAct);
     m_toolBar->addSeparator();
+
     /*-Tool Button Hookup-*/
     auto brushOpt = new QToolButton(this);
     brushOpt->setText("Brush");
@@ -320,15 +324,18 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_brushToolPanel, SIGNAL(brushWidthChanged(int)), m_Editor, SLOT(setBrushSize(int)));
     connect(m_brushToolPanel, SIGNAL(brushOpacityChanged(int)), m_Editor, SLOT(setOpacity(int)));
     connect(m_brushToolPanel, SIGNAL(stencilChanged(QPixmap)), m_Editor, SLOT(setBrushStencil(QPixmap)));
+    connect(m_colorConfigPanel, SIGNAL(redChanged(int)), m_Editor, SLOT(setRedValue(int)));
+    connect(m_colorConfigPanel, SIGNAL(greenChanged(int)), m_Editor, SLOT(setGreenValue(int)));
+    connect(m_colorConfigPanel, SIGNAL(blueChanged(int)), m_Editor, SLOT(setBlueValue(int)));
+    connect(m_dockColorConfigPanel, SIGNAL(redChanged(int)), m_Editor, SLOT(setRedValue(int)));
+    connect(m_dockColorConfigPanel, SIGNAL(greenChanged(int)), m_Editor, SLOT(setGreenValue(int)));
+    connect(m_dockColorConfigPanel, SIGNAL(blueChanged(int)), m_Editor, SLOT(setBlueValue(int)));
     connect(m_brushDock, SIGNAL(brushSizeChanged(int)), m_Editor, SLOT(setBrushSize(int)));
     connect(m_brushDock, SIGNAL(brushOpacityChanged(int)), m_Editor, SLOT(setOpacity(int)));
     connect(m_brushDock, SIGNAL(brushStencilChanged(QPixmap)), m_Editor, SLOT(setBrushStencil(QPixmap)));
     connect(m_brushDock, SIGNAL(brushSpacingChanged(int)), m_Editor, SLOT(setBrushSpacing(int)));
     connect(m_brushDock, SIGNAL(brushTransferSizeChanged(int)), m_Editor, SLOT(setSizeTransfer(int)));
     connect(m_brushDock, SIGNAL(brushTransferOpacityChanged(int)), m_Editor, SLOT(setOpacityTransfer(int)));
-    connect(m_colorDock, SIGNAL(redChanged(int)), m_Editor, SLOT(setRedValue(int)));
-    connect(m_colorDock, SIGNAL(greenChanged(int)), m_Editor, SLOT(setGreenValue(int)));
-    connect(m_colorDock, SIGNAL(blueChanged(int)), m_Editor, SLOT(setBlueValue(int)));
     connect(m_layerDock, SIGNAL(layerAdded()), m_Editor, SLOT(addLayer()));
     connect(m_layerDock, SIGNAL(layerChanged(int)), m_Editor, SLOT(setLayerIndex(int)));
     connect(m_layerDock, SIGNAL(opacityChanged(int)), m_Editor, SLOT(setLayerOpacity(int)));
@@ -347,9 +354,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_Editor, SIGNAL(brushOpacityChanged(int)), m_brushToolPanel, SLOT(updateBrushOpacity(int)));
     connect(m_Editor, SIGNAL(brushSizeChanged(int)), m_brushDock, SLOT(updateSize(int)));
     connect(m_Editor, SIGNAL(brushOpacityChanged(int)), m_brushDock, SLOT(updateOpacity(int)));
-    connect(m_Editor, SIGNAL(redChanged(int)), m_colorDock, SLOT(updateRed(int)));
-    connect(m_Editor, SIGNAL(greenChanged(int)), m_colorDock, SLOT(updateGreen(int)));
-    connect(m_Editor, SIGNAL(blueChanged(int)), m_colorDock, SLOT(updateBlue(int)));
     connect(m_Editor, SIGNAL(clipTranslateChanged(int,int)), m_toolPanel, SLOT(updateTranslate(int,int)));
     connect(m_Editor, SIGNAL(clipRotateChanged(int)), m_toolPanel, SLOT(updateRotate(int)));
     connect(m_Editor, SIGNAL(clipScaleChanged(int,int)), m_toolPanel, SLOT(updateScale(int,int)));
@@ -377,8 +381,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_closeAct, SIGNAL(triggered()), SLOT(close()));
 
     addDockWidget(Qt::RightDockWidgetArea, m_brushDock);
-    addDockWidget(Qt::RightDockWidgetArea, m_colorDock);
-    tabifyDockWidget(m_brushDock, m_colorDock);
+    addDockWidget(Qt::RightDockWidgetArea, colDockWidget);
+    tabifyDockWidget(m_brushDock, colDockWidget);
     addDockWidget(Qt::BottomDockWidgetArea, m_timeDock);
     addDockWidget(Qt::RightDockWidgetArea, m_layerDock);
     addDockWidget(Qt::RightDockWidgetArea, m_toolPanel);
@@ -597,9 +601,6 @@ void MainWindow::scaleImage(double val)
 {
     m_Editor->scale(m_scaleFactor);
 
-    int w = m_Editor->getRealWidth();
-    int h = m_Editor->getRealHeight();
-    m_workArea->resize(m_scaleFactor * w, m_scaleFactor * h);
     m_workArea->setAlignment(Qt::AlignCenter);
     adjustScrollBar(m_workArea->horizontalScrollBar(), val);
     adjustScrollBar(m_workArea->verticalScrollBar(), val);
@@ -636,7 +637,7 @@ void MainWindow::selectToStencil()
     //Convert Selection to stencil
     QPixmap pix = m_Editor->getSelectionPixmap();
     if(!pix.isNull()){
-
+        //TODO update this
     }
 }
 

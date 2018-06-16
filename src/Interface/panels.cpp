@@ -631,10 +631,10 @@ void ColorCell::mousePressEvent(QMouseEvent *event)
 }
 
 
-ColorConfigPanel::ColorConfigPanel(QWidget *parent, Editor *editor) : QWidget(parent)
+ColorConfigPanel::ColorConfigPanel(QWidget *parent, Editor *editor, ColorConfigOrientation orientation) : QWidget(parent)
 {
     m_editor = editor;
-    initGui();
+    initGui(orientation);
 }
 
 ColorConfigPanel::~ColorConfigPanel()
@@ -645,18 +645,21 @@ ColorConfigPanel::~ColorConfigPanel()
 void ColorConfigPanel::updateRed(qreal newRed)
 {
     m_colorWheel->setRed((int)newRed);
+    emit redChanged((int)newRed);
     updateHSV(m_colorWheel->getColor());
 }
 
 void ColorConfigPanel::updateGreen(qreal newGreen)
 {
     m_colorWheel->setGreen((int)newGreen);
+    emit greenChanged((int)newGreen);
     updateHSV(m_colorWheel->getColor());
 }
 
 void ColorConfigPanel::updateBlue(qreal newBlue)
 {
     m_colorWheel->setBlue((int)newBlue);
+    emit blueChanged((int)newBlue);
     updateHSV(m_colorWheel->getColor());
 }
 
@@ -678,14 +681,25 @@ void ColorConfigPanel::updateHSV(QColor incomingColor)
     m_VSlider->setCurrentValue(v, false);
 }
 
-void ColorConfigPanel::initGui()
+void ColorConfigPanel::initGui(ColorConfigPanel::ColorConfigOrientation orientation)
 {
-    QHBoxLayout* centralLayout = new QHBoxLayout;
+    bool isVerticalLayout = (orientation == ColorConfigOrientation::Vertical);
+    QBoxLayout* centralLayout;
+
+    if(isVerticalLayout)
+    {
+        centralLayout = new QVBoxLayout;
+    }
+    else
+    {
+        centralLayout = new QHBoxLayout;
+    }
+
 
     QVBoxLayout* colorWheelLayout = new QVBoxLayout;
     m_colorWheel = new ColorWheel(this);
     auto pix = m_colorWheel->pixmap();
-    pix->scaled(300, 300);
+    pix->scaled(320, 320);
     m_colorWheel->setPixmap(*pix);
 
     QPushButton* triangleBtn = new QPushButton("Triangle", this);   //TODO Implement this
@@ -696,9 +710,14 @@ void ColorConfigPanel::initGui()
     shapeBtnLayout->addWidget(squareBtn);
 
     colorWheelLayout->addWidget(m_colorWheel);
+    if(isVerticalLayout)
+    {
+        colorWheelLayout->setAlignment(m_colorWheel, Qt::AlignCenter);
+    }
     colorWheelLayout->addLayout(shapeBtnLayout);
 
     centralLayout->addLayout(colorWheelLayout);
+
     auto colorTabs = new QTabWidget(this);
 
     QWidget* PalleteTabWidget = new QWidget(this);
@@ -773,14 +792,22 @@ void ColorConfigPanel::initGui()
     colorTabs->addTab(PalleteTabWidget, "Pallete");
     colorTabs->addTab(RGBTabWidget, "RGB");
     colorTabs->addTab(HSVTabWidget, "HSV");
-    int h = colorTabs->contentsRect().height();
-    colorTabs->setFixedWidth(316);
+	colorTabs->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+
+    if(!isVerticalLayout)
+    {
+        int h = colorTabs->contentsRect().height();
+        colorTabs->setFixedWidth(316);
+    }
 
     centralLayout->addWidget(colorTabs);
 
+    if(isVerticalLayout){
+        centralLayout->addSpacerItem(new QSpacerItem(0 ,0, QSizePolicy::Expanding, QSizePolicy::Expanding));
+    }
+
     setLayout(centralLayout);
 
-    //TODO, hookup signals and slots
     connect(m_colorWheel, SIGNAL(colorChanged(QColor)), SLOT(updateColor(QColor)));
     connect(m_RSlider, SIGNAL(valueChanged(qreal)), SLOT(updateRed(qreal)));
     connect(m_GSlider, SIGNAL(valueChanged(qreal)), SLOT(updateGreen(qreal)));

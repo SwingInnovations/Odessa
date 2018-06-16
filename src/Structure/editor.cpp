@@ -310,6 +310,8 @@ void Editor::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
     /*-Primarily draw the canvas-*/
+    int scaledWidth = m_realWidth * m_ScaleFactor;
+    int scaledHeight = m_realHeight * m_ScaleFactor;
 
     if(!m_Layers.isEmpty())
     {
@@ -330,9 +332,11 @@ void Editor::paintEvent(QPaintEvent *event)
         }
         p.end();
 
-       emit layerPreviewChanged(0, m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
-        painter.drawImage(0,0, drawnPixmap.toImage());
-        resize(imageSize);
+        emit layerPreviewChanged(0, m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
+
+        resize(scaledWidth, scaledHeight);
+        painter.drawImage(0,0, drawnPixmap.toImage().scaled(scaledWidth, scaledHeight));
+
     }
 
 
