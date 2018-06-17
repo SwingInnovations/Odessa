@@ -642,6 +642,15 @@ ColorConfigPanel::~ColorConfigPanel()
 
 }
 
+void ColorConfigPanel::updateColorFromEditor(QColor color)
+{
+    m_colorWheel->setActualColor(color);
+    m_RSlider->setCurrentValue(color.red(), false);
+    m_GSlider->setCurrentValue(color.green(), false);
+    m_BSlider->setCurrentValue(color.blue(), false);
+    updateHSV(color);
+}
+
 void ColorConfigPanel::updateRed(qreal newRed)
 {
     m_colorWheel->setRed((int)newRed);
@@ -812,6 +821,7 @@ void ColorConfigPanel::initGui(ColorConfigPanel::ColorConfigOrientation orientat
     connect(m_RSlider, SIGNAL(valueChanged(qreal)), SLOT(updateRed(qreal)));
     connect(m_GSlider, SIGNAL(valueChanged(qreal)), SLOT(updateGreen(qreal)));
     connect(m_BSlider, SIGNAL(valueChanged(qreal)), SLOT(updateBlue(qreal)));
+    connect(m_editor, SIGNAL(currentColorChanged(QColor)), SLOT(updateColorFromEditor(QColor)));
 }
 
 void ColorConfigPanel::readFromLastPallette()

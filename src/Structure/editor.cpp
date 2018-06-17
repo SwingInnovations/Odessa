@@ -688,6 +688,7 @@ void Editor::setRedValue(int val)
     m_PrimaryColor.setRed(m_RedVal);
     m_CurrentTool.setColor(m_PrimaryColor);
     m_fmt.setForeground(QBrush(m_PrimaryColor));
+    emit currentColorChanged(m_PrimaryColor);
 }
 
 void Editor::setGreenValue(int val)
@@ -696,6 +697,7 @@ void Editor::setGreenValue(int val)
     m_PrimaryColor.setGreen(m_GreenVal);
     m_CurrentTool.setColor(m_PrimaryColor);
     m_fmt.setForeground(QBrush(m_PrimaryColor));
+    emit currentColorChanged(m_PrimaryColor);
 }
 
 void Editor::setBlueValue(int val)
@@ -704,6 +706,7 @@ void Editor::setBlueValue(int val)
     m_PrimaryColor.setBlue(m_BlueVal);
     m_CurrentTool.setColor(m_PrimaryColor);
     m_fmt.setForeground(QBrush(m_PrimaryColor));
+    emit currentColorChanged(m_PrimaryColor);
 }
 
 void Editor::increaseOpacity(){

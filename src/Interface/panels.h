@@ -190,6 +190,12 @@ signals:
     void greenChanged(int);
     void blueChanged(int);
 
+public slots:
+    /**
+     * @brief updateColorFromEditor
+     * @param color
+     */
+    void updateColorFromEditor(QColor);
 private slots:
     void updateRed(qreal);
     void updateGreen(qreal);

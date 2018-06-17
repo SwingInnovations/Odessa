@@ -106,6 +106,7 @@ signals:
     void italicToggled();
     void underlineToggled();
 
+    void currentColorChanged(QColor);
     void redChanged(int);
     void greenChanged(int);
     void blueChanged(int);
