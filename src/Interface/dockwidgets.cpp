@@ -510,12 +510,14 @@ void BrushDockWidget::saveBrushLib(QString filePath){
     qDebug() << "Saved brush set";
 }
 
-Brush BrushDockWidget::getStartBrush(){
+Brush BrushDockWidget::getStartBrush()
+{
     qDebug() << "Stencil stats: \t Width: " << m_ActualBrushList.first().getStencil().width() << " Height: " << m_ActualBrushList.first().getStencil().height() << endl;
     return m_ActualBrushList[0];
 }
 
-Brush BrushDockWidget::loadBrush(QString filePath){
+Brush BrushDockWidget::loadBrush(QString filePath)
+{
     Brush ret;
     int encrypt = 5025;
     QFile file(filePath);
@@ -691,6 +693,7 @@ void GeneralBrushWidget::updateName(QListWidgetItem *item){
 void GeneralBrushWidget::addBrush(int iD, Brush brush){
     int temp = iD;
     Brush b = brush;
+    //TODO Implement this?!?
 }
 
 void GeneralBrushWidget::addBrush(Brush brush){
@@ -740,13 +743,15 @@ void GeneralBrushWidget::setStencilPixmap(QPixmap pix){
     update();
 }
 
-void GeneralBrushWidget::showStencil(bool v){
+void GeneralBrushWidget::showStencil(bool v)
+{
     m_showStrokeBtn->setChecked(!v);
     m_PreviewLabel->setPixmap(m_StencilPreview);
     update();
 }
 
-void GeneralBrushWidget::showStroke(bool v){
+void GeneralBrushWidget::showStroke(bool v)
+{
     m_showStencilBtn->setChecked(!v);
     generateStrokePreview();
     m_PreviewLabel->setPixmap(m_StrokePreview);
@@ -754,12 +759,14 @@ void GeneralBrushWidget::showStroke(bool v){
     update();
 }
 
-void GeneralBrushWidget::activateUsePressureWidth(bool v){
+void GeneralBrushWidget::activateUsePressureWidth(bool v)
+{
     m_usePressureWidth = v;
     update();
 }
 
-void GeneralBrushWidget::generateStrokePreview(){
+void GeneralBrushWidget::generateStrokePreview()
+{
     m_StrokePreview = QPixmap(this->width() - 40, m_StencilPreview.height() * 0.5);
     m_StrokePreview.fill(Qt::gray);
     QPainterPath path;
@@ -799,7 +806,8 @@ void GeneralBrushWidget::generateStrokePreview(){
     }
 }
 
-void GeneralBrushWidget::resizeEvent(QResizeEvent *e){
+void GeneralBrushWidget::resizeEvent(QResizeEvent *e)
+{
     Q_UNUSED(e);
     if(m_showStrokeBtn->isChecked()){
         generateStrokePreview();
@@ -808,11 +816,13 @@ void GeneralBrushWidget::resizeEvent(QResizeEvent *e){
     update();
 }
 
-GeneralBrushWidget::~GeneralBrushWidget(){
+GeneralBrushWidget::~GeneralBrushWidget()
+{
 
 }
 
-CustomBrushWidget::CustomBrushWidget(){
+CustomBrushWidget::CustomBrushWidget()
+{
 
     m_BrushShape = CIRCLE_SHAPE;
     m_HasTexture = false;
@@ -955,7 +965,8 @@ CustomBrushWidget::CustomBrushWidget(){
     connect(m_TextureFileLE, SIGNAL(textChanged(QString)), SLOT(updateStencilTextureLE(QString)));
 }
 
-void CustomBrushWidget::TempSave(QPixmap pixmap){
+void CustomBrushWidget::TempSave(QPixmap pixmap)
+{
     QImage image = pixmap.toImage();
     image.convertToFormat(QImage::Format_RGB888, Qt::AutoColor);
     if(m_TempFile.open()){
@@ -965,11 +976,13 @@ void CustomBrushWidget::TempSave(QPixmap pixmap){
     emit stencilPathChanged(m_TempFile.fileName());
 }
 
-void CustomBrushWidget::updateStencil(QPixmap pixmap){
+void CustomBrushWidget::updateStencil(QPixmap pixmap)
+{
     TempSave(pixmap);
 }
 
-void CustomBrushWidget::updateStencilTexture(){
+void CustomBrushWidget::updateStencilTexture()
+{
     m_HasTexture = true;
     QString fileName = QFileDialog::getOpenFileName(this, "Load Texture", QDir::currentPath());
     m_StencilTexture.load(fileName);
@@ -990,45 +1003,53 @@ void CustomBrushWidget::updateStencilTexture(){
     m_TextureFileLE->setText(fileName);
 }
 
-void CustomBrushWidget::setStencil(QPixmap pix){
+void CustomBrushWidget::setStencil(QPixmap pix)
+{
     pix = pix.scaled(160, 160);
-
+    //TODO Implement?
 }
 
-void CustomBrushWidget::updateStencilWidth(int val){
+void CustomBrushWidget::updateStencilWidth(int val)
+{
    m_WidthLE->setText(QString::number(val));
    emit StencilWidthChanged(val);
    emit stencilChanged(m_StencilPreview);
 }
 
-void CustomBrushWidget::updateStencilWidth(QString val){
+void CustomBrushWidget::updateStencilWidth(QString val)
+{
     m_WidthSlider->setValue(val.toInt());
     emit StencilWidthChanged(val.toInt());
 }
 
-void CustomBrushWidget::updateStencilHeight(int val){
+void CustomBrushWidget::updateStencilHeight(int val)
+{
     m_HeightLE->setText(QString::number(val));
     emit stencilHeightChanged(val);
     emit stencilChanged(m_StencilPreview);
 }
 
-void CustomBrushWidget::updateStencilHeight(QString val){
+void CustomBrushWidget::updateStencilHeight(QString val)
+{
     m_HeightSlider->setValue(val.toInt());
     emit stencilHeightChanged(val.toInt());
 }
 
-void CustomBrushWidget::updateBrushHardness(int val){
+void CustomBrushWidget::updateBrushHardness(int val)
+{
     m_HardnessLE->setText(QString::number(val));
     emit brushHardnessChanged(val);
     emit stencilChanged(m_StencilPreview);
 }
 
-void CustomBrushWidget::updateBrushHardness(QString val){
+void CustomBrushWidget::updateBrushHardness(QString val)
+{
     m_HardnessSlider->setValue(val.toInt());
     emit brushHardnessChanged(val.toInt());
 }
 
-void CustomBrushWidget::updateStencilRotate(int val){
+void CustomBrushWidget::updateStencilRotate(int val)
+{
     if(val > 360){
         val = 0;
         m_RotateSlider->setValue(0);
@@ -1038,7 +1059,8 @@ void CustomBrushWidget::updateStencilRotate(int val){
     emit stencilChanged(m_StencilPreview);
 }
 
-void CustomBrushWidget::updateStencilRotate(QString val){
+void CustomBrushWidget::updateStencilRotate(QString val)
+{
     if(val.toInt() > 360){
         m_RotateSlider->setValue(0);
         emit rotateChanged(0);
@@ -1048,7 +1070,8 @@ void CustomBrushWidget::updateStencilRotate(QString val){
     }
 }
 
-void CustomBrushWidget::updateStencilTextureLE(QString val){
+void CustomBrushWidget::updateStencilTextureLE(QString val)
+{
     if(val.isEmpty()){
         m_HasTexture = false;
     }else{
@@ -1056,7 +1079,8 @@ void CustomBrushWidget::updateStencilTextureLE(QString val){
     }
 }
 
-void CustomBrushWidget::setBrushSettings(Brush b){
+void CustomBrushWidget::setBrushSettings(Brush b)
+{
     m_WidthSlider->setValue(b.s_Width);
     m_HeightSlider->setValue(b.s_Height);
     m_HardnessSlider->setValue(b.getHardness());
@@ -1064,7 +1088,8 @@ void CustomBrushWidget::setBrushSettings(Brush b){
     update();
 }
 
-QPixmap CustomBrushWidget::GeneratePixmap(){
+QPixmap CustomBrushWidget::GeneratePixmap()
+{
     m_StencilPreview.fill(Qt::transparent);
     int stencilWidth = (m_StencilPreview.width() * m_WidthSlider->value()/10)/2;
     int stencilHeight = (m_StencilPreview.height()* m_HeightSlider->value()/10)/2;
@@ -1593,6 +1618,7 @@ LayerDockWidget::LayerDockWidget(QWidget *parent) : QDockWidget(parent)
     connect(m_opacitySlider, SIGNAL(valueChanged(int)), SLOT(updateOpacity(int)));
     connect(m_opacitySpinbox, SIGNAL(valueChanged(QString)), SLOT(updateOpacity(QString)));
     connect(m_addLayerBtn, SIGNAL(clicked()), SLOT(addLayer()));
+    connect(m_deleteLayerBtn, SIGNAL(clicked()), SLOT(removeLayer()));
     connect(m_groupBtn, SIGNAL(clicked(bool)), SLOT(groupLayers()));
 }
 
@@ -1629,7 +1655,7 @@ void LayerDockWidget::addLayer(){
     itm->setData(0, Qt::UserRole + 2, QVariant(0)); //visibility
     itm->setData(0, Qt::UserRole + 3, QVariant(100)); // Opacity
     itm->setData(0, Qt::UserRole + 4, QVariant(0)); //Composition mode
-    itm->setData(0, Qt::UserRole + 5, QVariant(false)); //Determine if a layer or not
+    itm->setData(0, Qt::UserRole + 5, QVariant(false)); //Determine if a layer or nor
     m_opacitySlider->blockSignals(true);
     m_opacitySpinbox->blockSignals(true);
     m_opacitySlider->setValue(100);
@@ -1643,19 +1669,51 @@ void LayerDockWidget::addLayer(){
     emit layerAdded();
 }
 
-void LayerDockWidget::removeLayer(){
+void LayerDockWidget::removeLayer()
+{
+    int deletedIndex = -1, index = 0;
+    //Get Index and Item to Delete
+    QTreeWidgetItem* deletedItem = nullptr;
     foreach(QTreeWidgetItem* itm , m_layerManager->selectedItems()){
-        if(itm->isSelected()){
-            int index = itm->data(0, Qt::UserRole + 1).toInt();
-            if(index > 0){
-                delete itm;
+        if(itm->isSelected())
+        {
+            index = itm->data(0, Qt::UserRole + 1).toInt();
+            if(index >= 0)
+            {
+                deletedItem = itm;
                 emit layerRemoved(index);
+
+                if(deletedIndex == -1)
+                {
+                    deletedIndex = index;
+                }
             }
         }
     }
+
+    if(deletedItem != nullptr)
+    {
+        //Actual cleanup work now
+        QTreeWidgetItem* currentItem = m_layerManager->itemAbove(deletedItem);
+        while(currentItem != nullptr)
+        {
+            int currentIndex = currentItem->data(0, Qt::UserRole+1).toInt();
+            if(currentIndex > deletedIndex)
+            {
+                currentItem->setData(0, Qt::UserRole+1, currentIndex-1);
+            }
+            currentItem = m_layerManager->itemAbove(currentItem);
+        }
+        m_layerManager->removeItemWidget(deletedItem, 0);
+        delete deletedItem;
+        m_layerCount--;
+    }
+
+    update();
 }
 
-void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent){
+void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent)
+{
     m_layerCount++;
     QTreeWidgetItem* itm = new QTreeWidgetItem;
     itm->setText(0, "childLayer");
@@ -1669,7 +1727,8 @@ void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent){
     parent->sortChildren(0, Qt::DescendingOrder);
 }
 
-void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent, QString childName){
+void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent, QString childName)
+{
     m_layerCount++;
     QTreeWidgetItem* itm = new QTreeWidgetItem;
     itm->setText(0, childName);
@@ -1682,7 +1741,8 @@ void LayerDockWidget::addChildLayer(QTreeWidgetItem *parent, QString childName){
     parent->sortChildren(0, Qt::DescendingOrder);
 }
 
-void LayerDockWidget::groupLayers(){
+void LayerDockWidget::groupLayers()
+{
     QTreeWidgetItem* grpFolder = new QTreeWidgetItem(m_layerManager);
     grpFolder->setText(0, "Group");
     grpFolder->setFlags(grpFolder->flags() | Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsUserTristate);

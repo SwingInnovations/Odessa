@@ -85,7 +85,8 @@ public:
     }
 
     QPixmap getCurrentImage();
-
+    void setBrushColor(const QColor& color);
+    QColor getCurrentBrushColor() const;
 signals:
     void mousePositionChanged(QPoint);
     void brushPressureChanged(qreal);

@@ -27,7 +27,6 @@ MainWindow::MainWindow(QWidget *parent)
     }
     
     m_Editor = new Editor(this);
-    //m_Editor = new GLEditor(this);
     m_Editor->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_Editor->setFocusPolicy(Qt::ClickFocus);
 
@@ -44,11 +43,6 @@ MainWindow::MainWindow(QWidget *parent)
     m_newDiag = new OdessaNewDocDialog();
     m_prefDiag = new OdessaPrefDialog();
     m_prefDiag->setProjectPath(m_projectPath);
-    m_brushDock = new BrushDockWidget(this);
-    m_brushDock->setWindowTitle("Brush");
-    m_brushDock->setDirectory(m_projectPath+"/Brush/");
-    m_brushDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    m_Editor->setBrush(m_brushDock->getStartBrush());
 
     m_dockColorConfigPanel = new ColorConfigPanel(this, m_Editor, ColorConfigPanel::ColorConfigOrientation::Vertical);
     QDockWidget* colDockWidget = new QDockWidget(this);
@@ -247,6 +241,7 @@ MainWindow::MainWindow(QWidget *parent)
     auto brushOptMenu = new QMenu(this);
     brushOptMenu->setStyleSheet("background: rgb(53, 53, 53);");
     m_brushToolPanel = new BrushConfigPanel(this);
+    m_Editor->setBrush(m_brushToolPanel->getStartingBrush());
     m_colorConfigPanel = new ColorConfigPanel(this, m_Editor);
 
     auto brushOptHandle = new QWidgetAction(this);
@@ -310,7 +305,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_newDiag, SIGNAL(newProject(ProjectInfo&)), m_Editor, SLOT(newProject(ProjectInfo&)));
     connect(m_newDiag, SIGNAL(newProject(ProjectInfo&)), SLOT(newProject(ProjectInfo&)));
     connect(m_prefDiag, SIGNAL(projectPathChanged(QString)), SLOT(setProjectPath(QString)));
-    connect(m_prefDiag, SIGNAL(historyStepsChanged(int)), m_Editor, SLOT(setHistoyStep(int)));
     connect(m_exportImgAct, SIGNAL(triggered()), SLOT(exportImage()));
     connect(m_exportSelAct, SIGNAL(triggered()), SLOT(exportSelection()));
     connect(m_zoomInAct, SIGNAL(triggered()), SLOT(zoomIn()));
@@ -330,13 +324,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_dockColorConfigPanel, SIGNAL(redChanged(int)), m_Editor, SLOT(setRedValue(int)));
     connect(m_dockColorConfigPanel, SIGNAL(greenChanged(int)), m_Editor, SLOT(setGreenValue(int)));
     connect(m_dockColorConfigPanel, SIGNAL(blueChanged(int)), m_Editor, SLOT(setBlueValue(int)));
-    connect(m_brushDock, SIGNAL(brushSizeChanged(int)), m_Editor, SLOT(setBrushSize(int)));
-    connect(m_brushDock, SIGNAL(brushOpacityChanged(int)), m_Editor, SLOT(setOpacity(int)));
-    connect(m_brushDock, SIGNAL(brushStencilChanged(QPixmap)), m_Editor, SLOT(setBrushStencil(QPixmap)));
-    connect(m_brushDock, SIGNAL(brushSpacingChanged(int)), m_Editor, SLOT(setBrushSpacing(int)));
-    connect(m_brushDock, SIGNAL(brushTransferSizeChanged(int)), m_Editor, SLOT(setSizeTransfer(int)));
-    connect(m_brushDock, SIGNAL(brushTransferOpacityChanged(int)), m_Editor, SLOT(setOpacityTransfer(int)));
     connect(m_layerDock, SIGNAL(layerAdded()), m_Editor, SLOT(addLayer()));
+    connect(m_layerDock, SIGNAL(layerRemoved(int)), m_Editor, SLOT(deleteLayer(int)));
     connect(m_layerDock, SIGNAL(layerChanged(int)), m_Editor, SLOT(setLayerIndex(int)));
     connect(m_layerDock, SIGNAL(opacityChanged(int)), m_Editor, SLOT(setLayerOpacity(int)));
     connect(m_layerDock, SIGNAL(toggleLayerVisible(bool)), m_Editor, SLOT(setLayerVisible(bool)));
@@ -352,8 +341,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_toolPanel, SIGNAL(fontUnderlineChanged(bool)), m_Editor, SLOT(setUnderline(bool)));
     connect(m_Editor, SIGNAL(brushSizeChanged(int)), m_brushToolPanel, SLOT(updateBrushSize(int)));
     connect(m_Editor, SIGNAL(brushOpacityChanged(int)), m_brushToolPanel, SLOT(updateBrushOpacity(int)));
-    connect(m_Editor, SIGNAL(brushSizeChanged(int)), m_brushDock, SLOT(updateSize(int)));
-    connect(m_Editor, SIGNAL(brushOpacityChanged(int)), m_brushDock, SLOT(updateOpacity(int)));
     connect(m_Editor, SIGNAL(clipTranslateChanged(int,int)), m_toolPanel, SLOT(updateTranslate(int,int)));
     connect(m_Editor, SIGNAL(clipRotateChanged(int)), m_toolPanel, SLOT(updateRotate(int)));
     connect(m_Editor, SIGNAL(clipScaleChanged(int,int)), m_toolPanel, SLOT(updateScale(int,int)));
@@ -380,9 +367,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_aboutAct, SIGNAL(triggered()), SLOT(about()));
     connect(m_closeAct, SIGNAL(triggered()), SLOT(close()));
 
-    addDockWidget(Qt::RightDockWidgetArea, m_brushDock);
     addDockWidget(Qt::RightDockWidgetArea, colDockWidget);
-    tabifyDockWidget(m_brushDock, colDockWidget);
     addDockWidget(Qt::BottomDockWidgetArea, m_timeDock);
     addDockWidget(Qt::RightDockWidgetArea, m_layerDock);
     addDockWidget(Qt::RightDockWidgetArea, m_toolPanel);
@@ -410,7 +395,8 @@ void MainWindow::openProject(){
     //TODO Implement
 }
 
-void MainWindow::saveProjectAs(){
+void MainWindow::saveProjectAs()
+{
     QString fileName = QFileDialog::getSaveFileName(this, "Save Project", m_projectPath);
     if(fileName.isNull()){
         QMessageBox msgBox(this);
@@ -418,8 +404,9 @@ void MainWindow::saveProjectAs(){
     }
 }
 
-void MainWindow::saveProject(){
-
+void MainWindow::saveProject()
+{
+    //TODO Implement this
 }
 
 void MainWindow::showNewDocWin()
@@ -448,7 +435,8 @@ void MainWindow::newProject(ProjectInfo &info){
     }
 }
 
-void MainWindow::changeStatusMessage(QString message){
+void MainWindow::changeStatusMessage(QString message)
+{
    m_activeToolLabel->setText(message);
 }
 

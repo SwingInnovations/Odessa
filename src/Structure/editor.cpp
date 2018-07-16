@@ -104,6 +104,16 @@ QPixmap Editor::getCurrentImage()
     return ret;
 }
 
+void Editor::setBrushColor(const QColor &color)
+{
+    m_PrimaryColor = color;
+}
+
+QColor Editor::getCurrentBrushColor() const
+{
+    return m_PrimaryColor;
+}
+
 void Editor::mousePressEvent(QMouseEvent *event)
 {
     if(!m_Layers.isEmpty() && event->button() == Qt::LeftButton)
@@ -308,6 +318,7 @@ void Editor::tabletEvent(QTabletEvent *event)
 
 void Editor::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event);
     QPainter painter(this);
     /*-Primarily draw the canvas-*/
     int scaledWidth = m_realWidth * m_ScaleFactor;
@@ -507,15 +518,29 @@ void Editor::addLayer()
     }
 }
 
-void Editor::deleteLayer(int index){
-    if(!m_Layers.isEmpty()){
-
+void Editor::deleteLayer(int index)
+{
+    if(!m_Layers.isEmpty() && index > -1 && index < m_Layers.size())
+    {
+        m_Layers.removeAt(index);
+        if( index == m_CurrentIndex && index > 0)
+        {
+            m_CurrentIndex--;
+            emit currentIndexChanged(m_CurrentIndex);
+        }
     }
 }
 
 void Editor::setLayerIndex(int i){
     m_LastIndex = m_CurrentIndex;
-    if(i >= 1){ m_CurrentIndex = i+1; }else{ m_CurrentIndex = 1; }
+    if(i >= 1)
+    {
+        m_CurrentIndex = i+1;
+    }
+    else
+    {
+        m_CurrentIndex = 1;
+    }
     emit layerPreviewChanged(0, m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap());
     emit currentIndexChanged(m_CurrentIndex);
     update();

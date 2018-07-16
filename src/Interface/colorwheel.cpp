@@ -41,35 +41,41 @@ ColorWheel::ColorWheel(QWidget *parent) : QLabel(parent)
     m_Value = col.value();
 }
 
-QColor ColorWheel::getColorFromPoint(QPoint point){
+QColor ColorWheel::getColorFromPoint(QPoint point)
+{
     QPixmap pic = QWidget::grab();
     QImage img = pic.toImage();
     return QColor(img.pixel(point));
 }
 
-void ColorWheel::setActualColor(QColor col){
+void ColorWheel::setActualColor(QColor col)
+{
     m_ActualRed = col.red();
     m_ActualGreen = col.green();
     m_ActualBlue = col.blue();
     update();
 }
 
-QColor ColorWheel::getColor(){
+QColor ColorWheel::getColor()
+{
     QColor ret(m_ActualRed, m_ActualGreen, m_ActualBlue);
     return ret;
 }
 
-void ColorWheel::setRed(int r){
+void ColorWheel::setRed(int r)
+{
     m_ActualRed = r;
     update();
 }
 
-void ColorWheel::setGreen(int g){
+void ColorWheel::setGreen(int g)
+{
     m_ActualGreen = g;
     update();
 }
 
-void ColorWheel::setBlue(int b){
+void ColorWheel::setBlue(int b)
+{
     m_ActualBlue = b;
     update();
 }
@@ -80,9 +86,11 @@ void ColorWheel::processHSV(QColor col){
     m_Value = col.value();
 }
 
-void ColorWheel::mousePressEvent(QMouseEvent *ev){
+void ColorWheel::mousePressEvent(QMouseEvent *ev)
+{
     if(ev->button() == Qt::LeftButton){
-        if(m_PrimaryColorRect.contains(ev->pos())){
+        if(m_PrimaryColorRect.contains(ev->pos()))
+        {
             QColor color = QColorDialog::getColor(QColor(m_ActualRed, m_ActualGreen, m_ActualBlue));
             if(color.isValid()){
                 m_ActualRed = color.red();
@@ -105,7 +113,8 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev){
             return;
         }
 
-        if(m_ColorRangeTri.contains(ev->pos())){
+        if(m_ColorRangeTri.contains(ev->pos()))
+        {
             //set the color
             m_PreciseColor = ev->pos();
             QColor newColor = getColorFromPoint(ev->pos());
@@ -119,7 +128,8 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev){
             return;
         }
         if(!m_MouseDown && !m_ColorRangeTri.contains(ev->pos())) m_MouseDown = true;
-        if(m_MouseDown){
+        if(m_MouseDown)
+        {
             QPoint centerPoint(175, 100);
             QPoint dPoint = centerPoint - ev->pos();
             m_RotationAngle = atan2(dPoint.x(), dPoint.y());
@@ -129,7 +139,8 @@ void ColorWheel::mousePressEvent(QMouseEvent *ev){
     }
 
 
-    if(ev->button() == Qt::RightButton){
+    if(ev->button() == Qt::RightButton)
+    {
         int swapRed = 0, swapGreen = 0, swapBlue = 0;
         swapRed = m_ActualRed;
         swapGreen = m_ActualGreen;

@@ -6,6 +6,11 @@ BrushConfigPanel::BrushConfigPanel(QWidget *parent) : QWidget(parent)
     initGUI();
 }
 
+Brush BrushConfigPanel::getStartingBrush() const
+{
+    return m_ActualBrushList[0];
+}
+
 void BrushConfigPanel::updateBrushSize(int value)
 {
     m_brushSizeSE->setCurrentValue((int)value);
@@ -66,22 +71,22 @@ void BrushConfigPanel::updateCurrentBrushIndex(int newInd)
 
 void BrushConfigPanel::paintEvent(QPaintEvent *event)
 {
-
+    Q_UNUSED(event);
 }
 
 void BrushConfigPanel::mousePressEvent(QMouseEvent *event)
 {
-
+    Q_UNUSED(event);
 }
 
 void BrushConfigPanel::mouseReleaseEvent(QMouseEvent *event)
 {
-
+    Q_UNUSED(event);
 }
 
 void BrushConfigPanel::mouseMoveEvent(QMouseEvent *event)
 {
-
+    Q_UNUSED(event);
 }
 
 void BrushConfigPanel::initGUI()
@@ -614,24 +619,44 @@ ColorCell::ColorCell(QColor color, QWidget *parent, Editor *editor) : QWidget(pa
 {
     m_color = color;
     m_editor = editor;
+    setFixedSize(32, 32);
+    setMouseTracking(true);
+}
+
+void ColorCell::SetColor(QColor color)
+{
+    m_color = color;
+    update();
 }
 
 void ColorCell::mousePressEvent(QMouseEvent *event)
 {
+    qDebug() << "Widget Pressed" << endl;
     if(event->button() == Qt::LeftButton)
     {
         //Assign color to editor
+        m_editor->setBrushColor(m_color);
         return;
     }
 
     if(event->button() == Qt::RightButton)
     {
         //Assign color from editor
+        m_color = m_editor->getCurrentBrushColor();
     }
 }
 
+void ColorCell::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event);
+    QPainter p(this);
+    p.setPen(Qt::black);
+    p.setBrush(m_color);
+    p.drawRect(QRect(0, 0, 32, 32));
+}
 
-ColorConfigPanel::ColorConfigPanel(QWidget *parent, Editor *editor, ColorConfigOrientation orientation) : QWidget(parent)
+
+ColorConfigPanel::ColorConfigPanel(QWidget *parent, Editor *editor, ColorConfigOrientation orientation) : QWidget(parent), m_colorPalleteLoaded(false)
 {
     m_editor = editor;
     initGui(orientation);
@@ -692,6 +717,7 @@ void ColorConfigPanel::updateHSV(QColor incomingColor)
 
 void ColorConfigPanel::initGui(ColorConfigPanel::ColorConfigOrientation orientation)
 {
+    readFromLastPallette();     //Load from the system settings
     bool isVerticalLayout = (orientation == ColorConfigOrientation::Vertical);
     QBoxLayout* centralLayout;
 
@@ -711,8 +737,8 @@ void ColorConfigPanel::initGui(ColorConfigPanel::ColorConfigOrientation orientat
     pix->scaled(320, 320);
     m_colorWheel->setPixmap(*pix);
 
-    QPushButton* triangleBtn = new QPushButton("Triangle", this);   //TODO Implement this
-    QPushButton* squareBtn = new QPushButton("Square", this);       //TODO Implement this
+    QPushButton* triangleBtn = new QPushButton("Triangle", this);   //TODO Implement this.. Switch to triangle color picker
+    QPushButton* squareBtn = new QPushButton("Square", this);       //TODO Implement this.. Switch to Rectangular color picker
 
     QHBoxLayout* shapeBtnLayout = new QHBoxLayout;
     shapeBtnLayout->addWidget(triangleBtn);
@@ -729,7 +755,32 @@ void ColorConfigPanel::initGui(ColorConfigPanel::ColorConfigOrientation orientat
 
     auto colorTabs = new QTabWidget(this);
 
+    QGridLayout* colorPalletLayout = new QGridLayout;
+    colorPalletLayout->setHorizontalSpacing(1);
+    colorPalletLayout->setVerticalSpacing(1);
+
+    if(m_colorPalleteLoaded)
+    {
+        //Load with known values
+        //TODO Implement
+    }
+    else
+    {
+        int posX = 1, posY = 0;
+        for(uint i = 0; i < 64; i++)
+        {
+            colorPalletLayout->addWidget(new ColorCell(QColor(), this, m_editor), posY, posX);
+            if(posX == 12)
+            {
+                posX = 0;
+                posY++;
+            }
+            posX += 1;
+        }
+    }
+
     QWidget* PalleteTabWidget = new QWidget(this);
+    PalleteTabWidget->setLayout(colorPalletLayout);
 
     //START RGB Widget
     QWidget* RGBTabWidget = new QWidget(this);
@@ -805,7 +856,6 @@ void ColorConfigPanel::initGui(ColorConfigPanel::ColorConfigOrientation orientat
 
     if(!isVerticalLayout)
     {
-        int h = colorTabs->contentsRect().height();
         colorTabs->setFixedWidth(316);
     }
 
@@ -826,6 +876,50 @@ void ColorConfigPanel::initGui(ColorConfigPanel::ColorConfigOrientation orientat
 
 void ColorConfigPanel::readFromLastPallette()
 {
+    QSettings settings("SwingInnovations", "Odessa");
+    m_currentPalletString = settings.value("currentPalletePath").toString();
+    if(m_currentPalletString.size() > 0)
+    {
+        loadPallete(m_currentPalletString);
+    }
+    else
+    {
+        qDebug() << "No Color Pallete Found" << endl;
+    }
+}
 
+void ColorConfigPanel::loadPallete(QString filePath)
+{
+    int encrypt = 5025;
+    ColorPalleteInfo colorPalletInfo;
+    QFile file(filePath);
+    if(!file.open(QIODevice::ReadOnly))
+    {
+        qDebug() << "Error, could not open file!" << endl;
+        return;
+    }
+    QDataStream in(&file);
+    in.setVersion(QDataStream::Qt_5_0);
+    in >> encrypt >> colorPalletInfo;
+    file.close();
+    m_currentPallete = colorPalletInfo;
+}
+
+void ColorConfigPanel::savePallete(QString filePath)
+{
+    int encrypt = 5025;
+    QFile file(filePath);
+    if(!file.open(QIODevice::WriteOnly))
+    {
+        qDebug() << "Failed to open file" << endl;
+        return;
+    }
+
+    QDataStream out(&file);
+    out.setVersion(QDataStream::Qt_5_0);
+    out << encrypt << m_currentPallete;
+
+    file.flush();
+    file.close();
 }
 

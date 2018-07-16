@@ -6,10 +6,10 @@
 #include <QDataStream>
 #include <QPoint>
 
-Q_DECLARE_METATYPE(Brush)
-
 #include "Structure/brush.h"
 #include "Interface/dialogwindows.h"
+
+Q_DECLARE_METATYPE(Brush)
 
 inline QDataStream &operator <<(QDataStream &out, const Brush &brush);
 inline QDataStream &operator >>(QDataStream &in, Brush &brush);
@@ -54,5 +54,6 @@ inline QPoint &operator *(QPoint p, int scaleFactor){
     p.setY(_y);
     return p;
 }
+
 
 #endif // OVERLOADS_H

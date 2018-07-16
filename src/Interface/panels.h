@@ -1,7 +1,6 @@
 #ifndef PANELS_H
 #define PANELS_H
 
-
 #include <QWidget>
 #include <QWidgetAction>
 #include <QPushButton>
@@ -23,6 +22,9 @@
 #include <QSettings>
 #include <QMessageBox>
 #include <QColor>
+#include <QDataStream>
+#include <QFile>
+#include <QPaintEvent>
 
 #include "../Structure/brush.h"
 #include "../Overloads.h"
@@ -42,6 +44,7 @@ class BrushConfigPanel : public QWidget
 public:
     enum BrushShape{CIRCLE, SQUARE, CUSTOM};
     BrushConfigPanel(QWidget* parent = 0);
+    Brush getStartingBrush()const;
 signals:
     void brushWidthChanged(int);
     void brushOpacityChanged(int);
@@ -157,18 +160,49 @@ private:
  */
 class ColorCell : public QWidget
 {
+    Q_OBJECT
 public:
     ColorCell(QColor color, QWidget* parent, Editor* editor = 0);
+    void SetColor(QColor color);
+    inline QColor GetColor()const{ return m_color; }
 protected:
     void mousePressEvent(QMouseEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 private:
     Editor*     m_editor;
     QColor      m_color;
 };
 
+/**
+ * @brief The ColorPalleteInfo struct Contains Color Pallete info that can be saved/Loaded from disk
+ */
 struct ColorPalleteInfo {
-    uint numColors;
-    QColor colors[256];
+    uint    numColors = -1;
+    QColor  colors[256];
+
+    friend inline QDataStream &operator <<(QDataStream& out, const ColorPalleteInfo& colorPallete)
+    {
+        out << colorPallete.numColors;
+        for(QColor color : colorPallete.colors)
+        {
+            out << color;
+        }
+        return out;
+    }
+
+    friend inline QDataStream &operator >>(QDataStream& in, ColorPalleteInfo& colorPallete)
+    {
+        QColor color;
+
+        in >> colorPallete.numColors;
+        for(uint i = 0; i < colorPallete.numColors; i++)
+        {
+            in >> color;
+            colorPallete.colors[i] = color;
+        }
+
+        return in;
+    }
 };
 
 /**
@@ -205,6 +239,8 @@ private:
     void updateHSV(QColor);
     void initGui(ColorConfigOrientation orientation);
     void readFromLastPallette();
+    void loadPallete(QString filePath);
+    void savePallete(QString filePath);
     Editor* m_editor;
     ColorWheel* m_colorWheel;
 
@@ -217,6 +253,8 @@ private:
     SlideEdit*  m_VSlider;
 
     QString     m_currentPalletString;
+    ColorPalleteInfo m_currentPallete;
+    bool        m_colorPalleteLoaded;
 
 };
 
