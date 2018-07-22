@@ -179,22 +179,40 @@ private:
 struct ColorPalleteInfo {
     uint    numColors = -1;
     QColor  colors[256];
+    uint    rows = 0;
+    uint    cols = 0;
 
+    /**
+     * @brief operator <<
+     * @param out
+     * @param colorPallete
+     * @return
+     */
     friend inline QDataStream &operator <<(QDataStream& out, const ColorPalleteInfo& colorPallete)
     {
         out << colorPallete.numColors;
-        for(QColor color : colorPallete.colors)
+        out << colorPallete.rows;
+        out << colorPallete.cols;
+        for(const QColor& color : colorPallete.colors)
         {
             out << color;
         }
         return out;
     }
 
+    /**
+     * @brief operator >>
+     * @param in
+     * @param colorPallete
+     * @return read file
+     */
     friend inline QDataStream &operator >>(QDataStream& in, ColorPalleteInfo& colorPallete)
     {
         QColor color;
 
         in >> colorPallete.numColors;
+        in >> colorPallete.rows;
+        in >> colorPallete.cols;
         for(uint i = 0; i < colorPallete.numColors; i++)
         {
             in >> color;
@@ -235,6 +253,9 @@ private slots:
     void updateGreen(qreal);
     void updateBlue(qreal);
     void updateColor(QColor);
+    void loadColorPalleteAct();
+    void saveColorPalleteAct();
+    void toggleColorPicker();
 private:
     void updateHSV(QColor);
     void initGui(ColorConfigOrientation orientation);
@@ -255,6 +276,8 @@ private:
     QString     m_currentPalletString;
     ColorPalleteInfo m_currentPallete;
     bool        m_colorPalleteLoaded;
+    uint        m_rows;
+    uint        m_cols;
 
 };
 

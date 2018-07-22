@@ -634,6 +634,7 @@ void ColorCell::mousePressEvent(QMouseEvent *event)
     qDebug() << "Widget Pressed" << endl;
     if(event->button() == Qt::LeftButton)
     {
+        qDebug() << "Left Button Pressed" << endl;
         //Assign color to editor
         m_editor->setBrushColor(m_color);
         return;
@@ -642,7 +643,9 @@ void ColorCell::mousePressEvent(QMouseEvent *event)
     if(event->button() == Qt::RightButton)
     {
         //Assign color from editor
+        qDebug() << "Right Button Pressed" << endl;
         m_color = m_editor->getCurrentBrushColor();
+        repaint();
     }
 }
 
@@ -706,6 +709,33 @@ void ColorConfigPanel::updateColor(QColor incomingColor)
     updateHSV(incomingColor);
 }
 
+void ColorConfigPanel::loadColorPalleteAct()
+{
+    QString colorPalletePath = QFileDialog::getOpenFileName(this, "Open Color Pallete", QDir::currentPath(), ".stpal");
+    if(colorPalletePath.size() > 0)
+    {
+        m_currentPalletString = colorPalletePath;
+        loadPallete(m_currentPalletString);
+    }
+    //TODO Save this to QSetting
+}
+
+void ColorConfigPanel::saveColorPalleteAct()
+{
+    //TODO Implement
+    QString colorPalletePath = QFileDialog::getSaveFileName(this, "Save Color Pallete", QDir::currentPath(), ".stpal");
+    if(colorPalletePath.size() > 0)
+    {
+        savePallete(colorPalletePath);
+    }
+}
+
+void ColorConfigPanel::toggleColorPicker()
+{
+    //TODO Implement - Changes color picker shape from triangle to square.
+
+}
+
 void ColorConfigPanel::updateHSV(QColor incomingColor)
 {
     int h, s, v;
@@ -737,12 +767,26 @@ void ColorConfigPanel::initGui(ColorConfigPanel::ColorConfigOrientation orientat
     pix->scaled(320, 320);
     m_colorWheel->setPixmap(*pix);
 
+    //Create Menu for options
+    QAction* loadPalleteAct = new QAction("Load Pallete", this);
+    QAction* savePalleteAct = new QAction("Save Pallete", this);
+
+    QMenu* colorMenu = new QMenu(this);
+    colorMenu->addAction(loadPalleteAct);
+    colorMenu->addAction(savePalleteAct);
+
     QPushButton* triangleBtn = new QPushButton("Triangle", this);   //TODO Implement this.. Switch to triangle color picker
     QPushButton* squareBtn = new QPushButton("Square", this);       //TODO Implement this.. Switch to Rectangular color picker
+    QToolButton* optionsBtn = new QToolButton(this);
+    optionsBtn->setText("..");
+    optionsBtn->setFixedWidth(32);
+    optionsBtn->setMenu(colorMenu);
 
     QHBoxLayout* shapeBtnLayout = new QHBoxLayout;
+    shapeBtnLayout->setSpacing(0);
     shapeBtnLayout->addWidget(triangleBtn);
     shapeBtnLayout->addWidget(squareBtn);
+    shapeBtnLayout->addWidget(optionsBtn);
 
     colorWheelLayout->addWidget(m_colorWheel);
     if(isVerticalLayout)
@@ -766,17 +810,55 @@ void ColorConfigPanel::initGui(ColorConfigPanel::ColorConfigOrientation orientat
     }
     else
     {
-        int posX = 1, posY = 0;
-        for(uint i = 0; i < 64; i++)
+        int posX = 1, posY = 0, r = 10, g = 10, b = 10;
+        bool rPassed, gPassed;
+        rPassed = gPassed = false;
+        for(uint i = 0; i < 60; i++)
         {
-            colorPalletLayout->addWidget(new ColorCell(QColor(), this, m_editor), posY, posX);
+            colorPalletLayout->addWidget(new ColorCell(QColor(r, g, b), this, m_editor), posY, posX);
             if(posX == 12)
             {
                 posX = 0;
                 posY++;
             }
+
+            if(!rPassed)
+            {
+                if(r <= 255)
+                {
+                    r += 15;
+                    g = 0;
+                    b = 0;
+                }
+                else
+                {
+                    rPassed = true;
+                }
+            }
+            else if(!gPassed)
+            {
+                if(g <= 255)
+                {
+                    r = 0;
+                    g += 15;
+                    b = 0;
+                }
+                else
+                {
+                    gPassed = true;
+                }
+            }
+            else
+            {
+                r = 0;
+                b+=15;
+                g = 0;
+            }
             posX += 1;
+            m_currentPallete.colors[i] = QColor(r, g, b);
         }
+        m_rows = posY;
+        m_cols = posX;
     }
 
     QWidget* PalleteTabWidget = new QWidget(this);
@@ -872,6 +954,8 @@ void ColorConfigPanel::initGui(ColorConfigPanel::ColorConfigOrientation orientat
     connect(m_GSlider, SIGNAL(valueChanged(qreal)), SLOT(updateGreen(qreal)));
     connect(m_BSlider, SIGNAL(valueChanged(qreal)), SLOT(updateBlue(qreal)));
     connect(m_editor, SIGNAL(currentColorChanged(QColor)), SLOT(updateColorFromEditor(QColor)));
+    connect(loadPalleteAct, SIGNAL(triggered()), SLOT(loadColorPalleteAct()));
+    connect(savePalleteAct, SIGNAL(triggered()), SLOT(saveColorPalleteAct()));
 }
 
 void ColorConfigPanel::readFromLastPallette()

@@ -106,7 +106,9 @@ QPixmap Editor::getCurrentImage()
 
 void Editor::setBrushColor(const QColor &color)
 {
+    qDebug() << "Setting Brush Color" << endl;
     m_PrimaryColor = color;
+    m_CurrentTool.setColor(color);
 }
 
 QColor Editor::getCurrentBrushColor() const
