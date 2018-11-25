@@ -1,4 +1,5 @@
 #include "bitmapimage.h"
+#include "bitmapimage.h"
 
 BitmapImage::BitmapImage()
 {
@@ -70,6 +71,18 @@ BitmapImage::BitmapImage(QRect boundaries, QPixmap pixMap)
     m_ScaleFactor = 1.0;
     m_ScaleFactorInv = 1.0;
     m_inc = 0.01;
+}
+/**
+ * @brief BitmapImage::DrawStrokeAsync
+ * @param DrawPoints
+ * @param brush
+ * @param sourceImage
+ * @return
+ */
+QImage BitmapImage::DrawStrokeAsync(QVector<QPoint> &DrawPoints, Brush &brush, QImage &sourceImage)
+{
+    //TODO Implement
+    return QImage();
 }
 
 void BitmapImage::paintImage(QPainter &painter)
@@ -196,6 +209,47 @@ void BitmapImage::paintImage(QVector<QPointF> pointInfo, Brush brush)
     //    }
 }
 
+void BitmapImage::paintImage(QVector<QPointF>& pointInfo, Brush brush, bool isInputFinish)
+{
+    //Prepare stencil
+    int brushWidth = brush.getSize() + (brush.getPressureVal() * brush.getTransferSize());
+    brushWidth *= m_ScaleFactor;
+
+    QImage stencilBase = brush.getStencil().toImage();
+    stencilBase.invertPixels(QImage::InvertRgb);
+    stencilBase.createAlphaMask();
+    stencilBase.convertToFormat(QImage::Format_ARGB32, Qt::AutoColor);
+
+    //Create copy of stencil mask
+    QImage stencilImage = QImage(stencilBase);
+    QColor color = brush.getColor();
+    stencilImage.fill(color);
+    stencilImage.setAlphaChannel(stencilBase);
+    QPixmap stencil = QPixmap::fromImage(stencilImage.scaled(brushWidth, brushWidth, Qt::IgnoreAspectRatio));
+    //initialize painter
+
+    QPointF startPoint, endPoint;
+    if(isInputFinish)
+    {
+		//Address Remaining point info if not already.
+        while(pointInfo.length() >= 2)
+        {
+            startPoint = pointInfo.takeFirst();
+            endPoint = pointInfo.at(0);
+            drawStroke(startPoint, endPoint, brush.getSpacing(), stencil);
+        }
+    }
+    else
+    {
+        if(pointInfo.length() >= 2)
+        {
+            startPoint = pointInfo.takeFirst();
+            endPoint = pointInfo.at(0);
+            drawStroke(startPoint, endPoint, brush.getSpacing(), stencil);
+        }
+    }
+}
+
 /**
  * @brief BitmapImage::paintImage
  * @param points
@@ -242,11 +296,11 @@ void BitmapImage::paintImage(QVector<QPointF> *points, Brush brush)
             QPointF point = path.pointAtPercent(i / path.length()) / m_ScaleFactor;
             painter.drawPixmap(QPoint(point.x() - stencil.width()/2, point.y() - stencil.width()/2), stencil);
         }
+		painter.end();
 
-//        points->clear();
         points->pop_front();
         points->push_back(QPoint(x,y));
-        painter.end();
+
     }
 }
 
@@ -375,4 +429,33 @@ QPixmap BitmapImage::getCompositeImage()
     painter.end();
     m_pixmap = temp;
     return m_pixmap;
+}
+
+void BitmapImage::drawStroke(const QPointF &startPoint, const QPointF &endPoint, const qreal& spacing, QPixmap &stencil)
+{
+    QPainter painter(&m_pixmap);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    QPainterPath path;
+    path.moveTo(startPoint);
+
+    qreal a = 0.2f;
+    qreal x = 0.0f;
+    qreal y = 0.0f;
+
+    x = startPoint.x() * a + endPoint.x() * ( 1 - a );
+    y = startPoint.y() * a + endPoint.y() * ( 1 - a );
+    path.quadTo(startPoint, endPoint);
+
+    qreal r = (1.0f / path.length() * spacing);
+	int start, end;
+    for(qreal i = 1.0f; i <= path.length(); i+= r)
+    {
+        QPointF point = path.pointAtPercent(i / path.length()) / m_ScaleFactor;
+        painter.drawPixmap(QPoint( point.x() - stencil.width() / 2,
+                                   point.y() - stencil.width() / 2),
+                                   stencil );
+		end = QTime::currentTime().msec();
+    }
+    painter.end();
 }

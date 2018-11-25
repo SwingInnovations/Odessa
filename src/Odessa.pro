@@ -28,11 +28,11 @@ SOURCES += main.cpp\
     Structure/brush.cpp \
     Interface/odessa_ui.cpp \
     Structure/primitive.cpp \
-    Structure/gleditor.cpp \
     Interface/panels.cpp \
     Interface/slideedit.cpp \
-    Structure/Canvas/canvas.cpp \
-    Interface/colorwheel.cpp
+    Interface/colorwheel.cpp \
+    Interface/colorsquare.cpp \
+    Structure/canvasthread.cpp
 
 HEADERS  += mainwindow.h \
     Graphics/Bitmap/bitmapimage.h \
@@ -45,11 +45,12 @@ HEADERS  += mainwindow.h \
     Overloads.h \
     Interface/odessa_ui.h \
     Structure/primitive.h \
-    Structure/gleditor.h \
     Interface/panels.h \
     Interface/slideedit.h \
     Structure/Canvas/canvas.h \
-    Interface/colorwheel.h
+    Interface/colorwheel.h \
+    Interface/colorsquare.h \
+    Structure/canvasthread.h
 
 
 RESOURCES += \

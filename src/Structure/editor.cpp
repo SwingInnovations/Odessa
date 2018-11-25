@@ -70,23 +70,43 @@ Editor::Editor(QWidget *parent):QWidget(parent)
     m_tCursorBlinker->start();
     m_tCursorBlink = false;
 
+    m_canvasWorker = new CanvasWorker();
+
     connect(m_tCursorBlinker, SIGNAL(timeout()), SLOT(alternateTBlinker()));
+    connect(&m_canvasThread, &QThread::finished, m_canvasWorker, &QObject::deleteLater);
+    connect(this, &Editor::submitCanvasThreadJob, m_canvasWorker, &CanvasWorker::EnqueueJob, Qt::QueuedConnection);
+    //connect(&m_canvasThread, SIGNAL(started()), m_canvasWorker, SLOT(RenderJobs()));
+    m_canvasWorker->moveToThread(&m_canvasThread);
+    m_canvasThread.start();
 }
 
-void Editor::setHistoryLimit(int h){
+Editor::~Editor()
+{
+    m_canvasThread.quit();
+    m_canvasThread.wait();
+}
+
+void Editor::setHistoryLimit(int h)
+{
     m_HistorySteps = h;
     qDebug() << "Changed the history limit. " << endl;
     emit historyLimitChanged(m_HistorySteps);
 }
 
-QPixmap Editor::getSelectionPixmap(){
+QPixmap Editor::getSelectionPixmap()
+{
     if(!m_Layers.empty()){
-        if(m_SelectRect.width() > 0 && m_SelectRect.height() > 0){
+        if(m_SelectRect.width() > 0 && m_SelectRect.height() > 0)
+        {
             return m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->copy(m_SelectRect).getPixmap();
-        }else{
+        }
+        else
+        {
             return QPixmap();
         }
-    }else{
+    }
+    else
+    {
         return QPixmap();
     }
 }
@@ -95,8 +115,10 @@ QPixmap Editor::getCurrentImage()
 {
     QPixmap ret;
     QPainter p(&ret);
-    if(!m_Layers.empty()){
-        for(int i = 0; i < m_Layers.size(); i++){
+    if(!m_Layers.empty())
+    {
+        for(int i = 0; i < m_Layers.size(); i++)
+        {
             //p.setOpacity(m_Layers[i]->getFrame(m_CurrentFrame - 1)-);
             p.drawPixmap(0, 0, m_Layers[i]->getFrame(m_CurrentFrame - 1)->getPixmap());
         }
@@ -129,7 +151,13 @@ void Editor::mousePressEvent(QMouseEvent *event)
             {
                 m_MousePath.clear();
                 m_MousePath.append(event->pos());
-                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool);
+                CanvasWorker::CanvasJobParam JobParam;
+                JobParam.m_command = CanvasWorker::DRAW;
+                //JobParam.m_image = *m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getImage();
+                JobParam.m_currentBrush = m_CurrentTool;
+				JobParam.m_point = event->pos();
+                emit submitCanvasThreadJob(JobParam);
+                //m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool, false);
             }
             backup();
             break;
@@ -178,20 +206,26 @@ void Editor::mousePressEvent(QMouseEvent *event)
 
 void Editor::mouseReleaseEvent(QMouseEvent *event)
 {
-    Q_UNUSED(event)
 
     if(m_DeviceDown)
     {
-        m_DeviceDown = false;
-        m_MousePath.clear();
+		m_MousePath.append(event->pos());
+		m_DeviceDown = false;
     }
 
     if(!m_Layers.empty())
     {
+        switch(m_ToolType)
+        {
+            case BRUSH_TOOL:
+                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool, true);
+                break;
+        }
         if(m_SelectActive){
             m_SelectRect.setBottomRight(event->pos());
         }
     }
+    m_MousePath.clear();
     update();
 }
 
@@ -206,12 +240,16 @@ void Editor::mouseMoveEvent(QMouseEvent *event)
             if(m_DeviceDown)
             {
                 m_MousePath.append(event->pos());
-                if(m_MousePath.size() > 2)
-                {
-                    m_MousePath.removeFirst();
-                }
                 emit curToolPressureChanged(m_CurrentTool.getPressureVal());
-                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(&m_MousePath, m_CurrentTool);
+
+                CanvasWorker::CanvasJobParam JobParam;
+                JobParam.m_command = CanvasWorker::DRAW;
+                JobParam.m_currentBrush = m_CurrentTool;
+                //JobParam.m_image = *m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getImage();
+                JobParam.m_point = event->pos();
+                emit submitCanvasThreadJob(JobParam);
+
+                m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->paintImage(m_MousePath, m_CurrentTool, false);
             }
             break;
         case ERASER_TOOL:
@@ -533,7 +571,8 @@ void Editor::deleteLayer(int index)
     }
 }
 
-void Editor::setLayerIndex(int i){
+void Editor::setLayerIndex(int i)
+{
     m_LastIndex = m_CurrentIndex;
     if(i >= 1)
     {
@@ -548,8 +587,10 @@ void Editor::setLayerIndex(int i){
     update();
 }
 
-void Editor::setLayerOpacity(int o){
-    if(!m_Layers.empty()){
+void Editor::setLayerOpacity(int o)
+{
+    if(!m_Layers.empty())
+    {
         m_Layers.at(m_CurrentIndex-1)->setOpacity(o);
     }
     update();
@@ -576,6 +617,7 @@ void Editor::setLayerVisible(int val){
             m_Layers.at(1)->setVisible(!m_Layers.at(val+1)->isVisible());
         }
     }
+    update();
 }
 
 void Editor::addFrame()
@@ -692,6 +734,11 @@ void Editor::decreaseBrushSize(){
         setBrushSize(0);
     }
     emit brushSizeChanged(m_CurrentTool.getSize());
+}
+
+void Editor::handleJobSubmission(CanvasWorker::CanvasJobParam &JobParam)
+{
+
 }
 
 void Editor::setBrushSpacing(int val)
@@ -892,24 +939,33 @@ void Editor::redo()
     }
 }
 
-void Editor::cut(){
-    if(!m_Layers.isEmpty()){
+void Editor::cut()
+{
+    if(!m_Layers.isEmpty())
+    {
         copy();
-        if(!m_acceptTextInput){
-            if(m_Layers.size() > 2){
+        if(!m_acceptTextInput)
+        {
+            if(m_Layers.size() > 2)
+            {
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->cutImgOp(m_SelectRect, QColor(Qt::transparent));
-            }else{
+            }
+            else
+            {
                 //just fill the selection rect with white
                 m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->cutImgOp(m_SelectRect, QColor(Qt::white));
             }
-        }else{
+        }
+        else
+        {
             m_textCursor.removeSelectedText();
         }
     }
     backup();
 }
 
-void Editor::copy(){
+void Editor::copy()
+{
     if(!m_Layers.isEmpty()){
         QClipboard* clip = QApplication::clipboard();
         if(m_acceptTextInput){
@@ -923,20 +979,27 @@ void Editor::copy(){
     backup();
 }
 
-void Editor::paste(){
-    if(!m_Layers.isEmpty()){
+void Editor::paste()
+{
+    if(!m_Layers.isEmpty())
+    {
         const QClipboard* clip = QApplication::clipboard();
         const QMimeData* mimeData = clip->mimeData();
         if(!m_ClipboardPresent) m_ClipboardPresent = true;
-        if(mimeData->hasImage()){
+        if(mimeData->hasImage())
+        {
             m_ClipboardPixmap = QPixmap::fromImage(qvariant_cast<QImage>(mimeData->imageData()));
             m_ClipOffsetPoint = QPoint( (this->getCurrentImage().width()/2 - m_ClipboardPixmap.width()/2), (this->getCurrentImage().height()/2 - m_ClipboardPixmap.height()/2) );
             m_SelectRect = m_ClipboardPixmap.rect();
             setBrush(ToolType::TRANSFORM_TRANSLATE);
-        }else if(mimeData->hasText()){
+        }
+        else if(mimeData->hasText())
+        {
             setBrush(ToolType::TEXT_TOOL);
             m_textCursor.insertText(clip->text(), m_fmt);
-        }else{
+        }
+        else
+        {
             qDebug() << "Invalid Paste Option!" << endl;
         }
         backup();
@@ -974,9 +1037,12 @@ void Editor::useWindowsPenAPI(bool val)
 #endif
 }
 
-void Editor::commitChanges(){
+void Editor::commitChanges()
+
+{
     if(!m_Layers.isEmpty()){
-        if(!m_ClipboardPixmap.isNull()){
+        if(!m_ClipboardPixmap.isNull())
+        {
             m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->commitChanges(m_ClipOffsetPoint, m_ClipboardPixmap);
         }
         if(m_acceptTextInput) m_acceptTextInput = false;
@@ -991,11 +1057,18 @@ void Editor::commitChanges(){
     }
 }
 
-void Editor::alternateTBlinker(){
+void Editor::alternateTBlinker()
+{
     m_tCursorBlink =! m_tCursorBlink;
 }
 
-QPixmap Editor::generateTextPixmap(){
+void Editor::canvasJobComplete(CanvasWorker::CanvasJobResultParam & ResultParam)
+{
+    //TODO Implement
+}
+
+QPixmap Editor::generateTextPixmap()
+{
     QTextEdit* tempEdit = new QTextEdit(this);
     tempEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     tempEdit->setDocument(m_textDocument);
@@ -1014,8 +1087,6 @@ QPixmap Editor::generateTextPixmap(){
 
     p.end();
     delete tempEdit;
-    tempEdit = 0;
-
 
     update();
     return ret;

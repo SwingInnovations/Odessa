@@ -34,6 +34,8 @@ public:
     BitmapImage(QRect m_boundaries, QColor color);
     BitmapImage(QRect m_boundaries, QPixmap pixMap);
 
+    static QImage DrawStrokeAsync(QVector<QPoint>& DrawPoints, Brush& brush, QImage& sourceImage);
+
     void setBoundaries(const QRect& bounds){this->m_boundaries = bounds;}
 
     void setPixmap(QPixmap pixmap){m_pixmap = pixmap;}
@@ -46,6 +48,13 @@ public:
     void paintImage(QPainterPath painterPath, Brush brush); //works
     void paintImage(QPoint point, Brush brush);//Keep
     void paintImage(QVector<QPointF> pointInfo, Brush brush);
+    /**
+     * @brief paintImage
+     * @param pointInfo
+     * @param brush
+     * @param isInputFinish
+     */
+    void paintImage(QVector<QPointF>& pointInfo, Brush brush, bool isInputFinish);
     void paintImage(QVector<QPointF>* points, Brush brush);
     void paintImage(QVector<QPointF> pointInfo, Brush brush, qreal tabPress, int amt);//Keep
     void setColor(const QColor color){ m_Color = color; m_Image->fill(m_Color);}
@@ -96,6 +105,7 @@ protected:
     Object *myParent;
 
 private:
+    void    drawStroke(const QPointF& startPoint, const QPointF& endPoint, const qreal &spacing, QPixmap& stencil);
     QPoint  m_offset;
     bool    m_visible;
     qreal   m_inc;

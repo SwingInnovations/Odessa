@@ -23,6 +23,7 @@
 #include "layer.h"
 #include "brush.h"
 #include "primitive.h"
+#include "canvasthread.h"
 
 #ifdef Q_OS_WIN
 #include <wingdi.h>
@@ -46,36 +47,44 @@ class BitmapHistoryStack : public HistoryStack
 public:
     int m_Layer, m_Frame;
     BitmapImage m_Bitmap;
-    int type(){return BITMAP_CHANGE;}
-    void restore(Editor*){}
+    int type() override
+    {
+        return BITMAP_CHANGE;
+    }
+    void restore(Editor*) override {}
 };
 
 class Editor : public QWidget
 {
     Q_OBJECT
 public:
-    enum ToolType{BRUSH_TOOL,
-                  ERASER_TOOL,
-                  TEXT_TOOL,
-                  PRIMITIVE_TOOL,
-                  EYEDROPPER_TOOL,
-                  RECT_SELECT_TOOL,
-                  FILL_TOOL,
-                  TRANSFORM_TRANSLATE,
-                  TRANSFORM_ROTATE,
-                  TRANSFORM_SCALE,
-                  CURSOR_TOOL};
+    enum ToolType
+    {
+      BRUSH_TOOL = 0,
+      ERASER_TOOL,
+      TEXT_TOOL,
+      PRIMITIVE_TOOL,
+      EYEDROPPER_TOOL,
+      RECT_SELECT_TOOL,
+      FILL_TOOL,
+      TRANSFORM_TRANSLATE,
+      TRANSFORM_ROTATE,
+      TRANSFORM_SCALE,
+      CURSOR_TOOL
+    };
 
     Editor(QWidget *parent = 0);
+    ~Editor();
 
     void setBrush(Brush b);
     void setBrush(ToolType type);
     int getHistoryStep()const{ return m_HistorySteps; }
     int getRealWidth()const;
     int getRealHeight()const;
-    ProjectInfo getProjectInfo()const{ return m_Info; }
+    inline ProjectInfo getProjectInfo()const{ return m_Info; }
     QPixmap getSelectionPixmap();
-    QSize getPixmapSize(){
+    inline QSize getPixmapSize() const
+    {
         if(!m_Layers.isEmpty())
         {
             return m_Layers.at(m_CurrentIndex-1)->getFrame(m_CurrentFrame-1)->getPixmap().size();
@@ -121,6 +130,8 @@ signals:
 
     void historyLimitChanged(int);
     void historySizeChanged(int);
+
+    void submitCanvasThreadJob(CanvasWorker::CanvasJobParam JobParam);
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -194,6 +205,12 @@ public slots:
     void useWindowsPenAPI(bool);
 
     void alternateTBlinker();
+
+    /**
+     * @brief canvasJobComplete
+     * @param ResultParam
+     */
+    void canvasJobComplete(CanvasWorker::CanvasJobResultParam& ResultParam);
 private:
     /*-Control mode, for use with either full view of sprite sheet or normal use
      *  0 - Normal mode
@@ -209,6 +226,8 @@ private:
 
     void increaseBrushSize();
     void decreaseBrushSize();
+
+    void handleJobSubmission(CanvasWorker::CanvasJobParam& JobParam);
 
     QPixmap generateShapePixmap(Primitive);
 
@@ -248,6 +267,7 @@ private:
 
     int m_RedVal, m_GreenVal, m_BlueVal, m_OpacityVal;
 
+    //Local Pimary and secondary color.
     QColor m_PrimaryColor;
     QColor m_SecondaryColor;
 
@@ -279,6 +299,7 @@ private:
     QTimer *m_tCursorBlinker;
     bool m_tCursorBlink;
 
+    //Clipboard stuff.
     bool m_ClipWorldTransform;
     QPoint m_ClipOffsetPoint;
     QPoint m_ClipScale;
@@ -292,6 +313,12 @@ private:
 
     int m_realWidth;
     int m_realHeight;
+
+    QPixmap             m_tempDrawPixmap;
+    QRect               m_tempDrawArea;
+
+    CanvasWorker*       m_canvasWorker;
+    QThread             m_canvasThread;
 #ifdef Q_OS_WIN32
     bool m_useWinInkAPI = false;
 #endif

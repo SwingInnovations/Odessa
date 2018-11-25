@@ -2,6 +2,7 @@
 #include <QApplication>
 #include <QSettings>
 #include <QStyleFactory>
+#include "Structure/canvasthread.h"
 
 int main(int argc, char *argv[])
 {
@@ -12,6 +13,12 @@ int main(int argc, char *argv[])
     a.setOrganizationDomain("www.swinginnovations.com");
     a.setWindowIcon(QIcon(":/icon/resource/icon.png"));
     a.setStyle(QStyleFactory::create("fusion"));
+
+    //Initialize Metatypes
+    int status;
+    status = qRegisterMetaType<CanvasWorker::CanvasJobParam>();
+    status = qRegisterMetaType<CanvasWorker::CanvasJobResultParam>();
+
     QSettings settings("SwingInnovations", "Odessa");
     QPalette palette;
     QString theme = settings.value("theme").toString();

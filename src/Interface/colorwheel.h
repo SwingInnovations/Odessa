@@ -20,10 +20,6 @@ class ColorWheel : public QLabel
 {
     Q_OBJECT
 public:
-    enum SHAPE : char {
-        TRIANGLE,
-        SQUARE
-    };
     ColorWheel(QWidget* parent = 0);
     void setRed(int);
     void setGreen(int);
